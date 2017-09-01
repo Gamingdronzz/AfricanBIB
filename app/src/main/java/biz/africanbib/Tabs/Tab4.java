@@ -58,7 +58,7 @@ public class Tab4 extends Fragment {
 
     private void init(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_4);
-        adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager());
+        adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager(),this);
 
         if (isTab) {
             setupGridLayout(true);
@@ -236,7 +236,7 @@ public class Tab4 extends Fragment {
         }
         columnName = DatabaseHelper.COLUMN_DATE;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildDate("Date/Time", value,new Date(), tableName, columnName, -1));
+        items.add(utils.buildDate("Date/Time", value, tableName, columnName, -1));
         columnName = DatabaseHelper.COLUMN_LOCATION;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(utils.buildEditText("Name of Location / Event", value, tableName, columnName, -1));

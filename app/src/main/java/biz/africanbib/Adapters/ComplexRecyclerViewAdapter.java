@@ -1,13 +1,22 @@
 package biz.africanbib.Adapters;
 
 
-import android.app.AlertDialog;
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+
+import android.content.Context;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
@@ -23,11 +32,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+
+import com.linchaolong.android.imagepicker.ImagePicker;
+import com.linchaolong.android.imagepicker.cropper.CropImage;
+import com.linchaolong.android.imagepicker.cropper.CropImageView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
+
 import java.util.List;
 
 import biz.africanbib.CustomIndustry;
@@ -36,18 +51,18 @@ import biz.africanbib.Models.Divider;
 import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.Heading;
 import biz.africanbib.Models.MultiSelectDropdown;
-import biz.africanbib.Models.PreviousBusiness;
+
 import biz.africanbib.Models.SimpleDate;
 import biz.africanbib.Models.SimpleEditText;
+import biz.africanbib.Models.SimpleImage;
 import biz.africanbib.Models.SimpleText;
-//import biz.africanbib.MultiSelectionSpinner;
+
 import biz.africanbib.MyCustomMultiSelectionSpinner;
 import biz.africanbib.R;
 import biz.africanbib.Tools.DatabaseHelper;
 import biz.africanbib.Tools.Utils;
 import biz.africanbib.ViewHolders.ViewHolderHeading;
 
-import static android.provider.ContactsContract.CommonDataKinds.Event.START_DATE;
 
 /**
  * Created by Balpreet on 30-Jul-17.
@@ -72,14 +87,28 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private int currentRowProducts = 1;
     private int currentRowServices = 1;
 
+    Fragment context;
 
-    private final int HEADING = 0, SIMPLEEDITTEXT = 1, DROPDOWN = 2, ADD = 3, SIMPLETEXT = 4, DIVIDER = 5, MULTISELECT = 6, DATE = 7;
+    ImagePicker imagePicker;
 
 
-    public ComplexRecyclerViewAdapter(List<Object> items, FragmentManager manager) {
+    private final int
+            HEADING = 0,
+            SIMPLEEDITTEXT = 1,
+            DROPDOWN = 2,
+            ADD = 3,
+            SIMPLETEXT = 4,
+            DIVIDER = 5,
+            MULTISELECT = 6,
+            DATE = 7,
+            IMAGE = 8;
+
+
+    public ComplexRecyclerViewAdapter(List<Object> items, FragmentManager manager, Fragment context) {
         this.items = items;
         this.fragmentManager = manager;
         utils = new Utils();
+        this.context = context;
     }
 
 
@@ -109,6 +138,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             val = MULTISELECT;
         } else if (items.get(position) instanceof SimpleDate) {
             val = DATE;
+        } else if (items.get(position) instanceof SimpleImage) {
+            val = IMAGE;
         }
         //Log.v("Adapter", "Case = " + val);
         return val;
@@ -156,6 +187,10 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 View viewDate = inflater.inflate(R.layout.viewholder_simple_date, viewGroup, false);
                 viewHolder = new ViewHolderDate(viewDate, new CustomDateChooser());
                 break;
+            case IMAGE:
+                View viewImage = inflater.inflate(R.layout.viewholder_simple_image, viewGroup, false);
+                viewHolder = new ViewHolderSimpleImage(viewImage, new CustomImageChooser());
+                break;
             default:
                 //View v = inflater.inflate(android.R.layout.simple_list_item_1, viewGroup, false);
                 //viewHolder = new RecyclerViewSimpleTextViewHolder(v);
@@ -199,6 +234,10 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             case DATE:
                 ViewHolderDate viewHolderDate = (ViewHolderDate) viewHolder;
                 configureViewHolderSimpleDate(viewHolderDate, position);
+                break;
+            case IMAGE:
+                ViewHolderSimpleImage viewHolderImage = (ViewHolderSimpleImage) viewHolder;
+                configureViewHolderSimpleImage(viewHolderImage, position);
                 break;
             default:
                 break;
@@ -449,6 +488,34 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    public class ViewHolderSimpleImage extends RecyclerView.ViewHolder {
+
+        private ImageView imageView;
+        private TextView textview;
+        private CustomImageChooser customImageChooser;
+
+        public void setImage(Bitmap image) {
+            this.imageView.setImageBitmap(image);
+        }
+
+        public ViewHolderSimpleImage(View v, CustomImageChooser customImageChooser) {
+            super(v);
+            imageView = (ImageView) v.findViewById(R.id.image_view);
+            textview = (TextView) v.findViewById(R.id.text_view_simple_image);
+            this.customImageChooser = customImageChooser;
+            imageView.setOnClickListener(this.customImageChooser);
+        }
+
+
+        public void setTitle(String value) {
+            this.textview.setText(value);
+        }
+
+        public String getTitle() {
+            return this.textview.getText().toString();
+        }
+    }
+
 
     private void configureViewHolderHeading(ViewHolderHeading viewHolderHeading, int position) {
         Heading heading = (Heading) items.get(position);
@@ -478,6 +545,20 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             viewHolderSimpleEditText.setValue(simpleEditText.getValue());
             viewHolderSimpleEditText.setTag(simpleEditText.getTitle());
             viewHolderSimpleEditText.setEditTextType(simpleEditText.getType());
+        }
+    }
+
+    private void configureViewHolderSimpleImage(ViewHolderSimpleImage viewHolderSimpleImage, int position) {
+        SimpleImage simpleImage = (SimpleImage) items.get(position);
+        if (simpleImage != null) {
+            viewHolderSimpleImage.customImageChooser.updatePosition(position);
+            viewHolderSimpleImage.setTitle(simpleImage.getTitle());
+            if (simpleImage.getImage() == null) {
+
+            } else {
+                viewHolderSimpleImage.setImage(simpleImage.getImage());
+            }
+
         }
     }
 
@@ -926,6 +1007,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             databaseHelper.insertRow(add.getTableName(), currentRowNo);
 
             for (int i = 0; i < add.getRows(); i++) {
+                Log.v("Adapter", "Current Column = " + tableColumnNames[i]);
                 if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_SECTOR)) {
                     items.add(position, utils.buildMultiSelectDropdown(columnNames[i],
                             add.getTableName(),
@@ -934,7 +1016,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             null,
                             currentRowNo
                     ));
-                    Log.v("Adapter", "Inserting MultiSelect " + tableColumnNames[i] + " of " + add.getTableName() + " with row = " + currentRowNo);
                     notifyItemInserted(position);
 
                 } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_INDUSTRY)) {
@@ -943,6 +1024,15 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             utils.getIndustryList(),
                             databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
                             add.getTableName(), tableColumnNames[i], currentRowNo));
+                    notifyItemInserted(position);
+                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_DATE)) {
+                    items.add(position, utils.buildDate(
+                            columnNames[i],
+                            databaseHelper.getStringFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
+                            add.getTableName(),
+                            tableColumnNames[i],
+                            currentRowNo));
+                    Log.v("Adapter", "Inserting Date " + columnNames[i] + " at " + i);
                     notifyItemInserted(position);
                 } else if (columnNames[i].equals("Country")) {
                     items.add(position, utils.buildDropDown(columnNames[i], utils.getCountryNames(), 0, add.getTableName(), tableColumnNames[i], currentRowNo));
@@ -969,6 +1059,69 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    private class CustomImageChooser implements View.OnClickListener {
+        private int position;
+        private ComplexRecyclerViewAdapter adapter;
+
+        public void updatePosition(int position) {
+            this.position = position;
+            adapter = ComplexRecyclerViewAdapter.this;
+        }
+
+        @Override
+        public void onClick(final View view) {
+
+            final SimpleImage simpleImage = (SimpleImage) items.get(position);
+            Log.v("Adapter", "Clicked at = " + simpleImage.getTitle());
+            imagePicker = new ImagePicker();
+            imagePicker.setTitle("Select Image");
+            imagePicker.setCropImage(true);
+            imagePicker.startChooser(context, new ImagePicker.Callback() {
+                @Override public void onPickImage(Uri imageUri) {
+                    Log.v("Adapter","Picked Path = " + imageUri.getPath());
+                    Bitmap bitmap = BitmapFactory.decodeFile(imageUri.getPath());
+                    simpleImage.setImage(bitmap);
+                    adapter.notifyItemChanged(position);
+                    databaseHelper.updateBlobValue(simpleImage.getTableName(),simpleImage.getColumnName(),utils.createByteArrayFromBitmap(bitmap));
+
+                }
+
+                @Override public void onCropImage(Uri imageUri) {
+                    Log.v("Adapter","Cropped Path = " + imageUri.getPath());
+                    Bitmap bitmap = BitmapFactory.decodeFile(imageUri.getPath());
+                    simpleImage.setImage(bitmap);
+                    adapter.notifyItemChanged(position);
+                    databaseHelper.updateBlobValue(simpleImage.getTableName(),simpleImage.getColumnName(),utils.createByteArrayFromBitmap(bitmap));
+
+                    //draweeView.setImageURI(imageUri);
+                    //draweeView.getHierarchy().setRoundingParams(RoundingParams.asCircle());
+                }
+
+                @Override public void cropConfig(CropImage.ActivityBuilder builder) {
+                    builder
+                            // 是否启动多点触摸
+                            .setMultiTouchEnabled(true)
+                            // 设置网格显示模式
+                            .setGuidelines(CropImageView.Guidelines.OFF)
+                            // 圆形/矩形
+                            .setCropShape(CropImageView.CropShape.RECTANGLE)
+                            // 调整裁剪后的图片最终大小
+                            .setRequestedSize(942, 292)
+                            // 宽高比
+                            .setAspectRatio(157, 32);
+                }
+
+
+                @Override public void onPermissionDenied(int requestCode, String[] permissions,
+                                                         int[] grantResults) {
+                }
+            });
+        }
+
+    }
+
+
+
     private class CustomDateChooser implements View.OnClickListener {
         private int position;
 
@@ -979,10 +1132,9 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         @Override
         public void onClick(final View view) {
             DatePickerFragment datePickerFragment = new DatePickerFragment();
-            datePickerFragment.setItems(items);
             datePickerFragment.setAdapter(ComplexRecyclerViewAdapter.this);
             datePickerFragment.updatePosition(position);
-            datePickerFragment.show(fragmentManager,"Date");
+            datePickerFragment.show(fragmentManager, "Date");
         }
     }
 
@@ -994,13 +1146,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         public void updatePosition(int position) {
             this.position = position;
-        }
-
-        private List<Object> items;
-
-        public void setItems(List<Object> items)
-        {
-            this.items = items;
         }
 
         private ComplexRecyclerViewAdapter adapter;
@@ -1020,10 +1165,18 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
 
         public void onDateSet(DatePicker view, int year, int month, int day) {
+            SimpleDate simpleDate = (SimpleDate) adapter.items.get(position);
             month = month + 1;
-            String stringOfDate = year + "-" + month + "-" + day;
-            ((SimpleDate)items.get(position)).setValue(stringOfDate);
+            String stringOfDate = day + " - " + month + " - " + year;
+
+            simpleDate.setValue(stringOfDate);
             adapter.notifyItemChanged(position);
+            if (simpleDate.getRowno() == -1) {
+                adapter.databaseHelper.updateStringValue(simpleDate.getTableName(), simpleDate.getColumnName(), stringOfDate);
+            } else {
+                adapter.databaseHelper.updateRowWithString(simpleDate.getTableName(), simpleDate.getRowno(), simpleDate.getColumnName(), stringOfDate);
+            }
+
         }
     }
 
@@ -1109,8 +1262,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             return currentRowProducts++;
         } else if (tableName.equals(DatabaseHelper.TABLE_SERVICES)) {
             return currentRowServices++;
-        } else if (tableName.equals(DatabaseHelper.TABLE_PRODUCT_DETAILS)) {
-            return currentRowProductDetails++;
         } else if (tableName.equals(DatabaseHelper.TABLE_AWARDS)) {
             return currentRowAwards++;
         } else if (tableName.equals(DatabaseHelper.TABLE_LATEST_NEWS)) {
@@ -1137,8 +1288,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             currentRowProducts = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_SERVICES)) {
             currentRowServices = value;
-        } else if (tableName.equals(DatabaseHelper.TABLE_PRODUCT_DETAILS)) {
-            currentRowProductDetails = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_AWARDS)) {
             currentRowAwards = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_LATEST_NEWS)) {
@@ -1148,4 +1297,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    public  void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("Adapter", "Request Code  " +  requestCode);
+        imagePicker.onActivityResult(context,requestCode,resultCode,data);
+    }
 }

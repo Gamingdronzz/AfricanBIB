@@ -8,23 +8,24 @@
     android:padding="@dimen/padding_medium">
 
     <TextView
-        android:id="@+id/text_view_dropdown_title"
+        android:id="@+id/text_view_simple_image"
         android:layout_width="match_parent"
         android:textAlignment="center"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorBlack">
-
-    </TextView>
+        android:textColor="@color/colorBlack" />
 
 
-    <android.support.v7.widget.AppCompatSpinner
-        android:id="@+id/spinner_dropdown"
-        style="@style/SpinnerTheme"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:spinnerMode="dropdown">
 
-    </android.support.v7.widget.AppCompatSpinner>
+   <ImageView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:fitsSystemWindows="true"
+       android:clickable="true"
+       android:id="@+id/image_view"
+       android:src="@mipmap/ic_launcher"/>
+
+
 
 </LinearLayout>
+

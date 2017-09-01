@@ -6,7 +6,7 @@
     <string name="add_business">Add Business</string>
     <string name="edit_business">Edit Business</string>
     <string name="accept">I Accept</string>
-    <string name="company_name">Enter Company Name</string>
+    <string name="company_name">Enter Business Name</string>
     <string name="PreviousBusiness">Select a business to edit</string>
     <string name="title_activity_nav">Nav</string>
 

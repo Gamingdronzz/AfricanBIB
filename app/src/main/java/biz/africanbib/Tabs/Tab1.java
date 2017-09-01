@@ -1,7 +1,9 @@
 package biz.africanbib.Tabs;
 
 
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -53,7 +55,7 @@ public class Tab1 extends Fragment {
 
     private void init(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_1);
-        adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager());
+        adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager(),this);
         if (isTab) {
             setupGridLayout(true);
         } else {
@@ -127,7 +129,7 @@ public class Tab1 extends Fragment {
         String tableName = DatabaseHelper.TABLE_COMPANY_PROFILE;
 
         String value = databaseHelper.getStringValue(columnName, tableName);
-        Log.v("Tab1","Value = " + value);
+        Log.v("Tab1", "Value = " + value);
 
         items.add(new SimpleEditTextBuilder()
                 .setTableName(tableName)
@@ -143,12 +145,31 @@ public class Tab1 extends Fragment {
         items.add(utils.buildEditText("Registeration No", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_LOGO;
-        int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(utils.buildDropDown("Corporate Logo", new String[]{"Collected", "Not Collected"}, selectedPosition, tableName, columnName, -1));
+        Bitmap image = null;
+        try
+        {
+            image = utils.createBitmapFromByteArray(databaseHelper.getBlobValue(columnName,tableName));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        //=  databaseHelper.getIntValue(columnName, tableName);
+        items.add(utils.buildImage("Corporate Logo", image, tableName, columnName));
+        //items.add(utils.buildDropDown("Corporate Logo", new String[]{"Collected", "Not Collected"}, selectedPosition, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_KEYVISUAL_PHOTO;
-        selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(utils.buildDropDown("Keyvisual (Photo)", new String[]{"Collected", "Not Collected"}, selectedPosition, tableName, columnName, -1));
+        Bitmap keyvisual = null;
+        try
+        {
+            keyvisual = utils.createBitmapFromByteArray(databaseHelper.getBlobValue(columnName,tableName));
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        items.add(utils.buildImage("Keyvisual (Photo)", keyvisual, tableName, columnName));
+        //items.add(utils.buildDropDown("Keyvisual (Photo)", new String[]{"Collected", "Not Collected"}, selectedPosition, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_LOGO_NOTE;
         value = databaseHelper.getStringValue(columnName, tableName);
@@ -208,7 +229,7 @@ public class Tab1 extends Fragment {
         items.add(utils.buildEditText("City / Town", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_COUNTRY;
-        selectedPosition = databaseHelper.getIntValue(columnName, tableName);
+        int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
         items.add(utils.buildDropDown("Country", utils.getCountryNames(), selectedPosition, tableName, columnName, -1));
 
 
@@ -282,5 +303,17 @@ public class Tab1 extends Fragment {
         return items;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+            Log.d("Tab1", "Request Code  " + requestCode);
+            adapter.onActivityResult(requestCode, resultCode, data);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
 }

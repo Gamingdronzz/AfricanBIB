@@ -24,12 +24,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         CURRENT_COMPANY_ID = id;
     }
 
+    Context context;
+
     public DatabaseHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
+        this.context = context;
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 2;
+    public static final int DATABASE_VERSION = 4;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -48,7 +51,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_SUBSIDIARY_SPECIFIC_INFORMATION = "TableSubsidiarySpecificInformation";
     public static final String TABLE_SERVICES = "TableServices";
     public static final String TABLE_PRODUCTS_AND_PRODUCT_DETAILS = "TableProducts";
-    public static final String TABLE_PRODUCT_DETAILS = "TableProductDetails";
     public static final String TABLE_COMPANY_INDICATORS = "TableCompanyIndicators";
     public static final String TABLE_AWARDS = "TableAwards";
     public static final String TABLE_LATEST_NEWS = "TableLatestNews";
@@ -146,7 +148,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String COLUMN_AWARD_NAME = "COLUMN_AWARD_NAME";
     public static final String COLUMN_AWARD_INSTITUTION = "COLUMN_AWARD_INSTITUTION";
-    public static final String COLUMN_AWARD_DATE = "COLUMN_AWARD_DATE";
     public static final String COLUMN_AWARD_DESCRIPTION = "COLUMN_AWARD_DESCRIPTION";
     public static final String COLUMN_AWARD_TEL_FAX = "COLUMN_AWARD_TEL_FAX";
     public static final String COLUMN_AWARD_FILE = "COLUMN_AWARD_FILE";
@@ -168,8 +169,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_COMPANY_ID + " INTEGER PRIMARY KEY," +
             COLUMN_COMPANY_NAME + " VARCHAR," +
             COLUMN_REGISTERATION_NO + " VARCHAR," +
-            COLUMN_LOGO + " NUMBER," +
-            COLUMN_KEYVISUAL_PHOTO + " NUMBER," +
+            COLUMN_LOGO + " BLOB," +
+            COLUMN_KEYVISUAL_PHOTO + " BLOB," +
             COLUMN_LOGO_NOTE + " VARCHAR," +
             COLUMN_KEYVISUAL_NOTE + " VARCHAR," +
             COLUMN_BRIEF_DESCRIPTION + " VARCHAR " +
@@ -339,7 +340,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_ROW_ID + " INTEGER," +
             COLUMN_AWARD_NAME + " VARCHAR," +
             COLUMN_AWARD_INSTITUTION + " VARCHAR," +
-            COLUMN_AWARD_DATE + " VARCHAR," +
+            COLUMN_DATE + " VARCHAR," +
             COLUMN_AWARD_DESCRIPTION + " VARCHAR," +
             COLUMN_AWARD_TEL_FAX + " VARCHAR," +
             COLUMN_AWARD_FILE + " VARCHAR " +
@@ -410,9 +411,30 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         // Drop older table if existed, all data will be gone!!!
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCT_DETAILS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCT_DETAILS);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
 
+        db.delete(TABLE_COMPANY_PROFILE, null, null);
+        db.delete(TABLE_COMPANY_CONTACT, null, null);
+        db.delete(TABLE_COMPANY_POSTAL_ADDRESS, null, null);
+        db.delete(TABLE_COMPANY_PHYSICAL_ADDRESS, null, null);
+        db.delete(TABLE_COMPANY_SPECIFIC_INFORMATION, null, null);
+        db.delete(TABLE_OFFERS, null, null);
+        db.delete(TABLE_NEEDS, null, null);
+        db.delete(TABLE_OWNERS_MANAGERS_SUBSIDIARIES_REFERENCE, null, null);
+        db.delete(TABLE_ACADEMIC_BACKGROUND, null, null);
+        db.delete(TABLE_PROFESSIONAL_BACKGROUND, null, null);
+        db.delete(TABLE_AFFILIATION, null, null);
+        db.delete(TABLE_REFERENCE_SPECIFIC_INFORMATION, null, null);
+        db.delete(TABLE_SUBSIDIARY_SPECIFIC_INFORMATION, null, null);
+        db.delete(TABLE_SERVICES, null, null);
+        db.delete(TABLE_PRODUCTS_AND_PRODUCT_DETAILS, null, null);
+        db.delete(TABLE_COMPANY_INDICATORS, null, null);
+        db.delete(TABLE_AWARDS, null, null);
+        db.delete(TABLE_LATEST_NEWS, null, null);
+        db.delete(TABLE_BUSINESS_CORRESPONDING_LANGUAGES, null, null);
+        db.delete(TABLE_SECTORS, null, null);
+        db.delete(TABLE_SOURCE_OF_DATA, null, null);
         db.execSQL(CREATE_TABLE_PRODUCTS);
         // Create tables again
         onCreate(db);
@@ -452,8 +474,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (db != null) db.close();
     }
 
-    public boolean deleteBusiness(int id)
-    {
+    public boolean deleteBusiness(int id) {
         try {
             Log.v(TAG, "Deleting Businees id = " + id);
             SQLiteDatabase db = this.getWritableDatabase();
@@ -481,13 +502,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_SOURCE_OF_DATA, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_COMPANY_PROFILE, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             return true;
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             return false;
         }
     }
-
 
 
     private void addValue(long id, String tableName) {
@@ -618,7 +636,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //Log.v(TAG, "Query = " + query);
             cursor = db.rawQuery(query, null);
             cursor.moveToFirst();
-            if (cursor.getCount() > 0 ) {
+            if (cursor.getCount() > 0) {
                 result = new int[cursor.getCount()];
                 for (int i = 0; i < result.length; i++) {
                     Log.v(TAG, "Row id = " + cursor.getInt(0));
@@ -717,6 +735,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         result = db.update(TableName, values, COLUMN_COMPANY_ID + " = " + getCurrentCompanyId(), null);
         Log.v(TAG, TableName + "." + ColumnName + " updated with value = " + value);
         if (db != null) db.close();
+    }
+
+    public void updateBlobValue(String TableName, String ColumnName, byte[] value) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Log.v(TAG, "Updating Table = " + TableName);
+        long result = -1;
+
+        ContentValues values = new ContentValues();
+        values.put(ColumnName, value);
+        result = db.update(TableName, values, COLUMN_COMPANY_ID + " = " + getCurrentCompanyId(), null);
+        Log.v(TAG, TableName + "." + ColumnName + " updated with value = " + value);
+        if (db != null) db.close();
+    }
+
+    public byte[] getBlobValue(String columnName, String tableName) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        byte[] result = null;
+        try {
+            String query = "SELECT " + columnName + "  FROM " + tableName + " WHERE " + COLUMN_COMPANY_ID + " = " + getCurrentCompanyId();
+            cursor = db.rawQuery(query, null);
+            cursor.moveToFirst();
+            if (cursor.getCount() != 0) {
+                result = cursor.getBlob(0);
+                Log.v(TAG, "Query = " + query +
+                        "\nResult =  " + result);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+            if (db != null) db.close();
+        }
+        return result;
     }
 
     public void updateIntValue(String TableName, String ColumnName, int value) {

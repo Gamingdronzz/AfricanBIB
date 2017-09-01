@@ -2,8 +2,11 @@ package biz.africanbib.Tools;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,6 +22,8 @@ import biz.africanbib.Models.SimpleDate;
 import biz.africanbib.Models.SimpleDateBuilder;
 import biz.africanbib.Models.SimpleEditText;
 import biz.africanbib.Models.SimpleEditTextBuilder;
+import biz.africanbib.Models.SimpleImage;
+import biz.africanbib.Models.SimpleImageBuilder;
 
 /**
  * Created by Balpreet on 01-Aug-17.
@@ -320,13 +325,12 @@ public class Utils {
             .createMultiSelectDropdown();
     }
 
-    public SimpleDate buildDate(String title, String value, Date date, String tableName, String columnName, int rowno) {
+    public SimpleDate buildDate(String title, String value, String tableName, String columnName, int rowno) {
 
         if(MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS)
         {
             return new SimpleDateBuilder()
                     .setTitle(title)
-                    .setDate(new Date())
                     .setTableName(tableName)
                     .setColumnName(columnName)
                     .setRowno(rowno)
@@ -337,11 +341,32 @@ public class Utils {
             return new SimpleDateBuilder()
                     .setTitle(title)
                     .setValue(value)
-                    .setDate(date)
                     .setTableName(tableName)
                     .setColumnName(columnName)
                     .setRowno(rowno)
                     .createSimpleDate();
+        }
+
+    }
+
+    public SimpleImage buildImage(String title, Bitmap image, String tableName, String columnName) {
+
+        if(MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS)
+        {
+            return new SimpleImageBuilder()
+                    .setTitle(title)
+                    .setTableName(tableName)
+                    .setColumnName(columnName)
+                    .createSimpleImage();
+        }
+        else
+        {
+            return new SimpleImageBuilder()
+                    .setTitle(title)
+                    .setTableName(tableName)
+                    .setColumnName(columnName)
+                    .setImage(image)
+                    .createSimpleImage();
         }
 
     }
@@ -706,5 +731,24 @@ public class Utils {
         //items.add(position+1,multiSelectDropdown);
     }
 
+    public byte[] createByteArrayFromBitmap(Bitmap bitmap)
+    {
+        if(bitmap !=null) {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
+            byte[] byteArray = stream.toByteArray();
+            return byteArray;
+        }
+        return null;
+    }
+
+    public Bitmap createBitmapFromByteArray(byte[] array)
+    {
+        if(array!=null) {
+            Bitmap bmp = BitmapFactory.decodeByteArray(array, 0, array.length);
+            return bmp;
+        }
+        return null;
+    }
 
 }

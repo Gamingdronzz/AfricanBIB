@@ -59,7 +59,7 @@ public class Tab2 extends Fragment {
 
     private void init(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_2);
-        adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager());
+        adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager(),this);
 
         if (isTab) {
             setupGridLayout(true);
@@ -67,10 +67,10 @@ public class Tab2 extends Fragment {
             setupGridLayout(false);
         }
         adapter.updateRow(DatabaseHelper.TABLE_NEEDS, needRows);
-        adapter.updateRow(DatabaseHelper.TABLE_OFFERS,offerrows);
-        adapter.updateRow(DatabaseHelper.TABLE_PROFESSIONAL_BACKGROUND,professionalBackgroundRows);
-        adapter.updateRow(DatabaseHelper.TABLE_ACADEMIC_BACKGROUND,academicBackgroundRows);
-        adapter.updateRow(DatabaseHelper.TABLE_AFFILIATION,affiliationRows);
+        adapter.updateRow(DatabaseHelper.TABLE_OFFERS, offerrows);
+        adapter.updateRow(DatabaseHelper.TABLE_PROFESSIONAL_BACKGROUND, professionalBackgroundRows);
+        adapter.updateRow(DatabaseHelper.TABLE_ACADEMIC_BACKGROUND, academicBackgroundRows);
+        adapter.updateRow(DatabaseHelper.TABLE_AFFILIATION, affiliationRows);
         //SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
         //snapHelper.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
@@ -316,19 +316,30 @@ public class Tab2 extends Fragment {
 
                 for (int i = 0; i < ids.length; i++) {
                     items.add(new Divider());
-                    for(int j=titles.length-1;j>0;j--) {
-                        items.add(
-                                utils.buildEditText(
-                                        titles[j],
-                                        databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
-                                        tableName,
-                                        columnNames[j],
-                                        ids[i]));
+                    for (int j = titles.length - 1; j > 0; j--) {
+
+                        if (columnNames[j].equals(DatabaseHelper.COLUMN_DATE)) {
+                            items.add(utils.buildDate(
+                                    titles[j],
+                                    databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                    tableName,
+                                    columnNames[j],
+                                    ids[i]));
+                        } else {
+                            items.add(
+                                    utils.buildEditText(
+                                            titles[j],
+                                            databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                            tableName,
+                                            columnNames[j],
+                                            ids[i]));
+                        }
+
                     }
                     items.add(utils.buildDropDown(
                             titles[0],
                             utils.getCountryNames(),
-                            databaseHelper.getIntFromRow(tableName,DatabaseHelper.COLUMN_COUNTRY,ids[i]),
+                            databaseHelper.getIntFromRow(tableName, DatabaseHelper.COLUMN_COUNTRY, ids[i]),
                             tableName,
                             columnNames[0],
                             ids[i]));
@@ -362,19 +373,28 @@ public class Tab2 extends Fragment {
 
                 for (int i = 0; i < ids.length; i++) {
                     items.add(new Divider());
-                    for(int j=titles.length-1;j>0;j--) {
-                        items.add(
-                                utils.buildEditText(
-                                        titles[j],
-                                        databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
-                                        tableName,
-                                        columnNames[j],
-                                        ids[i]));
+                    for (int j = titles.length - 1; j > 0; j--) {
+                        if (columnNames[j].equals(DatabaseHelper.COLUMN_DATE)) {
+                            items.add(utils.buildDate(
+                                    titles[j],
+                                    databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                    tableName,
+                                    columnNames[j],
+                                    ids[i]));
+                        } else {
+                            items.add(
+                                    utils.buildEditText(
+                                            titles[j],
+                                            databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                            tableName,
+                                            columnNames[j],
+                                            ids[i]));
+                        }
                     }
                     items.add(utils.buildDropDown(
                             titles[0],
                             utils.getCountryNames(),
-                            databaseHelper.getIntFromRow(tableName,DatabaseHelper.COLUMN_COUNTRY,ids[i]),
+                            databaseHelper.getIntFromRow(tableName, DatabaseHelper.COLUMN_COUNTRY, ids[i]),
                             tableName,
                             columnNames[0],
                             ids[i]));
@@ -404,7 +424,7 @@ public class Tab2 extends Fragment {
 
                 for (int i = 0; i < ids.length; i++) {
                     items.add(new Divider());
-                    for(int j=titles.length-1;j>0;j--) {
+                    for (int j = titles.length - 1; j > 0; j--) {
                         items.add(
                                 utils.buildEditText(
                                         titles[j],
@@ -416,7 +436,7 @@ public class Tab2 extends Fragment {
                     items.add(utils.buildDropDown(
                             titles[0],
                             utils.getCountryNames(),
-                            databaseHelper.getIntFromRow(tableName,DatabaseHelper.COLUMN_COUNTRY,ids[i]),
+                            databaseHelper.getIntFromRow(tableName, DatabaseHelper.COLUMN_COUNTRY, ids[i]),
                             tableName,
                             columnNames[0],
                             ids[i]));

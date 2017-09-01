@@ -46,6 +46,7 @@ public class PreviousBusinessLists extends AppCompatActivity implements View.OnC
                 DatabaseHelper.setCurrentCompanyId(modelList.get(position).getBusinessID());
                 intent.putExtra("type",MainActivity.EDITBUSINESS);
                 startActivity(intent);
+                finish();
             }
 
             @Override
