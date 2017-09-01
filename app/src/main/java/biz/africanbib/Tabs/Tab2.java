@@ -1,0 +1,520 @@
+package biz.africanbib.Tabs;
+
+
+import android.content.res.Configuration;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Toast;
+
+import java.util.ArrayList;
+
+import biz.africanbib.Adapters.ComplexRecyclerViewAdapter;
+import biz.africanbib.MainActivity;
+import biz.africanbib.Models.Add;
+import biz.africanbib.Models.AddBuilder;
+import biz.africanbib.Models.Divider;
+import biz.africanbib.Models.DropDown;
+import biz.africanbib.Models.DropDownBuilder;
+import biz.africanbib.Models.Heading;
+import biz.africanbib.Models.SimpleEditText;
+import biz.africanbib.Models.SimpleText;
+import biz.africanbib.R;
+import biz.africanbib.Tools.DatabaseHelper;
+import biz.africanbib.Tools.Utils;
+
+//Our class extending fragment
+public class Tab2 extends Fragment {
+
+    RecyclerView recyclerView;
+    ComplexRecyclerViewAdapter adapter;
+    Utils utils;
+    boolean isTab;
+    DatabaseHelper databaseHelper;
+    int needRows;
+    int offerrows;
+    int professionalBackgroundRows;
+    int affiliationRows;
+    int academicBackgroundRows;
+
+
+    //Overriden method onCreateView
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View view = inflater.inflate(R.layout.tab_2, container, false);
+        Log.d("Company", "Trying to initialize");
+        utils = new Utils(getContext());
+        isTab = utils.isTab();
+        databaseHelper = new DatabaseHelper(view.getContext(), DatabaseHelper.DATABASE_NAME, null, DatabaseHelper.DATABASE_VERSION);
+        init(view);
+
+        return view;
+    }
+
+    private void init(View view) {
+        recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_2);
+        adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager());
+
+        if (isTab) {
+            setupGridLayout(true);
+        } else {
+            setupGridLayout(false);
+        }
+        adapter.updateRow(DatabaseHelper.TABLE_NEEDS, needRows);
+        adapter.updateRow(DatabaseHelper.TABLE_OFFERS,offerrows);
+        adapter.updateRow(DatabaseHelper.TABLE_PROFESSIONAL_BACKGROUND,professionalBackgroundRows);
+        adapter.updateRow(DatabaseHelper.TABLE_ACADEMIC_BACKGROUND,academicBackgroundRows);
+        adapter.updateRow(DatabaseHelper.TABLE_AFFILIATION,affiliationRows);
+        //SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
+        //snapHelper.attachToRecyclerView(recyclerView);
+        recyclerView.setAdapter(adapter);
+        Log.d("Company", "Adapter set");
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration config) {
+        super.onConfigurationChanged(config);
+        // Check for the rotation
+        if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            Toast.makeText(this.getContext(), "LANDSCAPE", Toast.LENGTH_SHORT).show();
+            setupGridLayout(true);
+
+        } else if (config.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Toast.makeText(this.getContext(), "PORTRAIT", Toast.LENGTH_SHORT).show();
+            if (isTab) {
+                setupGridLayout(true);
+            } else {
+                setupGridLayout(false);
+            }
+
+
+        }
+    }
+
+    private void setupGridLayout(boolean multiColumn) {
+        if (multiColumn) {
+            GridLayoutManager manager = new GridLayoutManager(this.getContext(), 2);
+            manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+                @Override
+                public int getSpanSize(int position) {
+                    Object ob = adapter.getItem(position);
+                    if (ob instanceof Heading || ob instanceof Add || ob instanceof SimpleText || ob instanceof Divider)
+                        return 2;
+                    else
+                        return 1;
+                }
+            });
+            recyclerView.setLayoutManager(manager);
+        } else {
+            GridLayoutManager manager = new GridLayoutManager(this.getContext(), 1);
+            recyclerView.setLayoutManager(manager);
+        }
+
+    }
+
+    private ArrayList<Object> getSampleArrayList() {
+        ArrayList<Object> items = new ArrayList<>();
+
+
+        //items.add(new SimpleEditText(""));
+
+        String columnName = DatabaseHelper.COLUMN_NEED;
+        String tableName = DatabaseHelper.TABLE_NEEDS;
+
+        String value;
+
+        items.add(new Heading("INVESTMENT OPPURTUNTIES"));
+        items.add(new SimpleText("Needs"));
+        Log.v("Tab2", "Business type = " + MainActivity.typeOfBusiness);
+
+
+        if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
+            int[] ids = databaseHelper.getrowids(tableName);
+            if (ids != null) {
+                for (int i = 0; i < ids.length; i++)
+                    items.add(
+                            utils.buildEditText(
+                                    "Need",
+                                    databaseHelper.getStringFromRow(tableName, columnName, ids[i]),
+                                    tableName,
+                                    columnName,
+                                    ids[i]));
+                needRows = ids.length;
+            }
+
+
+        }
+        items.add(utils.buildAdd(1, new String[]{"Need"}, tableName, new String[]{columnName}));
+
+        items.add(new SimpleText("Offers"));
+        columnName = DatabaseHelper.COLUMN_OFFER;
+        tableName = DatabaseHelper.TABLE_OFFERS;
+        if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
+            int[] ids = databaseHelper.getrowids(tableName);
+            if (ids != null) {
+                for (int i = 0; i < ids.length; i++) {
+                    items.add(new Divider());
+                    items.add(
+                            utils.buildEditText(
+                                    "Offer",
+                                    databaseHelper.getStringFromRow(tableName, columnName, ids[i]),
+                                    tableName,
+                                    columnName,
+                                    ids[i]));
+                }
+                offerrows = ids.length;
+            }
+
+
+        }
+        items.add(utils.buildAdd(1, new String[]{"Offer"}, DatabaseHelper.TABLE_OFFERS, new String[]{DatabaseHelper.COLUMN_OFFER}));
+        items.add(new Heading("OWNERS / MANAGERS / SUBSIDIARIES / REFERENCES"));
+        tableName = DatabaseHelper.TABLE_OWNERS_MANAGERS_SUBSIDIARIES_REFERENCE;
+        columnName = DatabaseHelper.COLUMN_TYPE;
+        int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
+        items.add(
+                utils.buildDropDown(
+                        "Type",
+                        new String[]{"Owner",
+                                "Manager",
+                                "Subsidiary",
+                                "Reference"},
+                        selectedPosition,
+                        tableName,
+                        columnName,
+                        -1));
+        columnName = DatabaseHelper.COLUMN_TELEPHONE;
+
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Telephone", value, tableName, columnName, -1));
+
+        columnName = DatabaseHelper.COLUMN_CELLPHONE;
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Cellphone", value, tableName, columnName, -1));
+
+        columnName = DatabaseHelper.COLUMN_FASCIMILE;
+
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Fascimile", value, tableName, columnName, -1));
+
+        columnName = DatabaseHelper.COLUMN_EMAIL;
+
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Email", value, tableName, columnName, -1));
+
+        columnName = DatabaseHelper.COLUMN_WEBSITE;
+
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Website", value, tableName, columnName, -1));
+
+        items.add(new Heading("OWNER / MANAGER SPECIFIC INFORMATION"));
+
+        columnName = DatabaseHelper.COLUMN_FIRST_NAME;
+
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("First name", value, tableName, columnName, -1));
+
+        columnName = DatabaseHelper.COLUMN_LAST_NAME;
+
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Last name", value, tableName, columnName, -1));
+        columnName = DatabaseHelper.COLUMN_PREFIX;
+        selectedPosition = databaseHelper.getIntValue(columnName, tableName);
+
+        items.add(
+                utils.buildDropDown(
+                        "Prefix",
+                        new String[]{"Mr.",
+                                "Mrs.",
+                                "Ms.",
+                                "Dr",
+                                "Prof."},
+                        selectedPosition,
+                        tableName,
+                        columnName,
+                        -1));
+
+        columnName = DatabaseHelper.COLUMN_POSITION_IN_COMPANY;
+        selectedPosition = databaseHelper.getIntValue(columnName, tableName);
+        items.add(
+                utils.buildDropDown(
+                        "Position in company/institution",
+                        new String[]{"Student/Intern",
+                                "Entry Level",
+                                "Professional / Experienced",
+                                "Manager (Manager / Supervisor)",
+                                "Executive (VP, SVP etc)",
+                                "Senior Executive (CEO,CFO)"},
+                        selectedPosition,
+                        tableName,
+                        columnName,
+                        -1));
+        columnName = DatabaseHelper.COLUMN_NATIONALITY;
+
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Nationality", value, tableName, columnName, -1));
+
+        columnName = DatabaseHelper.COLUMN_BIRTHDAY;
+
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Birthday", value, tableName, columnName, -1));
+        columnName = DatabaseHelper.COLUMN_PHOTO;
+        selectedPosition = databaseHelper.getIntValue(columnName, tableName);
+        items.add(
+                utils.buildDropDown(
+                        "Photo",
+                        new String[]{"Collected",
+                                "Not Collected"},
+                        selectedPosition,
+                        tableName,
+                        columnName,
+                        -1));
+
+        columnName = DatabaseHelper.COLUMN_VIDEO;
+        selectedPosition = databaseHelper.getIntValue(columnName, tableName);
+        items.add(
+                utils.buildDropDown(
+                        "Video",
+                        new String[]{"Collected",
+                                "Not Collected"},
+                        selectedPosition,
+                        tableName,
+                        columnName,
+                        -1));
+        columnName = DatabaseHelper.COLUMN_PHOTO_NOTE;
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Photo Note", value, tableName, columnName, -1));
+
+        columnName = DatabaseHelper.COLUMN_VIDEO_NOTE;
+
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Video Note", value, tableName, columnName, -1));
+
+        items.add(new SimpleText("Academic Background"));
+
+        tableName = DatabaseHelper.TABLE_ACADEMIC_BACKGROUND;
+
+        String[] titles = new String[]{
+                "Country",
+                "Date",
+                "Subject Focus",
+                "Name of Institution"};
+        String[] columnNames = new String[]{
+                DatabaseHelper.COLUMN_COUNTRY,
+                DatabaseHelper.COLUMN_DATE,
+                DatabaseHelper.COLUMN_SUBJECT_FOCUS,
+                DatabaseHelper.COLUMN_NAME_OF_INSTITUTION};
+        if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
+            int[] ids = databaseHelper.getrowids(tableName);
+            if (ids != null) {
+
+                for (int i = 0; i < ids.length; i++) {
+                    items.add(new Divider());
+                    for(int j=titles.length-1;j>0;j--) {
+                        items.add(
+                                utils.buildEditText(
+                                        titles[j],
+                                        databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                        tableName,
+                                        columnNames[j],
+                                        ids[i]));
+                    }
+                    items.add(utils.buildDropDown(
+                            titles[0],
+                            utils.getCountryNames(),
+                            databaseHelper.getIntFromRow(tableName,DatabaseHelper.COLUMN_COUNTRY,ids[i]),
+                            tableName,
+                            columnNames[0],
+                            ids[i]));
+                }
+                academicBackgroundRows = ids.length;
+            }
+
+
+        }
+        items.add(utils.buildAdd(4, titles,
+                tableName,
+                columnNames));
+
+        items.add(new SimpleText("Professional Background"));
+        tableName = DatabaseHelper.TABLE_PROFESSIONAL_BACKGROUND;
+        titles = new String[]{
+                "Country",
+                "Date",
+                "Job Description",
+                "Name of Employer",
+                "Job Title"};
+        columnNames = new String[]{
+                DatabaseHelper.COLUMN_COUNTRY,
+                DatabaseHelper.COLUMN_DATE,
+                DatabaseHelper.COLUMN_JOB_DESCRIPTION,
+                DatabaseHelper.COLUMN_NAME_OF_EMPLOYER,
+                DatabaseHelper.COLUMN_JOB_TITLE};
+        if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
+            int[] ids = databaseHelper.getrowids(tableName);
+            if (ids != null) {
+
+                for (int i = 0; i < ids.length; i++) {
+                    items.add(new Divider());
+                    for(int j=titles.length-1;j>0;j--) {
+                        items.add(
+                                utils.buildEditText(
+                                        titles[j],
+                                        databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                        tableName,
+                                        columnNames[j],
+                                        ids[i]));
+                    }
+                    items.add(utils.buildDropDown(
+                            titles[0],
+                            utils.getCountryNames(),
+                            databaseHelper.getIntFromRow(tableName,DatabaseHelper.COLUMN_COUNTRY,ids[i]),
+                            tableName,
+                            columnNames[0],
+                            ids[i]));
+
+                }
+                professionalBackgroundRows = ids.length;
+            }
+
+
+        }
+        items.add(utils.buildAdd(5, titles,
+                tableName,
+                columnNames));
+        items.add(new SimpleText("Affiliation"));
+        tableName = DatabaseHelper.TABLE_AFFILIATION;
+        titles = new String[]{
+                "Country",
+                "Sector",
+                "Name of Association"};
+        columnNames = new String[]{
+                DatabaseHelper.COLUMN_COUNTRY,
+                DatabaseHelper.COLUMN_SECTOR,
+                DatabaseHelper.COLUMN_NAME_OF_ASSOCIATION};
+        if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
+            int[] ids = databaseHelper.getrowids(tableName);
+            if (ids != null) {
+
+                for (int i = 0; i < ids.length; i++) {
+                    items.add(new Divider());
+                    for(int j=titles.length-1;j>0;j--) {
+                        items.add(
+                                utils.buildEditText(
+                                        titles[j],
+                                        databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                        tableName,
+                                        columnNames[j],
+                                        ids[i]));
+                    }
+                    items.add(utils.buildDropDown(
+                            titles[0],
+                            utils.getCountryNames(),
+                            databaseHelper.getIntFromRow(tableName,DatabaseHelper.COLUMN_COUNTRY,ids[i]),
+                            tableName,
+                            columnNames[0],
+                            ids[i]));
+                }
+                affiliationRows = ids.length;
+            }
+
+
+        }
+        items.add(utils.buildAdd(3, titles,
+                tableName,
+                columnNames));
+
+
+        items.add(new Heading("REFERENCE SPECIFIC INFORMATION"));
+
+        tableName = DatabaseHelper.TABLE_REFERENCE_SPECIFIC_INFORMATION;
+        columnName = DatabaseHelper.COLUMN_INSTITUTION_NAME;
+
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Institution name", value, tableName, columnName, -1));
+
+        columnName = DatabaseHelper.COLUMN_ORGANISATION_TYPE;
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Organisation type", value, tableName, columnName, -1));
+        columnName = DatabaseHelper.COLUMN_LOGO;
+        selectedPosition = databaseHelper.getIntValue(columnName, tableName);
+        items.add(
+                utils.buildDropDown(
+                        "Organisation Logo",
+                        new String[]{"Collected",
+                                "Not Collected"},
+                        selectedPosition,
+                        tableName,
+                        columnName,
+                        -1));
+        columnName = DatabaseHelper.COLUMN_LOGO_NOTE;
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Logo Note", value, tableName, columnName, -1));
+
+        items.add(new Heading("SUBSIDIARY SPECIFIC INFORMATION"));
+
+        tableName = DatabaseHelper.TABLE_SUBSIDIARY_SPECIFIC_INFORMATION;
+        columnName = DatabaseHelper.COLUMN_SUBSIDIARY_NAME;
+
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Subsidiary name", value, tableName, columnName, -1));
+
+        columnName = DatabaseHelper.COLUMN_STREET;
+
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Street & Number", value, tableName, columnName, -1));
+        columnName = DatabaseHelper.COLUMN_POSTAL_CODE;
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Postal Code", value, tableName, columnName, -1));
+        columnName = DatabaseHelper.COLUMN_PO_BOX;
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Post Office Box", value, tableName, columnName, -1));
+        columnName = DatabaseHelper.COLUMN_CITY;
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("City / Town", value, tableName, columnName, -1));
+        columnName = DatabaseHelper.COLUMN_DISTRICT;
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("District / State", value, tableName, columnName, -1));
+
+        items.add(new DropDownBuilder().setHeading("Country").setList(utils.getCountryNames()).createDropDown());
+
+        columnName = DatabaseHelper.COLUMN_LOGO_NOTE;
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(utils.buildEditText("Logo Note", value, tableName, columnName, -1));
+        columnName = DatabaseHelper.COLUMN_LOGO;
+        selectedPosition = databaseHelper.getIntValue(columnName, tableName);
+        items.add(
+                utils.buildDropDown(
+                        "Subsidiary Logo",
+                        new String[]{"Collected",
+                                "Not Collected"},
+                        selectedPosition,
+                        tableName,
+                        columnName,
+                        -1));
+        return items;
+    }
+
+
+    private void getValuesFromViews() {
+        Object[] items;
+        items = new Object[adapter.getItemCount()];
+        for (int i = 0; i < items.length; i++) {
+            //Log.d("Company","I = " + i);
+            items[i] = adapter.getItem(i);
+            if (items[i] instanceof SimpleEditText) {
+                SimpleEditText ob = (SimpleEditText) items[i];
+                Log.d("Company", ob.getTitle() + " = " + ob.getValue());
+            } else if (items[i] instanceof DropDown) {
+                DropDown ob = (DropDown) items[i];
+                Log.d("Company", ob.getHeading() + " = " + ob.getSelectedPosition());
+            }
+        }
+    }
+}

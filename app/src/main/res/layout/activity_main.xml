@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="biz.africanbib.MainActivity">
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_alignParentTop="true"
+        app:tabMode="fixed"
+        app:tabGravity="center"
+        app:tabTextAppearance="@style/TextAppearance.AppCompat.Large"
+        app:tabTextColor="@color/colorAccent"
+        app:tabSelectedTextColor="@color/colorBlack"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorLightGray"
+        android:minHeight="?attr/actionBarSize"
+        app:tabIndicatorColor="@color/colorAccent"
+        app:tabIndicatorHeight="@dimen/height_large" />
+
+    <com.carlosmuvi.segmentedprogressbar.SegmentedProgressBar
+        android:id="@+id/segmented_progressbar"
+        android:layout_width="match_parent"
+        app:fill_color="@color/colorBlack"
+        app:container_color="@color/colorLightGray"
+        app:gap_size="@dimen/height_min"
+        app:segment_count="4"
+        android:layout_height="10dp"/>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewPagerLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabLayout"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/left_arrow"
+        android:id="@+id/fab_go_left"
+        android:tint="@color/colorWhite"
+        app:backgroundTint="@color/colorRed"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/margin_large"
+        android:padding="@dimen/padding_large"/>
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/right_arrow"
+        android:layout_alignParentBottom="true"
+        android:tint="@color/colorWhite"
+        android:layout_alignParentRight="true"
+        app:backgroundTint="@color/colorRed"
+        android:id="@+id/fab_go_right"
+        android:layout_margin="@dimen/margin_large"
+        android:padding="@dimen/padding_xlarge"/>
+
+
+</RelativeLayout>

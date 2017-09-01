@@ -1,0 +1,44 @@
+<!--
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="@dimen/elevation_medium">
+
+
+</android.support.v7.widget.CardView>
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/margin_medium"
+    android:orientation="vertical"
+    android:padding="@dimen/padding_medium">
+
+    <TextView
+        android:id="@+id/text_view_multi_select_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textColor="@color/colorBlack">
+
+    </TextView>
+    <!--
+        <biz.africanbib.MultiSelectionSpinner
+            android:id="@+id/multi_select_Spinner"
+            android:background="@drawable/bg_edittext"
+            android:padding="@dimen/padding_medium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+            -->
+
+    <biz.africanbib.MyCustomMultiSelectionSpinner
+        android:id="@+id/multi_select_Spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_edittext"
+        android:padding="@dimen/padding_medium"></biz.africanbib.MyCustomMultiSelectionSpinner>
+
+</LinearLayout>

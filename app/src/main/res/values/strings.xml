@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">African BIB</string>
+    <string name="main_activity">Add a New Business</string>
+    <string name="company_profile">Company / Institution Profile</string>
+    <string name="name">Name</string>
+    <string name="add_business">Add Business</string>
+    <string name="edit_business">Edit Business</string>
+    <string name="accept">I Accept</string>
+    <string name="company_name">Enter Company Name</string>
+    <string name="PreviousBusiness">Select a business to edit</string>
+    <string name="title_activity_nav">Nav</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+</resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@color/colorLightGray"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="biz.africanbib.InitialCompanyDetails">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:textAlignment="center"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:layout_height="wrap_content"
+        android:text="@string/company_name"
+        android:textColor="@color/colorBlack" />
+
+    <EditText
+        android:id="@+id/edit_text_company_name"
+        android:layout_width="match_parent"
+        android:padding="@dimen/padding_medium"
+        android:scrollHorizontally="false"
+        android:layout_marginRight="@dimen/margin_large"
+        android:layout_marginLeft="@dimen/margin_large"
+        android:layout_marginTop="@dimen/margin_large"
+        android:inputType="textCapSentences|textMultiLine"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_edittext"
+        android:textAlignment="center" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/circular_background"
+        android:layout_marginTop="@dimen/margin_xxlarge"
+        android:text="Submit"
+        android:id="@+id/button_submit"
+        android:textSize="@dimen/text_large"
+        android:paddingLeft="@dimen/padding_xxlarge"
+        android:paddingTop="@dimen/padding_large"
+        android:paddingBottom="@dimen/padding_large"
+        android:paddingRight="@dimen/padding_xxlarge"/>
+
+
+</LinearLayout>

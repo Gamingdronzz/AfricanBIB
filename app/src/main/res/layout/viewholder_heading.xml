@@ -1,0 +1,45 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/llContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginBottom="@dimen/margin_small"
+    android:layout_marginTop="@dimen/margin_large">
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="5dp"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/view1"
+        android:background="@color/colorBlack">
+
+    </View>
+
+    <TextView
+        android:id="@+id/text_view_heading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/padding_medium"
+        android:textAlignment="center"
+        android:textColor="@color/colorWhite"
+        android:textSize="@dimen/text_medium">
+
+    </TextView>
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:id="@+id/view2"
+        android:layout_height="5dp"
+        android:background="@color/colorBlack">
+    </View>
+
+
+
+
+
+
+
+
+</LinearLayout>
