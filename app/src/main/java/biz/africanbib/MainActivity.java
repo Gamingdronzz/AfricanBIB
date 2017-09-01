@@ -21,15 +21,13 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     private static final String TAG = "Main";
     public static int typeOfBusiness;
-    public static final  int NEWBUSINESS = 1;
-    public static final  int EDITBUSINESS = 2;
+    public static final int NEWBUSINESS = 1;
+    public static final int EDITBUSINESS = 2;
     //This is our tablayout
     private TabLayout tabLayout;
-
     //This is our viewPager
     private ViewPager viewPager;
     SegmentedProgressBar segmentedProgressBar;
-
     FloatingActionButton goLeft, goRight;
     DatabaseHelper databaseHelper;
     String companyName = null;
@@ -43,17 +41,16 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         setUpTabLayout();
         init();
         handleIntent();
-        Log.v(TAG,"Current company id = " + DatabaseHelper.getCurrentCompanyId());
+        Log.v(TAG, "Current company id = " + DatabaseHelper.getCurrentCompanyId());
     }
 
-    private void handleIntent()
-    {
+    private void handleIntent() {
         Intent intent = getIntent();
-        typeOfBusiness = intent.getIntExtra("type",-1);
+        typeOfBusiness = intent.getIntExtra("type", -1);
 
     }
-    private void init()
-    {
+
+    private void init() {
         goLeft.setVisibility(View.INVISIBLE);
 
         goLeft.setOnClickListener(new View.OnClickListener() {
@@ -78,8 +75,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     }
 
-    private void bindViews()
-    {
+    private void bindViews() {
         segmentedProgressBar = (SegmentedProgressBar) findViewById(R.id.segmented_progressbar);
         goLeft = (FloatingActionButton) findViewById(R.id.fab_go_left);
         goRight = (FloatingActionButton) findViewById(R.id.fab_go_right);

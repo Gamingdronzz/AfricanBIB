@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import biz.africanbib.Adapters.ComplexRecyclerViewAdapter;
@@ -235,7 +236,7 @@ public class Tab4 extends Fragment {
         }
         columnName = DatabaseHelper.COLUMN_DATE;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Date/Time", value, tableName, columnName, -1));
+        items.add(utils.buildDate("Date/Time", value,new Date(), tableName, columnName, -1));
         columnName = DatabaseHelper.COLUMN_LOCATION;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(utils.buildEditText("Name of Location / Event", value, tableName, columnName, -1));

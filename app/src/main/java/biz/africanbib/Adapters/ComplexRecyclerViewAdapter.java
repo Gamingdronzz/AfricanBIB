@@ -1,7 +1,13 @@
 package biz.africanbib.Adapters;
 
 
+import android.app.AlertDialog;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
@@ -15,10 +21,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import biz.africanbib.CustomIndustry;
@@ -27,6 +36,8 @@ import biz.africanbib.Models.Divider;
 import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.Heading;
 import biz.africanbib.Models.MultiSelectDropdown;
+import biz.africanbib.Models.PreviousBusiness;
+import biz.africanbib.Models.SimpleDate;
 import biz.africanbib.Models.SimpleEditText;
 import biz.africanbib.Models.SimpleText;
 //import biz.africanbib.MultiSelectionSpinner;
@@ -35,6 +46,8 @@ import biz.africanbib.R;
 import biz.africanbib.Tools.DatabaseHelper;
 import biz.africanbib.Tools.Utils;
 import biz.africanbib.ViewHolders.ViewHolderHeading;
+
+import static android.provider.ContactsContract.CommonDataKinds.Event.START_DATE;
 
 /**
  * Created by Balpreet on 30-Jul-17.
@@ -60,16 +73,16 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private int currentRowServices = 1;
 
 
-    private final int HEADING = 0, SIMPLEEDITTEXT = 1, DROPDOWN = 2, ADD = 3, SIMPLETEXT = 4, DIVIDER = 5, MULTISELECT = 6;
+    private final int HEADING = 0, SIMPLEEDITTEXT = 1, DROPDOWN = 2, ADD = 3, SIMPLETEXT = 4, DIVIDER = 5, MULTISELECT = 6, DATE = 7;
 
-    // Provide a suitable constructor (depends on the kind of dataset)
+
     public ComplexRecyclerViewAdapter(List<Object> items, FragmentManager manager) {
         this.items = items;
         this.fragmentManager = manager;
         utils = new Utils();
     }
 
-    // Return the size of your dataset (invoked by the layout manager)
+
     @Override
     public int getItemCount() {
         return this.items.size();
@@ -81,7 +94,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         int val = -1;
         //Log.v("Adapter", "Instance of  = " + items.get(position).toString());
         if (items.get(position) instanceof Heading) {
-
             val = HEADING;
         } else if (items.get(position) instanceof SimpleEditText) {
             val = SIMPLEEDITTEXT;
@@ -95,6 +107,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             val = DIVIDER;
         } else if (items.get(position) instanceof MultiSelectDropdown) {
             val = MULTISELECT;
+        } else if (items.get(position) instanceof SimpleDate) {
+            val = DATE;
         }
         //Log.v("Adapter", "Case = " + val);
         return val;
@@ -106,11 +120,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         databaseHelper = new DatabaseHelper(viewGroup.getContext(), DatabaseHelper.DATABASE_NAME, null, DatabaseHelper.DATABASE_VERSION);
 
         LayoutInflater inflater = LayoutInflater.from(viewGroup.getContext());
-        //Log.v("Adapter", "Type = " + viewType);
-        if (viewType == -1) {
-            //Log.v("Adapter", "Invalid");
-            return null;
-        }
+
+
         switch (viewType) {
             case HEADING:
                 View v0 = inflater.inflate(R.layout.viewholder_heading, viewGroup, false);
@@ -140,6 +151,10 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             case MULTISELECT:
                 View viewMultiSelect = inflater.inflate(R.layout.viewholder_multi_select, viewGroup, false);
                 viewHolder = new ViewHolderMultiSelectSpinner(viewMultiSelect, new CustomOnMultiSelectClickListener());
+                break;
+            case DATE:
+                View viewDate = inflater.inflate(R.layout.viewholder_simple_date, viewGroup, false);
+                viewHolder = new ViewHolderDate(viewDate, new CustomDateChooser());
                 break;
             default:
                 //View v = inflater.inflate(android.R.layout.simple_list_item_1, viewGroup, false);
@@ -180,6 +195,10 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             case MULTISELECT:
                 ViewHolderMultiSelectSpinner viewHolderMultiSelectSpinner = (ViewHolderMultiSelectSpinner) viewHolder;
                 configureViewHolderMultiSelect(viewHolderMultiSelectSpinner, position);
+                break;
+            case DATE:
+                ViewHolderDate viewHolderDate = (ViewHolderDate) viewHolder;
+                configureViewHolderSimpleDate(viewHolderDate, position);
                 break;
             default:
                 break;
@@ -348,8 +367,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
 
         public void setItems(String[] items) {
-            if(items!=null)
-            this.myCustomMultiSelectionSpinner.setItems(items);
+            if (items != null)
+                this.myCustomMultiSelectionSpinner.setItems(items);
         }
 
         public void setSelected(List<Integer> selected) {
@@ -387,6 +406,47 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             this.divider = (View) v.findViewById(R.id.divider);
         }
 
+    }
+
+    public class ViewHolderDate extends RecyclerView.ViewHolder {
+
+        private TextView date;
+        private TextView textview;
+        private CustomDateChooser customDateChooser;
+
+        public ViewHolderDate(View v, CustomDateChooser customDateChooser) {
+            super(v);
+            date = (TextView) v.findViewById(R.id.text_date);
+            textview = (TextView) v.findViewById(R.id.text_view_simple_date);
+            this.date.setFocusable(true);
+            this.customDateChooser = customDateChooser;
+            date.setOnClickListener(this.customDateChooser);
+        }
+
+        public void setHint(String hint) {
+            this.date.setHint(hint);
+        }
+
+        public void setValue(String value) {
+            this.date.setText(value);
+        }
+
+        public String getValue() {
+            return this.date.getText().toString();
+        }
+
+
+        public void setTitle(String value) {
+            this.textview.setText(value);
+        }
+
+        public void setTag(String value) {
+            this.date.setTag(value);
+        }
+
+        public String getTitle() {
+            return this.textview.getText().toString();
+        }
     }
 
 
@@ -454,6 +514,16 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     }
 
+    private void configureViewHolderSimpleDate(ViewHolderDate viewHolderDate, int position) {
+        SimpleDate simpleDate = (SimpleDate) items.get(position);
+        if (simpleDate != null) {
+            viewHolderDate.customDateChooser.updatePosition(position);
+            viewHolderDate.setTitle(simpleDate.getTitle());
+            viewHolderDate.setValue(simpleDate.getValue());
+            viewHolderDate.setTag(simpleDate.getTitle());
+        }
+    }
+
 
     private class CustomEditTextListener implements TextWatcher {
         private int position;
@@ -506,7 +576,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     if (dropDown.getHeading().equals("Industry")) {
                         Log.v("Adapter", "Industry Selected = " + i);
                         manageMultiSelectList(i);
-                        MultiSelectDropdown multiselect = (MultiSelectDropdown) items.get(position+1);
+                        MultiSelectDropdown multiselect = (MultiSelectDropdown) items.get(position + 1);
                         multiselect.setSelectedIndices(new ArrayList<Integer>());
                         notifyItemChanged(position + 1);
                     }
@@ -899,6 +969,64 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    private class CustomDateChooser implements View.OnClickListener {
+        private int position;
+
+        public void updatePosition(int position) {
+            this.position = position;
+        }
+
+        @Override
+        public void onClick(final View view) {
+            DatePickerFragment datePickerFragment = new DatePickerFragment();
+            datePickerFragment.setItems(items);
+            datePickerFragment.setAdapter(ComplexRecyclerViewAdapter.this);
+            datePickerFragment.updatePosition(position);
+            datePickerFragment.show(fragmentManager,"Date");
+        }
+    }
+
+
+    public static class DatePickerFragment extends DialogFragment
+            implements DatePickerDialog.OnDateSetListener {
+
+        private int position;
+
+        public void updatePosition(int position) {
+            this.position = position;
+        }
+
+        private List<Object> items;
+
+        public void setItems(List<Object> items)
+        {
+            this.items = items;
+        }
+
+        private ComplexRecyclerViewAdapter adapter;
+
+        public void setAdapter(ComplexRecyclerViewAdapter adapter) {
+            this.adapter = adapter;
+        }
+
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            // Use the current date as the default date in the picker
+            final Calendar c = Calendar.getInstance();
+            int year = c.get(Calendar.YEAR);
+            int month = c.get(Calendar.MONTH);
+            int day = c.get(Calendar.DAY_OF_MONTH);
+            return new DatePickerDialog(getActivity(), this, year, month, day);
+        }
+
+        public void onDateSet(DatePicker view, int year, int month, int day) {
+            month = month + 1;
+            String stringOfDate = year + "-" + month + "-" + day;
+            ((SimpleDate)items.get(position)).setValue(stringOfDate);
+            adapter.notifyItemChanged(position);
+        }
+    }
+
     private class CustomFocusChangeListener implements View.OnFocusChangeListener {
         private int position;
         private int currentlyFocusedPosition = -1;
@@ -964,6 +1092,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+
     private int manageRowNo(Add add) {
         String tableName = add.getTableName();
         if (tableName.equals(DatabaseHelper.TABLE_OFFERS)) {
@@ -1019,30 +1148,4 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
-    /*
-    public void initializewithzero() {
-        Log.d("Adapter", "Initializing within adapter");
-        int value = 0;
-        currentRowOffers = value;
-        currentRowNeeds = value;
-
-        currentRowAcademicBackground = value;
-
-        currentRowProfessionalBackground = value;
-
-        currentRowAffiliation = value;
-
-        currentRowProducts = value;
-
-        currentRowServices = value;
-
-        currentRowProductDetails = value;
-
-        currentRowAwards = value;
-
-        currentRowLatestNews = value;
-
-        currentRowIndustry = value;
-    }
-    */
 }

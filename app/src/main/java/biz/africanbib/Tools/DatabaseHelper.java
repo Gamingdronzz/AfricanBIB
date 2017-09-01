@@ -407,52 +407,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.v(TAG, "TABLE CREATED");
     }
 
-    private void deleteAllRecords(SQLiteDatabase db) {
-        String tableName;
-        tableName = TABLE_COMPANY_PROFILE;
-        db.delete(tableName, null, null);
-        tableName = TABLE_COMPANY_CONTACT;
-        db.delete(tableName, null, null);
-        tableName = TABLE_COMPANY_POSTAL_ADDRESS;
-        db.delete(tableName, null, null);
-        tableName = TABLE_COMPANY_PHYSICAL_ADDRESS;
-        db.delete(tableName, null, null);
-        tableName = TABLE_COMPANY_SPECIFIC_INFORMATION;
-        db.delete(tableName, null, null);
-        tableName = TABLE_OFFERS;
-        db.delete(tableName, null, null);
-        tableName = TABLE_NEEDS;
-        db.delete(tableName, null, null);
-        tableName = TABLE_OWNERS_MANAGERS_SUBSIDIARIES_REFERENCE;
-        db.delete(tableName, null, null);
-        tableName = TABLE_ACADEMIC_BACKGROUND;
-        db.delete(tableName, null, null);
-        tableName = TABLE_PROFESSIONAL_BACKGROUND;
-        db.delete(tableName, null, null);
-        tableName = TABLE_AFFILIATION;
-        db.delete(tableName, null, null);
-        tableName = TABLE_REFERENCE_SPECIFIC_INFORMATION;
-        db.delete(tableName, null, null);
-        tableName = TABLE_SUBSIDIARY_SPECIFIC_INFORMATION;
-        db.delete(tableName, null, null);
-        tableName = TABLE_SERVICES;
-        db.delete(tableName, null, null);
-        tableName = TABLE_PRODUCTS_AND_PRODUCT_DETAILS;
-        db.delete(tableName, null, null);
-        tableName = TABLE_PRODUCT_DETAILS;
-        db.delete(tableName, null, null);
-        tableName = TABLE_COMPANY_INDICATORS;
-        db.delete(tableName, null, null);
-        tableName = TABLE_AWARDS;
-        db.delete(tableName, null, null);
-        tableName = TABLE_LATEST_NEWS;
-        db.delete(tableName, null, null);
-        tableName = TABLE_BUSINESS_CORRESPONDING_LANGUAGES;
-        db.delete(tableName, null, null);
-        tableName = TABLE_SECTORS;
-        db.delete(tableName, null, null);
-        tableName = TABLE_SOURCE_OF_DATA;
-        db.delete(tableName, null, null);
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        // Drop older table if existed, all data will be gone!!!
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCT_DETAILS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
+
+        db.execSQL(CREATE_TABLE_PRODUCTS);
+        // Create tables again
+        onCreate(db);
+
     }
 
     public void addBusiness(String businessName) {
@@ -768,16 +732,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // Drop older table if existed, all data will be gone!!!
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCT_DETAILS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
 
-        db.execSQL(CREATE_TABLE_PRODUCTS);
-        // Create tables again
-        onCreate(db);
-
-    }
 }
 

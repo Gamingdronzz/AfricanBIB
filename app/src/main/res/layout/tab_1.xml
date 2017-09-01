@@ -10,16 +10,4 @@
         android:background="@color/colorLightGray">
     </android.support.v7.widget.RecyclerView>
 
-
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:text="Get Values"
-        android:visibility="gone"
-        android:id="@+id/buttonGetValues"
-        android:textColor="@color/colorWhite"
-        android:textSize="@dimen/text_large"
-        android:layout_alignParentBottom="true"/>
 </RelativeLayout>

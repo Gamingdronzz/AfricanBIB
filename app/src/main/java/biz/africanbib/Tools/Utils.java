@@ -5,6 +5,7 @@ import android.content.res.Configuration;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import biz.africanbib.MainActivity;
@@ -14,6 +15,8 @@ import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.DropDownBuilder;
 import biz.africanbib.Models.MultiSelectDropdown;
 import biz.africanbib.Models.MultiSelectDropdownBuilder;
+import biz.africanbib.Models.SimpleDate;
+import biz.africanbib.Models.SimpleDateBuilder;
 import biz.africanbib.Models.SimpleEditText;
 import biz.africanbib.Models.SimpleEditTextBuilder;
 
@@ -315,6 +318,32 @@ public class Utils {
             .setItems(items)
             .setSelectedIndices(selectedIndices)
             .createMultiSelectDropdown();
+    }
+
+    public SimpleDate buildDate(String title, String value, Date date, String tableName, String columnName, int rowno) {
+
+        if(MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS)
+        {
+            return new SimpleDateBuilder()
+                    .setTitle(title)
+                    .setDate(new Date())
+                    .setTableName(tableName)
+                    .setColumnName(columnName)
+                    .setRowno(rowno)
+                    .createSimpleDate();
+        }
+        else
+        {
+            return new SimpleDateBuilder()
+                    .setTitle(title)
+                    .setValue(value)
+                    .setDate(date)
+                    .setTableName(tableName)
+                    .setColumnName(columnName)
+                    .setRowno(rowno)
+                    .createSimpleDate();
+        }
+
     }
 
     public List<Integer> getSelectedIndices(String list)
@@ -676,4 +705,6 @@ public class Utils {
         //notifyDataSetChanged();
         //items.add(position+1,multiSelectDropdown);
     }
+
+
 }

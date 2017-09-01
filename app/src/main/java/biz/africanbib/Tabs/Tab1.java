@@ -33,7 +33,6 @@ import biz.africanbib.Tools.Utils;
 public class Tab1 extends Fragment {
 
     RecyclerView recyclerView;
-    private Button getValues;
     ComplexRecyclerViewAdapter adapter;
     Utils utils;
     boolean isTab;
@@ -55,14 +54,6 @@ public class Tab1 extends Fragment {
     private void init(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_1);
         adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager());
-
-        getValues = (Button) view.findViewById(R.id.buttonGetValues);
-        getValues.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getValuesFromViews();
-            }
-        });
         if (isTab) {
             setupGridLayout(true);
         } else {
@@ -128,6 +119,8 @@ public class Tab1 extends Fragment {
 
     private ArrayList<Object> getSampleArrayList() {
         ArrayList<Object> items = new ArrayList<>();
+
+
         items.add(new Heading("COMPANY / INSTITUION PROFILE"));
 
         String columnName = DatabaseHelper.COLUMN_COMPANY_NAME;
@@ -135,10 +128,11 @@ public class Tab1 extends Fragment {
 
         String value = databaseHelper.getStringValue(columnName, tableName);
         Log.v("Tab1","Value = " + value);
+
         items.add(new SimpleEditTextBuilder()
                 .setTableName(tableName)
                 .setColumnName(columnName)
-                .setTitle("Need")
+                .setTitle("Business Name")
                 .setValue(value)
                 .setRowno(-1)
                 .createSimpleEditText());
@@ -286,23 +280,6 @@ public class Tab1 extends Fragment {
         items.add(utils.buildEditText("Guiding Principals", value, tableName, columnName, -1));
 
         return items;
-    }
-
-
-    private void getValuesFromViews() {
-        Object[] items;
-        items = new Object[adapter.getItemCount()];
-        for (int i = 0; i < items.length; i++) {
-            //Log.d("Company","I = " + i);
-            items[i] = adapter.getItem(i);
-            if (items[i] instanceof SimpleEditText) {
-                SimpleEditText ob = (SimpleEditText) items[i];
-                Log.d("Company", ob.getTitle() + " = " + ob.getValue());
-            } else if (items[i] instanceof DropDown) {
-                DropDown ob = (DropDown) items[i];
-                Log.d("Company", ob.getHeading() + " = " + ob.getSelectedPosition());
-            }
-        }
     }
 
 

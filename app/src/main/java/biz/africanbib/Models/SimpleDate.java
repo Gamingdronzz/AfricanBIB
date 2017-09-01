@@ -1,25 +1,28 @@
 package biz.africanbib.Models;
 
+import java.util.Date;
+
 /**
  * Created by Balpreet on 30-Jul-17.
  */
 
-public class SimpleEditText
+public class SimpleDate
 {
     private String title;
     private String value;
-    private int type = TEXT;
+    private Date date;
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 
     private String columnName;
     private String tableName;
     private int rowno = 0;
-
-
-
-    public static final int TEXT = 1;
-    public static final int NUMBER = 2;
-    public static final int DATE = 3;
-    public static final int EMAIL = 4;
 
     public int getRowno() {
         return rowno;
@@ -30,11 +33,10 @@ public class SimpleEditText
     }
 
 
-
-    public SimpleEditText(String title, String value, int type, String columnName, String tableName, int rowno) {
+    public SimpleDate(String title, String value, Date date, String columnName, String tableName, int rowno) {
         this.title = title;
         this.value = value;
-        this.type = type;
+        this.date = date;
         this.columnName = columnName;
         this.tableName = tableName;
         this.rowno = rowno;
@@ -54,14 +56,6 @@ public class SimpleEditText
 
     public void setTableName(String tableName) {
         this.tableName = tableName;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
     }
 
     public String getTitle() {
