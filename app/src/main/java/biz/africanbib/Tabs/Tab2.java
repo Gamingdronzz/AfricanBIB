@@ -263,7 +263,7 @@ public class Tab2 extends Fragment {
         columnName = DatabaseHelper.COLUMN_BIRTHDAY;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Birthday", value, tableName, columnName, -1));
+        items.add(utils.buildDate("Birthday", value, tableName, columnName, -1));
         columnName = DatabaseHelper.COLUMN_PHOTO;
         selectedPosition = databaseHelper.getIntValue(columnName, tableName);
         items.add(
@@ -313,7 +313,6 @@ public class Tab2 extends Fragment {
         if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
             int[] ids = databaseHelper.getrowids(tableName);
             if (ids != null) {
-
                 for (int i = 0; i < ids.length; i++) {
                     items.add(new Divider());
                     for (int j = titles.length - 1; j > 0; j--) {
