@@ -1,8 +1,7 @@
-package biz.africanbib;
+package biz.africanbib.Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,14 +9,18 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
+import biz.africanbib.R;
+import biz.africanbib.Tools.DatabaseHelper;
+
 public class SplashScreen extends AppCompatActivity {
 
     Button addBusiness,editBusiness;
-
+DatabaseHelper databaseHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
+        databaseHelper = new DatabaseHelper(getApplicationContext(),DatabaseHelper.DATABASE_NAME,null,DatabaseHelper.DATABASE_VERSION);
         bindVIews();
         //ShowNextActivity();
     }
@@ -59,7 +62,7 @@ public class SplashScreen extends AppCompatActivity {
         if(newBusiness ) {
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), InitialCompanyDetails.class);
-            intent.putExtra("type",MainActivity.NEWBUSINESS);
+            intent.putExtra("type", MainActivity.NEWBUSINESS);
             startActivity(intent);
         }
         else

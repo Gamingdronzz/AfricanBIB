@@ -32,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 4;
+    public static final int DATABASE_VERSION = 5;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -436,6 +436,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.delete(TABLE_SECTORS, null, null);
         db.delete(TABLE_SOURCE_OF_DATA, null, null);
         db.execSQL(CREATE_TABLE_PRODUCTS);
+
         // Create tables again
         onCreate(db);
 

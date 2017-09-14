@@ -1,4 +1,4 @@
-package biz.africanbib;
+package biz.africanbib.Activity;
 
 import android.content.Intent;
 import android.provider.ContactsContract;
@@ -14,6 +14,7 @@ import android.view.View;
 import com.carlosmuvi.segmentedprogressbar.SegmentedProgressBar;
 
 import biz.africanbib.Adapters.ComplexRecyclerViewAdapter;
+import biz.africanbib.R;
 import biz.africanbib.Tabs.Pager;
 import biz.africanbib.Tools.DatabaseHelper;
 

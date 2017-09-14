@@ -1,4 +1,4 @@
-package biz.africanbib;
+package biz.africanbib.ViewHolders;
 
 import android.app.AlertDialog;
 import android.content.Context;

@@ -8,10 +8,9 @@ import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
-import biz.africanbib.MainActivity;
+import biz.africanbib.Activity.MainActivity;
 import biz.africanbib.Models.Add;
 import biz.africanbib.Models.AddBuilder;
 import biz.africanbib.Models.DropDown;

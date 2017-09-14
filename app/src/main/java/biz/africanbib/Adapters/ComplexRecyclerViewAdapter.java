@@ -1,16 +1,13 @@
 package biz.africanbib.Adapters;
 
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-
-import android.content.Context;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -45,7 +42,6 @@ import java.util.Calendar;
 
 import java.util.List;
 
-import biz.africanbib.CustomIndustry;
 import biz.africanbib.Models.Add;
 import biz.africanbib.Models.Divider;
 import biz.africanbib.Models.DropDown;
@@ -57,7 +53,7 @@ import biz.africanbib.Models.SimpleEditText;
 import biz.africanbib.Models.SimpleImage;
 import biz.africanbib.Models.SimpleText;
 
-import biz.africanbib.MyCustomMultiSelectionSpinner;
+import biz.africanbib.ViewHolders.MyCustomMultiSelectionSpinner;
 import biz.africanbib.R;
 import biz.africanbib.Tools.DatabaseHelper;
 import biz.africanbib.Tools.Utils;
@@ -984,7 +980,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
 
-    private class CustomOnClickListener implements View.OnClickListener, CustomIndustry.UserNameListener {
+    private class CustomOnClickListener implements View.OnClickListener {
         private int position;
         private boolean clicked = false;
 
@@ -1008,7 +1004,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             for (int i = 0; i < add.getRows(); i++) {
                 Log.v("Adapter", "Current Column = " + tableColumnNames[i]);
-                if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_SECTOR)) {
+                if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_SECTOR) && !add.getTableName().equals(DatabaseHelper.TABLE_AFFILIATION)) {
                     items.add(position, utils.buildMultiSelectDropdown(columnNames[i],
                             add.getTableName(),
                             tableColumnNames[i],
@@ -1053,19 +1049,18 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             notifyDataSetChanged();
         }
 
-        @Override
-        public void onFinishUserDialog(int position) {
-            Log.v("Adapter", "Finished with = " + position);
-        }
+
     }
 
     private class CustomImageChooser implements View.OnClickListener {
         private int position;
         private ComplexRecyclerViewAdapter adapter;
 
+
         public void updatePosition(int position) {
             this.position = position;
             adapter = ComplexRecyclerViewAdapter.this;
+
         }
 
         @Override
@@ -1098,17 +1093,28 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 }
 
                 @Override public void cropConfig(CropImage.ActivityBuilder builder) {
+                    Point size = new Point();
+                    Point ratio = new Point();
+                    if(simpleImage.getTitle().equals("Corporate Logo"))
+                    {
+                        size.set(210,145);
+                        ratio.set(42,29);
+                    }
+                    else if(simpleImage.getTitle().equals("Keyvisual (Photo)"))
+                    {
+                        size.set(942,292);
+                        ratio.set(471,146);
+                    }
+                    else if(simpleImage.getTitle().equals(""))
+                    {
+
+                    }
                     builder
-                            // 是否启动多点触摸
                             .setMultiTouchEnabled(true)
-                            // 设置网格显示模式
                             .setGuidelines(CropImageView.Guidelines.OFF)
-                            // 圆形/矩形
                             .setCropShape(CropImageView.CropShape.RECTANGLE)
-                            // 调整裁剪后的图片最终大小
-                            .setRequestedSize(942, 292)
-                            // 宽高比
-                            .setAspectRatio(157, 32);
+                            .setRequestedSize(size.x, size.y)
+                            .setAspectRatio(ratio.x,ratio.y);
                 }
 
 

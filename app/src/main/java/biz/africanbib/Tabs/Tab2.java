@@ -15,9 +15,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import biz.africanbib.Adapters.ComplexRecyclerViewAdapter;
-import biz.africanbib.MainActivity;
+import biz.africanbib.Activity.MainActivity;
 import biz.africanbib.Models.Add;
-import biz.africanbib.Models.AddBuilder;
 import biz.africanbib.Models.Divider;
 import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.DropDownBuilder;

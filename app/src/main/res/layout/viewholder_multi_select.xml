@@ -25,11 +25,11 @@
             android:layout_height="wrap_content" />
             -->
 
-    <biz.africanbib.MyCustomMultiSelectionSpinner
+    <biz.africanbib.ViewHolders.MyCustomMultiSelectionSpinner
         android:id="@+id/multi_select_Spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/bg_edittext"
-        android:padding="@dimen/padding_medium"></biz.africanbib.MyCustomMultiSelectionSpinner>
+        android:padding="@dimen/padding_medium"></biz.africanbib.ViewHolders.MyCustomMultiSelectionSpinner>
 
 </LinearLayout>

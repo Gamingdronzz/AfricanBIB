@@ -7,7 +7,7 @@
     android:background="@color/colorLightGray"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="biz.africanbib.InitialCompanyDetails">
+    tools:context="biz.africanbib.Activity.InitialCompanyDetails">
 
     <TextView
         android:layout_width="match_parent"
