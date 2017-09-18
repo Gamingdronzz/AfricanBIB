@@ -53,10 +53,10 @@ import biz.africanbib.Models.SimpleEditText;
 import biz.africanbib.Models.SimpleImage;
 import biz.africanbib.Models.SimpleText;
 
+import biz.africanbib.Tools.Helper;
 import biz.africanbib.ViewHolders.MyCustomMultiSelectionSpinner;
 import biz.africanbib.R;
 import biz.africanbib.Tools.DatabaseHelper;
-import biz.africanbib.Tools.Utils;
 import biz.africanbib.ViewHolders.ViewHolderHeading;
 
 
@@ -68,7 +68,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     // The items to display in your RecyclerView
     private List<Object> items;
-    Utils utils;
+    Helper helper;
     FragmentManager fragmentManager;
     DatabaseHelper databaseHelper;
     private int currentRowOffers = 1;
@@ -103,7 +103,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     public ComplexRecyclerViewAdapter(List<Object> items, FragmentManager manager, Fragment context) {
         this.items = items;
         this.fragmentManager = manager;
-        utils = new Utils();
+        helper = new Helper();
         this.context = context;
     }
 
@@ -644,7 +644,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 if (dropDown.getRowno() == -1) {
                     if (dropDown.getHeading().equals("Place of Collection")) {
                         if (i == 2) {
-                            items.add(position + 1, utils.buildEditText("Place of Collection (Specify)", "", DatabaseHelper.TABLE_SOURCE_OF_DATA, DatabaseHelper.COLUMN_OTHERS_SPECIFY, -1));
+                            items.add(position + 1, helper.buildEditText("Place of Collection (Specify)", "", DatabaseHelper.TABLE_SOURCE_OF_DATA, DatabaseHelper.COLUMN_OTHERS_SPECIFY, -1));
                             notifyItemInserted(position + 1);
                         }
                     }
@@ -1005,24 +1005,24 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             for (int i = 0; i < add.getRows(); i++) {
                 Log.v("Adapter", "Current Column = " + tableColumnNames[i]);
                 if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_SECTOR) && !add.getTableName().equals(DatabaseHelper.TABLE_AFFILIATION)) {
-                    items.add(position, utils.buildMultiSelectDropdown(columnNames[i],
+                    items.add(position, helper.buildMultiSelectDropdown(columnNames[i],
                             add.getTableName(),
                             tableColumnNames[i],
-                            utils.manageMultiSelectList(0),
+                            helper.manageMultiSelectList(0),
                             null,
                             currentRowNo
                     ));
                     notifyItemInserted(position);
 
                 } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_INDUSTRY)) {
-                    items.add(position, utils.buildDropDown(
+                    items.add(position, helper.buildDropDown(
                             columnNames[i],
-                            utils.getIndustryList(),
+                            helper.getIndustryList(),
                             databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
                             add.getTableName(), tableColumnNames[i], currentRowNo));
                     notifyItemInserted(position);
                 } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_DATE)) {
-                    items.add(position, utils.buildDate(
+                    items.add(position, helper.buildDate(
                             columnNames[i],
                             databaseHelper.getStringFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
                             add.getTableName(),
@@ -1031,10 +1031,10 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     Log.v("Adapter", "Inserting Date " + columnNames[i] + " at " + i);
                     notifyItemInserted(position);
                 } else if (columnNames[i].equals("Country")) {
-                    items.add(position, utils.buildDropDown(columnNames[i], utils.getCountryNames(), 0, add.getTableName(), tableColumnNames[i], currentRowNo));
+                    items.add(position, helper.buildDropDown(columnNames[i], helper.getCountryNames(), 0, add.getTableName(), tableColumnNames[i], currentRowNo));
                     notifyItemInserted(position);
                 } else {
-                    items.add(position, utils.buildEditText(columnNames[i], "", add.getTableName(), tableColumnNames[i], currentRowNo));
+                    items.add(position, helper.buildEditText(columnNames[i], "", add.getTableName(), tableColumnNames[i], currentRowNo));
                     Log.v("Adapter", "Inserting Edittext " + columnNames[i] + " at " + i);
                     notifyItemInserted(position);
                 }
@@ -1077,7 +1077,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     Bitmap bitmap = BitmapFactory.decodeFile(imageUri.getPath());
                     simpleImage.setImage(bitmap);
                     adapter.notifyItemChanged(position);
-                    databaseHelper.updateBlobValue(simpleImage.getTableName(),simpleImage.getColumnName(),utils.createByteArrayFromBitmap(bitmap));
+                    databaseHelper.updateBlobValue(simpleImage.getTableName(),simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
 
                 }
 
@@ -1086,7 +1086,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     Bitmap bitmap = BitmapFactory.decodeFile(imageUri.getPath());
                     simpleImage.setImage(bitmap);
                     adapter.notifyItemChanged(position);
-                    databaseHelper.updateBlobValue(simpleImage.getTableName(),simpleImage.getColumnName(),utils.createByteArrayFromBitmap(bitmap));
+                    databaseHelper.updateBlobValue(simpleImage.getTableName(),simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
 
                     //draweeView.setImageURI(imageUri);
                     //draweeView.getHierarchy().setRoundingParams(RoundingParams.asCircle());
@@ -1234,9 +1234,9 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             Log.v("Adapter", "Selected Indices of " + multiSelectDropdown.getTitle() + " = " + indices.size());
             multiSelectDropdown.setSelectedIndices(indices);
             if (multiSelectDropdown.getRowno() == -1) {
-                databaseHelper.updateStringValue(multiSelectDropdown.getTableName(), multiSelectDropdown.getColumnName(), utils.getStringFromIndices(indices));
+                databaseHelper.updateStringValue(multiSelectDropdown.getTableName(), multiSelectDropdown.getColumnName(), helper.getStringFromIndices(indices));
             } else {
-                String si = utils.getStringFromIndices(indices);
+                String si = helper.getStringFromIndices(indices);
                 Log.v("Adapter", "String updated =  " + si);
                 databaseHelper.updateRowWithString(multiSelectDropdown.getTableName(), multiSelectDropdown.getRowno(), multiSelectDropdown.getColumnName(), si);
 

@@ -25,14 +25,14 @@ import biz.africanbib.Models.SimpleEditText;
 import biz.africanbib.Models.SimpleText;
 import biz.africanbib.R;
 import biz.africanbib.Tools.DatabaseHelper;
-import biz.africanbib.Tools.Utils;
+import biz.africanbib.Tools.Helper;
 
 //Our class extending fragment
 public class Tab4 extends Fragment {
 
     RecyclerView recyclerView;
     ComplexRecyclerViewAdapter adapter;
-    Utils utils;
+    Helper helper;
     boolean isTab;
     DatabaseHelper databaseHelper;
     private int industryRows = 0;
@@ -47,8 +47,8 @@ public class Tab4 extends Fragment {
 
         View view = inflater.inflate(R.layout.tab_4, container, false);
         Log.d("Company", "Trying to initialize");
-        utils = new Utils(getContext());
-        isTab = utils.isTab();
+        helper = new Helper(getContext());
+        isTab = helper.isTab();
         databaseHelper = new DatabaseHelper(view.getContext(), DatabaseHelper.DATABASE_NAME, null, DatabaseHelper.DATABASE_VERSION);
         init(view);
 
@@ -125,14 +125,14 @@ public class Tab4 extends Fragment {
         String tableName = DatabaseHelper.TABLE_BUSINESS_CORRESPONDING_LANGUAGES;
         String columnName = DatabaseHelper.COLUMN_LANGUAGE;
         String si = databaseHelper.getStringValue(columnName, tableName);
-        List<Integer> selectionLanguages = utils.getSelectedIndices(si);
+        List<Integer> selectionLanguages = helper.getSelectedIndices(si);
         if (selectionLanguages != null) {
             for (int k :
                     selectionLanguages) {
                 Log.v("Tab4", "Setting language = " + k);
             }
         }
-        items.add(utils.buildMultiSelectDropdown("Business Corresponding Languages",
+        items.add(helper.buildMultiSelectDropdown("Business Corresponding Languages",
                 tableName,
                 columnName,
                 new String[]{
@@ -181,7 +181,7 @@ public class Tab4 extends Fragment {
                     items.add(new Divider());
                     String s = databaseHelper.getStringFromRow(tableName, columnNames[0], ids[i]);
 
-                    selectedIndices = utils.getSelectedIndices(s);
+                    selectedIndices = helper.getSelectedIndices(s);
                     if (selectedIndices != null) {
                         for (int k :
                                 selectedIndices) {
@@ -189,17 +189,17 @@ public class Tab4 extends Fragment {
                         }
                     }
                     int selectedIndex = databaseHelper.getIntFromRow(tableName, columnNames[1], ids[i]);
-                    items.add(utils.buildDropDown(
-                            titles[1], utils.getIndustryList(),
+                    items.add(helper.buildDropDown(
+                            titles[1], helper.getIndustryList(),
                             selectedIndex,
                             tableName,
                             columnNames[1],
                             ids[i]));
 
-                    items.add(utils.buildMultiSelectDropdown(titles[0],
+                    items.add(helper.buildMultiSelectDropdown(titles[0],
                             tableName,
                             columnNames[0],
-                            utils.manageMultiSelectList(selectedIndex),
+                            helper.manageMultiSelectList(selectedIndex),
                             selectedIndices,
                             ids[i]
                     ));
@@ -209,7 +209,7 @@ public class Tab4 extends Fragment {
 
 
         }
-        items.add(utils.buildAdd(2, titles,
+        items.add(helper.buildAdd(2, titles,
                 tableName,
                 columnNames));
 
@@ -220,27 +220,27 @@ public class Tab4 extends Fragment {
         columnName = DatabaseHelper.COLUMN_NAME_OF_COLLECTOR;
         String value;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Name of Collector", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Name of Collector", value, tableName, columnName, -1));
         columnName = DatabaseHelper.COLUMN_AUTHORIZED_BY;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Authorized By", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Authorized By", value, tableName, columnName, -1));
         columnName = DatabaseHelper.COLUMN_PLACE_OF_COLECTION;
         int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(utils.buildDropDown("Place of Collection",
+        items.add(helper.buildDropDown("Place of Collection",
                 new String[]{"Event", "Company", "Others"}, selectedPosition, tableName, columnName, -1));
         if (selectedPosition == 2) {
             columnName = DatabaseHelper.COLUMN_OTHERS_SPECIFY;
             value = databaseHelper.getStringValue(columnName, tableName);
-            items.add(utils.buildEditText("Place of Collection (Specify)", value, tableName, columnName, -1));
+            items.add(helper.buildEditText("Place of Collection (Specify)", value, tableName, columnName, -1));
         }
         columnName = DatabaseHelper.COLUMN_DATE;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildDate("Date/Time", value, tableName, columnName, -1));
+        items.add(helper.buildDate("Date/Time", value, tableName, columnName, -1));
         columnName = DatabaseHelper.COLUMN_LOCATION;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Name of Location / Event", value, tableName, columnName, -1));
-        items.add(utils.buildDropDown("Country of Location / Event",
-                utils.getCountryNames(), selectedPosition, tableName, columnName, -1));
+        items.add(helper.buildEditText("Name of Location / Event", value, tableName, columnName, -1));
+        items.add(helper.buildDropDown("Country of Location / Event",
+                helper.getCountryNames(), selectedPosition, tableName, columnName, -1));
         items.add(new SimpleText("DISCLAIMER\n\n" +
                 "I certify that the information provided in this form is true, complete and correct to the best of my knowledge and belief. I understand that the information provided in this form is checked and updated by AfricanBIB GmbH on the AfricanBIB website with due diligence on a regular basis. This notwithstanding, data may become subject to changes during the intervening period. Therefore AfricanBIB GmbH does not assume any liability or guarantee for the timeliness, accuracy and completeness of the information provided. This applies also to other websites that may be accessed through hyperlinks. AfricanBIB GmbH assumes no responsibility for the contents of websites that can be accessed through such links.\n" +
                 "Further, AfricanBIB GmbH reserves the right to change or amend the information provided at any time and without prior notice.\n" +

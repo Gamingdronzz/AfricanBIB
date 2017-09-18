@@ -28,14 +28,14 @@ import biz.africanbib.Models.SimpleImageBuilder;
  * Created by Balpreet on 01-Aug-17.
  */
 
-public class Utils {
+public class Helper {
     private Context context;
 
-    public Utils(Context context) {
+    public Helper(Context context) {
         this.context = context;
     }
 
-    public Utils() {
+    public Helper() {
 
     }
 
@@ -313,7 +313,7 @@ public class Utils {
 
     public MultiSelectDropdown buildMultiSelectDropdown( String title, String tableName, String columnName, String[] items,List<Integer> selectedIndices,int rowno)
     {
-        //Log.v("Utils","Selected Indices for " + title + " = " + selectedIndices.toString());
+        //Log.v("Helper","Selected Indices for " + title + " = " + selectedIndices.toString());
         return new MultiSelectDropdownBuilder()
             .setRowno(rowno)
             .setTitle(title)
@@ -380,7 +380,7 @@ public class Utils {
                 values) {
             result.add(Integer.parseInt(s));
         }
-        Log.v("Utils","Creating list from " + list);
+        Log.v("Helper","Creating list from " + list);
         return result;
     }
 
@@ -391,7 +391,7 @@ public class Utils {
                 list) {
             builder.append(i+"a");
         }
-        Log.v("Utils","Creating string from " + list.toString());
+        Log.v("Helper","Creating string from " + list.toString());
         return builder.toString();
     }
 

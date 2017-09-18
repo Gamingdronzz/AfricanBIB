@@ -24,14 +24,14 @@ import biz.africanbib.Models.SimpleEditTextBuilder;
 import biz.africanbib.Models.SimpleText;
 import biz.africanbib.R;
 import biz.africanbib.Tools.DatabaseHelper;
-import biz.africanbib.Tools.Utils;
+import biz.africanbib.Tools.Helper;
 
 //Our class extending fragment
 public class Tab1 extends Fragment {
 
     RecyclerView recyclerView;
     ComplexRecyclerViewAdapter adapter;
-    Utils utils;
+    Helper helper;
     boolean isTab;
     DatabaseHelper databaseHelper;
 
@@ -41,8 +41,8 @@ public class Tab1 extends Fragment {
 
         View view = inflater.inflate(R.layout.tab_1, container, false);
         Log.d("Company", "Trying to initialize");
-        utils = new Utils(this.getContext());
-        isTab = utils.isTab();
+        helper = new Helper(this.getContext());
+        isTab = helper.isTab();
         databaseHelper = new DatabaseHelper(view.getContext(), DatabaseHelper.DATABASE_NAME, null, DatabaseHelper.DATABASE_VERSION);
         init(view);
         return view;
@@ -137,68 +137,68 @@ public class Tab1 extends Fragment {
 
         columnName = DatabaseHelper.COLUMN_REGISTERATION_NO;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Registeration No", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Registeration No", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_LOGO;
         Bitmap image = null;
         try
         {
-            image = utils.createBitmapFromByteArray(databaseHelper.getBlobValue(columnName,tableName));
+            image = helper.createBitmapFromByteArray(databaseHelper.getBlobValue(columnName,tableName));
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
         //=  databaseHelper.getIntValue(columnName, tableName);
-        items.add(utils.buildImage("Corporate Logo", image, tableName, columnName));
-        //items.add(utils.buildDropDown("Corporate Logo", new String[]{"Collected", "Not Collected"}, selectedPosition, tableName, columnName, -1));
+        items.add(helper.buildImage("Corporate Logo", image, tableName, columnName));
+        //items.add(helper.buildDropDown("Corporate Logo", new String[]{"Collected", "Not Collected"}, selectedPosition, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_KEYVISUAL_PHOTO;
         Bitmap keyvisual = null;
         try
         {
-            keyvisual = utils.createBitmapFromByteArray(databaseHelper.getBlobValue(columnName,tableName));
+            keyvisual = helper.createBitmapFromByteArray(databaseHelper.getBlobValue(columnName,tableName));
         }
         catch (Exception e)
         {
             e.printStackTrace();
         }
-        items.add(utils.buildImage("Keyvisual (Photo)", keyvisual, tableName, columnName));
-        //items.add(utils.buildDropDown("Keyvisual (Photo)", new String[]{"Collected", "Not Collected"}, selectedPosition, tableName, columnName, -1));
+        items.add(helper.buildImage("Keyvisual (Photo)", keyvisual, tableName, columnName));
+        //items.add(helper.buildDropDown("Keyvisual (Photo)", new String[]{"Collected", "Not Collected"}, selectedPosition, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_LOGO_NOTE;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Logo Note", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Logo Note", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_KEYVISUAL_NOTE;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Key Visual Note", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Key Visual Note", value, tableName, columnName, -1));
         columnName = DatabaseHelper.COLUMN_BRIEF_DESCRIPTION;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Brief Description of the Company / Instituion", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Brief Description of the Company / Instituion", value, tableName, columnName, -1));
 
         items.add(new Heading("COMPANY CONTACT"));
 
         columnName = DatabaseHelper.COLUMN_TELEPHONE;
         tableName = DatabaseHelper.TABLE_COMPANY_CONTACT;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Telephone", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Telephone", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_CELLPHONE;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Cellphone", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Cellphone", value, tableName, columnName, -1));
         columnName = DatabaseHelper.COLUMN_FASCIMILE;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Fascimile", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Fascimile", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_EMAIL;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Email", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Email", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_WEBSITE;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Website", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Website", value, tableName, columnName, -1));
 
         items.add(new Heading("COMPANY POSTAL ADRESS"));
 
@@ -206,26 +206,26 @@ public class Tab1 extends Fragment {
         tableName = DatabaseHelper.TABLE_COMPANY_POSTAL_ADDRESS;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Street & Number", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Street & Number", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_PO_BOX;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Post Office Box", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Post Office Box", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_POSTAL_CODE;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Postal Code", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Postal Code", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_CITY;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("City / Town", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("City / Town", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_COUNTRY;
         int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(utils.buildDropDown("Country", utils.getCountryNames(), selectedPosition, tableName, columnName, -1));
+        items.add(helper.buildDropDown("Country", helper.getCountryNames(), selectedPosition, tableName, columnName, -1));
 
 
         items.add(new Heading("COMPANY PHYSICAL ADRESS"));
@@ -234,31 +234,31 @@ public class Tab1 extends Fragment {
         tableName = DatabaseHelper.TABLE_COMPANY_PHYSICAL_ADDRESS;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Street & Number", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Street & Number", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_CITY;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("City / Town", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("City / Town", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_POSTAL_CODE;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Postal Code", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Postal Code", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_DISTRICT;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("District / State", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("District / State", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_STREET;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Street & Number", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Street & Number", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_COUNTRY;
         selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(utils.buildDropDown("Country", utils.getCountryNames(), selectedPosition, tableName, columnName, -1));
+        items.add(helper.buildDropDown("Country", helper.getCountryNames(), selectedPosition, tableName, columnName, -1));
 
 
         items.add(new Heading("COMPANY SPECIFIC INFORMATION"));
@@ -267,11 +267,11 @@ public class Tab1 extends Fragment {
         tableName = DatabaseHelper.TABLE_COMPANY_SPECIFIC_INFORMATION;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Legal Form", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Legal Form", value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_TYPE_OF_ORGANISATION;
         selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(utils.buildDropDown("Type of Orgainsation", new String[]{"Business Partnership",
+        items.add(helper.buildDropDown("Type of Orgainsation", new String[]{"Business Partnership",
                 "International NGO",
                 "Freelance",
                 "Public Institution",
@@ -281,19 +281,19 @@ public class Tab1 extends Fragment {
                 "Publicly Held Institution"}, selectedPosition, tableName, columnName, -1));
         columnName = DatabaseHelper.COLUMN_TYPE_OF_ACTIVITIES;
         selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(utils.buildDropDown("Type of Activities", new String[]{"Manufacturing", "Service Provider"}, selectedPosition, tableName, columnName, -1));
+        items.add(helper.buildDropDown("Type of Activities", new String[]{"Manufacturing", "Service Provider"}, selectedPosition, tableName, columnName, -1));
         columnName = DatabaseHelper.COLUMN_ABOUT_US;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("About Us", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("About Us", value, tableName, columnName, -1));
         columnName = DatabaseHelper.COLUMN_VISION;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Vision", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Vision", value, tableName, columnName, -1));
         columnName = DatabaseHelper.COLUMN_MISSION_STATEMENT;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Mission Statement", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Mission Statement", value, tableName, columnName, -1));
         columnName = DatabaseHelper.COLUMN_GUIDING_PRINCIPALS;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(utils.buildEditText("Guiding Principals", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Guiding Principals", value, tableName, columnName, -1));
 
         return items;
     }

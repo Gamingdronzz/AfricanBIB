@@ -32,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 5;
+    public static final int DATABASE_VERSION = 6;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -298,7 +298,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private String CREATE_TABLE_SERVICES = "CREATE TABLE IF NOT EXISTS " + TABLE_SERVICES + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_ROW_ID + " INTEGER," +
-            COLUMN_SERVICE + " VARCHAR" +
+            COLUMN_SERVICE + " VARCHAR," +
+            COLUMN_TITLE + " VARCHAR," +
+            COLUMN_DESCRIPTION + " VARCHAR," +
+            COLUMN_MEDIA + " VARCHAR" +
             ")";
 
     private String CREATE_TABLE_PRODUCTS = "CREATE TABLE IF NOT EXISTS " + TABLE_PRODUCTS_AND_PRODUCT_DETAILS + " ( " +
@@ -414,28 +417,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCT_DETAILS);
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
 
-        db.delete(TABLE_COMPANY_PROFILE, null, null);
-        db.delete(TABLE_COMPANY_CONTACT, null, null);
-        db.delete(TABLE_COMPANY_POSTAL_ADDRESS, null, null);
-        db.delete(TABLE_COMPANY_PHYSICAL_ADDRESS, null, null);
-        db.delete(TABLE_COMPANY_SPECIFIC_INFORMATION, null, null);
-        db.delete(TABLE_OFFERS, null, null);
-        db.delete(TABLE_NEEDS, null, null);
-        db.delete(TABLE_OWNERS_MANAGERS_SUBSIDIARIES_REFERENCE, null, null);
-        db.delete(TABLE_ACADEMIC_BACKGROUND, null, null);
-        db.delete(TABLE_PROFESSIONAL_BACKGROUND, null, null);
-        db.delete(TABLE_AFFILIATION, null, null);
-        db.delete(TABLE_REFERENCE_SPECIFIC_INFORMATION, null, null);
-        db.delete(TABLE_SUBSIDIARY_SPECIFIC_INFORMATION, null, null);
-        db.delete(TABLE_SERVICES, null, null);
-        db.delete(TABLE_PRODUCTS_AND_PRODUCT_DETAILS, null, null);
-        db.delete(TABLE_COMPANY_INDICATORS, null, null);
-        db.delete(TABLE_AWARDS, null, null);
-        db.delete(TABLE_LATEST_NEWS, null, null);
-        db.delete(TABLE_BUSINESS_CORRESPONDING_LANGUAGES, null, null);
-        db.delete(TABLE_SECTORS, null, null);
-        db.delete(TABLE_SOURCE_OF_DATA, null, null);
-        db.execSQL(CREATE_TABLE_PRODUCTS);
+
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY_PROFILE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY_CONTACT);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY_POSTAL_ADDRESS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY_PHYSICAL_ADDRESS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY_SPECIFIC_INFORMATION);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEEDS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OWNERS_MANAGERS_SUBSIDIARIES_REFERENCE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACADEMIC_BACKGROUND);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROFESSIONAL_BACKGROUND);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_AFFILIATION);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REFERENCE_SPECIFIC_INFORMATION);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBSIDIARY_SPECIFIC_INFORMATION);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SERVICES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY_INDICATORS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_AWARDS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LATEST_NEWS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUSINESS_CORRESPONDING_LANGUAGES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SECTORS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SOURCE_OF_DATA);
 
         // Create tables again
         onCreate(db);
