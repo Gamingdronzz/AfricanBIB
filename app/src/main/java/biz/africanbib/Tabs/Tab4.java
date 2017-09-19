@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public class Tab4 extends Fragment {
     DatabaseHelper databaseHelper;
     private int industryRows = 0;
 
+
+
     public ComplexRecyclerViewAdapter getAdapter() {
         return adapter;
     }
@@ -59,6 +62,7 @@ public class Tab4 extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_4);
         adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager(),this);
 
+
         if (isTab) {
             setupGridLayout(true);
         } else {
@@ -70,6 +74,7 @@ public class Tab4 extends Fragment {
         recyclerView.setAdapter(adapter);
         Log.d("Company", "Adapter set");
     }
+
 
     @Override
     public void onConfigurationChanged(Configuration config) {

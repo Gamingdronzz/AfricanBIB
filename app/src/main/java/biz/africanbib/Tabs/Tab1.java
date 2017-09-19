@@ -35,6 +35,11 @@ public class Tab1 extends Fragment {
     boolean isTab;
     DatabaseHelper databaseHelper;
 
+    int a = 0;
+    public int getSomeValue()
+    {
+        return a;
+    }
     //Overriden method onCreateView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,6 +50,7 @@ public class Tab1 extends Fragment {
         isTab = helper.isTab();
         databaseHelper = new DatabaseHelper(view.getContext(), DatabaseHelper.DATABASE_NAME, null, DatabaseHelper.DATABASE_VERSION);
         init(view);
+        a = 10;
         return view;
     }
 

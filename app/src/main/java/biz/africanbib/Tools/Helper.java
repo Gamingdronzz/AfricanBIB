@@ -1,14 +1,21 @@
 package biz.africanbib.Tools;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Base64;
 import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import biz.africanbib.Activity.MainActivity;
 import biz.africanbib.Models.Add;
@@ -30,6 +37,11 @@ import biz.africanbib.Models.SimpleImageBuilder;
 
 public class Helper {
     private Context context;
+    public String FAILED = "failed";
+    public String SUCCESS = "success";
+    final String TAG = "Helper";
+    private String baseURL = "http://www.imergesoft.de/android/";
+
 
     public Helper(Context context) {
         this.context = context;
@@ -37,6 +49,103 @@ public class Helper {
 
     public Helper() {
 
+    }
+
+
+    public String getBaseURL() {
+        return this.baseURL;
+    }
+
+    public JSONObject getJson(String input) {
+        try {
+            try {
+                return new JSONObject(input.substring(input.indexOf("{"), input.indexOf("}") + 1));
+            } catch (JSONException jse) {
+                jse.printStackTrace();
+                Log.v("Helper", "Error creating json");
+                return null;
+            }
+        } catch (StringIndexOutOfBoundsException sioobe) {
+            sioobe.printStackTrace();
+            return null;
+        }
+    }
+
+    public String getStringFromList(List list) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < list.size(); i++) {
+            result.append(list.get(i).toString().toLowerCase());
+            result.append(",");
+        }
+        result.deleteCharAt(result.length() - 1);
+        Log.v("Helper", "Final String : " + result.toString());
+        return result.toString();
+    }
+
+    public List<String> getListFromString(String string) {
+        String[] intermediate = string.split(",");
+        List<String> result = new ArrayList();
+        for (String toLowerCase : intermediate) {
+            result.add(toLowerCase.toLowerCase());
+        }
+        Log.v("Helper", "List Result : " + result);
+        return result;
+    }
+
+    public Intent getImageIntent() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction("android.intent.action.GET_CONTENT");
+        return intent;
+    }
+
+    public byte[] getByteArrayFromBitmap(Bitmap image) {
+        if (image == null) {
+            return null;
+        }
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        return byteArrayOutputStream.toByteArray();
+    }
+
+    public Bitmap getBitmapFromString(String value) {
+        byte[] inter = Base64.decode(value, 0);
+        Log.d("Helper", "Byte Array = " + inter.toString());
+        return BitmapFactory.decodeByteArray(inter, 0, inter.length);
+    }
+
+    public Bitmap getBitmapFromByteArray(byte[] value) {
+        if (value != null) {
+            return BitmapFactory.decodeByteArray(value, 0, value.length);
+        }
+        return null;
+    }
+
+    public Bitmap getBitmapFromResource(int res) {
+        return BitmapFactory.decodeResource(this.context.getResources(), res);
+    }
+
+    public Map<String, String> getNameValuePairs(String value) {
+        String[] result = value.split("\"");
+        for (String s : result) {
+            Log.d("Helper", "Split : " + s);
+        }
+        Map<String, String> finalResult = new HashMap();
+        for (int i = 1; i < result.length - 2; i += 3) {
+            finalResult.put(result[i], result[3]);
+        }
+        return finalResult;
+    }
+
+    public String checkForInput(String text) {
+        if (text == null || text.length() == 0 || text.equals("")) {
+            return null;
+        }
+        text = text.replaceAll("\\s+", "");
+        if (text.length() == 0 || text.equals("")) {
+            return null;
+        }
+        return text;
     }
 
     public String[] getCountryNames()

@@ -1,7 +1,6 @@
 package biz.africanbib.Activity;
 
 import android.content.Intent;
-import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -10,12 +9,13 @@ import android.support.design.widget.TabLayout;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
 
 import com.carlosmuvi.segmentedprogressbar.SegmentedProgressBar;
 
-import biz.africanbib.Adapters.ComplexRecyclerViewAdapter;
 import biz.africanbib.R;
-import biz.africanbib.Tabs.Pager;
+import biz.africanbib.Tabs.ViewPagerAdapter;
+import biz.africanbib.Tabs.Tab1;
 import biz.africanbib.Tools.DatabaseHelper;
 
 public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
@@ -32,6 +32,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     FloatingActionButton goLeft, goRight;
     DatabaseHelper databaseHelper;
     String companyName = null;
+    ViewPagerAdapter adapter;
+
+    private Button buttonValidate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,13 +76,39 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             companyName = (String) databaseHelper.getStringValue(DatabaseHelper.COLUMN_COMPANY_NAME, DatabaseHelper.TABLE_COMPANY_PROFILE);
             getSupportActionBar().setTitle(companyName);
         }
-
+        showValidate(false);
     }
+
+
+    private void showValidate(boolean show)
+    {
+        if(show)
+        {
+            buttonValidate.setVisibility(View.VISIBLE);
+        }
+        else
+        {
+            buttonValidate.setVisibility(View.INVISIBLE);
+        }
+    }
+
 
     private void bindViews() {
         segmentedProgressBar = (SegmentedProgressBar) findViewById(R.id.segmented_progressbar);
         goLeft = (FloatingActionButton) findViewById(R.id.fab_go_left);
         goRight = (FloatingActionButton) findViewById(R.id.fab_go_right);
+        buttonValidate = (Button) findViewById(R.id.validate);
+        buttonValidate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkValidation();
+            }
+        });
+    }
+
+    private void checkValidation()
+    {
+
     }
 
     private void setUpTabLayout() {
@@ -90,8 +119,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         viewPager = (ViewPager) findViewById(R.id.viewPagerLayout);
 
         //Creating our pager blogAdapter
-        Pager adapter = new Pager(getSupportFragmentManager(), tabLayout.getTabCount());
+        adapter = new ViewPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
 
+        Tab1 tab1 = (Tab1)adapter.getItem(0);
         //Adding blogAdapter to pager
         viewPager.setAdapter(adapter);
 
@@ -119,8 +149,12 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         tabLayout.getTabAt(1).setText("2");
         tabLayout.getTabAt(2).setText("3");
         tabLayout.getTabAt(3).setText("4");
+
+
         return tabLayout;
     }
+
+
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
@@ -156,6 +190,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Tab1 tab1 = (Tab1)adapter.getItem(0);
+            Log.d("Main","Tab1 = " + tab1.getSomeValue());
             doExit();
         }
         return super.onKeyDown(keyCode, event);

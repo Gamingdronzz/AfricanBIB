@@ -36,28 +36,40 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tabLayout"/>
 
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Validate"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/validate"
+        android:textSize="@dimen/text_medium"
+        android:background="@color/colorAccent"/>
+
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/left_arrow"
         android:id="@+id/fab_go_left"
+        android:layout_above="@id/validate"
         android:tint="@color/colorWhite"
         app:backgroundTint="@color/colorRed"
         android:layout_alignParentBottom="true"
-        android:layout_margin="@dimen/margin_large"
+        android:layout_marginLeft="@dimen/margin_large"
         android:padding="@dimen/padding_large"/>
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/right_arrow"
+        android:layout_above="@id/validate"
         android:layout_alignParentBottom="true"
         android:tint="@color/colorWhite"
         android:layout_alignParentRight="true"
         app:backgroundTint="@color/colorRed"
         android:id="@+id/fab_go_right"
-        android:layout_margin="@dimen/margin_large"
+        android:layout_marginRight="@dimen/margin_large"
         android:padding="@dimen/padding_xlarge"/>
+
 
 
 </RelativeLayout>

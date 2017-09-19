@@ -9,7 +9,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
  * Created by Belal on 2/3/2016.
  */
 //Extending FragmentStatePagerAdapter
-public class Pager extends FragmentStatePagerAdapter {
+public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     //integer to count number of tabs
     int tabCount;
@@ -19,7 +19,7 @@ public class Pager extends FragmentStatePagerAdapter {
     Tab4 tab4;
 
     //Constructor to the class
-    public Pager(FragmentManager fm, int tabCount) {
+    public ViewPagerAdapter(FragmentManager fm, int tabCount) {
         super(fm);
         //Initializing tab count
         this.tabCount= tabCount;
