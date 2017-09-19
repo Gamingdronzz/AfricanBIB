@@ -41,6 +41,12 @@ public class Tab2 extends Fragment {
     int affiliationRows;
     int academicBackgroundRows;
 
+    ArrayList<Object> items;
+
+    public ArrayList<Object> getList()
+    {
+        return items ;
+    }
 
     //Overriden method onCreateView
     @Override
@@ -118,7 +124,7 @@ public class Tab2 extends Fragment {
     }
 
     private ArrayList<Object> getSampleArrayList() {
-        ArrayList<Object> items = new ArrayList<>();
+        items = new ArrayList<>();
 
 
         //items.add(new SimpleEditText(""));

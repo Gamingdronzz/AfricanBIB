@@ -34,11 +34,17 @@ public class Tab1 extends Fragment {
     Helper helper;
     boolean isTab;
     DatabaseHelper databaseHelper;
+    ArrayList<Object> items = new ArrayList<>();
+    public String businessName = "Business Name";
+    public String telephone = "Telephone";
+    public String city_town = "City / Town";
+    public String state = "District / State";
+    public String country = "Country";
 
     int a = 0;
-    public int getSomeValue()
+    public ArrayList<Object> getList()
     {
-        return a;
+        return items ;
     }
     //Overriden method onCreateView
     @Override
@@ -121,7 +127,7 @@ public class Tab1 extends Fragment {
     }
 
     private ArrayList<Object> getSampleArrayList() {
-        ArrayList<Object> items = new ArrayList<>();
+        items = new ArrayList<>();
 
 
         items.add(new Heading("COMPANY / INSTITUION PROFILE"));
@@ -135,7 +141,7 @@ public class Tab1 extends Fragment {
         items.add(new SimpleEditTextBuilder()
                 .setTableName(tableName)
                 .setColumnName(columnName)
-                .setTitle("Business Name")
+                .setTitle(businessName)
                 .setValue(value)
                 .setRowno(-1)
                 .createSimpleEditText());
@@ -188,7 +194,7 @@ public class Tab1 extends Fragment {
         columnName = DatabaseHelper.COLUMN_TELEPHONE;
         tableName = DatabaseHelper.TABLE_COMPANY_CONTACT;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Telephone", value, tableName, columnName, -1));
+        items.add(helper.buildEditText(telephone, value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_CELLPHONE;
         value = databaseHelper.getStringValue(columnName, tableName);
@@ -245,7 +251,7 @@ public class Tab1 extends Fragment {
         columnName = DatabaseHelper.COLUMN_CITY;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("City / Town", value, tableName, columnName, -1));
+        items.add(helper.buildEditText(city_town, value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_POSTAL_CODE;
 
@@ -255,7 +261,7 @@ public class Tab1 extends Fragment {
         columnName = DatabaseHelper.COLUMN_DISTRICT;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("District / State", value, tableName, columnName, -1));
+        items.add(helper.buildEditText(state, value, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_STREET;
 
@@ -264,7 +270,7 @@ public class Tab1 extends Fragment {
 
         columnName = DatabaseHelper.COLUMN_COUNTRY;
         selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(helper.buildDropDown("Country", helper.getCountryNames(), selectedPosition, tableName, columnName, -1));
+        items.add(helper.buildDropDown(country, helper.getCountryNames(), selectedPosition, tableName, columnName, -1));
 
 
         items.add(new Heading("COMPANY SPECIFIC INFORMATION"));

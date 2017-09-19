@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -37,6 +38,23 @@ public class Tab4 extends Fragment {
     boolean isTab;
     DatabaseHelper databaseHelper;
     private int industryRows = 0;
+    CheckBox accept;
+    ArrayList<Object> items;
+
+    public String nameOfCollector = "Name of Collector";
+    public String authorizedBy = "Authorized By";
+    public String placeOfCollection = "Place of Collection";
+
+
+    public boolean getAccepted()
+    {
+        return accept.isChecked();
+    }
+
+    public ArrayList<Object> getList()
+    {
+        return items;
+    }
 
 
 
@@ -60,9 +78,8 @@ public class Tab4 extends Fragment {
 
     private void init(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_4);
+        accept = (CheckBox) view.findViewById(R.id.accept);
         adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager(),this);
-
-
         if (isTab) {
             setupGridLayout(true);
         } else {
@@ -118,7 +135,7 @@ public class Tab4 extends Fragment {
     }
 
     private ArrayList<Object> getSampleArrayList() {
-        ArrayList<Object> items = new ArrayList<>();
+        items = new ArrayList<>();
 
 
         databaseHelper.getTableData(DatabaseHelper.TABLE_SECTORS);
@@ -225,13 +242,13 @@ public class Tab4 extends Fragment {
         columnName = DatabaseHelper.COLUMN_NAME_OF_COLLECTOR;
         String value;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Name of Collector", value, tableName, columnName, -1));
+        items.add(helper.buildEditText(nameOfCollector, value, tableName, columnName, -1));
         columnName = DatabaseHelper.COLUMN_AUTHORIZED_BY;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Authorized By", value, tableName, columnName, -1));
+        items.add(helper.buildEditText(authorizedBy, value, tableName, columnName, -1));
         columnName = DatabaseHelper.COLUMN_PLACE_OF_COLECTION;
         int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(helper.buildDropDown("Place of Collection",
+        items.add(helper.buildDropDown(placeOfCollection,
                 new String[]{"Event", "Company", "Others"}, selectedPosition, tableName, columnName, -1));
         if (selectedPosition == 2) {
             columnName = DatabaseHelper.COLUMN_OTHERS_SPECIFY;

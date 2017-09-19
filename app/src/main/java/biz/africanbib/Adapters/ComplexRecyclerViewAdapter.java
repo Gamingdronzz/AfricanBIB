@@ -302,6 +302,14 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         public String getTitle() {
             return this.textview.getText().toString();
         }
+
+        public void setFocus(boolean requestFocus)
+        {
+            if(requestFocus)
+            {
+                this.editText.requestFocus();
+            }
+        }
     }
 
     public class ViewHolderDropDown extends RecyclerView.ViewHolder {
@@ -541,6 +549,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             viewHolderSimpleEditText.setValue(simpleEditText.getValue());
             viewHolderSimpleEditText.setTag(simpleEditText.getTitle());
             viewHolderSimpleEditText.setEditTextType(simpleEditText.getType());
+            viewHolderSimpleEditText.setFocus(simpleEditText.isFocused());
         }
     }
 
@@ -1199,7 +1208,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         public void onFocusChange(View view, boolean b) {
             if (b) {
                 currentlyFocusedPosition = position;
-                Log.v("Complex Adapter", "Focused Position  = " + currentlyFocusedPosition + " and title = " + ((SimpleEditText) items.get(currentlyFocusedPosition)).getTitle());
+                //Log.v("Complex Adapter", "Focused Position  = " + currentlyFocusedPosition + " and title = " + ((SimpleEditText) items.get(currentlyFocusedPosition)).getTitle());
             } else {
                 if (currentlyFocusedPosition != -1) {
                     if (items.get(currentlyFocusedPosition) instanceof SimpleEditText) {
@@ -1306,5 +1315,22 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     public  void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("Adapter", "Request Code  " +  requestCode);
         imagePicker.onActivityResult(context,requestCode,resultCode,data);
+    }
+
+
+    public void setFocus()
+    {
+        int a = 0;
+        for (Object o :
+                items) {
+            if (o instanceof SimpleEditText)
+            {
+                SimpleEditText simpleEditText = (SimpleEditText) o;
+                simpleEditText.setFocused(true);
+                notifyItemChanged(a);
+                return;
+            }
+            a++;
+        }
     }
 }

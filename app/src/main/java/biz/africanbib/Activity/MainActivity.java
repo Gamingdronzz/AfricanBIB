@@ -10,13 +10,20 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.carlosmuvi.segmentedprogressbar.SegmentedProgressBar;
 
+import java.util.ArrayList;
+
+import biz.africanbib.Models.SimpleEditText;
 import biz.africanbib.R;
+import biz.africanbib.Tabs.Tab2;
+import biz.africanbib.Tabs.Tab4;
 import biz.africanbib.Tabs.ViewPagerAdapter;
 import biz.africanbib.Tabs.Tab1;
 import biz.africanbib.Tools.DatabaseHelper;
+import biz.africanbib.Tools.Helper;
 
 public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
 
@@ -33,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     DatabaseHelper databaseHelper;
     String companyName = null;
     ViewPagerAdapter adapter;
+    Helper helper;
 
     private Button buttonValidate;
 
@@ -55,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     private void init() {
+        helper = new Helper(this);
         goLeft.setVisibility(View.INVISIBLE);
 
         goLeft.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +117,127 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     private void checkValidation()
     {
+        Tab4 tab4 = (Tab4)adapter.getItem(3);
+        if(tab4.getAccepted())
+        {
+            Tab1 tab1 = (Tab1)adapter.getItem(0);
+            ArrayList<Object> items = tab1.getList();
+            for (Object o :
+                    items) {
+                if (o instanceof SimpleEditText)
+                {
+                    SimpleEditText simpleEditText = (SimpleEditText) o;
+
+
+                    //Business Name
+                    if(simpleEditText.getTitle().equals(tab1.businessName))
+                    {
+                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
+                        {
+                            Toast.makeText(this,"Please enter a valid Business Name in Tab1",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+
+                    //Telephone
+                    if(simpleEditText.getTitle().equals(tab1.telephone))
+                    {
+                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
+                        {
+                            Toast.makeText(this,"Please enter a valid Telephone in Tab 1",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+
+
+                    //City
+                    if(simpleEditText.getTitle().equals(tab1.city_town))
+                    {
+                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
+                        {
+                            Toast.makeText(this,"Please enter a valid City / Town in Tab 1",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+
+
+                    //State
+                    if(simpleEditText.getTitle().equals(tab1.state))
+                    {
+                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
+                        {
+                            Toast.makeText(this,"Please enter a valid State in Tab 1",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+
+
+
+                    //Country
+                    if(simpleEditText.getTitle().equals(tab1.country))
+                    {
+                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
+                        {
+                            Toast.makeText(this,"Please enter a valid Country in Tab 1",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                }
+            }
+
+            items.clear();
+            items = tab4.getList();
+            for (Object o :
+                    items) {
+                if (o instanceof SimpleEditText)
+                {
+                    SimpleEditText simpleEditText = (SimpleEditText) o;
+
+
+                    //Business Name
+                    if(simpleEditText.getTitle().equals(tab4.nameOfCollector))
+                    {
+                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
+                        {
+                            Toast.makeText(this,"Please enter a valid Collector Name in Tab4",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+
+                    //Telephone
+                    if(simpleEditText.getTitle().equals(tab4.authorizedBy))
+                    {
+                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
+                        {
+                            Toast.makeText(this,"Please enter a valid Authorizing Name in Tab 4",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+
+
+                    //City
+                    if(simpleEditText.getTitle().equals(tab4.placeOfCollection))
+                    {
+                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
+                        {
+                            Toast.makeText(this,"Please enter a valid Place of Collection in Tab 4",Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                }
+            }
+
+
+            tab4.getAdapter().notifyDataSetChanged();
+
+        }
+        else
+        {
+
+            Toast.makeText(this,"Please accept the agreeement first",Toast.LENGTH_SHORT).show();
+        }
+
+
 
     }
 
@@ -175,23 +305,25 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private void manageFab(boolean showLeft, boolean showRight) {
         if (showLeft) {
             goLeft.setVisibility(View.VISIBLE);
+            showValidate(false);
         } else {
             goLeft.setVisibility(View.INVISIBLE);
+            showValidate(false);
         }
         if (showRight) {
             goRight.setVisibility(View.VISIBLE);
+            showValidate(false);
         } else {
             goRight.setVisibility(View.INVISIBLE);
+            showValidate(true);
         }
 
     }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Tab1 tab1 = (Tab1)adapter.getItem(0);
-            Log.d("Main","Tab1 = " + tab1.getSomeValue());
+
             doExit();
         }
         return super.onKeyDown(keyCode, event);
