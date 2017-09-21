@@ -349,8 +349,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         ArrayList<Object> items4 = tab4.getList();
 */
         try {
-            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + getResources().getString(R.string.app) + "/" + companyName);
+            Log.v(TAG,"Trying to create xml File");
+            File file = new File(getApplicationContext().getFilesDir(), companyName);
             file.createNewFile();
+            Log.v(TAG,"Path = " + file.getAbsolutePath());
             FileOutputStream fileos = new FileOutputStream(file);
             XmlSerializer xmlSerializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
@@ -359,34 +361,54 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             xmlSerializer.startDocument("UTF-8", true);
             xmlSerializer.startTag(null, "Organisation");
 
-            Log.d("File", String.valueOf(items.size()));
+            Log.d(TAG,"Item size = " + items.size()+"");
             for (int i = 0; i < items.size() - 1; i++) {
                 int j=0;
                 if (items.get(i) instanceof Heading) {
+                    Log.v(TAG,"Start Tag = " + ((Heading) items.get(i)).getHeading());
                     xmlSerializer.startTag(null, ((Heading) items.get(i)).getHeading());
+
                     j = i + 1;
+                    Log.v(TAG,"J inital = " + j);
                     while (!(items.get(j) instanceof Heading)) {
+                        Log.v(TAG,"J start = " + j);
                         if (items.get(j) instanceof SimpleEditText) {
+                            Log.v(TAG,"Starting Tag = " + ((SimpleEditText) items.get(j)).getColumnName());
                             xmlSerializer.startTag(null, ((SimpleEditText) items.get(j)).getColumnName());
-                            if (((SimpleEditText) items.get(j)).getValue() != null)
+
+                            if (((SimpleEditText) items.get(j)).getValue() != null) {
                                 xmlSerializer.text(((SimpleEditText) items.get(j)).getValue());
-                            else
+                            }
+                            else {
                                 xmlSerializer.text("null");
+                            }
+                            Log.v(TAG,"Ending Tag = " + ((SimpleEditText) items.get(j)).getColumnName());
                             xmlSerializer.endTag(null, ((SimpleEditText) items.get(j)).getColumnName());
                         }
                         if (items.get(j) instanceof DropDown) {
+                            Log.v(TAG,"Starting Tag = " + ((DropDown) items.get(j)).getColumnName());
                             xmlSerializer.startTag(null, ((DropDown) items.get(j)).getColumnName());
+                            Log.v(TAG,"Value of Tag = " + ((DropDown) items.get(j)).getSelectedPosition());
                             xmlSerializer.text(String.valueOf(((DropDown) items.get(j)).getSelectedPosition()));
+                            Log.v(TAG,"Ending Tag = " +((DropDown) items.get(j)).getColumnName());
                             xmlSerializer.endTag(null, ((DropDown) items.get(j)).getColumnName());
                         }
-                        if (j < items.size() - 1)
+                        Log.v(TAG,"J after = " + j);
+                        if (j < items.size() - 1) {
+                            Log.v(TAG, "J final = " + j);
                             j++;
+                        }
+                        else
+                        {
+                            break;
+                        }
                     }
                     xmlSerializer.endTag(null, ((Heading) items.get(i)).getHeading());
                 }
                 i = j - 1;
             }
 
+            /*
             //For single
             xmlSerializer.startTag(null, "name");
             xmlSerializer.text(databaseHelper.getStringValue(DatabaseHelper.COLUMN_COMPANY_NAME, DatabaseHelper.TABLE_COMPANY_PROFILE));
@@ -433,6 +455,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
             xmlSerializer.endTag(null, "Organisation");
             xmlSerializer.endDocument();
+            */
             xmlSerializer.flush();
 
             String dataWrite = writer.toString();
@@ -448,7 +471,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     public void showXML() {
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + getResources().getString(R.string.app) + "/" + companyName);
+        File file = new File(getApplicationContext().getFilesDir(), companyName);
         try {
             FileInputStream fIn = new FileInputStream(file);
             BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
@@ -457,7 +480,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             while ((aDataRow = myReader.readLine()) != null) {
                 aBuffer += aDataRow + "\n";
             }
-            Log.d("File ShowXML", aBuffer);
+            Log.v(TAG, aBuffer);
             myReader.close();
             fIn.close();
         } catch (FileNotFoundException e) {
