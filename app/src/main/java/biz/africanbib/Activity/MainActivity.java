@@ -237,8 +237,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             Toast.makeText(this,"Please accept the agreeement first",Toast.LENGTH_SHORT).show();
         }
 
-
-
     }
 
     private void setUpTabLayout() {
