@@ -62,6 +62,10 @@ public class Tab2 extends Fragment {
         return view;
     }
 
+    public ComplexRecyclerViewAdapter getAdapter() {
+        return adapter;
+    }
+
     private void init(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_2);
         adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager(),this);

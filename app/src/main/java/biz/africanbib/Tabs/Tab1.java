@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
+import biz.africanbib.Activity.MainActivity;
 import biz.africanbib.Adapters.ComplexRecyclerViewAdapter;
 import biz.africanbib.Models.Add;
 import biz.africanbib.Models.Divider;
@@ -41,6 +42,7 @@ public class Tab1 extends Fragment {
     public String state = "District / State";
     public String country = "Country";
 
+
     int a = 0;
     public ArrayList<Object> getList()
     {
@@ -63,10 +65,13 @@ public class Tab1 extends Fragment {
     private void init(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_1);
         adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager(),this);
-        if (isTab) {
-            setupGridLayout(true);
-        } else {
-            setupGridLayout(false);
+        if(MainActivity.first) {
+            if (isTab) {
+                setupGridLayout(true);
+            } else {
+                setupGridLayout(false);
+            }
+            MainActivity.first = false;
         }
         /*manager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -87,6 +92,7 @@ public class Tab1 extends Fragment {
     @Override
     public void onConfigurationChanged(Configuration config) {
         super.onConfigurationChanged(config);
+        /*
         // Check for the rotation
         if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Toast.makeText(this.getContext(), "LANDSCAPE", Toast.LENGTH_SHORT).show();
@@ -102,6 +108,7 @@ public class Tab1 extends Fragment {
 
 
         }
+        */
     }
 
 
@@ -124,6 +131,10 @@ public class Tab1 extends Fragment {
             recyclerView.setLayoutManager(manager);
         }
 
+    }
+
+    public ComplexRecyclerViewAdapter getAdapter() {
+        return adapter;
     }
 
     private ArrayList<Object> getSampleArrayList() {

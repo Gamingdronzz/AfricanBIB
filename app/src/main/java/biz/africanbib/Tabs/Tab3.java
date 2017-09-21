@@ -97,6 +97,7 @@ public class Tab3 extends Fragment {
         }
     }
 
+
     private void setupGridLayout(boolean multiColumn) {
         if (multiColumn) {
             GridLayoutManager manager = new GridLayoutManager(this.getContext(), 2);

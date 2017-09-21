@@ -272,8 +272,6 @@ public class Tab4 extends Fragment {
         return items;
     }
 
-
-
     private void getValuesFromViews() {
         Object[] items;
         items = new Object[adapter.getItemCount()];

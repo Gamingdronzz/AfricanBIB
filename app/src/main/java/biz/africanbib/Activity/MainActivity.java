@@ -1,12 +1,14 @@
 package biz.africanbib.Activity;
 
 import android.content.Intent;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.util.Log;
+import android.util.Xml;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -14,11 +16,18 @@ import android.widget.Toast;
 
 import com.carlosmuvi.segmentedprogressbar.SegmentedProgressBar;
 
+import org.xmlpull.v1.XmlSerializer;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.ArrayList;
 
 import biz.africanbib.Models.SimpleEditText;
 import biz.africanbib.R;
 import biz.africanbib.Tabs.Tab2;
+import biz.africanbib.Tabs.Tab3;
 import biz.africanbib.Tabs.Tab4;
 import biz.africanbib.Tabs.ViewPagerAdapter;
 import biz.africanbib.Tabs.Tab1;
@@ -41,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     String companyName = null;
     ViewPagerAdapter adapter;
     Helper helper;
-
+    public static boolean first = true;
     private Button buttonValidate;
 
     @Override
@@ -59,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private void handleIntent() {
         Intent intent = getIntent();
         typeOfBusiness = intent.getIntExtra("type", -1);
-
     }
 
     private void init() {
@@ -117,10 +125,13 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     private void checkValidation()
     {
+        Tab1 tab1 = (Tab1)adapter.getItem(0);
+        Tab2 tab2 = (Tab2)adapter.getItem(1);
+        Tab3 tab3 = (Tab3)adapter.getItem(2);
         Tab4 tab4 = (Tab4)adapter.getItem(3);
         if(tab4.getAccepted())
         {
-            Tab1 tab1 = (Tab1)adapter.getItem(0);
+
             ArrayList<Object> items = tab1.getList();
             for (Object o :
                     items) {
@@ -228,7 +239,12 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             }
 
 
+            //tab1.getAdapter().notifyDataSetChanged();
+            tab2.getAdapter().notifyDataSetChanged();
+            tab3.getAdapter().notifyDataSetChanged();
             tab4.getAdapter().notifyDataSetChanged();
+
+            Test();
 
         }
         else
@@ -257,7 +273,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         tabLayout.addOnTabSelectedListener(this);
-        viewPager.setOffscreenPageLimit(4);
+        viewPager.setOffscreenPageLimit(5);
         viewPager.getAdapter().notifyDataSetChanged();
 
     }
@@ -328,6 +344,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     private void doExit() {
+        first = true;
         finish();
     }
 
@@ -342,4 +359,54 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
 
+    void Test()
+    {
+
+
+        try {
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "your_app_name" + "/" + companyName);
+            file.createNewFile();
+            FileOutputStream fileos = new FileOutputStream(file);
+            XmlSerializer xmlSerializer = Xml.newSerializer();
+            StringWriter writer = new StringWriter();
+            xmlSerializer.setOutput(writer);
+            xmlSerializer.startDocument("UTF-8",true);
+
+            xmlSerializer.startTag(null, "Organisation");
+
+            //For single
+            xmlSerializer.startTag(null, "name");
+            xmlSerializer.text(companyName);
+            xmlSerializer.endTag(null, "name");
+
+
+
+            //For group
+            xmlSerializer.startTag(null, "contact");
+
+            xmlSerializer.startTag(null, "phone");
+            xmlSerializer.text("9856596846");
+            xmlSerializer.endTag(null, "phone");
+
+            xmlSerializer.startTag(null, "street");
+            xmlSerializer.text("jhazsfjkdrng");
+            xmlSerializer.endTag(null, "street");
+
+            xmlSerializer.endTag(null, "contact");
+
+
+
+            xmlSerializer.endTag(null,"Organisation");
+
+
+            xmlSerializer.endDocument();
+            xmlSerializer.flush();
+            String dataWrite = writer.toString();
+            fileos.write(dataWrite.getBytes());
+            fileos.close();
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
 }
