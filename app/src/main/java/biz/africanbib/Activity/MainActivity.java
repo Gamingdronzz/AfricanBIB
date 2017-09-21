@@ -1,12 +1,12 @@
 package biz.africanbib.Activity;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.util.Log;
 import android.util.Xml;
 import android.view.KeyEvent;
@@ -18,20 +18,25 @@ import com.carlosmuvi.segmentedprogressbar.SegmentedProgressBar;
 
 import org.xmlpull.v1.XmlSerializer;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
+import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.Heading;
 import biz.africanbib.Models.SimpleEditText;
 import biz.africanbib.R;
+import biz.africanbib.Tabs.Tab1;
 import biz.africanbib.Tabs.Tab2;
 import biz.africanbib.Tabs.Tab3;
 import biz.africanbib.Tabs.Tab4;
 import biz.africanbib.Tabs.ViewPagerAdapter;
-import biz.africanbib.Tabs.Tab1;
 import biz.africanbib.Tools.DatabaseHelper;
 import biz.africanbib.Tools.Helper;
 
@@ -98,14 +103,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
 
-    private void showValidate(boolean show)
-    {
-        if(show)
-        {
+    private void showValidate(boolean show) {
+        if (show) {
             buttonValidate.setVisibility(View.VISIBLE);
-        }
-        else
-        {
+        } else {
             buttonValidate.setVisibility(View.INVISIBLE);
         }
     }
@@ -124,73 +125,59 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         });
     }
 
-    private void checkValidation()
-    {
-        Tab1 tab1 = (Tab1)adapter.getItem(0);
-        Tab2 tab2 = (Tab2)adapter.getItem(1);
-        Tab3 tab3 = (Tab3)adapter.getItem(2);
-        Tab4 tab4 = (Tab4)adapter.getItem(3);
-        if(tab4.getAccepted())
-        {
+    private void checkValidation() {
+        Tab1 tab1 = (Tab1) adapter.getItem(0);
+        Tab2 tab2 = (Tab2) adapter.getItem(1);
+        Tab3 tab3 = (Tab3) adapter.getItem(2);
+        Tab4 tab4 = (Tab4) adapter.getItem(3);
+        if (tab4.getAccepted()) {
 
             ArrayList<Object> items = tab1.getList();
             for (Object o :
                     items) {
-                if (o instanceof SimpleEditText)
-                {
+                if (o instanceof SimpleEditText) {
                     SimpleEditText simpleEditText = (SimpleEditText) o;
 
 
                     //Business Name
-                    if(simpleEditText.getTitle().equals(tab1.businessName))
-                    {
-                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
-                        {
-                            Toast.makeText(this,"Please enter a valid Business Name in Tab1",Toast.LENGTH_SHORT).show();
+                    if (simpleEditText.getTitle().equals(tab1.businessName)) {
+                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
+                            Toast.makeText(this, "Please enter a valid Business Name in Tab1", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
 
                     //Telephone
-                    if(simpleEditText.getTitle().equals(tab1.telephone))
-                    {
-                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
-                        {
-                            Toast.makeText(this,"Please enter a valid Telephone in Tab 1",Toast.LENGTH_SHORT).show();
+                    if (simpleEditText.getTitle().equals(tab1.telephone)) {
+                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
+                            Toast.makeText(this, "Please enter a valid Telephone in Tab 1", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
 
 
                     //City
-                    if(simpleEditText.getTitle().equals(tab1.city_town))
-                    {
-                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
-                        {
-                            Toast.makeText(this,"Please enter a valid City / Town in Tab 1",Toast.LENGTH_SHORT).show();
+                    if (simpleEditText.getTitle().equals(tab1.city_town)) {
+                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
+                            Toast.makeText(this, "Please enter a valid City / Town in Tab 1", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
 
 
                     //State
-                    if(simpleEditText.getTitle().equals(tab1.state))
-                    {
-                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
-                        {
-                            Toast.makeText(this,"Please enter a valid State in Tab 1",Toast.LENGTH_SHORT).show();
+                    if (simpleEditText.getTitle().equals(tab1.state)) {
+                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
+                            Toast.makeText(this, "Please enter a valid State in Tab 1", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
 
 
-
                     //Country
-                    if(simpleEditText.getTitle().equals(tab1.country))
-                    {
-                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
-                        {
-                            Toast.makeText(this,"Please enter a valid Country in Tab 1",Toast.LENGTH_SHORT).show();
+                    if (simpleEditText.getTitle().equals(tab1.country)) {
+                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
+                            Toast.makeText(this, "Please enter a valid Country in Tab 1", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
@@ -201,38 +188,31 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             items = tab4.getList();
             for (Object o :
                     items) {
-                if (o instanceof SimpleEditText)
-                {
+                if (o instanceof SimpleEditText) {
                     SimpleEditText simpleEditText = (SimpleEditText) o;
 
 
                     //Business Name
-                    if(simpleEditText.getTitle().equals(tab4.nameOfCollector))
-                    {
-                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
-                        {
-                            Toast.makeText(this,"Please enter a valid Collector Name in Tab4",Toast.LENGTH_SHORT).show();
+                    if (simpleEditText.getTitle().equals(tab4.nameOfCollector)) {
+                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
+                            Toast.makeText(this, "Please enter a valid Collector Name in Tab4", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
 
                     //Telephone
-                    if(simpleEditText.getTitle().equals(tab4.authorizedBy))
-                    {
-                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
-                        {
-                            Toast.makeText(this,"Please enter a valid Authorizing Name in Tab 4",Toast.LENGTH_SHORT).show();
+                    if (simpleEditText.getTitle().equals(tab4.authorizedBy)) {
+                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
+                            Toast.makeText(this, "Please enter a valid Authorizing Name in Tab 4", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
 
 
                     //City
-                    if(simpleEditText.getTitle().equals(tab4.placeOfCollection))
-                    {
-                        if(helper.checkForInput(simpleEditText.getValue()) ==null)
-                        {
-                            Toast.makeText(this,"Please enter a valid Place of Collection in Tab 4",Toast.LENGTH_SHORT).show();
+                    if (simpleEditText.getTitle().equals(tab4.placeOfCollection)) {
+                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
+                            Toast.makeText(this, "Please enter a valid Place of Collection in Tab 4", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
@@ -246,12 +226,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             tab4.getAdapter().notifyDataSetChanged();
 
             Test();
+            showXML();
+        } else {
 
-        }
-        else
-        {
-
-            Toast.makeText(this,"Please accept the agreeement first",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please accept the agreeement first", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -266,7 +244,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         //Creating our pager blogAdapter
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
 
-        Tab1 tab1 = (Tab1)adapter.getItem(0);
+        Tab1 tab1 = (Tab1) adapter.getItem(0);
         //Adding blogAdapter to pager
         viewPager.setAdapter(adapter);
 
@@ -298,7 +276,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         return tabLayout;
     }
-
 
 
     @Override
@@ -360,31 +337,53 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
 
-    void Test()
-    {
+    void Test() {
 
-        Tab1 tab1 = (Tab1)adapter.getItem(0);
-        Tab2 tab2 = (Tab2)adapter.getItem(1);
-        Tab3 tab3 = (Tab3)adapter.getItem(2);
-        Tab4 tab4 = (Tab4)adapter.getItem(3);
+        Tab1 tab1 = (Tab1) adapter.getItem(0);
+        Tab2 tab2 = (Tab2) adapter.getItem(1);
+        Tab3 tab3 = (Tab3) adapter.getItem(2);
+        Tab4 tab4 = (Tab4) adapter.getItem(3);
 
         ArrayList<Object> items1 = tab1.getList();
         ArrayList<Object> items2 = tab2.getList();
         ArrayList<Object> items3 = tab3.getList();
         ArrayList<Object> items4 = tab4.getList();
         try {
-            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "your_app_name" + "/" + companyName);
+            File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + getResources().getString(R.string.app) + "/" + companyName);
             file.createNewFile();
             FileOutputStream fileos = new FileOutputStream(file);
             XmlSerializer xmlSerializer = Xml.newSerializer();
             StringWriter writer = new StringWriter();
-            xmlSerializer.setOutput(writer);
-            xmlSerializer.startDocument("UTF-8",true);
 
+            xmlSerializer.setOutput(writer);
+            xmlSerializer.startDocument("UTF-8", true);
             xmlSerializer.startTag(null, "Organisation");
 
+            for (int i = 0; i < items1.size(); i++) {
+                Log.d("File", String.valueOf(items1.size()));
+                if (items1.get(i) != null) {
+                    if (items1.get(i) instanceof Heading) {
+                        xmlSerializer.startTag(null, ((Heading) items1.get(i)).getHeading());
+                        while (!(items1.get(i) instanceof Heading)) {
+                            if (items1.get(i) instanceof SimpleEditText) {
+                                xmlSerializer.startTag(null, ((SimpleEditText) items1.get(i)).getColumnName());
+                                xmlSerializer.text(((SimpleEditText) items1.get(i)).getValue());
+                                xmlSerializer.endTag(null, ((SimpleEditText) items1.get(i)).getColumnName());
+                            }
+                            if (items1.get(i) instanceof DropDown) {
+                                xmlSerializer.startTag(null, ((DropDown) items1.get(i)).getColumnName());
+                                xmlSerializer.text(String.valueOf(((DropDown) items1.get(i)).getSelectedPosition()));
+                                xmlSerializer.endTag(null, ((DropDown) items1.get(i)).getColumnName());
+                            }
+                            i++;
+                        }
+                        xmlSerializer.endTag(null, ((Heading) items1.get(i)).getHeading());
+                    }
+                }
+            }
 
-            //For single
+
+          /*  //For single
             xmlSerializer.startTag(null, "name");
             xmlSerializer.text(databaseHelper.getStringValue(DatabaseHelper.COLUMN_COMPANY_NAME,DatabaseHelper.TABLE_COMPANY_PROFILE));
             xmlSerializer.endTag(null, "name");
@@ -409,15 +408,36 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
 
 
-            xmlSerializer.endTag(null,"Organisation");
-
-
+          */
+            xmlSerializer.endTag(null, "Organisation");
             xmlSerializer.endDocument();
             xmlSerializer.flush();
+
             String dataWrite = writer.toString();
             fileos.write(dataWrite.getBytes());
             fileos.close();
-        }catch (IOException e) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void showXML() {
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + getResources().getString(R.string.app) + "/" + companyName);
+        try {
+            FileInputStream fIn = new FileInputStream(file);
+            BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
+            String aDataRow = "";
+            String aBuffer = "";
+            while ((aDataRow = myReader.readLine()) != null) {
+                aBuffer += aDataRow + "\n";
+            }
+            Log.d("File ShowXML", aBuffer);
+            myReader.close();
+            fIn.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
 

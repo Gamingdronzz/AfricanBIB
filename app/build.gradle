@@ -26,7 +26,6 @@ dependencies {
     })
     // If you want to use data binding
     compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:design:25.3.1'
     compile 'com.github.carlosmuvi:SegmentedProgressBar:0.6.0'
     compile 'com.wrapp.floatlabelededittext:library:0.0.6'
