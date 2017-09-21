@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
+import biz.africanbib.Models.Heading;
 import biz.africanbib.Models.SimpleEditText;
 import biz.africanbib.R;
 import biz.africanbib.Tabs.Tab2;
@@ -362,7 +363,15 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     void Test()
     {
 
+        Tab1 tab1 = (Tab1)adapter.getItem(0);
+        Tab2 tab2 = (Tab2)adapter.getItem(1);
+        Tab3 tab3 = (Tab3)adapter.getItem(2);
+        Tab4 tab4 = (Tab4)adapter.getItem(3);
 
+        ArrayList<Object> items1 = tab1.getList();
+        ArrayList<Object> items2 = tab2.getList();
+        ArrayList<Object> items3 = tab3.getList();
+        ArrayList<Object> items4 = tab4.getList();
         try {
             File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + "your_app_name" + "/" + companyName);
             file.createNewFile();
@@ -374,23 +383,27 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
             xmlSerializer.startTag(null, "Organisation");
 
+
             //For single
             xmlSerializer.startTag(null, "name");
-            xmlSerializer.text(companyName);
+            xmlSerializer.text(databaseHelper.getStringValue(DatabaseHelper.COLUMN_COMPANY_NAME,DatabaseHelper.TABLE_COMPANY_PROFILE));
             xmlSerializer.endTag(null, "name");
 
 
+            xmlSerializer.startTag(null, "registrationNumber");
+            xmlSerializer.text(databaseHelper.getStringValue(DatabaseHelper.COLUMN_REGISTERATION_NO,DatabaseHelper.TABLE_COMPANY_PROFILE));
+            xmlSerializer.endTag(null, "registrationNumber");
 
             //For group
             xmlSerializer.startTag(null, "contact");
 
-            xmlSerializer.startTag(null, "phone");
-            xmlSerializer.text("9856596846");
-            xmlSerializer.endTag(null, "phone");
-
             xmlSerializer.startTag(null, "street");
-            xmlSerializer.text("jhazsfjkdrng");
+            xmlSerializer.text(databaseHelper.getStringValue(DatabaseHelper.COLUMN_STREET,DatabaseHelper.TABLE_COMPANY_POSTAL_ADDRESS));
             xmlSerializer.endTag(null, "street");
+
+            xmlSerializer.startTag(null, "postbox");
+            xmlSerializer.text(databaseHelper.getStringValue(DatabaseHelper.COLUMN_PO_BOX,DatabaseHelper.TABLE_COMPANY_POSTAL_ADDRESS));
+            xmlSerializer.endTag(null, "postbox");
 
             xmlSerializer.endTag(null, "contact");
 

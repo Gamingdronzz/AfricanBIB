@@ -40,6 +40,7 @@ public class Tab3 extends Fragment {
     private int newsRows = 0;
     private int productRows = 0;
     private int serviceRows = 0;
+    ArrayList<Object> items;
 
     public ComplexRecyclerViewAdapter getAdapter() {
         return adapter;
@@ -61,7 +62,7 @@ public class Tab3 extends Fragment {
 
     private void init(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_3);
-        adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager(),this);
+        adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager(), this);
         if (isTab) {
             setupGridLayout(true);
         } else {
@@ -97,6 +98,9 @@ public class Tab3 extends Fragment {
         }
     }
 
+    public ArrayList<Object> getList() {
+        return items;
+    }
 
     private void setupGridLayout(boolean multiColumn) {
         if (multiColumn) {
@@ -120,7 +124,7 @@ public class Tab3 extends Fragment {
     }
 
     private ArrayList<Object> getSampleArrayList() {
-        ArrayList<Object> items = new ArrayList<>();
+        items = new ArrayList<>();
 
         //items.add(new SimpleEditText(""));
 
@@ -190,7 +194,6 @@ public class Tab3 extends Fragment {
         items.add(helper.buildAdd(4, titles, tableName, columnNames));
 
 
-
         items.add(new SimpleText("Services & Service Details"));
         tableName = DatabaseHelper.TABLE_SERVICES;
 
@@ -226,10 +229,6 @@ public class Tab3 extends Fragment {
 
         }
         items.add(helper.buildAdd(4, titles, tableName, columnNames));
-
-
-
-
 
 
         items.add(new Heading("COMPANY INDICATORS"));
