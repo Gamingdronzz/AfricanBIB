@@ -7,6 +7,7 @@ public class SimpleImageBuilder {
     private Bitmap image;
     private String columnName;
     private String tableName;
+    private String xmlTag;
 
     public SimpleImageBuilder setTitle(String title) {
         this.title = title;
@@ -28,7 +29,12 @@ public class SimpleImageBuilder {
         return this;
     }
 
+    public SimpleImageBuilder setXmlTag(String xmlTag) {
+        this.xmlTag = xmlTag;
+        return this;
+    }
+
     public SimpleImage createSimpleImage() {
-        return new SimpleImage(title, image, columnName, tableName);
+        return new SimpleImage(title, image, columnName, tableName,xmlTag);
     }
 }

@@ -7,6 +7,15 @@ package biz.africanbib.Models;
 public class Heading
 {
     private String heading;
+    private String xmlTag;
+
+    public String getXmlTag() {
+        return xmlTag;
+    }
+
+    public void setXmlTag(String xmlTag) {
+        this.xmlTag = xmlTag;
+    }
 
     public String getHeading() {
         return heading;
@@ -16,8 +25,9 @@ public class Heading
         this.heading = heading;
     }
 
-    public Heading(String heading) {
+    public Heading(String heading,String xmlTag) {
 
         this.heading = heading;
+        this.xmlTag = xmlTag;
     }
 }

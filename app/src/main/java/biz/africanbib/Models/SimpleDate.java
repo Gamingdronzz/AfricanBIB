@@ -23,6 +23,15 @@ public class SimpleDate
     private String columnName;
     private String tableName;
     private int rowno = 0;
+    private String xmlTag;
+
+    public String getXmlTag() {
+        return xmlTag;
+    }
+
+    public void setXmlTag(String xmlTag) {
+        this.xmlTag = xmlTag;
+    }
 
     public int getRowno() {
         return rowno;
@@ -33,13 +42,14 @@ public class SimpleDate
     }
 
 
-    public SimpleDate(String title, String value, Date date, String columnName, String tableName, int rowno) {
+    public SimpleDate(String title, String value, Date date, String columnName, String tableName, int rowno,String xmlTag) {
         this.title = title;
         this.value = value;
         this.date = date;
         this.columnName = columnName;
         this.tableName = tableName;
         this.rowno = rowno;
+        this.xmlTag = xmlTag;
     }
 
     public String getColumnName() {

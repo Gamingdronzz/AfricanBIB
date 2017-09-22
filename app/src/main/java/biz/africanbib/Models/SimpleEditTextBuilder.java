@@ -7,6 +7,7 @@ public class SimpleEditTextBuilder {
     private String columnName;
     private String tableName;
     private int rowno = 0;
+    private String xmlTag;
 
     public SimpleEditTextBuilder setTitle(String title) {
         this.title = title;
@@ -38,7 +39,12 @@ public class SimpleEditTextBuilder {
         return this;
     }
 
+    public SimpleEditTextBuilder setXmlTag(String xmlTag) {
+        this.xmlTag = xmlTag;
+        return this;
+    }
+
     public SimpleEditText createSimpleEditText() {
-        return new SimpleEditText(title, value, type, columnName, tableName, rowno);
+        return new SimpleEditText(title, value, type, columnName, tableName, rowno,xmlTag);
     }
 }

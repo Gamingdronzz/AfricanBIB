@@ -7,6 +7,15 @@ package biz.africanbib.Models;
 public class SimpleText
 {
     private String title;
+    private String xmlTag;
+
+    public String getXmlTag() {
+        return xmlTag;
+    }
+
+    public void setXmlTag(String xmlTag) {
+        this.xmlTag = xmlTag;
+    }
 
     public String getTitle() {
         return title;

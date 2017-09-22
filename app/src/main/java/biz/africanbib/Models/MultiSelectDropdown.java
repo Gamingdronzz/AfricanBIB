@@ -15,6 +15,15 @@ public class MultiSelectDropdown {
     private String columnName;
     private String tableName;
 
+    private String xmlTag;
+
+    public String getXmlTag() {
+        return xmlTag;
+    }
+
+    public void setXmlTag(String xmlTag) {
+        this.xmlTag = xmlTag;
+    }
     public List<Integer> getSelectedIndices() {
         return selectedIndices;
     }
@@ -41,7 +50,7 @@ public class MultiSelectDropdown {
         this.tableName = tableName;
     }
 
-    public MultiSelectDropdown(String title, String[] items, List<Integer> selectedIndices, String columnName, String tableName, int rowno) {
+    public MultiSelectDropdown(String title, String[] items, List<Integer> selectedIndices, String columnName, String tableName, int rowno,String xmlTag) {
         this.title = title;
         this.items = items;
         if (selectedIndices == null) {
@@ -52,6 +61,7 @@ public class MultiSelectDropdown {
         this.columnName = columnName;
         this.tableName = tableName;
         this.rowno = rowno;
+        this.xmlTag = xmlTag;
     }
 
     public String getColumnName() {

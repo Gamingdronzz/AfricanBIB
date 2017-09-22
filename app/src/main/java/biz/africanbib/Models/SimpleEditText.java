@@ -9,6 +9,15 @@ public class SimpleEditText
     private String title;
     private String value;
     private int type = TEXT;
+    private String xmlTag;
+
+    public String getXmlTag() {
+        return xmlTag;
+    }
+
+    public void setXmlTag(String xmlTag) {
+        this.xmlTag = xmlTag;
+    }
 
     private String columnName;
     private String tableName;
@@ -39,13 +48,14 @@ public class SimpleEditText
 
 
 
-    public SimpleEditText(String title, String value, int type, String columnName, String tableName, int rowno) {
+    public SimpleEditText(String title, String value, int type, String columnName, String tableName, int rowno,String xmlTag) {
         this.title = title;
         this.value = value;
         this.type = type;
         this.columnName = columnName;
         this.tableName = tableName;
         this.rowno = rowno;
+        this.xmlTag = xmlTag;
     }
 
     public String getColumnName() {

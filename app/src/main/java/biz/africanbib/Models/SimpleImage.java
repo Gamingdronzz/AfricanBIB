@@ -12,6 +12,15 @@ public class SimpleImage
     private Bitmap image;
     private String columnName;
     private String tableName;
+    private String xmlTag;
+
+    public String getXmlTag() {
+        return xmlTag;
+    }
+
+    public void setXmlTag(String xmlTag) {
+        this.xmlTag = xmlTag;
+    }
 
     public String getColumnName() {
         return columnName;
@@ -45,10 +54,11 @@ public class SimpleImage
         this.image = image;
     }
 
-    public SimpleImage(String title, Bitmap image, String columnName, String tableName) {
+    public SimpleImage(String title, Bitmap image, String columnName, String tableName,String xmlTag) {
         this.title = title;
         this.image = image;
         this.columnName = columnName;
         this.tableName = tableName;
+        this.xmlTag = xmlTag;
     }
 }

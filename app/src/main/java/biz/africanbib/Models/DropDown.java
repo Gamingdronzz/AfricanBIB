@@ -9,6 +9,16 @@ import android.util.Log;
 public class DropDown
 {
     private String heading;
+    private String xmlTag;
+
+    public String getXmlTag() {
+        return xmlTag;
+    }
+
+    public void setXmlTag(String xmlTag) {
+        this.xmlTag = xmlTag;
+    }
+
     private String[] list;
     private int selectedPosition = 0;
 
@@ -25,13 +35,14 @@ public class DropDown
 
     private int rowno = -1;
 
-    public DropDown(String heading, String[] list, int selectedPosition, String columnName, String tableName, int rowno) {
+    public DropDown(String heading, String[] list, int selectedPosition, String columnName, String tableName, int rowno,String xmlTag) {
         this.heading = heading;
         this.list = list;
         this.selectedPosition = selectedPosition;
         this.columnName = columnName;
         this.tableName = tableName;
         this.rowno = rowno;
+        this.xmlTag = xmlTag;
     }
 
     public String getColumnName() {

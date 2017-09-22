@@ -9,6 +9,7 @@ public class SimpleDateBuilder {
     private String columnName;
     private String tableName;
     private int rowno;
+    private String xmlTag;
 
     public SimpleDateBuilder setTitle(String title) {
         this.title = title;
@@ -40,7 +41,12 @@ public class SimpleDateBuilder {
         return this;
     }
 
+    public SimpleDateBuilder setXmlTag(String xmlTag) {
+        this.xmlTag = xmlTag;
+        return this;
+    }
+
     public SimpleDate createSimpleDate() {
-        return new SimpleDate(title, value, date, columnName, tableName, rowno);
+        return new SimpleDate(title, value, date, columnName, tableName, rowno,xmlTag);
     }
 }

@@ -12,6 +12,7 @@ public class MultiSelectDropdownBuilder {
     private String columnName;
     private String tableName;
     private int rowno;
+    private String xmlTag;
 
     public MultiSelectDropdownBuilder setTitle(String title) {
         this.title = title;
@@ -43,6 +44,11 @@ public class MultiSelectDropdownBuilder {
         return this;
     }
 
+    public MultiSelectDropdownBuilder setXmlTag(String xmlTag) {
+        this.xmlTag = xmlTag;
+        return this;
+    }
+
     public MultiSelectDropdown createMultiSelectDropdown() {
         if(selectedIndices == null)
         {
@@ -52,6 +58,6 @@ public class MultiSelectDropdownBuilder {
         {
             Log.v("Multi","Selected indices in builder is not null");
         }
-        return new MultiSelectDropdown(title, items, selectedIndices, columnName, tableName, rowno);
+        return new MultiSelectDropdown(title, items, selectedIndices, columnName, tableName, rowno,xmlTag);
     }
 }

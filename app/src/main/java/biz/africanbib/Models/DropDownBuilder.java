@@ -7,6 +7,7 @@ public class DropDownBuilder {
     private String columnName;
     private String tableName;
     private int rowno;
+    private String xmlTag;
 
     public DropDownBuilder setHeading(String heading) {
         this.heading = heading;
@@ -33,12 +34,17 @@ public class DropDownBuilder {
         return this;
     }
 
+    public DropDownBuilder setXmlTag(String xmlTag) {
+        this.xmlTag = xmlTag;
+        return this;
+    }
+
     public DropDownBuilder setRowno(int rowno) {
         this.rowno = rowno;
         return this;
     }
 
     public DropDown createDropDown() {
-        return new DropDown(heading, list, selectedPosition, columnName, tableName, rowno);
+        return new DropDown(heading, list, selectedPosition, columnName, tableName, rowno, xmlTag);
     }
 }

@@ -141,7 +141,7 @@ public class Tab1 extends Fragment {
         items = new ArrayList<>();
 
 
-        items.add(new Heading("COMPANY / INSTITUION PROFILE"));
+        items.add(new Heading("COMPANY / INSTITUION PROFILE",null));
 
         String columnName = DatabaseHelper.COLUMN_COMPANY_NAME;
         String tableName = DatabaseHelper.TABLE_COMPANY_PROFILE;
@@ -186,7 +186,7 @@ public class Tab1 extends Fragment {
         {
             e.printStackTrace();
         }
-        items.add(helper.buildImage("Keyvisual (Photo)", keyvisual, tableName, columnName));
+        items.add(helper.buildImage("Keyvisual (Photo)", keyvisual, tableName, columnName,"sdryger"));
         //items.add(helper.buildDropDown("Keyvisual (Photo)", new String[]{"Collected", "Not Collected"}, selectedPosition, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_LOGO_NOTE;
@@ -200,7 +200,7 @@ public class Tab1 extends Fragment {
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Brief Description of the Company / Instituion", value, tableName, columnName, -1));
 
-        items.add(new Heading("COMPANY CONTACT"));
+        items.add(new Heading("COMPANY CONTACT","contact"));
 
         columnName = DatabaseHelper.COLUMN_TELEPHONE;
         tableName = DatabaseHelper.TABLE_COMPANY_CONTACT;
@@ -223,7 +223,7 @@ public class Tab1 extends Fragment {
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Website", value, tableName, columnName, -1));
 
-        items.add(new Heading("COMPANY POSTAL ADRESS"));
+        items.add(new Heading("COMPANY POSTAL ADRESS","contact"));
 
         columnName = DatabaseHelper.COLUMN_STREET;
         tableName = DatabaseHelper.TABLE_COMPANY_POSTAL_ADDRESS;
@@ -251,7 +251,7 @@ public class Tab1 extends Fragment {
         items.add(helper.buildDropDown("Country", helper.getCountryNames(), selectedPosition, tableName, columnName, -1));
 
 
-        items.add(new Heading("COMPANY PHYSICAL ADRESS"));
+        items.add(new Heading("COMPANY PHYSICAL ADRESS","contact"));
 
         columnName = DatabaseHelper.COLUMN_STREET;
         tableName = DatabaseHelper.TABLE_COMPANY_PHYSICAL_ADDRESS;
@@ -284,13 +284,13 @@ public class Tab1 extends Fragment {
         items.add(helper.buildDropDown(country, helper.getCountryNames(), selectedPosition, tableName, columnName, -1));
 
 
-        items.add(new Heading("COMPANY SPECIFIC INFORMATION"));
+        items.add(new Heading("COMPANY SPECIFIC INFORMATION","about"));
 
         columnName = DatabaseHelper.COLUMN_LEGAL_FORM;
         tableName = DatabaseHelper.TABLE_COMPANY_SPECIFIC_INFORMATION;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Legal Form", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Legal Form", value, tableName, columnName, -1,"legalForm"));
 
         columnName = DatabaseHelper.COLUMN_TYPE_OF_ORGANISATION;
         selectedPosition = databaseHelper.getIntValue(columnName, tableName);
@@ -301,7 +301,7 @@ public class Tab1 extends Fragment {
                 "Individual Enterprise",
                 "Local NGO",
                 "Privately Held Company",
-                "Publicly Held Institution"}, selectedPosition, tableName, columnName, -1));
+                "Publicly Held Institution"}, selectedPosition, tableName, columnName, -1,"typeOrganization"));
         columnName = DatabaseHelper.COLUMN_TYPE_OF_ACTIVITIES;
         selectedPosition = databaseHelper.getIntValue(columnName, tableName);
         items.add(helper.buildDropDown("Type of Activities", new String[]{"Manufacturing", "Service Provider"}, selectedPosition, tableName, columnName, -1));

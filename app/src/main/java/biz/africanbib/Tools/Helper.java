@@ -362,7 +362,7 @@ public class Helper {
         return isTab;
     }
 
-    public SimpleEditText buildEditText(String title, String value, String tableName, String columnName,int rowno) {
+    public SimpleEditText buildEditText(String title, String value, String tableName, String columnName,int rowno,String xmlTag) {
 
         if(MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS)
         {
@@ -371,6 +371,7 @@ public class Helper {
                     .setTableName(tableName)
                     .setColumnName(columnName)
                     .setRowno(rowno)
+                    .setXmlTag(xmlTag)
                     .createSimpleEditText();
         }
         else
@@ -381,12 +382,13 @@ public class Helper {
                     .setTableName(tableName)
                     .setColumnName(columnName)
                     .setRowno(rowno)
+                    .setXmlTag(xmlTag)
                     .createSimpleEditText();
         }
 
     }
 
-    public DropDown buildDropDown(String heading, String[] list, int selectedPosition, String tableName, String columnName,int rowno) {
+    public DropDown buildDropDown(String heading, String[] list, int selectedPosition, String tableName, String columnName,int rowno,String xmlTag) {
         if(MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS) {
 
             return new DropDownBuilder()
@@ -395,6 +397,7 @@ public class Helper {
                     .setTableName(tableName)
                     .setColumnName(columnName)
                     .setRowno(rowno)
+                    .setXmlTag(xmlTag)
                     .createDropDown();
         }
         else
@@ -404,6 +407,7 @@ public class Helper {
                     .setList(list)
                     .setSelectedPosition(selectedPosition)
                     .setTableName(tableName)
+                    .setXmlTag(xmlTag)
                     .setColumnName(columnName)
                     .setRowno(rowno)
                     .createDropDown();
@@ -420,7 +424,7 @@ public class Helper {
                 .createAdd();
     }
 
-    public MultiSelectDropdown buildMultiSelectDropdown( String title, String tableName, String columnName, String[] items,List<Integer> selectedIndices,int rowno)
+    public MultiSelectDropdown buildMultiSelectDropdown( String title, String tableName, String columnName, String[] items,List<Integer> selectedIndices,int rowno,String xmlTag)
     {
         //Log.v("Helper","Selected Indices for " + title + " = " + selectedIndices.toString());
         return new MultiSelectDropdownBuilder()
@@ -430,10 +434,11 @@ public class Helper {
             .setColumnName(columnName)
             .setItems(items)
             .setSelectedIndices(selectedIndices)
+                .setXmlTag(xmlTag)
             .createMultiSelectDropdown();
     }
 
-    public SimpleDate buildDate(String title, String value, String tableName, String columnName, int rowno) {
+    public SimpleDate buildDate(String title, String value, String tableName, String columnName, int rowno,String xmlTag) {
 
         if(MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS)
         {
@@ -442,6 +447,7 @@ public class Helper {
                     .setTableName(tableName)
                     .setColumnName(columnName)
                     .setRowno(rowno)
+                    .setXmlTag(xmlTag)
                     .createSimpleDate();
         }
         else
@@ -452,12 +458,13 @@ public class Helper {
                     .setTableName(tableName)
                     .setColumnName(columnName)
                     .setRowno(rowno)
+                    .setXmlTag(xmlTag)
                     .createSimpleDate();
         }
 
     }
 
-    public SimpleImage buildImage(String title, Bitmap image, String tableName, String columnName) {
+    public SimpleImage buildImage(String title, Bitmap image, String tableName, String columnName,String xmlTag) {
 
         if(MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS)
         {
@@ -465,6 +472,7 @@ public class Helper {
                     .setTitle(title)
                     .setTableName(tableName)
                     .setColumnName(columnName)
+                    .setXmlTag(xmlTag)
                     .createSimpleImage();
         }
         else
@@ -474,6 +482,7 @@ public class Helper {
                     .setTableName(tableName)
                     .setColumnName(columnName)
                     .setImage(image)
+                    .setXmlTag(xmlTag)
                     .createSimpleImage();
         }
 
