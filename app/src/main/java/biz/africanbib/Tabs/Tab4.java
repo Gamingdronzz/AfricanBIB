@@ -142,7 +142,7 @@ public class Tab4 extends Fragment {
 
 
 
-        items.add(new Heading("BUSINESS INFORMATION"));
+        items.add(new Heading("BUSINESS INFORMATION",null));
 
         String tableName = DatabaseHelper.TABLE_BUSINESS_CORRESPONDING_LANGUAGES;
         String columnName = DatabaseHelper.COLUMN_LANGUAGE;
@@ -180,7 +180,7 @@ public class Tab4 extends Fragment {
                         "Chichewa",
                         "Tigrinya",
                         "Xhosa"
-                }, selectionLanguages, -1));
+                }, selectionLanguages, -1,"businessLanguage"));
 
 
         items.add(new SimpleText("Industries"));
@@ -236,24 +236,24 @@ public class Tab4 extends Fragment {
                 columnNames));
 
 
-        items.add(new Heading("SOURCE OF DATA"));
+        items.add(new Heading("SOURCE OF DATA",null));
 
         tableName = DatabaseHelper.TABLE_SOURCE_OF_DATA;
         columnName = DatabaseHelper.COLUMN_NAME_OF_COLLECTOR;
         String value;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText(nameOfCollector, value, tableName, columnName, -1));
+        items.add(helper.buildEditText(nameOfCollector, value, tableName, columnName, -1,"approvedBy"));
         columnName = DatabaseHelper.COLUMN_AUTHORIZED_BY;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText(authorizedBy, value, tableName, columnName, -1));
+        items.add(helper.buildEditText(authorizedBy, value, tableName, columnName, -1,"authorizedBy"));
         columnName = DatabaseHelper.COLUMN_PLACE_OF_COLECTION;
         int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
         items.add(helper.buildDropDown(placeOfCollection,
-                new String[]{"Event", "Company", "Others"}, selectedPosition, tableName, columnName, -1));
+                new String[]{"Event", "Company", "Others"}, selectedPosition, tableName, columnName, -1,"collectedBy"));
         if (selectedPosition == 2) {
             columnName = DatabaseHelper.COLUMN_OTHERS_SPECIFY;
             value = databaseHelper.getStringValue(columnName, tableName);
-            items.add(helper.buildEditText("Place of Collection (Specify)", value, tableName, columnName, -1));
+            items.add(helper.buildEditText("Place of Collection (Specify)", value, tableName, columnName, -1,"collectedBy"));
         }
         columnName = DatabaseHelper.COLUMN_DATE;
         value = databaseHelper.getStringValue(columnName, tableName);
