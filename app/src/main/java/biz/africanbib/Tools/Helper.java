@@ -414,12 +414,13 @@ public class Helper {
         }
     }
 
-    public Add buildAdd(int rows,String[] titles,String tableName,String[] tableColumnNames)
+    public Add buildAdd(int rows,String[] titles,String tableName,String[] tableColumnNames,String[] xmlTags)
     {
         return new AddBuilder()
                 .setRows(rows)
                 .setTableName(tableName)
                 .setColumnNames(titles)
+                .setxmlTags(xmlTags)
                 .setTableColumnNames(tableColumnNames)
                 .createAdd();
     }

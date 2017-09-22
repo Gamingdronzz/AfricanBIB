@@ -159,7 +159,11 @@ public class Tab3 extends Fragment {
 
         items.add(new SimpleText("Products & Product Details"));
         String tableName = DatabaseHelper.TABLE_PRODUCTS_AND_PRODUCT_DETAILS;
-
+        String[] xmlTags = new String[]{
+                "media",
+                "description",
+                "title",
+                "product"};
         String[] titles = new String[]{
                 "Media (Photo / Documents)",
                 "Description",
@@ -183,7 +187,7 @@ public class Tab3 extends Fragment {
                                         databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
                                         tableName,
                                         columnNames[j],
-                                        ids[i],"productDetails"));
+                                        ids[i],xmlTags[j]));
                     }
                 }
                 productDetailsRows = ids.length;
@@ -191,12 +195,16 @@ public class Tab3 extends Fragment {
 
 
         }
-        items.add(helper.buildAdd(4, titles, tableName, columnNames));
+        items.add(helper.buildAdd(4, titles, tableName, columnNames,xmlTags));
 
 
         items.add(new SimpleText("Services & Service Details"));
         tableName = DatabaseHelper.TABLE_SERVICES;
-
+        xmlTags = new String[]{
+                "media",
+                "description",
+                "title",
+                "service"};
         titles = new String[]{
                 "Media (Photo / Documents)",
                 "Description",
@@ -220,7 +228,7 @@ public class Tab3 extends Fragment {
                                         databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
                                         tableName,
                                         columnNames[j],
-                                        ids[i],"services"));
+                                        ids[i],xmlTags[j]));
                     }
                 }
                 productDetailsRows = ids.length;
@@ -228,7 +236,7 @@ public class Tab3 extends Fragment {
 
 
         }
-        items.add(helper.buildAdd(4, titles, tableName, columnNames));
+        items.add(helper.buildAdd(4, titles, tableName, columnNames,xmlTags));
 
 
         items.add(new Heading("COMPANY INDICATORS","indicators"));
@@ -318,7 +326,7 @@ public class Tab3 extends Fragment {
 
         items.add(new Heading("AWARDS",null));
         tableName = DatabaseHelper.TABLE_AWARDS;
-        String[] xmlTags = new String[]{
+        xmlTags = new String[]{
                 "awardfile",
                 "telephone",
                 "description",
@@ -370,7 +378,7 @@ public class Tab3 extends Fragment {
 
 
         }
-        items.add(helper.buildAdd(6, titles, tableName, columnNames));
+        items.add(helper.buildAdd(6, titles, tableName, columnNames,xmlTags));
 
         items.add(new Heading("LATEST NEWS","news"));
         tableName = DatabaseHelper.TABLE_LATEST_NEWS;
@@ -416,7 +424,7 @@ public class Tab3 extends Fragment {
 
 
         }
-        items.add(helper.buildAdd(3, titles, tableName, columnNames));
+        items.add(helper.buildAdd(3, titles, tableName, columnNames,xmlTags));
 
 
         return items;

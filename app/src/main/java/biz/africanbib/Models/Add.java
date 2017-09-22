@@ -7,6 +7,16 @@ package biz.africanbib.Models;
 public class Add {
     private int rows;
     private int type = -1;
+    private String[] xmlTags;
+
+    public String[] getXmlTags() {
+        return xmlTags;
+    }
+
+    public void setXmlTags(String[] xmlTags) {
+        this.xmlTags = xmlTags;
+    }
+
     public static int INDUSTRY = 1;
     private String[] columnNames = null;
 
@@ -22,12 +32,13 @@ public class Add {
 
     private String tableName;
 
-    public Add(int rows, int type, String[] columnNames, String[] tableColumnNames, String tableName) {
+    public Add(int rows, int type, String[] columnNames, String[] tableColumnNames, String tableName,String[] xmlTags) {
         this.rows = rows;
         this.type = type;
         this.columnNames = columnNames;
         this.tableColumnNames = tableColumnNames;
         this.tableName = tableName;
+        this.xmlTags = xmlTags;
     }
 
     public String getTableName() {

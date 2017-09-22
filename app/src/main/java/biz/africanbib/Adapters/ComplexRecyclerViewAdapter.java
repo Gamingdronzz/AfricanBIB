@@ -653,7 +653,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 if (dropDown.getRowno() == -1) {
                     if (dropDown.getHeading().equals("Place of Collection")) {
                         if (i == 2) {
-                            items.add(position + 1, helper.buildEditText("Place of Collection (Specify)", "", DatabaseHelper.TABLE_SOURCE_OF_DATA, DatabaseHelper.COLUMN_OTHERS_SPECIFY, -1));
+                            items.add(position + 1, helper.buildEditText("Place of Collection (Specify)", "", DatabaseHelper.TABLE_SOURCE_OF_DATA, DatabaseHelper.COLUMN_OTHERS_SPECIFY, -1,"placeofcollection"));
                             notifyItemInserted(position + 1);
                         }
                     }
@@ -1006,6 +1006,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             items.add(position, new Divider());
             String[] columnNames = add.getColumnNames();
             String[] tableColumnNames = add.getTableColumnNames();
+            String[] xmlTags = add.getXmlTags();
             int currentRowNo = manageRowNo(add);
             Log.v("Adapter", "Current Row = " + currentRowNo);
 
@@ -1019,7 +1020,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             tableColumnNames[i],
                             helper.manageMultiSelectList(0),
                             null,
-                            currentRowNo
+                            currentRowNo,"sector"
                     ));
                     notifyItemInserted(position);
 
@@ -1028,7 +1029,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             columnNames[i],
                             helper.getIndustryList(),
                             databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
-                            add.getTableName(), tableColumnNames[i], currentRowNo));
+                            add.getTableName(), tableColumnNames[i], currentRowNo,"industry"));
                     notifyItemInserted(position);
                 } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_DATE)) {
                     items.add(position, helper.buildDate(
@@ -1036,14 +1037,14 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             databaseHelper.getStringFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
                             add.getTableName(),
                             tableColumnNames[i],
-                            currentRowNo));
+                            currentRowNo,"date"));
                     Log.v("Adapter", "Inserting Date " + columnNames[i] + " at " + i);
                     notifyItemInserted(position);
                 } else if (columnNames[i].equals("Country")) {
-                    items.add(position, helper.buildDropDown(columnNames[i], helper.getCountryNames(), 0, add.getTableName(), tableColumnNames[i], currentRowNo));
+                    items.add(position, helper.buildDropDown(columnNames[i], helper.getCountryNames(), 0, add.getTableName(), tableColumnNames[i], currentRowNo,"country"));
                     notifyItemInserted(position);
                 } else {
-                    items.add(position, helper.buildEditText(columnNames[i], "", add.getTableName(), tableColumnNames[i], currentRowNo));
+                    items.add(position, helper.buildEditText(columnNames[i], "", add.getTableName(), tableColumnNames[i], currentRowNo,xmlTags[i]));
                     Log.v("Adapter", "Inserting Edittext " + columnNames[i] + " at " + i);
                     notifyItemInserted(position);
                 }

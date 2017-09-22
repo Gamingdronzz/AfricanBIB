@@ -233,7 +233,7 @@ public class Tab4 extends Fragment {
         }
         items.add(helper.buildAdd(2, titles,
                 tableName,
-                columnNames));
+                columnNames,new String[]{"sector","industry"}));
 
 
         items.add(new Heading("SOURCE OF DATA",null));

@@ -6,6 +6,7 @@ public class AddBuilder {
     private String[] columnNames;
     private String[] tableColumnNames;
     private String tableName;
+    private String[] xmlTags;
 
     public AddBuilder setRows(int rows) {
         this.rows = rows;
@@ -27,12 +28,17 @@ public class AddBuilder {
         return this;
     }
 
+    public AddBuilder setxmlTags(String[] xmltags) {
+        this.xmlTags = xmltags;
+        return this;
+    }
+
     public AddBuilder setTableName(String tableName) {
         this.tableName = tableName;
         return this;
     }
 
     public Add createAdd() {
-        return new Add(rows, type, columnNames, tableColumnNames, tableName);
+        return new Add(rows, type, columnNames, tableColumnNames, tableName,xmlTags);
     }
 }
