@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.Heading;
 import biz.africanbib.Models.SimpleEditText;
+import biz.africanbib.Models.SimpleText;
 import biz.africanbib.R;
 import biz.africanbib.Tabs.Tab1;
 import biz.africanbib.Tabs.Tab2;

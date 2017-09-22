@@ -160,7 +160,7 @@ public class Tab1 extends Fragment {
 
         columnName = DatabaseHelper.COLUMN_REGISTERATION_NO;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Registeration No", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Registeration No", value, tableName, columnName, -1,"registrationNumber"));
 
         columnName = DatabaseHelper.COLUMN_LOGO;
         Bitmap image = null;
@@ -173,7 +173,7 @@ public class Tab1 extends Fragment {
             e.printStackTrace();
         }
         //=  databaseHelper.getIntValue(columnName, tableName);
-        items.add(helper.buildImage("Corporate Logo", image, tableName, columnName));
+        items.add(helper.buildImage("Corporate Logo", image, tableName, columnName,"logo"));
         //items.add(helper.buildDropDown("Corporate Logo", new String[]{"Collected", "Not Collected"}, selectedPosition, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_KEYVISUAL_PHOTO;
