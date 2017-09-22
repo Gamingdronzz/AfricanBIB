@@ -190,11 +190,11 @@ public class Tab1 extends Fragment {
 
         columnName = DatabaseHelper.COLUMN_LOGO_NOTE;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Logo Note", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Logo Note", value, tableName, columnName, -1,"logonote"));
 
         columnName = DatabaseHelper.COLUMN_KEYVISUAL_NOTE;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Key Visual Note", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Key Visual Note", value, tableName, columnName, -1,"keyvisualnote"));
         columnName = DatabaseHelper.COLUMN_BRIEF_DESCRIPTION;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Brief Description of the Company / Instituion", value, tableName, columnName, -1,"description"));
@@ -211,7 +211,7 @@ public class Tab1 extends Fragment {
         items.add(helper.buildEditText("Cellphone", value, tableName, columnName, -1,"cellphone"));
         columnName = DatabaseHelper.COLUMN_FASCIMILE;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Fascimile", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Fascimile", value, tableName, columnName, -1,"fascimile"));
 
         columnName = DatabaseHelper.COLUMN_EMAIL;
 

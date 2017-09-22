@@ -258,13 +258,13 @@ public class Tab3 extends Fragment {
         items.add(helper.buildEditText("Annual Sales (Range)", value, tableName, columnName, -1,"annualSales"));
         columnName = DatabaseHelper.COLUMN_ANNUAL_REVENUE;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Annual Revenue (Range)", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("Annual Revenue (Range)", value, tableName, columnName, -1, "annualrevenue" ));
 
 
         columnName = DatabaseHelper.COLUMN_NO_OF_BRANCHES;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("No. of Branches", value, tableName, columnName, -1));
+        items.add(helper.buildEditText("No. of Branches", value, tableName, columnName, -1,"branches"));
 
 
         columnName = DatabaseHelper.COLUMN_TOTAL_NO_OF_EMPLOYEES;
@@ -318,6 +318,14 @@ public class Tab3 extends Fragment {
 
         items.add(new Heading("AWARDS",null));
         tableName = DatabaseHelper.TABLE_AWARDS;
+        String[] xmlTags = new String[]{
+                "awardfile",
+                "telephone",
+                "description",
+                "date",
+                "institution",
+                "name"
+        };
         titles = new String[]{
                 "Award (File)",
                 "Telephone / Fax",
@@ -345,7 +353,7 @@ public class Tab3 extends Fragment {
                                     databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
                                     tableName,
                                     columnNames[j],
-                                    ids[i]));
+                                    ids[i],xmlTags[j]));
                         } else {
                             items.add(
                                     helper.buildEditText(
@@ -353,7 +361,7 @@ public class Tab3 extends Fragment {
                                             databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
                                             tableName,
                                             columnNames[j],
-                                            ids[i]));
+                                            ids[i],xmlTags[j]));
                         }
                     }
                 }
@@ -370,6 +378,10 @@ public class Tab3 extends Fragment {
                 "Description",
                 "Title",
                 "Date"};
+        xmlTags = new String[]{
+                "description",
+                "title",
+                "date"};
         columnNames = new String[]{
                 DatabaseHelper.COLUMN_DESCRIPTION,
                 DatabaseHelper.COLUMN_TITLE,
@@ -387,7 +399,7 @@ public class Tab3 extends Fragment {
                                     databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
                                     tableName,
                                     columnNames[j],
-                                    ids[i],"date"));
+                                    ids[i],xmlTags[j]));
                         } else {
                             items.add(
                                     helper.buildEditText(
@@ -395,7 +407,7 @@ public class Tab3 extends Fragment {
                                             databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
                                             tableName,
                                             columnNames[j],
-                                            ids[i],"description"));
+                                            ids[i],xmlTags[j]));
                         }
                     }
                 }
