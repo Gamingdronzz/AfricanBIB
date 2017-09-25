@@ -145,13 +145,16 @@ public class Tab2 extends Fragment {
         if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
             int[] ids = databaseHelper.getrowids(tableName);
             if (ids != null) {
-                for (int i = 0; i < ids.length; i++)
+                for (int i = 0; i < ids.length; i++) {
+
                     items.add(helper.buildEditText(
                             "Need",
                             databaseHelper.getStringFromRow(tableName, columnName, ids[i]),
                             tableName,
                             columnName,
                             ids[i], "need"));
+                    items.add(new Divider());
+                }
                 needRows = ids.length;
             }
 
@@ -166,14 +169,15 @@ public class Tab2 extends Fragment {
             int[] ids = databaseHelper.getrowids(tableName);
             if (ids != null) {
                 for (int i = 0; i < ids.length; i++) {
-                    items.add(new Divider());
+
                     items.add(
                             helper.buildEditText(
                                     "Offer",
                                     databaseHelper.getStringFromRow(tableName, columnName, ids[i]),
                                     tableName,
                                     columnName,
-                                    ids[i], "need"));
+                                    ids[i], "offer"));
+                    items.add(new Divider());
                 }
                 offerrows = ids.length;
             }
@@ -265,7 +269,7 @@ public class Tab2 extends Fragment {
         columnName = DatabaseHelper.COLUMN_NATIONALITY;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Nationality", value, tableName, columnName, -1, "nationality,"));
+        items.add(helper.buildEditText("Nationality", value, tableName, columnName, -1, "nationality"));
 
         columnName = DatabaseHelper.COLUMN_BIRTHDAY;
 
@@ -326,7 +330,7 @@ public class Tab2 extends Fragment {
             int[] ids = databaseHelper.getrowids(tableName);
             if (ids != null) {
                 for (int i = 0; i < ids.length; i++) {
-                    items.add(new Divider());
+
                     for (int j = titles.length - 1; j > 0; j--) {
 
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_DATE)) {
@@ -354,6 +358,7 @@ public class Tab2 extends Fragment {
                             tableName,
                             columnNames[0],
                             ids[i], xmltags[0]));
+                    items.add(new Divider());
                 }
                 academicBackgroundRows = ids.length;
             }
@@ -362,7 +367,7 @@ public class Tab2 extends Fragment {
         }
         items.add(helper.buildAdd(4, titles,
                 tableName,
-                columnNames,xmltags));
+                columnNames, xmltags));
 
         items.add(new SimpleText("Professional Background"));
         tableName = DatabaseHelper.TABLE_PROFESSIONAL_BACKGROUND;
@@ -389,7 +394,7 @@ public class Tab2 extends Fragment {
             if (ids != null) {
 
                 for (int i = 0; i < ids.length; i++) {
-                    items.add(new Divider());
+
                     for (int j = titles.length - 1; j > 0; j--) {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_DATE)) {
                             items.add(helper.buildDate(
@@ -415,6 +420,7 @@ public class Tab2 extends Fragment {
                             tableName,
                             columnNames[0],
                             ids[i], xmltags[0]));
+                    items.add(new Divider());
 
                 }
                 professionalBackgroundRows = ids.length;
@@ -424,7 +430,7 @@ public class Tab2 extends Fragment {
         }
         items.add(helper.buildAdd(5, titles,
                 tableName,
-                columnNames,xmltags));
+                columnNames, xmltags));
         items.add(new SimpleText("Affiliation"));
         tableName = DatabaseHelper.TABLE_AFFILIATION;
         xmltags = new String[]{
@@ -445,7 +451,7 @@ public class Tab2 extends Fragment {
             if (ids != null) {
 
                 for (int i = 0; i < ids.length; i++) {
-                    items.add(new Divider());
+
                     for (int j = titles.length - 1; j > 0; j--) {
                         items.add(
                                 helper.buildEditText(
@@ -462,6 +468,7 @@ public class Tab2 extends Fragment {
                             tableName,
                             columnNames[0],
                             ids[i], xmltags[0]));
+                    items.add(new Divider());
                 }
                 affiliationRows = ids.length;
             }
@@ -470,7 +477,7 @@ public class Tab2 extends Fragment {
         }
         items.add(helper.buildAdd(3, titles,
                 tableName,
-                columnNames,xmltags));
+                columnNames, xmltags));
 
 
         items.add(new Heading("REFERENCE SPECIFIC INFORMATION", null));
@@ -523,8 +530,8 @@ public class Tab2 extends Fragment {
         columnName = DatabaseHelper.COLUMN_DISTRICT;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("District / State", value, tableName, columnName, -1, "district"));
-
-        items.add(new DropDownBuilder().setHeading("Country").setList(helper.getCountryNames()).createDropDown());
+        columnName = DatabaseHelper.COLUMN_COUNTRY;
+        items.add(helper.buildDropDown("Country", helper.getCountryNames(), 0, tableName, columnName, -1, "country"));
 
         columnName = DatabaseHelper.COLUMN_LOGO_NOTE;
         value = databaseHelper.getStringValue(columnName, tableName);

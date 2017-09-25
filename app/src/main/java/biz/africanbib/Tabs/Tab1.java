@@ -153,6 +153,7 @@ public class Tab1 extends Fragment {
                 .setColumnName(columnName)
                 .setTitle(businessName)
                 .setValue(value)
+                .setXmlTag("name")
                 .setRowno(-1)
                 .createSimpleEditText());
 

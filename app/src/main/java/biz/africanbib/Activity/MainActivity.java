@@ -29,6 +29,7 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 
 import biz.africanbib.Models.Add;
+import biz.africanbib.Models.Divider;
 import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.Heading;
 import biz.africanbib.Models.SimpleEditText;
@@ -132,6 +133,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         Tab2 tab2 = (Tab2) adapter.getItem(1);
         Tab3 tab3 = (Tab3) adapter.getItem(2);
         Tab4 tab4 = (Tab4) adapter.getItem(3);
+
+        ArrayList<Object> items2 = tab2.getList();
+        ArrayList<Object> items3 = tab3.getList();
         if (tab4.getAccepted()) {
 
             ArrayList<Object> items = tab1.getList();
@@ -187,9 +191,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             }
 
             //items.clear();
-            ArrayList<Object> items1 = tab4.getList();
+            ArrayList<Object> items4 = tab4.getList();
             for (Object o :
-                    items1) {
+                    items4) {
                 if (o instanceof SimpleEditText) {
                     SimpleEditText simpleEditText = (SimpleEditText) o;
 
@@ -227,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             tab3.getAdapter().notifyDataSetChanged();
             tab4.getAdapter().notifyDataSetChanged();
 
-            Test(items, items1);
+            Test(items, items2,items3);
             showXML();
         } else {
 
@@ -339,17 +343,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
 
-    void Test(ArrayList<Object> items, ArrayList<Object> items1) {
+    void Test(ArrayList<Object> items1, ArrayList<Object> items2,ArrayList<Object> items3) {
 
-  /*      Tab1 tab1 = (Tab1) adapter.getItem(0);
-        Tab2 tab2 = (Tab2) adapter.getItem(1);
-        Tab3 tab3 = (Tab3) adapter.getItem(2);
-        Tab4 tab4 = (Tab4) adapter.getItem(3);
-        ArrayList<Object> items1 = tab1.getList();
-        ArrayList<Object> items2 = tab2.getList();
-        ArrayList<Object> items3 = tab3.getList();
-        ArrayList<Object> items4 = tab4.getList();
-*/
+
         try {
             Log.v(TAG, "Trying to create xml File");
             File file = new File(getApplicationContext().getFilesDir(), companyName + ".xml");
@@ -363,23 +359,27 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             xmlSerializer.startDocument("UTF-8", true);
             xmlSerializer.startTag(null, "Organisation");
 
-            Log.d(TAG, "Item size = " + items.size() + "");
-            for (int i = 0; i < items.size() - 1; i++) {
+            Log.d(TAG, "Item size = " + items1.size() + "");
+            for (int i = 0; i < items1.size() - 1; i++) {
                 int j = 0;
-                if (items.get(i) instanceof Heading) {
-                    Log.v(TAG, "Start Tag = " + ((Heading) items.get(i)).getXmlTag());
-                    //xmlSerializer.startTag(null, ((Heading) items.get(i)).getHeading());
-                    String startTag = ((Heading) items.get(i)).getXmlTag();
+                if (items1.get(i) instanceof Heading) {
+
+                    Log.v(TAG, "Start Tag = " + ((Heading) items1.get(i)).getXmlTag());
+                    //xmlSerializer.startTag(null, ((Heading) items1.get(i)).getHeading());
+                    String startTag = ((Heading) items1.get(i)).getXmlTag();
                     if (startTag != null) {
                         xmlSerializer.startTag(null, startTag);
                     }
 
                     j = i + 1;
-                    Object item = items.get(j);
+                    Object item = items1.get(j);
+
+
                     Log.v(TAG, "J inital = " + j);
                     while (!(item instanceof Heading)) {
+                        item = items1.get(j);
                         if (item instanceof SimpleEditText) {
-                            //Log.v(TAG, "Starting Tag = " + ((SimpleEditText) item).getXmlTag());
+                            Log.v(TAG, "Starting Tag = " + ((SimpleEditText) item).getXmlTag());
                             xmlSerializer.startTag(null, ((SimpleEditText) item).getXmlTag());
 
                             if (((SimpleEditText) item).getValue() != null) {
@@ -391,16 +391,22 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             xmlSerializer.endTag(null, ((SimpleEditText) item).getXmlTag());
                         }
                         if (item instanceof SimpleText) {
-                            //Log.v(TAG, "Starting Tag = " + ((SimpleText) item).getXmlTag());
-                            int k = j+1;
+                            Log.v(TAG, "Starting Tag = " + ((SimpleText) item).getXmlTag());
+                            int k = j + 1;
                             j++;
                             String tag = ((SimpleText) item).getXmlTag();
                             xmlSerializer.startTag(null, tag);
-                            Object o = items.get(k);
-                            //Loop through the items until we find an object of class Add because Add denotes its the end of current group
-                            while (!(o instanceof Add)) {
-                                Object o2 = items.get(k+1);
+                            Object o = items1.get(k);
+                            //Loop through the items1 until we find an object of class Add because Add denotes its the end of current group
+                            /*while (!(o instanceof Add)) {
+                                int l = k + 1;
+                                Object o2 = items1.get(k + 1);
+                                while (!(o2 instanceof Divider)) {
+
+
+                                }
                             }
+                            */
 
 
                             //Log.v(TAG, "Ending Tag = " + tag);
@@ -415,7 +421,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
                         }
                         Log.v(TAG, "J after = " + j);
-                        if (j < items.size() - 1) {
+                        if (j < items1.size() - 1) {
                             //Log.v(TAG, "J final = " + j);
                             j++;
                         } else {
@@ -425,8 +431,117 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     if (startTag != null) {
                         xmlSerializer.endTag(null, startTag);
                     }
+                    i = j - 1;
                 }
-                i = j - 1;
+
+            }
+
+
+
+
+            for (int i = 0; i < items2.size() - 1; i++) {
+                int j = 0;
+                if (items2.get(i) instanceof Heading) {
+
+                    Log.v(TAG, "Start Tag = " + ((Heading) items2.get(i)).getXmlTag());
+                    //xmlSerializer.startTag(null, ((Heading) items2.get(i)).getHeading());
+                    String startTag = ((Heading) items2.get(i)).getXmlTag();
+                    if (startTag != null) {
+                        xmlSerializer.startTag(null, startTag);
+                    }
+
+                    j = i + 1;
+                    Object item = items2.get(j);
+
+
+                    Log.v(TAG, "Value of J before entering while loop = " + j);
+                    while (!(item instanceof Heading)) {
+                        Log.v(TAG, "Value of J after entering while loop = " + j);
+                        item = items2.get(j);
+                        if (item instanceof SimpleEditText) {
+                            Log.v(TAG, "Starting Tag = " + ((SimpleEditText) item).getXmlTag());
+                            xmlSerializer.startTag(null, ((SimpleEditText) item).getXmlTag());
+
+                            if (((SimpleEditText) item).getValue() != null) {
+                                xmlSerializer.text(((SimpleEditText) item).getValue());
+                            } else {
+                                xmlSerializer.text("null");
+                            }
+                            //Log.v(TAG, "Ending Tag = " + ((SimpleEditText) item).getXmlTag());
+                            xmlSerializer.endTag(null, ((SimpleEditText) item).getXmlTag());
+                        }
+
+
+                        if (item instanceof SimpleText) {
+                            Log.v(TAG, "Starting Simple text Tag = " + ((SimpleText) item).getXmlTag() + "Vaue of j = " + j);
+                            String tag = ((SimpleText) item).getXmlTag();
+                            if(tag!=null) {
+                                xmlSerializer.startTag(null, tag);
+                            }
+
+                            j++;
+                            //j++;
+                            item = items2.get(j);
+
+                            if(!(item instanceof Add)) {//Loop through the items2 until we find an object of class Add because Add denotes its the end of current group
+                                while (!(item instanceof Add)) {
+                                    Log.v("SimpleText", "Value of j before = " + j);
+                                    item = items2.get(j);
+                                    while (!(item instanceof Divider) && !(item instanceof Add)) {
+                                        Log.v("SimpleText", "Value of j after = " + j);
+                                        item = items2.get(j++);
+                                        if (item instanceof SimpleEditText) {
+                                            SimpleEditText simpleEditText = (SimpleEditText) item;
+                                            xmlSerializer.startTag(null, simpleEditText.getXmlTag());
+                                            xmlSerializer.text(simpleEditText.getValue());
+                                            xmlSerializer.endTag(null, simpleEditText.getXmlTag());
+                                            Log.v("SimpleText Value", "Value = " + simpleEditText.getValue());
+                                        }
+
+
+                                        if (item instanceof DropDown) {
+                                            xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
+                                            xmlSerializer.text(String.valueOf(((DropDown) item).getSelectedPosition()));
+                                            xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
+                                        }
+                                    }
+
+                                }
+                            }
+                            else
+                            {
+                               item = items2.get(j+1);
+                            }
+
+                            //Log.v(TAG, "Ending Tag = " + tag);
+                            if(tag!=null) {
+                                xmlSerializer.endTag(null, tag);
+                            }
+                        }
+
+                        if (item instanceof DropDown) {
+                            //Log.v(TAG, "Starting Tag = " + ((DropDown) item).getXmlTag());
+                            xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
+                            //Log.v(TAG, "Value of Tag = " + ((DropDown) item).getSelectedPosition());
+                            xmlSerializer.text(String.valueOf(((DropDown) item).getSelectedPosition()));
+                            //Log.v(TAG, "Ending Tag = " + ((DropDown) item).getXmlTag());
+                            xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
+                        }
+
+                        if (j < items2.size() - 1) {
+                            //Log.v(TAG, "J final = " + j);
+                            j++;
+                            Log.v(TAG, "Final value of J after Increment = " + j);
+                        } else {
+                            break;
+                        }
+                    }
+                    if (startTag != null) {
+                        xmlSerializer.endTag(null, startTag);
+                    }
+                    i = j - 1;
+                }
+
             }
 
             xmlSerializer.endTag(null, "Organisation");
