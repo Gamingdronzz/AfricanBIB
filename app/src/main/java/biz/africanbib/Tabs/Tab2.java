@@ -486,11 +486,11 @@ public class Tab2 extends Fragment {
         columnName = DatabaseHelper.COLUMN_INSTITUTION_NAME;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Institution name", value, tableName, columnName, -1, ""));
+        items.add(helper.buildEditText("Institution name", value, tableName, columnName, -1, "institutionname"));
 
         columnName = DatabaseHelper.COLUMN_ORGANISATION_TYPE;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Organisation type", value, tableName, columnName, -1, ""));
+        items.add(helper.buildEditText("Organisation type", value, tableName, columnName, -1, "organisationtype"));
         columnName = DatabaseHelper.COLUMN_LOGO;
         selectedPosition = databaseHelper.getIntValue(columnName, tableName);
         items.add(
@@ -501,7 +501,7 @@ public class Tab2 extends Fragment {
                         selectedPosition,
                         tableName,
                         columnName,
-                        -1, "organisation"));
+                        -1, "organisationlogo"));
         columnName = DatabaseHelper.COLUMN_LOGO_NOTE;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Logo Note", value, tableName, columnName, -1, "logonote"));

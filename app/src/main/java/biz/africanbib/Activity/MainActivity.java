@@ -360,7 +360,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
             Log.d(TAG, "Item size = " + items1.size() + "");
             int j = 0;
-            for (int i = 0; i < items1.size() - 1; i++) {
+            for (int i = 0; i < items1.size() ; i++) {
 
                 if (items1.get(i) instanceof Heading) {
 
@@ -510,9 +510,14 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             i++;
                             item = items2.get(i);
                         }
-                        if (i >= items2.size() - 1) {
+                        else
+                        {
                             break;
                         }
+                       /* if (i >= items2.size()) {
+                            break;
+                        }
+                        */
                     }
                     i--;
                 }
@@ -545,8 +550,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             String aBuffer = "";
             while ((aDataRow = myReader.readLine()) != null) {
                 aBuffer += aDataRow + "\n";
+                Log.v("XML","\n" + aDataRow);
             }
-            Log.v(TAG, aBuffer);
+            //Log.v(TAG, aBuffer);
             myReader.close();
             fIn.close();
         } catch (FileNotFoundException e) {
