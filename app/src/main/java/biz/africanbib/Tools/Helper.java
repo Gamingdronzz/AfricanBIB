@@ -869,4 +869,9 @@ public class Helper {
         return null;
     }
 
+    public String getStringFromSelectedIndex(String[] items,int index)
+    {
+        return items[index];
+    }
+
 }

@@ -25,6 +25,11 @@ public class SimpleText
         this.title = title;
     }
 
+    public SimpleText(String title, String xmlTag) {
+        this.title = title;
+        this.xmlTag = xmlTag;
+    }
+
     public SimpleText(String title) {
 
         this.title = title;

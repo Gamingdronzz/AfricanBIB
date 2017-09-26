@@ -266,7 +266,7 @@ public class Tab4 extends Fragment {
         items.add(new SimpleText("DISCLAIMER\n\n" +
                 "I certify that the information provided in this form is true, complete and correct to the best of my knowledge and belief. I understand that the information provided in this form is checked and updated by AfricanBIB GmbH on the AfricanBIB website with due diligence on a regular basis. This notwithstanding, data may become subject to changes during the intervening period. Therefore AfricanBIB GmbH does not assume any liability or guarantee for the timeliness, accuracy and completeness of the information provided. This applies also to other websites that may be accessed through hyperlinks. AfricanBIB GmbH assumes no responsibility for the contents of websites that can be accessed through such links.\n" +
                 "Further, AfricanBIB GmbH reserves the right to change or amend the information provided at any time and without prior notice.\n" +
-                "Contents and structure of this form sites are copyright protected. Reproduction of information or data content, in particular the use of text (whether in full or in part), pictures or graphics, requires the prior approval of AfricanBIB GmbH.\n"));
+                "Contents and structure of this form sites are copyright protected. Reproduction of information or data content, in particular the use of text (whether in full or in part), pictures or graphics, requires the prior approval of AfricanBIB GmbH.\n","disclaimer"));
 
 
         return items;

@@ -26,11 +26,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 import biz.africanbib.Models.Add;
 import biz.africanbib.Models.Divider;
 import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.Heading;
+import biz.africanbib.Models.MultiSelectDropdown;
 import biz.africanbib.Models.SimpleEditText;
 import biz.africanbib.Models.SimpleText;
 import biz.africanbib.R;
@@ -230,7 +232,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             tab3.getAdapter().notifyDataSetChanged();
             tab4.getAdapter().notifyDataSetChanged();
 
-            Test(items, items2, items3);
+            Test(items, items2, items3,items4 );
             showXML();
         } else {
 
@@ -342,8 +344,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
 
-    void Test(ArrayList<Object> items1, ArrayList<Object> items2, ArrayList<Object> items3) {
-
+    void Test(ArrayList<Object> items1, ArrayList<Object> items2, ArrayList<Object> items3,ArrayList<Object> items4) {
 
         try {
             Log.v(TAG, "Trying to create xml File");
@@ -358,6 +359,14 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             xmlSerializer.startDocument("UTF-8", true);
             xmlSerializer.startTag(null, "Organisation");
 
+            addXmlContent(items1,xmlSerializer);
+            addXmlContent(items2,xmlSerializer);
+            addXmlContent(items3,xmlSerializer);
+            addXmlContent(items4,xmlSerializer);
+
+
+
+            /*
             Log.d(TAG, "Item size = " + items1.size() + "");
             int j = 0;
             for (int i = 0; i < items1.size() ; i++) {
@@ -397,7 +406,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             xmlSerializer.startTag(null, tag);
                             Object o = items1.get(k);
                             //Loop through the items1 until we find an object of class Add because Add denotes its the end of current group
-                            /*while (!(o instanceof Add)) {
+                            /*
+
+                            while (!(o instanceof Add)) {
+
                                 int l = k + 1;
                                 Object o2 = items1.get(k + 1);
                                 while (!(o2 instanceof Divider)) {
@@ -405,7 +417,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
                                 }
                             }
-                            */
+
 
 
                             //Log.v(TAG, "Ending Tag = " + tag);
@@ -435,96 +447,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
             }
 
+*/
 
-            for (int i = 0; i < items2.size() - 1; i++) {
-
-                String startTag = null;
-                Object item = items2.get(i);
-                boolean tagSet = false;
-                Log.v(TAG, "i =" + i);
-                if (items2.get(i) instanceof Heading) {
-
-                    startTag = ((Heading) items2.get(i)).getXmlTag();
-                    Log.v(TAG, "Start Tag = " + startTag + ": i =" + i);
-                    if (startTag != null) {
-                        xmlSerializer.startTag(null, startTag);
-                        tagSet = true;
-                    }
-                } else {
-                    while (!(item instanceof Heading)) {
-
-                        Log.v(TAG, "Inside heading while :  i = " + i);
-                        if (item instanceof SimpleEditText) {
-                            xmlSerializer.startTag(null, ((SimpleEditText) item).getXmlTag());
-                            if (((SimpleEditText) item).getValue() != null) {
-                                xmlSerializer.text(((SimpleEditText) item).getValue());
-                            } else {
-                                xmlSerializer.text("null");
-                            }
-                            xmlSerializer.endTag(null, ((SimpleEditText) item).getXmlTag());
-                        }
-
-                        if (item instanceof DropDown) {
-                            xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
-                            xmlSerializer.text(String.valueOf(((DropDown) item).getSelectedPosition()));
-                            xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
-                        }
-                        if (item instanceof SimpleText) {
-                            String tag = ((SimpleText) item).getXmlTag();
-                            if (tag != null) {
-                                xmlSerializer.startTag(null, tag);
-                            }
-                            Log.v(TAG, "Simple text Start Tag = " + tag + " : i = " + i);
-                            i++;
-                            item = items2.get(i);
-                            if (item instanceof Add) {
-
-                            } else {       //Loop through the items2 until we find an object of class Add because Add denotes its the end of current group
-                                while (!(item instanceof Add)) {
-
-                                    Log.v(TAG, "Inside simple text while :  i = " + i);
-                                    if (!(item instanceof Divider)) {
-                                        if (item instanceof SimpleEditText) {
-                                            SimpleEditText simpleEditText = (SimpleEditText) item;
-                                            xmlSerializer.startTag(null, simpleEditText.getXmlTag());
-                                            xmlSerializer.text(simpleEditText.getValue());
-                                            xmlSerializer.endTag(null, simpleEditText.getXmlTag());
-                                        }
-
-                                        if (item instanceof DropDown) {
-                                            xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
-                                            xmlSerializer.text(String.valueOf(((DropDown) item).getSelectedPosition()));
-                                            xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
-                                        }
-                                    }
-                                    i++;
-                                    item = items2.get(i);
-                                }
-                            }
-                            if (tag != null) {
-                                xmlSerializer.endTag(null, tag);
-                            }
-                        }
-
-                        if (i < items2.size() - 1) {
-                            i++;
-                            item = items2.get(i);
-                        }
-                        else
-                        {
-                            break;
-                        }
-                       /* if (i >= items2.size()) {
-                            break;
-                        }
-                        */
-                    }
-                    i--;
-                }
-                if (tagSet) {
-                    xmlSerializer.endTag(null, startTag);
-                }
-            }
 
 
             xmlSerializer.endTag(null, "Organisation");
@@ -541,7 +465,136 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     }
 
-    public void showXML() {
+    private void addXmlContent(ArrayList<Object> items,XmlSerializer xmlSerializer) throws IOException
+    {
+        for (int i = 0; i < items.size() - 1; i++) {
+
+            String startTag = null;
+            Object item = items.get(i);
+            boolean tagSet = false;
+            Log.v(TAG, "i =" + i);
+            if (items.get(i) instanceof Heading) {
+
+                startTag = ((Heading) items.get(i)).getXmlTag();
+                Log.v(TAG, "Start Tag = " + startTag + ": i =" + i);
+                if (startTag != null) {
+                    xmlSerializer.startTag(null, startTag);
+                    tagSet = true;
+                }
+            } else {
+                while (!(item instanceof Heading)) {
+
+                    //Log.v(TAG, "Inside heading while :  i = " + i);
+                    if (item instanceof SimpleEditText) {
+                        SimpleEditText simpleEditText = (SimpleEditText) item;
+                        Log.v(TAG, "Found " + simpleEditText.getTitle() + " with value = " + simpleEditText.getValue() + " where i = " + i );
+                        xmlSerializer.startTag(null, simpleEditText.getXmlTag());
+                        if (simpleEditText.getValue() != null) {
+                            xmlSerializer.text(simpleEditText.getValue());
+                        } else {
+                            xmlSerializer.text("null");
+                        }
+                        xmlSerializer.endTag(null, simpleEditText.getXmlTag());
+                    }
+
+                    if (item instanceof DropDown) {
+                        DropDown dropDown = (DropDown) item;
+                        Log.v(TAG, "Found " + dropDown.getHeading() + " with value = " + dropDown.getSelectedPosition() + " where i = " + i );
+                        xmlSerializer.startTag(null, dropDown.getXmlTag());
+                        xmlSerializer.text(String.valueOf(dropDown.getSelectedPosition()));
+                        xmlSerializer.endTag(null, dropDown.getXmlTag());
+                    }
+
+                    if (item instanceof MultiSelectDropdown) {
+                        MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) item;
+                        Log.v(TAG, "Found " + multiSelectDropdown.getTitle() + " with value = " + multiSelectDropdown.getSelectedIndices() + " where i = " + i );
+                        List<Integer> indices =  multiSelectDropdown.getSelectedIndices();
+                        for (int index :
+                                indices) {
+                            xmlSerializer.startTag(null, multiSelectDropdown.getXmlTag());
+                            xmlSerializer.text(helper.getStringFromSelectedIndex(multiSelectDropdown.getItems(),index));
+                            xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
+                        }
+
+                    }
+                    if (item instanceof SimpleText) {
+                        SimpleText simpleText = (SimpleText) item;
+                        Log.v(TAG, "Found " + simpleText.getTitle() + " where i = " + i );
+                        if(simpleText.getXmlTag()!=null)
+                        {
+                            if(simpleText.getXmlTag().equals("disclaimer"))
+                                break;
+                        }
+                        String tag = ((SimpleText) item).getXmlTag();
+                        if (tag != null) {
+                            xmlSerializer.startTag(null, tag);
+                        }
+                        Log.v(TAG, "Simple text Start Tag = " + tag + " : i = " + i);
+                        i++;
+                        item = items.get(i);
+                        if (item instanceof Add) {
+
+                        } else {       //Loop through the items until we find an object of class Add because Add denotes its the end of current group
+                            while (!(item instanceof Add)) {
+
+                                Log.v(TAG, "Inside simple text while :  i = " + i);
+                                if (!(item instanceof Divider)) {
+                                    if (item instanceof SimpleEditText) {
+                                        SimpleEditText simpleEditText = (SimpleEditText) item;
+                                        xmlSerializer.startTag(null, simpleEditText.getXmlTag());
+                                        xmlSerializer.text(simpleEditText.getValue());
+                                        xmlSerializer.endTag(null, simpleEditText.getXmlTag());
+                                    }
+
+                                    if (item instanceof DropDown) {
+                                        xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
+                                        xmlSerializer.text(String.valueOf(((DropDown) item).getSelectedPosition()));
+                                        xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
+                                    }
+                                    if (item instanceof MultiSelectDropdown) {
+                                        MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) item;
+                                        Log.v(TAG, "Found " + multiSelectDropdown.getTitle() + " with value = " + multiSelectDropdown.getSelectedIndices() + " where i = " + i );
+                                        List<Integer> indices =  multiSelectDropdown.getSelectedIndices();
+                                        for (int index :
+                                                indices) {
+                                            xmlSerializer.startTag(null, multiSelectDropdown.getXmlTag());
+                                            xmlSerializer.text(helper.getStringFromSelectedIndex(multiSelectDropdown.getItems(),index));
+                                            xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
+                                        }
+
+                                    }
+                                }
+                                i++;
+                                item = items.get(i);
+                            }
+                        }
+                        if (tag != null) {
+                            xmlSerializer.endTag(null, tag);
+                        }
+                    }
+
+                    if (i < items.size() - 1) {
+                        i++;
+                        item = items.get(i);
+                    }
+                    else
+                    {
+                        break;
+                    }
+                       /* if (i >= items.size()) {
+                            break;
+                        }
+                        */
+                }
+                i--;
+            }
+            if (tagSet) {
+                xmlSerializer.endTag(null, startTag);
+            }
+        }
+    }
+
+    private void showXML() {
         File file = new File(getApplicationContext().getFilesDir(), companyName + ".xml");
         try {
             FileInputStream fIn = new FileInputStream(file);
