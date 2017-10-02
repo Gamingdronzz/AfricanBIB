@@ -1,6 +1,5 @@
 package biz.africanbib.Activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -16,11 +15,8 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
-import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.carlosmuvi.segmentedprogressbar.SegmentedProgressBar;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.BufferedReader;
@@ -36,7 +32,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import biz.africanbib.GenerateXMLDialog;
 import biz.africanbib.Models.Add;
 import biz.africanbib.Models.Divider;
 import biz.africanbib.Models.DropDown;
@@ -425,7 +420,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         Log.v(TAG, "Found " + simpleEditText.getTitle() + " with value = " + simpleEditText.getValue() + " where i = " + i);
                         xmlSerializer.startTag(null, simpleEditText.getXmlTag());
                         if (simpleEditText.getValue() != null) {
-                            xmlSerializer.text(simpleEditText.getValue());
+                            xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
                         } else {
                             xmlSerializer.text("null");
                         }
@@ -476,7 +471,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                     if (item instanceof SimpleEditText) {
                                         SimpleEditText simpleEditText = (SimpleEditText) item;
                                         xmlSerializer.startTag(null, simpleEditText.getXmlTag());
-                                        xmlSerializer.text(simpleEditText.getValue());
+                                        xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
                                         xmlSerializer.endTag(null, simpleEditText.getXmlTag());
                                     }
 

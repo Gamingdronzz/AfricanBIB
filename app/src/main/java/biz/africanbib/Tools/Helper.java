@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 import biz.africanbib.Activity.MainActivity;
 import biz.africanbib.Models.Add;
@@ -148,9 +149,8 @@ public class Helper {
         return text;
     }
 
-    public String[] getCountryNames()
-    {
-        String [] names = new String[]{
+    public String[] getCountryNames() {
+        String[] names = new String[]{
                 "Afghanistan",
                 "Albania",
                 "Algeria",
@@ -349,23 +349,21 @@ public class Helper {
                 "Zambia",
                 "Zimbabwe"
         };
-        return  names;
+        return names;
 
     }
 
-    public boolean isTab()
-    {
+    public boolean isTab() {
         boolean isTab = (context.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
-        Log.d("Company","Tab = " + isTab);
+        Log.d("Company", "Tab = " + isTab);
         return isTab;
     }
 
-    public SimpleEditText buildEditText(String title, String value, String tableName, String columnName,int rowno,String xmlTag) {
+    public SimpleEditText buildEditText(String title, String value, String tableName, String columnName, int rowno, String xmlTag) {
 
-        if(MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS)
-        {
+        if (MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS) {
             return new SimpleEditTextBuilder()
                     .setTitle(title)
                     .setTableName(tableName)
@@ -373,9 +371,7 @@ public class Helper {
                     .setRowno(rowno)
                     .setXmlTag(xmlTag)
                     .createSimpleEditText();
-        }
-        else
-        {
+        } else {
             return new SimpleEditTextBuilder()
                     .setTitle(title)
                     .setValue(value)
@@ -388,8 +384,8 @@ public class Helper {
 
     }
 
-    public DropDown buildDropDown(String heading, String[] list, int selectedPosition, String tableName, String columnName,int rowno,String xmlTag) {
-        if(MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS) {
+    public DropDown buildDropDown(String heading, String[] list, int selectedPosition, String tableName, String columnName, int rowno, String xmlTag) {
+        if (MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS) {
 
             return new DropDownBuilder()
                     .setHeading(heading)
@@ -399,9 +395,7 @@ public class Helper {
                     .setRowno(rowno)
                     .setXmlTag(xmlTag)
                     .createDropDown();
-        }
-        else
-        {
+        } else {
             return new DropDownBuilder()
                     .setHeading(heading)
                     .setList(list)
@@ -414,8 +408,7 @@ public class Helper {
         }
     }
 
-    public Add buildAdd(int rows,String[] titles,String tableName,String[] tableColumnNames,String[] xmlTags)
-    {
+    public Add buildAdd(int rows, String[] titles, String tableName, String[] tableColumnNames, String[] xmlTags) {
         return new AddBuilder()
                 .setRows(rows)
                 .setTableName(tableName)
@@ -425,24 +418,22 @@ public class Helper {
                 .createAdd();
     }
 
-    public MultiSelectDropdown buildMultiSelectDropdown( String title, String tableName, String columnName, String[] items,List<Integer> selectedIndices,int rowno,String xmlTag)
-    {
+    public MultiSelectDropdown buildMultiSelectDropdown(String title, String tableName, String columnName, String[] items, List<Integer> selectedIndices, int rowno, String xmlTag) {
         //Log.v("Helper","Selected Indices for " + title + " = " + selectedIndices.toString());
         return new MultiSelectDropdownBuilder()
-            .setRowno(rowno)
-            .setTitle(title)
-            .setTableName(tableName)
-            .setColumnName(columnName)
-            .setItems(items)
-            .setSelectedIndices(selectedIndices)
+                .setRowno(rowno)
+                .setTitle(title)
+                .setTableName(tableName)
+                .setColumnName(columnName)
+                .setItems(items)
+                .setSelectedIndices(selectedIndices)
                 .setXmlTag(xmlTag)
-            .createMultiSelectDropdown();
+                .createMultiSelectDropdown();
     }
 
-    public SimpleDate buildDate(String title, String value, String tableName, String columnName, int rowno,String xmlTag) {
+    public SimpleDate buildDate(String title, String value, String tableName, String columnName, int rowno, String xmlTag) {
 
-        if(MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS)
-        {
+        if (MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS) {
             return new SimpleDateBuilder()
                     .setTitle(title)
                     .setTableName(tableName)
@@ -450,9 +441,7 @@ public class Helper {
                     .setRowno(rowno)
                     .setXmlTag(xmlTag)
                     .createSimpleDate();
-        }
-        else
-        {
+        } else {
             return new SimpleDateBuilder()
                     .setTitle(title)
                     .setValue(value)
@@ -465,19 +454,16 @@ public class Helper {
 
     }
 
-    public SimpleImage buildImage(String title, Bitmap image, String tableName, String columnName,String xmlTag) {
+    public SimpleImage buildImage(String title, Bitmap image, String tableName, String columnName, String xmlTag) {
 
-        if(MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS)
-        {
+        if (MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS) {
             return new SimpleImageBuilder()
                     .setTitle(title)
                     .setTableName(tableName)
                     .setColumnName(columnName)
                     .setXmlTag(xmlTag)
                     .createSimpleImage();
-        }
-        else
-        {
+        } else {
             return new SimpleImageBuilder()
                     .setTitle(title)
                     .setTableName(tableName)
@@ -489,9 +475,8 @@ public class Helper {
 
     }
 
-    public List<Integer> getSelectedIndices(String list)
-    {
-        if(list == null)
+    public List<Integer> getSelectedIndices(String list) {
+        if (list == null)
             return null;
         List<Integer> result = new ArrayList<>();
         String[] values = list.split("a");
@@ -499,21 +484,19 @@ public class Helper {
                 values) {
             result.add(Integer.parseInt(s));
         }
-        Log.v("Helper","Creating list from " + list);
+        Log.v("Helper", "Creating list from " + list);
         return result;
     }
 
-    public String getStringFromIndices(List<Integer> list)
-    {
+    public String getStringFromIndices(List<Integer> list) {
         StringBuilder builder = new StringBuilder();
         for (int i :
                 list) {
-            builder.append(i+"a");
+            builder.append(i + "a");
         }
-        Log.v("Helper","Creating string from " + list.toString());
+        Log.v("Helper", "Creating string from " + list.toString());
         return builder.toString();
     }
-
 
 
     public String[] getIndustryList() {
@@ -553,7 +536,7 @@ public class Helper {
 
 
     public String[] manageMultiSelectList(int i) {
-        String[]  result = null;
+        String[] result = null;
         switch (i) {
             case 0:
                 result = new String[]{
@@ -849,9 +832,8 @@ public class Helper {
         //items.add(position+1,multiSelectDropdown);
     }
 
-    public byte[] createByteArrayFromBitmap(Bitmap bitmap)
-    {
-        if(bitmap !=null) {
+    public byte[] createByteArrayFromBitmap(Bitmap bitmap) {
+        if (bitmap != null) {
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 50, stream);
             byte[] byteArray = stream.toByteArray();
@@ -860,18 +842,25 @@ public class Helper {
         return null;
     }
 
-    public Bitmap createBitmapFromByteArray(byte[] array)
-    {
-        if(array!=null) {
+    public Bitmap createBitmapFromByteArray(byte[] array) {
+        if (array != null) {
             Bitmap bmp = BitmapFactory.decodeByteArray(array, 0, array.length);
             return bmp;
         }
         return null;
     }
 
-    public String getStringFromSelectedIndex(String[] items,int index)
-    {
+    public String getStringFromSelectedIndex(String[] items, int index) {
         return items[index];
     }
 
+
+   public static String forReplacementString(String aInput){
+       return Matcher.quoteReplacement(aInput);
+   }
+
+
 }
+
+
+
