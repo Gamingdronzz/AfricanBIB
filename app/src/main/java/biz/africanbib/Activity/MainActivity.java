@@ -94,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         awesomeInfoDialog = new AwesomeInfoDialog(this)
                 .setTitle("Generating XML")
                 .setMessage("Please wait..")
-                .setDialogIconAndColor(R.drawable.ic_dialog_info,R.color.colorPrimary)
+                .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.colorPrimary)
                 .setCancelable(false);
 
 
@@ -508,10 +508,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     } else {
                         break;
                     }
-                       /* if (i >= items.size()) {
-                            break;
-                        }
-                        */
+
                 }
                 i--;
             }
@@ -524,11 +521,12 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private void showXML() {
         File file = new File(getApplicationContext().getFilesDir(), companyName + ".xml");
         String aDataRow = "";
+        String aBuffer = "";
         try {
             FileInputStream fIn = new FileInputStream(file);
             BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
 
-            String aBuffer = "";
+
             while ((aDataRow = myReader.readLine()) != null) {
                 aBuffer += aDataRow + "\n";
                 Log.v("XML", "\n" + aDataRow);
@@ -544,9 +542,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         VolleyHelper volleyHelper = new VolleyHelper(this, this);
 
-        Map<String,String> params = new HashMap<>();
-        params.put("xml",aDataRow);
-        volleyHelper.makeStringRequest(helper.getBaseURL()+"addxml.php","tag",params);
+        Map<String, String> params = new HashMap<>();
+        params.put("xml", aBuffer);
+        volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
         awesomeInfoDialog.setMessage("Submitting files to server");
 
 
@@ -559,7 +557,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     @Override
     public void onResponse(String str) {
-        Log.v("xml","xml = " + str);
+        Log.v("xml", "xml = " + str);
         awesomeInfoDialog.setMessage(str);
 
     }

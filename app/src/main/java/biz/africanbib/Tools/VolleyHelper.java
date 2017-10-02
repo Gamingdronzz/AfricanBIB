@@ -1,6 +1,7 @@
 package biz.africanbib.Tools;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.android.volley.AuthFailureError;
@@ -125,14 +126,14 @@ public class VolleyHelper {
 
     public void makeStringRequest(String url, String TAG, final Map<String, String> params) {
         final Map<String, String> map = params;
-        //JSONObject jsonObject = helper.getJson(params.get("xml"));
-        //final String requestBody = jsonObject.toString();
+
         StringRequest strReq = new StringRequest(StringRequest.Method.POST, url, this.stringResponseListener, this.errorListener) {
-            protected Map<String, String> getParams() throws AuthFailureError {
+           protected Map<String, String> getParams() throws AuthFailureError {
+               Log.v("Volley","Value = " + map.toString());
                 return map;
             }
+/*
 
-            /*
             @Override
             public Map<String, String> getHeaders() throws AuthFailureError
             {
