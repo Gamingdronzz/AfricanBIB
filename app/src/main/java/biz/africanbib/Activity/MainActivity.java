@@ -1,5 +1,6 @@
 package biz.africanbib.Activity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,8 +14,13 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.VolleyError;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.carlosmuvi.segmentedprogressbar.SegmentedProgressBar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.BufferedReader;
@@ -26,8 +32,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import biz.africanbib.GenerateXMLDialog;
 import biz.africanbib.Models.Add;
 import biz.africanbib.Models.Divider;
 import biz.africanbib.Models.DropDown;
@@ -43,8 +52,9 @@ import biz.africanbib.Tabs.Tab4;
 import biz.africanbib.Tabs.ViewPagerAdapter;
 import biz.africanbib.Tools.DatabaseHelper;
 import biz.africanbib.Tools.Helper;
+import biz.africanbib.Tools.VolleyHelper;
 
-public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener {
+public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSelectedListener, VolleyHelper.VolleyResponse {
 
     private static final String TAG = "Main";
     public static int typeOfBusiness;
@@ -62,6 +72,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     Helper helper;
     public static boolean first = true;
     private Button buttonValidate;
+
+
+    AwesomeInfoDialog awesomeInfoDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +96,12 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private void init() {
         helper = new Helper(this);
         goLeft.setVisibility(View.INVISIBLE);
+        awesomeInfoDialog = new AwesomeInfoDialog(this)
+                .setTitle("Generating XML")
+                .setMessage("Please wait..")
+                .setDialogIconAndColor(R.drawable.ic_dialog_info,R.color.colorPrimary)
+                .setCancelable(false);
+
 
         goLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,10 +251,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             tab3.getAdapter().notifyDataSetChanged();
             tab4.getAdapter().notifyDataSetChanged();
 
-            Test(items, items2, items3,items4 );
-            showXML();
-        } else {
+            awesomeInfoDialog.show();
+            Test(items, items2, items3, items4);
 
+        } else {
             Toast.makeText(this, "Please accept the agreeement first", Toast.LENGTH_SHORT).show();
         }
 
@@ -344,7 +363,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
 
-    void Test(ArrayList<Object> items1, ArrayList<Object> items2, ArrayList<Object> items3,ArrayList<Object> items4) {
+    void Test(ArrayList<Object> items1, ArrayList<Object> items2, ArrayList<Object> items3, ArrayList<Object> items4) {
 
         try {
             Log.v(TAG, "Trying to create xml File");
@@ -359,97 +378,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             xmlSerializer.startDocument("UTF-8", true);
             xmlSerializer.startTag(null, "Organisation");
 
-            addXmlContent(items1,xmlSerializer);
-            addXmlContent(items2,xmlSerializer);
-            addXmlContent(items3,xmlSerializer);
-            addXmlContent(items4,xmlSerializer);
-
-
-
-            /*
-            Log.d(TAG, "Item size = " + items1.size() + "");
-            int j = 0;
-            for (int i = 0; i < items1.size() ; i++) {
-
-                if (items1.get(i) instanceof Heading) {
-
-                    Log.v(TAG, "Start Tag = " + ((Heading) items1.get(i)).getXmlTag());
-                    String startTag = ((Heading) items1.get(i)).getXmlTag();
-                    if (startTag != null) {
-                        xmlSerializer.startTag(null, startTag);
-                    }
-
-                    j = i + 1;
-                    Object item = items1.get(j);
-
-
-                    Log.v(TAG, "J inital = " + j);
-                    while (!(item instanceof Heading)) {
-                        item = items1.get(j);
-                        if (item instanceof SimpleEditText) {
-                            Log.v(TAG, "Starting Tag = " + ((SimpleEditText) item).getXmlTag());
-                            xmlSerializer.startTag(null, ((SimpleEditText) item).getXmlTag());
-
-                            if (((SimpleEditText) item).getValue() != null) {
-                                xmlSerializer.text(((SimpleEditText) item).getValue());
-                            } else {
-                                xmlSerializer.text("null");
-                            }
-                            //Log.v(TAG, "Ending Tag = " + ((SimpleEditText) item).getXmlTag());
-                            xmlSerializer.endTag(null, ((SimpleEditText) item).getXmlTag());
-                        }
-                        if (item instanceof SimpleText) {
-                            Log.v(TAG, "Starting Tag = " + ((SimpleText) item).getXmlTag());
-                            int k = j + 1;
-                            j++;
-                            String tag = ((SimpleText) item).getXmlTag();
-                            xmlSerializer.startTag(null, tag);
-                            Object o = items1.get(k);
-                            //Loop through the items1 until we find an object of class Add because Add denotes its the end of current group
-                            /*
-
-                            while (!(o instanceof Add)) {
-
-                                int l = k + 1;
-                                Object o2 = items1.get(k + 1);
-                                while (!(o2 instanceof Divider)) {
-
-
-                                }
-                            }
-
-
-
-                            //Log.v(TAG, "Ending Tag = " + tag);
-                            xmlSerializer.endTag(null, tag);
-                        }
-                        if (item instanceof DropDown) {
-                            //Log.v(TAG, "Starting Tag = " + ((DropDown) item).getXmlTag());
-                            xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
-                            //Log.v(TAG, "Value of Tag = " + ((DropDown) item).getSelectedPosition());
-                            xmlSerializer.text(String.valueOf(((DropDown) item).getSelectedPosition()));
-                            //Log.v(TAG, "Ending Tag = " + ((DropDown) item).getXmlTag());
-                            xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
-                        }
-                        Log.v(TAG, "J after = " + j);
-                        if (j < items1.size() - 1) {
-                            //Log.v(TAG, "J final = " + j);
-                            j++;
-                        } else {
-                            break;
-                        }
-                    }
-                    if (startTag != null) {
-                        xmlSerializer.endTag(null, startTag);
-                    }
-                    i = j - 1;
-                }
-
-            }
-
-*/
-
-
+            addXmlContent(items1, xmlSerializer);
+            addXmlContent(items2, xmlSerializer);
+            addXmlContent(items3, xmlSerializer);
+            addXmlContent(items4, xmlSerializer);
 
             xmlSerializer.endTag(null, "Organisation");
             xmlSerializer.endDocument();
@@ -459,14 +391,17 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             fileos.write(dataWrite.getBytes());
             fileos.close();
             Toast.makeText(this, "Succesfully generated xml", Toast.LENGTH_SHORT).show();
+            awesomeInfoDialog.setMessage("Succesfully Generated XML");
+            showXML();
         } catch (IOException e) {
+            awesomeInfoDialog.setMessage("Error in Generating XML");
+            awesomeInfoDialog.setCancelable(true);
             e.printStackTrace();
         }
 
     }
 
-    private void addXmlContent(ArrayList<Object> items,XmlSerializer xmlSerializer) throws IOException
-    {
+    private void addXmlContent(ArrayList<Object> items, XmlSerializer xmlSerializer) throws IOException {
         for (int i = 0; i < items.size() - 1; i++) {
 
             String startTag = null;
@@ -487,7 +422,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     //Log.v(TAG, "Inside heading while :  i = " + i);
                     if (item instanceof SimpleEditText) {
                         SimpleEditText simpleEditText = (SimpleEditText) item;
-                        Log.v(TAG, "Found " + simpleEditText.getTitle() + " with value = " + simpleEditText.getValue() + " where i = " + i );
+                        Log.v(TAG, "Found " + simpleEditText.getTitle() + " with value = " + simpleEditText.getValue() + " where i = " + i);
                         xmlSerializer.startTag(null, simpleEditText.getXmlTag());
                         if (simpleEditText.getValue() != null) {
                             xmlSerializer.text(simpleEditText.getValue());
@@ -499,7 +434,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
                     if (item instanceof DropDown) {
                         DropDown dropDown = (DropDown) item;
-                        Log.v(TAG, "Found " + dropDown.getHeading() + " with value = " + dropDown.getSelectedPosition() + " where i = " + i );
+                        Log.v(TAG, "Found " + dropDown.getHeading() + " with value = " + dropDown.getSelectedPosition() + " where i = " + i);
                         xmlSerializer.startTag(null, dropDown.getXmlTag());
                         xmlSerializer.text(String.valueOf(dropDown.getSelectedPosition()));
                         xmlSerializer.endTag(null, dropDown.getXmlTag());
@@ -507,22 +442,21 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
                     if (item instanceof MultiSelectDropdown) {
                         MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) item;
-                        Log.v(TAG, "Found " + multiSelectDropdown.getTitle() + " with value = " + multiSelectDropdown.getSelectedIndices() + " where i = " + i );
-                        List<Integer> indices =  multiSelectDropdown.getSelectedIndices();
+                        Log.v(TAG, "Found " + multiSelectDropdown.getTitle() + " with value = " + multiSelectDropdown.getSelectedIndices() + " where i = " + i);
+                        List<Integer> indices = multiSelectDropdown.getSelectedIndices();
                         for (int index :
                                 indices) {
                             xmlSerializer.startTag(null, multiSelectDropdown.getXmlTag());
-                            xmlSerializer.text(helper.getStringFromSelectedIndex(multiSelectDropdown.getItems(),index));
+                            xmlSerializer.text(helper.getStringFromSelectedIndex(multiSelectDropdown.getItems(), index));
                             xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
                         }
 
                     }
                     if (item instanceof SimpleText) {
                         SimpleText simpleText = (SimpleText) item;
-                        Log.v(TAG, "Found " + simpleText.getTitle() + " where i = " + i );
-                        if(simpleText.getXmlTag()!=null)
-                        {
-                            if(simpleText.getXmlTag().equals("disclaimer"))
+                        Log.v(TAG, "Found " + simpleText.getTitle() + " where i = " + i);
+                        if (simpleText.getXmlTag() != null) {
+                            if (simpleText.getXmlTag().equals("disclaimer"))
                                 break;
                         }
                         String tag = ((SimpleText) item).getXmlTag();
@@ -553,12 +487,12 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                     }
                                     if (item instanceof MultiSelectDropdown) {
                                         MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) item;
-                                        Log.v(TAG, "Found " + multiSelectDropdown.getTitle() + " with value = " + multiSelectDropdown.getSelectedIndices() + " where i = " + i );
-                                        List<Integer> indices =  multiSelectDropdown.getSelectedIndices();
+                                        Log.v(TAG, "Found " + multiSelectDropdown.getTitle() + " with value = " + multiSelectDropdown.getSelectedIndices() + " where i = " + i);
+                                        List<Integer> indices = multiSelectDropdown.getSelectedIndices();
                                         for (int index :
                                                 indices) {
                                             xmlSerializer.startTag(null, multiSelectDropdown.getXmlTag());
-                                            xmlSerializer.text(helper.getStringFromSelectedIndex(multiSelectDropdown.getItems(),index));
+                                            xmlSerializer.text(helper.getStringFromSelectedIndex(multiSelectDropdown.getItems(), index));
                                             xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
                                         }
 
@@ -576,9 +510,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     if (i < items.size() - 1) {
                         i++;
                         item = items.get(i);
-                    }
-                    else
-                    {
+                    } else {
                         break;
                     }
                        /* if (i >= items.size()) {
@@ -596,14 +528,15 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     private void showXML() {
         File file = new File(getApplicationContext().getFilesDir(), companyName + ".xml");
+        String aDataRow = "";
         try {
             FileInputStream fIn = new FileInputStream(file);
             BufferedReader myReader = new BufferedReader(new InputStreamReader(fIn));
-            String aDataRow = "";
+
             String aBuffer = "";
             while ((aDataRow = myReader.readLine()) != null) {
                 aBuffer += aDataRow + "\n";
-                Log.v("XML","\n" + aDataRow);
+                Log.v("XML", "\n" + aDataRow);
             }
             //Log.v(TAG, aBuffer);
             myReader.close();
@@ -613,6 +546,26 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        VolleyHelper volleyHelper = new VolleyHelper(this, this);
+
+        Map<String,String> params = new HashMap<>();
+        params.put("xml",aDataRow);
+        volleyHelper.makeStringRequest(helper.getBaseURL()+"addxml.php","tag",params);
+        awesomeInfoDialog.setMessage("Submitting files to server");
+
+
+    }
+
+    @Override
+    public void onError(VolleyError volleyError) {
+
+    }
+
+    @Override
+    public void onResponse(String str) {
+        Log.v("xml","xml = " + str);
+        awesomeInfoDialog.setMessage(str);
 
     }
 }
