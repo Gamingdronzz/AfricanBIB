@@ -41,7 +41,8 @@ public class Helper {
     public String FAILED = "failed";
     public String SUCCESS = "success";
     final String TAG = "Helper";
-    private String baseURL = "http://www.gamingdronzz.com/gunjita/android/";
+    private String baseURL = "http://www.imergesoft.de/android/";
+    //private String baseURL = "http://www.gamingdronzz.com/gunjita/android/";
 
 
     public Helper(Context context) {

@@ -1,20 +1,25 @@
 package biz.africanbib.Adapters;
 
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -75,7 +80,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private int currentRowAcademicBackground = 1;
     private int currentRowAffiliation = 1;
     private int currentRowAwards = 1;
-    private int currentRowProductDetails = 1;
     private int currentRowIndustry = 1;
     private int currentRowLatestNews = 1;
     private int currentRowNeeds = 1;
@@ -1076,67 +1080,86 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         @Override
         public void onClick(final View view) {
 
-            final SimpleImage simpleImage = (SimpleImage) items.get(position);
-            Log.v("Adapter", "Clicked at = " + simpleImage.getTitle());
-            imagePicker = new ImagePicker();
-            imagePicker.setTitle("Select Image");
-            imagePicker.setCropImage(true);
-            imagePicker.startChooser(context, new ImagePicker.Callback() {
-                @Override public void onPickImage(Uri imageUri) {
-                    Log.v("Adapter","Picked Path = " + imageUri.getPath());
-                    Bitmap bitmap = BitmapFactory.decodeFile(imageUri.getPath());
-                    simpleImage.setImage(bitmap);
-                    adapter.notifyItemChanged(position);
-                    databaseHelper.updateBlobValue(simpleImage.getTableName(),simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
-
+            final int MyVersion = Build.VERSION.SDK_INT;
+            if (MyVersion > Build.VERSION_CODES.LOLLIPOP_MR1) {
+                if (!checkIfAlreadyhavePermission()) {
+                    ActivityCompat.requestPermissions(context.getActivity(),new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                } else {
+                    showImageChooser(adapter,position);
                 }
+            }
 
-                @Override public void onCropImage(Uri imageUri) {
-                    Log.v("Adapter","Cropped Path = " + imageUri.getPath());
-                    Bitmap bitmap = BitmapFactory.decodeFile(imageUri.getPath());
-                    simpleImage.setImage(bitmap);
-                    adapter.notifyItemChanged(position);
-                    databaseHelper.updateBlobValue(simpleImage.getTableName(),simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
-
-                    //draweeView.setImageURI(imageUri);
-                    //draweeView.getHierarchy().setRoundingParams(RoundingParams.asCircle());
-                }
-
-                @Override public void cropConfig(CropImage.ActivityBuilder builder) {
-                    Point size = new Point();
-                    Point ratio = new Point();
-                    if(simpleImage.getTitle().equals("Corporate Logo"))
-                    {
-                        size.set(210,145);
-                        ratio.set(42,29);
-                    }
-                    else if(simpleImage.getTitle().equals("Keyvisual (Photo)"))
-                    {
-                        size.set(942,292);
-                        ratio.set(471,146);
-                    }
-                    else if(simpleImage.getTitle().equals(""))
-                    {
-
-                    }
-                    builder
-                            .setMultiTouchEnabled(true)
-                            .setGuidelines(CropImageView.Guidelines.OFF)
-                            .setCropShape(CropImageView.CropShape.RECTANGLE)
-                            .setRequestedSize(size.x, size.y)
-                            .setAspectRatio(ratio.x,ratio.y);
-                }
-
-
-                @Override public void onPermissionDenied(int requestCode, String[] permissions,
-                                                         int[] grantResults) {
-                }
-            });
         }
 
     }
+    private boolean checkIfAlreadyhavePermission() {
+        int result = ContextCompat.checkSelfPermission(context.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        return result == PackageManager.PERMISSION_GRANTED;
+    }
 
 
+    private void showImageChooser(final ComplexRecyclerViewAdapter adapter, final int position)
+    {
+        final SimpleImage simpleImage = (SimpleImage) items.get(position);
+        Log.v("Adapter", "Clicked at = " + simpleImage.getTitle());
+        imagePicker = new ImagePicker();
+        imagePicker.setTitle("Select Image");
+        imagePicker.setCropImage(true);
+        imagePicker.startChooser(context, new ImagePicker.Callback() {
+            @Override public void onPickImage(Uri imageUri) {
+                Log.v("Adapter","Picked Path = " + imageUri.getPath());
+                Bitmap bitmap = BitmapFactory.decodeFile(imageUri.getPath());
+                simpleImage.setImage(bitmap);
+                adapter.notifyItemChanged(position);
+                databaseHelper.updateBlobValue(simpleImage.getTableName(),simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
+
+            }
+
+            @Override public void onCropImage(Uri imageUri) {
+                Log.v("Adapter","Cropped Path = " + imageUri.getPath());
+                Bitmap bitmap = BitmapFactory.decodeFile(imageUri.getPath());
+                simpleImage.setImage(bitmap);
+                adapter.notifyItemChanged(position);
+                databaseHelper.updateBlobValue(simpleImage.getTableName(),simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
+
+                //draweeView.setImageURI(imageUri);
+                //draweeView.getHierarchy().setRoundingParams(RoundingParams.asCircle());
+            }
+
+            @Override public void cropConfig(CropImage.ActivityBuilder builder) {
+                Point size = new Point();
+                Point ratio = new Point();
+                if(simpleImage.getTitle().equals("Corporate Logo"))
+                {
+                    size.set(210,145);
+                    ratio.set(42,29);
+                }
+                else if(simpleImage.getTitle().equals("Keyvisual (Photo)"))
+                {
+                    size.set(942,292);
+                    ratio.set(471,146);
+                }
+                else if(simpleImage.getTitle().equals(""))
+                {
+
+                }
+                builder
+                        .setMultiTouchEnabled(true)
+                        .setGuidelines(CropImageView.Guidelines.OFF)
+                        .setCropShape(CropImageView.CropShape.RECTANGLE)
+                        .setRequestedSize(size.x, size.y)
+                        .setAspectRatio(ratio.x,ratio.y);
+            }
+
+
+            @Override public void onPermissionDenied(int requestCode, String[] permissions,
+                                                     int[] grantResults) {
+
+            }
+
+
+        });
+    }
 
     private class CustomDateChooser implements View.OnClickListener {
         private int position;
@@ -1316,6 +1339,11 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     public  void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("Adapter", "Request Code  " +  requestCode);
         imagePicker.onActivityResult(context,requestCode,resultCode,data);
+    }
+
+
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        imagePicker.onRequestPermissionsResult(context,requestCode,permissions,grantResults);
     }
 
 

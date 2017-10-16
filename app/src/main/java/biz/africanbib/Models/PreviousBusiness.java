@@ -8,6 +8,15 @@ public class PreviousBusiness
 {
     int businessID;
     String businessName;
+    boolean uploadStatus;
+
+    public boolean isUploadStatus() {
+        return uploadStatus;
+    }
+
+    public void setUploadStatus(boolean uploadStatus) {
+        this.uploadStatus = uploadStatus;
+    }
 
     public int getBusinessID() {
         return businessID;

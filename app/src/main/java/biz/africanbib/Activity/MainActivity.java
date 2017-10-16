@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Xml;
 import android.view.KeyEvent;
@@ -13,10 +14,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.NetworkError;
+import com.android.volley.NoConnectionError;
+import com.android.volley.ParseError;
+import com.android.volley.ServerError;
+import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
 import com.carlosmuvi.segmentedprogressbar.SegmentedProgressBar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.BufferedReader;
@@ -38,6 +47,7 @@ import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.Heading;
 import biz.africanbib.Models.MultiSelectDropdown;
 import biz.africanbib.Models.SimpleEditText;
+import biz.africanbib.Models.SimpleImage;
 import biz.africanbib.Models.SimpleText;
 import biz.africanbib.R;
 import biz.africanbib.Tabs.Tab1;
@@ -168,6 +178,13 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
                     }
 
+                    if (simpleEditText.getTitle().equals(tab1.registerationNumber)) {
+                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
+                            Toast.makeText(this, "Please enter a valid Registeration Number in Tab1", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+
                     //Telephone
                     if (simpleEditText.getTitle().equals(tab1.telephone)) {
                         if (helper.checkForInput(simpleEditText.getValue()) == null) {
@@ -199,6 +216,21 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     if (simpleEditText.getTitle().equals(tab1.country)) {
                         if (helper.checkForInput(simpleEditText.getValue()) == null) {
                             Toast.makeText(this, "Please enter a valid Country in Tab 1", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                } else if (o instanceof SimpleImage) {
+                    SimpleImage simpleImage = (SimpleImage) o;
+                    if (simpleImage.getTitle().equals(tab1.corporateLogo)) {
+                        if (simpleImage.getImage() == null) {
+                            Toast.makeText(this, "Please select Corporate Logo in Tab1", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+
+                    if (simpleImage.getTitle().equals(tab1.keyVisual)) {
+                        if (simpleImage.getImage() == null) {
+                            Toast.makeText(this, "Please select KeyVisual Photo in Tab1", Toast.LENGTH_SHORT).show();
                             return;
                         }
                     }
@@ -544,6 +576,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         Map<String, String> params = new HashMap<>();
         params.put("xml", aBuffer);
+        params.put("businessName", companyName);
+        String logo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_LOGO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
+        String keyvisuallogo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_KEYVISUAL_PHOTO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
+        params.put("companylogo", logo);
+        params.put("keyvisual", keyvisuallogo);
         volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
         awesomeInfoDialog.setMessage("Submitting files to server");
 
@@ -551,14 +588,48 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     @Override
-    public void onError(VolleyError volleyError) {
-
+    public void onError(VolleyError error) {
+        if (error instanceof TimeoutError) {
+            awesomeInfoDialog.setMessage("Server Timeout\nPlease Try Again !!");
+            Log.e("Volley", "TimeoutError");
+        } else if (error instanceof NoConnectionError) {
+            awesomeInfoDialog.setMessage("No Internet Connectivity\nCheck your internet connection");
+            Log.e("Volley", "NoConnectionError");
+        } else if (error instanceof AuthFailureError) {
+            awesomeInfoDialog.setMessage("Authentication Error\nContact server administrator");
+        } else if (error instanceof ServerError) {
+            awesomeInfoDialog.setMessage("Server Error\nContact server administrator");
+        } else if (error instanceof NetworkError) {
+            awesomeInfoDialog.setMessage("Netowrk Error\nTry again after some time");
+        } else if (error instanceof ParseError) {
+            Log.e("Volley", "ParseError");
+        }
+        awesomeInfoDialog.setCancelable(true);
     }
 
     @Override
     public void onResponse(String str) {
         Log.v("xml", "xml = " + str);
-        awesomeInfoDialog.setMessage(str);
+        JSONObject jsonObject = helper.getJson(str);
+
+        try {
+            if (jsonObject.get("result").equals(helper.SUCCESS))
+            {
+                awesomeInfoDialog.setMessage("Succesfully uploaded Business");
+                databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE,DatabaseHelper.COLUMN_STATUS,1);
+            }
+            else
+            {
+                awesomeInfoDialog.setMessage("Business Already Uploaded");
+                databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE,DatabaseHelper.COLUMN_STATUS,1);
+            }
+        }
+        catch (JSONException jse)
+        {
+
+        }
+       //awesomeInfoDialog.setMessage(str);
+        awesomeInfoDialog.setCancelable(true);
 
     }
 }

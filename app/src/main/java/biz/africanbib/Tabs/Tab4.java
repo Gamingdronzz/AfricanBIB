@@ -41,9 +41,9 @@ public class Tab4 extends Fragment {
     CheckBox accept;
     ArrayList<Object> items;
 
-    public String nameOfCollector = "Name of Collector";
-    public String authorizedBy = "Authorized By";
-    public String placeOfCollection = "Place of Collection";
+    public String nameOfCollector = "Name of Collector *";
+    public String authorizedBy = "Authorized By *";
+    public String placeOfCollection = "Place of Collection *";
 
 
     public boolean getAccepted()

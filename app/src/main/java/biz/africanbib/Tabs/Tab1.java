@@ -2,6 +2,7 @@ package biz.africanbib.Tabs;
 
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -35,11 +37,14 @@ public class Tab1 extends Fragment {
     boolean isTab;
     DatabaseHelper databaseHelper;
     ArrayList<Object> items = new ArrayList<>();
-    public String businessName = "Business Name";
-    public String telephone = "Telephone";
-    public String city_town = "City / Town";
-    public String state = "District / State";
-    public String country = "Country";
+    public String businessName = "Business Name *";
+    public String registerationNumber = "Registeration No *";
+    public String keyVisual = "Keyvisual (Photo) *";
+    public String corporateLogo = "Corporate Logo *";
+    public String telephone = "Telephone *";
+    public String city_town = "City / Town *";
+    public String state = "District / State *";
+    public String country = "Country *";
 
 
     int a = 0;
@@ -160,7 +165,7 @@ public class Tab1 extends Fragment {
 
         columnName = DatabaseHelper.COLUMN_REGISTERATION_NO;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Registeration No", value, tableName, columnName, -1, "registrationNumber"));
+        items.add(helper.buildEditText(registerationNumber, value, tableName, columnName, -1, "registrationNumber"));
 
         columnName = DatabaseHelper.COLUMN_LOGO;
         Bitmap image = null;
@@ -171,7 +176,7 @@ public class Tab1 extends Fragment {
             e.printStackTrace();
         }
         //=  databaseHelper.getIntValue(columnName, tableName);
-        items.add(helper.buildImage("Corporate Logo", image, tableName, columnName, "logo"));
+        items.add(helper.buildImage(corporateLogo, image, tableName, columnName, "logo"));
         //items.add(helper.buildDropDown("Corporate Logo", new String[]{"Collected", "Not Collected"}, selectedPosition, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_KEYVISUAL_PHOTO;
@@ -181,7 +186,7 @@ public class Tab1 extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        items.add(helper.buildImage("Keyvisual (Photo)", keyvisual, tableName, columnName, "keyvisual"));
+        items.add(helper.buildImage(keyVisual, keyvisual, tableName, columnName, "keyvisual"));
         //items.add(helper.buildDropDown("Keyvisual (Photo)", new String[]{"Collected", "Not Collected"}, selectedPosition, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_LOGO_NOTE;
@@ -324,6 +329,22 @@ public class Tab1 extends Fragment {
             adapter.onActivityResult(requestCode, resultCode, data);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    adapter.onRequestPermissionsResult(requestCode,permissions,grantResults);
+                } else {
+                    Toast.makeText(getActivity(), "Please give your permission.", Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
         }
     }
 

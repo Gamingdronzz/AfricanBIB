@@ -45,6 +45,15 @@ public class RecyclerViewAdapterPreviousBusiness extends RecyclerView.Adapter<Re
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         PreviousBusiness model = previousBusinessList.get(position);
         holder.textViewBusinessName.setText(model.getBusinessName());
+        Log.v(TAG,"Status = " + model.isUploadStatus());
+        if(model.isUploadStatus())
+        {
+            holder.imageViewUploadStatus.setImageResource(R.mipmap.ic_tick);
+        }
+        else
+        {
+            holder.imageViewUploadStatus.setImageResource(R.mipmap.ic_cross);
+        }
 
     }
 
@@ -58,10 +67,12 @@ public class RecyclerViewAdapterPreviousBusiness extends RecyclerView.Adapter<Re
     public class MyViewHolder extends RecyclerView.ViewHolder{
 
         private TextView textViewBusinessName;
+        private ImageView imageViewUploadStatus;
 
         private MyViewHolder(View itemView) {
             super(itemView);
             textViewBusinessName = (TextView) itemView.findViewById(R.id.previous_business_name);
+            imageViewUploadStatus = (ImageView) itemView.findViewById(R.id.imageViewUploadStatus);
 
         }
 

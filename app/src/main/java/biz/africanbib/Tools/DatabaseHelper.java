@@ -32,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 6;
+    public static final int DATABASE_VERSION = 8;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -67,6 +67,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_LOGO_NOTE = "COLUMN_LOGO_NOTE";
     public static final String COLUMN_KEYVISUAL_NOTE = "COLUMN_KEYVISUAL_NOTE";
     public static final String COLUMN_BRIEF_DESCRIPTION = "COLUMN_BRIEF_DESCRIPTION";
+    public static final String COLUMN_STATUS = "COLUMN_STATUS";
 
     public static final String COLUMN_TELEPHONE = "COLUMN_TELEPHONE";
     public static final String COLUMN_CELLPHONE = "COLUMN_CELLPHONE";
@@ -162,6 +163,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_LOCATION = "COLUMN_LOCATION";
     public static final String COLUMN_ACCEPTANCE = "COLUMN_ACCEPTANCE";
 
+
     public Cursor cursor;
 
 
@@ -173,7 +175,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_KEYVISUAL_PHOTO + " BLOB," +
             COLUMN_LOGO_NOTE + " VARCHAR," +
             COLUMN_KEYVISUAL_NOTE + " VARCHAR," +
-            COLUMN_BRIEF_DESCRIPTION + " VARCHAR " +
+            COLUMN_BRIEF_DESCRIPTION + " VARCHAR, " +
+            COLUMN_STATUS + " INTEGER " +
             ")";
     private String CREATE_TABLE_COMPANY_CONTACT = "CREATE TABLE IF NOT EXISTS " + TABLE_COMPANY_CONTACT + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
@@ -524,7 +527,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         PreviousBusiness[] result = null;
         try {
-            String query = "SELECT " + COLUMN_COMPANY_ID + "," + COLUMN_COMPANY_NAME + "  FROM " + TABLE_COMPANY_PROFILE;
+            String query = "SELECT " + COLUMN_COMPANY_ID + "," + COLUMN_COMPANY_NAME + "," + COLUMN_STATUS + "  FROM " + TABLE_COMPANY_PROFILE;
             //Log.v(TAG, "Query = " + query);
             cursor = db.rawQuery(query, null);
             cursor.moveToFirst();
@@ -534,6 +537,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     result[i] = new PreviousBusiness();
                     result[i].setBusinessID(cursor.getInt(0));
                     result[i].setBusinessName(cursor.getString(1));
+                    result[i].setUploadStatus(cursor.getInt(2) != 0);
                     cursor.moveToNext();
                 }
             } else {
