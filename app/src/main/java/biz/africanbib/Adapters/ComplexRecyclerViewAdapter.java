@@ -307,10 +307,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             return this.textview.getText().toString();
         }
 
-        public void setFocus(boolean requestFocus)
-        {
-            if(requestFocus)
-            {
+        public void setFocus(boolean requestFocus) {
+            if (requestFocus) {
                 this.editText.requestFocus();
             }
         }
@@ -657,7 +655,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 if (dropDown.getRowno() == -1) {
                     if (dropDown.getHeading().equals("Place of Collection")) {
                         if (i == 2) {
-                            items.add(position + 1, helper.buildEditText("Place of Collection (Specify)", "", DatabaseHelper.TABLE_SOURCE_OF_DATA, DatabaseHelper.COLUMN_OTHERS_SPECIFY, -1,"placeofcollection"));
+                            items.add(position + 1, helper.buildEditText("Place of Collection (Specify)", "", DatabaseHelper.TABLE_SOURCE_OF_DATA, DatabaseHelper.COLUMN_OTHERS_SPECIFY, -1, "placeofcollection"));
                             notifyItemInserted(position + 1);
                         }
                     }
@@ -1024,7 +1022,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             tableColumnNames[i],
                             helper.manageMultiSelectList(0),
                             null,
-                            currentRowNo,"sector"
+                            currentRowNo, "sector"
                     ));
                     notifyItemInserted(position);
 
@@ -1033,7 +1031,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             columnNames[i],
                             helper.getIndustryList(),
                             databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
-                            add.getTableName(), tableColumnNames[i], currentRowNo,"industry"));
+                            add.getTableName(), tableColumnNames[i], currentRowNo, "industry"));
                     notifyItemInserted(position);
                 } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_DATE)) {
                     items.add(position, helper.buildDate(
@@ -1041,14 +1039,24 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             databaseHelper.getStringFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
                             add.getTableName(),
                             tableColumnNames[i],
-                            currentRowNo,"date"));
+                            currentRowNo, "date"));
                     Log.v("Adapter", "Inserting Date " + columnNames[i] + " at " + i);
                     notifyItemInserted(position);
                 } else if (columnNames[i].equals("Country")) {
-                    items.add(position, helper.buildDropDown(columnNames[i], helper.getCountryNames(), 0, add.getTableName(), tableColumnNames[i], currentRowNo,"country"));
+                    items.add(position, helper.buildDropDown(columnNames[i], helper.getCountryNames(), 0, add.getTableName(), tableColumnNames[i], currentRowNo, "country"));
+                    notifyItemInserted(position);
+                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_MEDIA)) {
+                    Bitmap image = null;
+                    try
+                    {
+                        image = helper.createBitmapFromByteArray(databaseHelper.getBlobValue(tableColumnNames[i], add.getTableName()));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    items.add(position, helper.buildImage(columnNames[i], image, add.getTableName(), tableColumnNames[i], xmlTags[i]));
                     notifyItemInserted(position);
                 } else {
-                    items.add(position, helper.buildEditText(columnNames[i], "", add.getTableName(), tableColumnNames[i], currentRowNo,xmlTags[i]));
+                    items.add(position, helper.buildEditText(columnNames[i], "", add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
                     Log.v("Adapter", "Inserting Edittext " + columnNames[i] + " at " + i);
                     notifyItemInserted(position);
                 }
@@ -1083,64 +1091,62 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             final int MyVersion = Build.VERSION.SDK_INT;
             if (MyVersion > Build.VERSION_CODES.LOLLIPOP_MR1) {
                 if (!checkIfAlreadyhavePermission()) {
-                    ActivityCompat.requestPermissions(context.getActivity(),new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+                    ActivityCompat.requestPermissions(context.getActivity(), new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
                 } else {
-                    showImageChooser(adapter,position);
+                    showImageChooser(adapter, position);
                 }
             }
 
         }
 
     }
+
     private boolean checkIfAlreadyhavePermission() {
         int result = ContextCompat.checkSelfPermission(context.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
         return result == PackageManager.PERMISSION_GRANTED;
     }
 
 
-    private void showImageChooser(final ComplexRecyclerViewAdapter adapter, final int position)
-    {
+    private void showImageChooser(final ComplexRecyclerViewAdapter adapter, final int position) {
         final SimpleImage simpleImage = (SimpleImage) items.get(position);
         Log.v("Adapter", "Clicked at = " + simpleImage.getTitle());
         imagePicker = new ImagePicker();
         imagePicker.setTitle("Select Image");
         imagePicker.setCropImage(true);
         imagePicker.startChooser(context, new ImagePicker.Callback() {
-            @Override public void onPickImage(Uri imageUri) {
-                Log.v("Adapter","Picked Path = " + imageUri.getPath());
+            @Override
+            public void onPickImage(Uri imageUri) {
+                Log.v("Adapter", "Picked Path = " + imageUri.getPath());
                 Bitmap bitmap = BitmapFactory.decodeFile(imageUri.getPath());
                 simpleImage.setImage(bitmap);
                 adapter.notifyItemChanged(position);
-                databaseHelper.updateBlobValue(simpleImage.getTableName(),simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
+                databaseHelper.updateBlobValue(simpleImage.getTableName(), simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
 
             }
 
-            @Override public void onCropImage(Uri imageUri) {
-                Log.v("Adapter","Cropped Path = " + imageUri.getPath());
+            @Override
+            public void onCropImage(Uri imageUri) {
+                Log.v("Adapter", "Cropped Path = " + imageUri.getPath());
                 Bitmap bitmap = BitmapFactory.decodeFile(imageUri.getPath());
                 simpleImage.setImage(bitmap);
                 adapter.notifyItemChanged(position);
-                databaseHelper.updateBlobValue(simpleImage.getTableName(),simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
+                databaseHelper.updateBlobValue(simpleImage.getTableName(), simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
 
                 //draweeView.setImageURI(imageUri);
                 //draweeView.getHierarchy().setRoundingParams(RoundingParams.asCircle());
             }
 
-            @Override public void cropConfig(CropImage.ActivityBuilder builder) {
+            @Override
+            public void cropConfig(CropImage.ActivityBuilder builder) {
                 Point size = new Point();
                 Point ratio = new Point();
-                if(simpleImage.getTitle().equals("Corporate Logo"))
-                {
-                    size.set(210,145);
-                    ratio.set(42,29);
-                }
-                else if(simpleImage.getTitle().equals("Keyvisual (Photo)"))
-                {
-                    size.set(942,292);
-                    ratio.set(471,146);
-                }
-                else if(simpleImage.getTitle().equals(""))
-                {
+                if (simpleImage.getTitle().equals("Corporate Logo")) {
+                    size.set(210, 145);
+                    ratio.set(42, 29);
+                } else if (simpleImage.getTitle().equals("Keyvisual (Photo)")) {
+                    size.set(942, 292);
+                    ratio.set(471, 146);
+                } else if (simpleImage.getTitle().equals("")) {
 
                 }
                 builder
@@ -1148,12 +1154,13 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                         .setGuidelines(CropImageView.Guidelines.OFF)
                         .setCropShape(CropImageView.CropShape.RECTANGLE)
                         .setRequestedSize(size.x, size.y)
-                        .setAspectRatio(ratio.x,ratio.y);
+                        .setAspectRatio(ratio.x, ratio.y);
             }
 
 
-            @Override public void onPermissionDenied(int requestCode, String[] permissions,
-                                                     int[] grantResults) {
+            @Override
+            public void onPermissionDenied(int requestCode, String[] permissions,
+                                           int[] grantResults) {
 
             }
 
@@ -1336,24 +1343,22 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
-    public  void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d("Adapter", "Request Code  " +  requestCode);
-        imagePicker.onActivityResult(context,requestCode,resultCode,data);
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d("Adapter", "Request Code  " + requestCode);
+        imagePicker.onActivityResult(context, requestCode, resultCode, data);
     }
 
 
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        imagePicker.onRequestPermissionsResult(context,requestCode,permissions,grantResults);
+        imagePicker.onRequestPermissionsResult(context, requestCode, permissions, grantResults);
     }
 
 
-    public void setFocus()
-    {
+    public void setFocus() {
         int a = 0;
         for (Object o :
                 items) {
-            if (o instanceof SimpleEditText)
-            {
+            if (o instanceof SimpleEditText) {
                 SimpleEditText simpleEditText = (SimpleEditText) o;
                 simpleEditText.setFocused(true);
                 notifyItemChanged(a);
