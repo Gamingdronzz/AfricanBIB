@@ -47,7 +47,6 @@ import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.Heading;
 import biz.africanbib.Models.MultiSelectDropdown;
 import biz.africanbib.Models.SimpleEditText;
-import biz.africanbib.Models.SimpleImage;
 import biz.africanbib.Models.SimpleText;
 import biz.africanbib.R;
 import biz.africanbib.Tabs.Tab1;
@@ -219,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             return;
                         }
                     }
-                } else if (o instanceof SimpleImage) {
+                }/* else if (o instanceof SimpleImage) {
                     SimpleImage simpleImage = (SimpleImage) o;
                     if (simpleImage.getTitle().equals(tab1.corporateLogo)) {
                         if (simpleImage.getImage() == null) {
@@ -234,7 +233,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             return;
                         }
                     }
-                }
+                }*/
             }
 
             //items.clear();
@@ -583,7 +582,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         params.put("keyvisual", keyvisuallogo);
         volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
         awesomeInfoDialog.setMessage("Submitting files to server");
-
 
     }
 

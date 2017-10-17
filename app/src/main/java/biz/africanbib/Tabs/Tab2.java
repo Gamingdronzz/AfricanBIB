@@ -223,7 +223,7 @@ public class Tab2 extends Fragment {
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Website", value, tableName, columnName, -1, "website"));
 
-        items.add(new Heading("OWNER / MANAGER SPECIFIC INFORMATION", null));
+        items.add(new Heading("OWNER / MANAGER SPECIFIC INFORMATION", "person"));
 
         columnName = DatabaseHelper.COLUMN_FIRST_NAME;
 
@@ -272,7 +272,7 @@ public class Tab2 extends Fragment {
 
         columnName = DatabaseHelper.COLUMN_BIRTHDAY;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildDate("Birthday", value, tableName, columnName, -1, "birthday"));
+        items.add(helper.buildDate("Birthday", helper.toDays(value), tableName, columnName, -1, "birthday"));
         columnName = DatabaseHelper.COLUMN_PHOTO;
         selectedPosition = databaseHelper.getIntValue(columnName, tableName);
         items.add(

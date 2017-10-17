@@ -865,14 +865,17 @@ public class Helper {
     }
 
     public String toDays(String date) {
-        Date d= null;
-        try {
-            d = new SimpleDateFormat("DD/MM/YYYY").parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        long days = TimeUnit.DAYS.convert(d.getTime(), TimeUnit.MILLISECONDS);
-        return String.valueOf(days);
+        Date d = null;
+        if (date != null) {
+            try {
+                d = new SimpleDateFormat("DD/MM/YYYY").parse(date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            long days = TimeUnit.DAYS.convert(d.getTime(), TimeUnit.MILLISECONDS);
+            return String.valueOf(days);
+
+        } else return " ";
     }
 }
 
