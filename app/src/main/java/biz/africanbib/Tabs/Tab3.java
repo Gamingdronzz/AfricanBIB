@@ -2,6 +2,7 @@ package biz.africanbib.Tabs;
 
 
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -129,7 +130,7 @@ public class Tab3 extends Fragment {
         //items.add(new SimpleEditText(""));
 
 
-        items.add(new Heading("BUSINESS SPECIFIC INFORMATION",null));
+        items.add(new Heading("BUSINESS SPECIFIC INFORMATION", null));
 
 
         /*
@@ -157,23 +158,22 @@ public class Tab3 extends Fragment {
 
 */
 
-        items.add(new SimpleText("Products & Product Details"));
+        items.add(new SimpleText("Products & Product Details", "productDetails"));
         String tableName = DatabaseHelper.TABLE_PRODUCTS_AND_PRODUCT_DETAILS;
+        Bitmap image = null;
         String[] xmlTags = new String[]{
-                "media",
+                "productMedia",
                 "description",
-                "title",
-                "product"};
+                "title"};
         String[] titles = new String[]{
                 "Media (Photo / Documents)",
                 "Description",
-                "Title",
-                "Product"};
+                "Title"};
         String[] columnNames = new String[]{
                 DatabaseHelper.COLUMN_MEDIA,
                 DatabaseHelper.COLUMN_DESCRIPTION,
-                DatabaseHelper.COLUMN_TITLE,
-                DatabaseHelper.COLUMN_PRODUCTS};
+                DatabaseHelper.COLUMN_TITLE
+        };
         if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
             int[] ids = databaseHelper.getrowids(tableName);
             if (ids != null) {
@@ -187,7 +187,7 @@ public class Tab3 extends Fragment {
                                         databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
                                         tableName,
                                         columnNames[j],
-                                        ids[i],xmlTags[j]));
+                                        ids[i], xmlTags[j]));
                     }
                 }
                 productDetailsRows = ids.length;
@@ -195,10 +195,10 @@ public class Tab3 extends Fragment {
 
 
         }
-        items.add(helper.buildAdd(4, titles, tableName, columnNames,xmlTags));
+        items.add(helper.buildAdd(3, titles, tableName, columnNames, xmlTags));
 
 
-        items.add(new SimpleText("Services & Service Details"));
+       /* items.add(new SimpleText("Services & Service Details"));
         tableName = DatabaseHelper.TABLE_SERVICES;
         xmlTags = new String[]{
                 "media",
@@ -238,8 +238,8 @@ public class Tab3 extends Fragment {
         }
         items.add(helper.buildAdd(4, titles, tableName, columnNames,xmlTags));
 
-
-        items.add(new Heading("COMPANY INDICATORS","indicators"));
+*/
+        items.add(new Heading("COMPANY INDICATORS", "indicators"));
         tableName = DatabaseHelper.TABLE_COMPANY_INDICATORS;
         String columnName = DatabaseHelper.COLUMN_COMPANY_SIZE;
         int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
@@ -251,52 +251,52 @@ public class Tab3 extends Fragment {
                 "201 - 500 Employees",
                 "501 - 1,000 Employees",
                 "1,001 - 10,000 Employees",
-                "10,001 or More"}, selectedPosition, tableName, columnName, -1,"companySize"));
+                "10,001 or More"}, selectedPosition, tableName, columnName, -1, "companySize"));
 
         tableName = DatabaseHelper.TABLE_COMPANY_INDICATORS;
         columnName = DatabaseHelper.COLUMN_FOUNDING_YEAR_OF_COMPANY;
         String value;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Founding year of Company / Institution", value, tableName, columnName, -1,"foundingYear"));
+        items.add(helper.buildEditText("Founding year of Company / Institution", value, tableName, columnName, -1, "foundingYear"));
         columnName = DatabaseHelper.COLUMN_AGE_OF_ACTIVE_BUSINESS;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Age of Active Business", value, tableName, columnName, -1,"ageOfActBusiness"));
+        items.add(helper.buildEditText("Age of Active Business", value, tableName, columnName, -1, "ageOfActBusiness"));
         columnName = DatabaseHelper.COLUMN_ANNUAL_SALES;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Annual Sales (Range)", value, tableName, columnName, -1,"annualSales"));
+        items.add(helper.buildEditText("Annual Sales (Range)", value, tableName, columnName, -1, "annualSales"));
         columnName = DatabaseHelper.COLUMN_ANNUAL_REVENUE;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Annual Revenue (Range)", value, tableName, columnName, -1, "annualrevenue" ));
+        items.add(helper.buildEditText("Annual Revenue (Range)", value, tableName, columnName, -1, "annualrevenue"));
 
 
         columnName = DatabaseHelper.COLUMN_NO_OF_BRANCHES;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("No. of Branches", value, tableName, columnName, -1,"branches"));
+        items.add(helper.buildEditText("No. of Branches", value, tableName, columnName, -1, "branches"));
 
 
         columnName = DatabaseHelper.COLUMN_TOTAL_NO_OF_EMPLOYEES;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Total no. of Employees", value, tableName, columnName, -1,"numberEmployees"));
+        items.add(helper.buildEditText("Total no. of Employees", value, tableName, columnName, -1, "numberEmployees"));
 
 
         columnName = DatabaseHelper.COLUMN_NO_OF_EMPLOYEES_IN_PRODUCTION;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("No. of Employees in Production", value, tableName, columnName, -1,"numEmployeesProduction"));
+        items.add(helper.buildEditText("No. of Employees in Production", value, tableName, columnName, -1, "numEmployeesProduction"));
 
 
         columnName = DatabaseHelper.COLUMN_NO_OF_ADMINISTRATIVE_STAFF;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("No. of Administrative Staff", value, tableName, columnName, -1,"numAdministrativeStaff"));
+        items.add(helper.buildEditText("No. of Administrative Staff", value, tableName, columnName, -1, "numAdministrativeStaff"));
 
 
         columnName = DatabaseHelper.COLUMN_FREELANCE_ASSOCIATES;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("No. of Freelance Associates", value, tableName, columnName, -1,"numFreelancers"));
+        items.add(helper.buildEditText("No. of Freelance Associates", value, tableName, columnName, -1, "numFreelancers"));
 
         columnName = DatabaseHelper.COLUMN_INVESTMENT_VOLUME;
         selectedPosition = databaseHelper.getIntValue(columnName, tableName);
@@ -307,7 +307,7 @@ public class Tab3 extends Fragment {
                 "15,000-50,000",
                 "50,000-150,000",
                 "150,000-500,000",
-                "more than 500,000"}, selectedPosition, tableName, columnName, -1,"investmentVolume"));
+                "more than 500,000"}, selectedPosition, tableName, columnName, -1, "investmentVolume"));
 
 
         columnName = DatabaseHelper.COLUMN_EMPLOYEE_ADDITIONAL_TRAINING;
@@ -316,15 +316,15 @@ public class Tab3 extends Fragment {
                 "4 Times / Year ",
                 "Twice / year",
                 "Once / Year",
-                "Once Every 2 Years"}, selectedPosition, tableName, columnName, -1,"employeeAdditionalTraining"));
+                "Once Every 2 Years"}, selectedPosition, tableName, columnName, -1, "employeeAdditionalTraining"));
 
 
         columnName = DatabaseHelper.COLUMN_LAST_EMPLOYEE_TRAINING;
 
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Last Employee Training", value, tableName, columnName, -1,"lastTraining"));
+        items.add(helper.buildEditText("Last Employee Training", value, tableName, columnName, -1, "lastTraining"));
 
-        items.add(new Heading("AWARDS",null));
+        items.add(new Heading("AWARDS", null));
         tableName = DatabaseHelper.TABLE_AWARDS;
         xmlTags = new String[]{
                 "awardfile",
@@ -358,10 +358,10 @@ public class Tab3 extends Fragment {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_DATE)) {
                             items.add(helper.buildDate(
                                     titles[j],
-                                    databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                    helper.toDays(databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i])),
                                     tableName,
                                     columnNames[j],
-                                    ids[i],xmlTags[j]));
+                                    ids[i], xmlTags[j]));
                         } else {
                             items.add(
                                     helper.buildEditText(
@@ -369,7 +369,7 @@ public class Tab3 extends Fragment {
                                             databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
                                             tableName,
                                             columnNames[j],
-                                            ids[i],xmlTags[j]));
+                                            ids[i], xmlTags[j]));
                         }
                     }
                 }
@@ -378,9 +378,9 @@ public class Tab3 extends Fragment {
 
 
         }
-        items.add(helper.buildAdd(6, titles, tableName, columnNames,xmlTags));
+        items.add(helper.buildAdd(6, titles, tableName, columnNames, xmlTags));
 
-        items.add(new Heading("LATEST NEWS","news"));
+        items.add(new Heading("LATEST NEWS", "news"));
         tableName = DatabaseHelper.TABLE_LATEST_NEWS;
         titles = new String[]{
                 "Description",
@@ -404,10 +404,10 @@ public class Tab3 extends Fragment {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_DATE)) {
                             items.add(helper.buildDate(
                                     titles[j],
-                                    databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                    helper.toDays(databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i])),
                                     tableName,
                                     columnNames[j],
-                                    ids[i],xmlTags[j]));
+                                    ids[i], xmlTags[j]));
                         } else {
                             items.add(
                                     helper.buildEditText(
@@ -415,7 +415,7 @@ public class Tab3 extends Fragment {
                                             databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
                                             tableName,
                                             columnNames[j],
-                                            ids[i],xmlTags[j]));
+                                            ids[i], xmlTags[j]));
                         }
                     }
                 }
@@ -424,7 +424,7 @@ public class Tab3 extends Fragment {
 
 
         }
-        items.add(helper.buildAdd(3, titles, tableName, columnNames,xmlTags));
+        items.add(helper.buildAdd(3, titles, tableName, columnNames, xmlTags));
 
 
         return items;

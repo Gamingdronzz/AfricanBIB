@@ -14,12 +14,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-import biz.africanbib.Adapters.ComplexRecyclerViewAdapter;
 import biz.africanbib.Activity.MainActivity;
+import biz.africanbib.Adapters.ComplexRecyclerViewAdapter;
 import biz.africanbib.Models.Add;
 import biz.africanbib.Models.Divider;
 import biz.africanbib.Models.DropDown;
-import biz.africanbib.Models.DropDownBuilder;
 import biz.africanbib.Models.Heading;
 import biz.africanbib.Models.SimpleEditText;
 import biz.africanbib.Models.SimpleText;
@@ -137,7 +136,7 @@ public class Tab2 extends Fragment {
 
         String value;
 
-        items.add(new Heading("INVESTMENT OPPURTUNTIES", null));
+        items.add(new Heading("INVESTMENT OPPURTUNTIES", "investmentOpportunities"));
         items.add(new SimpleText("Needs"));
         Log.v("Tab2", "Business type = " + MainActivity.typeOfBusiness);
 
@@ -272,7 +271,6 @@ public class Tab2 extends Fragment {
         items.add(helper.buildEditText("Nationality", value, tableName, columnName, -1, "nationality"));
 
         columnName = DatabaseHelper.COLUMN_BIRTHDAY;
-
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildDate("Birthday", value, tableName, columnName, -1, "birthday"));
         columnName = DatabaseHelper.COLUMN_PHOTO;
@@ -307,7 +305,7 @@ public class Tab2 extends Fragment {
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Video Note", value, tableName, columnName, -1, "videonote"));
 
-        items.add(new SimpleText("Academic Background"));
+        items.add(new SimpleText("Academic Background", "academic"));
 
         tableName = DatabaseHelper.TABLE_ACADEMIC_BACKGROUND;
         String[] xmltags = new String[]{
@@ -336,7 +334,7 @@ public class Tab2 extends Fragment {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_DATE)) {
                             items.add(helper.buildDate(
                                     titles[j],
-                                    databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                    helper.toDays(databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i])),
                                     tableName,
                                     columnNames[j],
                                     ids[i], xmltags[j]));
@@ -369,7 +367,7 @@ public class Tab2 extends Fragment {
                 tableName,
                 columnNames, xmltags));
 
-        items.add(new SimpleText("Professional Background"));
+        items.add(new SimpleText("Professional Background", "professional"));
         tableName = DatabaseHelper.TABLE_PROFESSIONAL_BACKGROUND;
         xmltags = new String[]{
                 "country",
@@ -399,7 +397,7 @@ public class Tab2 extends Fragment {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_DATE)) {
                             items.add(helper.buildDate(
                                     titles[j],
-                                    databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                    helper.toDays(databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i])),
                                     tableName,
                                     columnNames[j],
                                     ids[i], xmltags[j]));

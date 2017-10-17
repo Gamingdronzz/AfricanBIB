@@ -12,10 +12,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 
 import biz.africanbib.Activity.MainActivity;
@@ -856,11 +860,20 @@ public class Helper {
     }
 
 
-   public static String forReplacementString(String aInput){
-       return Matcher.quoteReplacement(aInput);
-   }
+    public static String forReplacementString(String aInput) {
+        return Matcher.quoteReplacement(aInput);
+    }
 
-
+    public String toDays(String date) {
+        Date d= null;
+        try {
+            d = new SimpleDateFormat("DD/MM/YYYY").parse(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long days = TimeUnit.DAYS.convert(d.getTime(), TimeUnit.MILLISECONDS);
+        return String.valueOf(days);
+    }
 }
 
 
