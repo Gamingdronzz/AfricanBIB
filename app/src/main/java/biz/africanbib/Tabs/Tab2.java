@@ -75,9 +75,9 @@ public class Tab2 extends Fragment {
         }
         adapter.updateRow(DatabaseHelper.TABLE_NEEDS, needRows);
         adapter.updateRow(DatabaseHelper.TABLE_OFFERS, offerrows);
-        adapter.updateRow(DatabaseHelper.TABLE_PROFESSIONAL_BACKGROUND, professionalBackgroundRows);
-        adapter.updateRow(DatabaseHelper.TABLE_ACADEMIC_BACKGROUND, academicBackgroundRows);
-        adapter.updateRow(DatabaseHelper.TABLE_AFFILIATION, affiliationRows);
+        //adapter.updateRow(DatabaseHelper.TABLE_PROFESSIONAL_BACKGROUND, professionalBackgroundRows);
+        //adapter.updateRow(DatabaseHelper.TABLE_ACADEMIC_BACKGROUND, academicBackgroundRows);
+        //adapter.updateRow(DatabaseHelper.TABLE_AFFILIATION, affiliationRows);
         //SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
         //snapHelper.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
@@ -168,7 +168,6 @@ public class Tab2 extends Fragment {
             int[] ids = databaseHelper.getrowids(tableName);
             if (ids != null) {
                 for (int i = 0; i < ids.length; i++) {
-
                     items.add(
                             helper.buildEditText(
                                     "Offer",
@@ -185,7 +184,7 @@ public class Tab2 extends Fragment {
         }
         items.add(helper.buildAdd(1, new String[]{"Offer"}, DatabaseHelper.TABLE_OFFERS, new String[]{DatabaseHelper.COLUMN_OFFER}, new String[]{"offer"}));
         items.add(new Heading("OWNERS / MANAGERS / SUBSIDIARIES / REFERENCES", null));
-        tableName = DatabaseHelper.TABLE_OWNERS_MANAGERS_SUBSIDIARIES_REFERENCE;
+        tableName = DatabaseHelper.TABLE_CONTACT_PERSON;
         columnName = DatabaseHelper.COLUMN_TYPE;
         int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
         items.add(
@@ -223,7 +222,7 @@ public class Tab2 extends Fragment {
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Website", value, tableName, columnName, -1, "website"));
 
-        items.add(new Heading("OWNER / MANAGER SPECIFIC INFORMATION", "person"));
+        //items.add(new Heading("OWNER / MANAGER SPECIFIC INFORMATION", "person"));
 
         columnName = DatabaseHelper.COLUMN_FIRST_NAME;
 

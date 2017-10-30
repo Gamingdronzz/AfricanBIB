@@ -32,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 8;
+    public static final int DATABASE_VERSION = 9;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -43,10 +43,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_COMPANY_SPECIFIC_INFORMATION = "TableCompanySpecificInformation";
     public static final String TABLE_OFFERS = "TableOffers";
     public static final String TABLE_NEEDS = "TableNeeds";
-    public static final String TABLE_OWNERS_MANAGERS_SUBSIDIARIES_REFERENCE = "TableOwners";
-    public static final String TABLE_ACADEMIC_BACKGROUND = "TableAcademicBackground";
-    public static final String TABLE_PROFESSIONAL_BACKGROUND = "TableProfessionalBackground";
-    public static final String TABLE_AFFILIATION = "TableAffiliation";
+    public static final String TABLE_CONTACT_PERSON = "TableContactPerson";
+    public static final String TABLE_REFERENCES = "TableReference";
+    public static final String TABLE_OWNERS = "TableOwners";
+    public static final String TABLE_MANAGERS = "TableManagers";
+    //public static final String TABLE_ACADEMIC_BACKGROUND = "TableAcademicBackground";
+    //public static final String TABLE_PROFESSIONAL_BACKGROUND = "TableProfessionalBackground";
+    //public static final String TABLE_AFFILIATION = "TableAffiliation";
     public static final String TABLE_REFERENCE_SPECIFIC_INFORMATION = "TableReferenceSpecificInformation";
     public static final String TABLE_SUBSIDIARY_SPECIFIC_INFORMATION = "TableSubsidiarySpecificInformation";
     public static final String TABLE_SERVICES = "TableServices";
@@ -132,6 +135,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_DESCRIPTION = "COLUMN_DESCRIPTION";
     public static final String COLUMN_MEDIA = "COLUMN_MEDIA";
 
+    public static final String COLUMN_ACADEMIC = "COLUMN_ACADEMIC";
+    public static final String COLUMN_PROFESSIONAL = "COLUMN_PROFESSIONAL";
+    public static final String COLUMN_AFFILIATION = "COLUMN_AFFILIATION";
 
     public static final String COLUMN_COMPANY_SIZE = "COLUMN_COMPANY_SIZE";
     public static final String COLUMN_FOUNDING_YEAR_OF_COMPANY = "COLUMN_FOUNDING_YEAR_OF_COMPANY";
@@ -230,26 +236,67 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_NEED + " VARCHAR" +
             ")";
 
-    private String CREATE_TABLE_OWNERS_MANAGERS_SPECIFIC_INFORMATION = "CREATE TABLE IF NOT EXISTS " + TABLE_OWNERS_MANAGERS_SUBSIDIARIES_REFERENCE + " ( " +
+    private String CREATE_TABLE_CONTATC_PERSON = "CREATE TABLE IF NOT EXISTS " + TABLE_CONTACT_PERSON + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
-            COLUMN_TYPE + " VARCHAR," +
-            COLUMN_TELEPHONE + " VARCHAR," +
-            COLUMN_CELLPHONE + " VARCHAR," +
-            COLUMN_FASCIMILE + " VARCHAR," +
-            COLUMN_EMAIL + " VARCHAR," +
-            COLUMN_WEBSITE + " VARCHAR, " +
             COLUMN_FIRST_NAME + " VARCHAR," +
             COLUMN_LAST_NAME + " VARCHAR," +
             COLUMN_PREFIX + " NUMBER," +
             COLUMN_POSITION_IN_COMPANY + " NUMBER," +
-            COLUMN_NATIONALITY + " VARCHAR," +
-            COLUMN_BIRTHDAY + " VARCHAR," +
-            COLUMN_PHOTO + " NUMBER," +
-            COLUMN_VIDEO + " NUMBER, " +
-            COLUMN_PHOTO_NOTE + " VARCHAR," +
-            COLUMN_VIDEO_NOTE + " VARCHAR " +
+            COLUMN_TELEPHONE + " VARCHAR," +
+            COLUMN_CELLPHONE + " VARCHAR," +
+            COLUMN_FASCIMILE + " VARCHAR," +
+            COLUMN_EMAIL + " VARCHAR," +
+            COLUMN_STREET + " VARCHAR," +
+            COLUMN_CITY + " VARCHAR," +
+            COLUMN_PO_BOX + " VARCHAR," +
+            COLUMN_POSTAL_CODE + " VARCHAR," +
+            COLUMN_DISTRICT + " VARCHAR," +
+            COLUMN_COUNTRY + " NUMBER " +
             ")";
 
+    private String CREATE_TABLE_REFERENCES = "CREATE TABLE IF NOT EXISTS " + TABLE_REFERENCES + " ( " +
+            COLUMN_COMPANY_ID + " NUMBER," +
+            COLUMN_ROW_ID + " INTEGER," +
+            COLUMN_INSTITUTION_NAME + " VARCHAR," +
+            COLUMN_TELEPHONE + " VARCHAR," +
+            COLUMN_CELLPHONE + " VARCHAR," +
+            COLUMN_EMAIL + " VARCHAR," +
+            COLUMN_WEBSITE + " VARCHAR," +
+            COLUMN_LOGO + " BLOB," +
+            COLUMN_TYPE_OF_ORGANISATION + " INTEGER" +
+            ")";
+
+    private String CREATE_TABLE_OWNERS = "CREATE TABLE IF NOT EXISTS " + TABLE_OWNERS + " ( " +
+            COLUMN_COMPANY_ID + " NUMBER," +
+            COLUMN_ROW_ID + " INTEGER," +
+            COLUMN_PREFIX + " VARCHAR," +
+            COLUMN_LAST_NAME + " VARCHAR," +
+            COLUMN_BIRTHDAY + " VARCHAR," +
+            COLUMN_NATIONALITY + " VARCHAR," +
+            COLUMN_TELEPHONE + " VARCHAR," +
+            COLUMN_EMAIL + " VARCHAR," +
+            COLUMN_ACADEMIC + " VARCHAR," +
+            COLUMN_PROFESSIONAL + " VARCHAR," +
+            COLUMN_AFFILIATION + " VARCHAR," +
+            COLUMN_LOGO + " BLOB" +
+            ")";
+
+
+    private String CREATE_TABLE_MANAGERS = "CREATE TABLE IF NOT EXISTS " + TABLE_MANAGERS + " ( " +
+            COLUMN_COMPANY_ID + " NUMBER," +
+            COLUMN_ROW_ID + " INTEGER," +
+            COLUMN_PREFIX + " VARCHAR," +
+            COLUMN_LAST_NAME + " VARCHAR," +
+            COLUMN_BIRTHDAY + " VARCHAR," +
+            COLUMN_NATIONALITY + " VARCHAR," +
+            COLUMN_TELEPHONE + " VARCHAR," +
+            COLUMN_EMAIL + " VARCHAR," +
+            COLUMN_ACADEMIC + " VARCHAR," +
+            COLUMN_PROFESSIONAL + " VARCHAR," +
+            COLUMN_AFFILIATION + " VARCHAR," +
+            COLUMN_LOGO + " BLOB" +
+            ")";
+/*
     private String CREATE_TABLE_ACADEMIC_BACKGROUND = "CREATE TABLE IF NOT EXISTS " + TABLE_ACADEMIC_BACKGROUND + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_ROW_ID + " INTEGER," +
@@ -268,6 +315,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_DATE + " VARCHAR," +
             COLUMN_COUNTRY + " NUMBER " +
             ")";
+
 
     private String CREATE_TABLE_AFFILIATION = "CREATE TABLE IF NOT EXISTS " + TABLE_AFFILIATION + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
@@ -297,6 +345,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_LOGO + " NUMBER," +
             COLUMN_LOGO_NOTE + " VARCHAR " +
             ")";
+            */
 
     private String CREATE_TABLE_SERVICES = "CREATE TABLE IF NOT EXISTS " + TABLE_SERVICES + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
@@ -395,12 +444,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_COMPANY_SPECIFIC_INFORMATION);
         db.execSQL(CREATE_TABLE_OFFERS);
         db.execSQL(CREATE_TABLE_NEEDS);
-        db.execSQL(CREATE_TABLE_OWNERS_MANAGERS_SPECIFIC_INFORMATION);
-        db.execSQL(CREATE_TABLE_ACADEMIC_BACKGROUND);
-        db.execSQL(CREATE_TABLE_PROFESSIONAL_BACKGROUND);
-        db.execSQL(CREATE_TABLE_AFFILIATION);
-        db.execSQL(CREATE_TABLE_REFERENCE_SPECIFIC_INFORMATION);
-        db.execSQL(CREATE_TABLE_SUBSIDIARY_SPECIFIC_INFORMATION);
+        db.execSQL(CREATE_TABLE_CONTATC_PERSON);
+        //db.execSQL(CREATE_TABLE_ACADEMIC_BACKGROUND);
+        //db.execSQL(CREATE_TABLE_PROFESSIONAL_BACKGROUND);
+        //db.execSQL(CREATE_TABLE_AFFILIATION);
+        //db.execSQL(CREATE_TABLE_REFERENCE_SPECIFIC_INFORMATION);
+        //db.execSQL(CREATE_TABLE_SUBSIDIARY_SPECIFIC_INFORMATION);
         db.execSQL(CREATE_TABLE_SERVICES);
         db.execSQL(CREATE_TABLE_PRODUCTS);
         //db.execSQL(CREATE_TABLE_PRODUCT_DETAILS);
@@ -428,10 +477,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY_SPECIFIC_INFORMATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEEDS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OWNERS_MANAGERS_SUBSIDIARIES_REFERENCE);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACADEMIC_BACKGROUND);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROFESSIONAL_BACKGROUND);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_AFFILIATION);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACT_PERSON);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACADEMIC_BACKGROUND);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROFESSIONAL_BACKGROUND);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_AFFILIATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_REFERENCE_SPECIFIC_INFORMATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBSIDIARY_SPECIFIC_INFORMATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SERVICES);
@@ -463,7 +512,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         addValue(result, TABLE_COMPANY_SPECIFIC_INFORMATION);
         //addValue(result, TABLE_OFFERS);
         //addValue(result, TABLE_NEEDS);
-        addValue(result, TABLE_OWNERS_MANAGERS_SUBSIDIARIES_REFERENCE);
+        addValue(result, TABLE_CONTACT_PERSON);
         //addValue(result, TABLE_ACADEMIC_BACKGROUND);
         //addValue(result, TABLE_PROFESSIONAL_BACKGROUND);
         //addValue(result, TABLE_AFFILIATION);
@@ -492,10 +541,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_COMPANY_SPECIFIC_INFORMATION, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_OFFERS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_NEEDS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
-            db.delete(TABLE_OWNERS_MANAGERS_SUBSIDIARIES_REFERENCE, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
-            db.delete(TABLE_ACADEMIC_BACKGROUND, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
-            db.delete(TABLE_PROFESSIONAL_BACKGROUND, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
-            db.delete(TABLE_AFFILIATION, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
+            db.delete(TABLE_CONTACT_PERSON, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
+            db.delete(TABLE_CONTACT_PERSON, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
+            db.delete(TABLE_OWNERS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
+            db.delete(TABLE_MANAGERS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_REFERENCE_SPECIFIC_INFORMATION, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_SUBSIDIARY_SPECIFIC_INFORMATION, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_SERVICES, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
