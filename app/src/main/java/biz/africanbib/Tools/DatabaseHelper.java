@@ -32,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 9;
+    public static final int DATABASE_VERSION = 10;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -51,8 +51,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //public static final String TABLE_ACADEMIC_BACKGROUND = "TableAcademicBackground";
     //public static final String TABLE_PROFESSIONAL_BACKGROUND = "TableProfessionalBackground";
     //public static final String TABLE_AFFILIATION = "TableAffiliation";
-    public static final String TABLE_REFERENCE_SPECIFIC_INFORMATION = "TableReferenceSpecificInformation";
-    public static final String TABLE_SUBSIDIARY_SPECIFIC_INFORMATION = "TableSubsidiarySpecificInformation";
+    //public static final String TABLE_REFERENCE_SPECIFIC_INFORMATION = "TableReferenceSpecificInformation";
+    //public static final String TABLE_SUBSIDIARY_SPECIFIC_INFORMATION = "TableSubsidiarySpecificInformation";
     public static final String TABLE_SERVICES = "TableServices";
     public static final String TABLE_PRODUCTS_AND_PRODUCT_DETAILS = "TableProducts";
     public static final String TABLE_COMPANY_INDICATORS = "TableCompanyIndicators";
@@ -272,7 +272,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_ROW_ID + " INTEGER," +
             COLUMN_PREFIX + " VARCHAR," +
             COLUMN_LAST_NAME + " VARCHAR," +
-            COLUMN_FIRST_NAME + " VARCHAR" +
+            COLUMN_FIRST_NAME + " VARCHAR," +
             COLUMN_BIRTHDAY + " VARCHAR," +
             COLUMN_NATIONALITY + " VARCHAR," +
             COLUMN_TELEPHONE + " VARCHAR," +
@@ -289,7 +289,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_ROW_ID + " INTEGER," +
             COLUMN_PREFIX + " VARCHAR," +
             COLUMN_LAST_NAME + " VARCHAR," +
-            COLUMN_FIRST_NAME + " VARCHAR" +
+            COLUMN_FIRST_NAME + " VARCHAR," +
             COLUMN_BIRTHDAY + " VARCHAR," +
             COLUMN_NATIONALITY + " VARCHAR," +
             COLUMN_TELEPHONE + " VARCHAR," +
@@ -309,7 +309,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_DISTRICT + " VARCHAR," +
             COLUMN_COUNTRY + " NUMBER," +
             COLUMN_TELEPHONE + " VARCHAR," +
-            COLUMN_EMAIL + " VARCHAR " +
+            COLUMN_EMAIL + " VARCHAR, " +
             COLUMN_WEBSITE + " VARCHAR " +
             ")";
 /*
@@ -493,8 +493,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACADEMIC_BACKGROUND);
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROFESSIONAL_BACKGROUND);
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_AFFILIATION);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REFERENCE_SPECIFIC_INFORMATION);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBSIDIARY_SPECIFIC_INFORMATION);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_REFERENCE_SPECIFIC_INFORMATION);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBSIDIARY_SPECIFIC_INFORMATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SERVICES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY_INDICATORS);
@@ -525,15 +525,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //addValue(result, TABLE_OFFERS);
         //addValue(result, TABLE_NEEDS);
         addValue(result, TABLE_CONTACT_PERSON);
-        addValue(result, TABLE_REFERENCES);
-        addValue(result, TABLE_OWNERS);
-        addValue(result, TABLE_MANAGERS);
+        //addValue(result, TABLE_REFERENCES);
+        //addValue(result, TABLE_OWNERS);
+        //addValue(result, TABLE_MANAGERS);
         addValue(result, TABLE_SUBSIDIARIES);
         //addValue(result, TABLE_ACADEMIC_BACKGROUND);
         //addValue(result, TABLE_PROFESSIONAL_BACKGROUND);
         //addValue(result, TABLE_AFFILIATION);
-        addValue(result, TABLE_REFERENCE_SPECIFIC_INFORMATION);
-        addValue(result, TABLE_SUBSIDIARY_SPECIFIC_INFORMATION);
+        //addValue(result, TABLE_REFERENCE_SPECIFIC_INFORMATION);
+        //addValue(result, TABLE_SUBSIDIARY_SPECIFIC_INFORMATION);
         //addValue(result, TABLE_SERVICES);
         //addValue(result, TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
         addValue(result, TABLE_COMPANY_INDICATORS);
@@ -561,8 +561,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_CONTACT_PERSON, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_OWNERS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_MANAGERS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
-            db.delete(TABLE_REFERENCE_SPECIFIC_INFORMATION, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
-            db.delete(TABLE_SUBSIDIARY_SPECIFIC_INFORMATION, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
+            //db.delete(TABLE_REFERENCE_SPECIFIC_INFORMATION, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
+            //db.delete(TABLE_SUBSIDIARY_SPECIFIC_INFORMATION, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_SERVICES, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_PRODUCTS_AND_PRODUCT_DETAILS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             //db.delete(TABLE_PRODUCT_DETAILS,COLUMN_COMPANY_ID + " = ?",new String[]{id+""});

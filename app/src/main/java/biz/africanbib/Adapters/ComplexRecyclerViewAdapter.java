@@ -1087,7 +1087,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         @Override
         public void onClick(final View view) {
-
+Log.v("Adapter","Clicked on :"+position);
             final int MyVersion = Build.VERSION.SDK_INT;
             if (MyVersion > Build.VERSION_CODES.LOLLIPOP_MR1) {
                 if (!checkIfAlreadyhavePermission()) {
