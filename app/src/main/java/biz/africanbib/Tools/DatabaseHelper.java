@@ -47,6 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_REFERENCES = "TableReference";
     public static final String TABLE_OWNERS = "TableOwners";
     public static final String TABLE_MANAGERS = "TableManagers";
+    public static final String TABLE_SUBSIDIARIES="Subsidiaries";
     //public static final String TABLE_ACADEMIC_BACKGROUND = "TableAcademicBackground";
     //public static final String TABLE_PROFESSIONAL_BACKGROUND = "TableProfessionalBackground";
     //public static final String TABLE_AFFILIATION = "TableAffiliation";
@@ -271,6 +272,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_ROW_ID + " INTEGER," +
             COLUMN_PREFIX + " VARCHAR," +
             COLUMN_LAST_NAME + " VARCHAR," +
+            COLUMN_FIRST_NAME + " VARCHAR" +
             COLUMN_BIRTHDAY + " VARCHAR," +
             COLUMN_NATIONALITY + " VARCHAR," +
             COLUMN_TELEPHONE + " VARCHAR," +
@@ -287,6 +289,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_ROW_ID + " INTEGER," +
             COLUMN_PREFIX + " VARCHAR," +
             COLUMN_LAST_NAME + " VARCHAR," +
+            COLUMN_FIRST_NAME + " VARCHAR" +
             COLUMN_BIRTHDAY + " VARCHAR," +
             COLUMN_NATIONALITY + " VARCHAR," +
             COLUMN_TELEPHONE + " VARCHAR," +
@@ -295,6 +298,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_PROFESSIONAL + " VARCHAR," +
             COLUMN_AFFILIATION + " VARCHAR," +
             COLUMN_LOGO + " BLOB" +
+            ")";
+
+    private String CREATE_TABLE_SUBSIDIARY = "CREATE TABLE IF NOT EXISTS " + TABLE_SUBSIDIARIES + " ( " +
+            COLUMN_COMPANY_ID + " NUMBER," +
+            COLUMN_SUBSIDIARY_NAME + " VARCHAR," +
+            COLUMN_STREET + " VARCHAR," +
+            COLUMN_CITY + " VARCHAR," +
+            COLUMN_POSTAL_CODE + " VARCHAR," +
+            COLUMN_DISTRICT + " VARCHAR," +
+            COLUMN_COUNTRY + " NUMBER," +
+            COLUMN_TELEPHONE + " VARCHAR," +
+            COLUMN_EMAIL + " VARCHAR " +
+            COLUMN_WEBSITE + " VARCHAR " +
             ")";
 /*
     private String CREATE_TABLE_ACADEMIC_BACKGROUND = "CREATE TABLE IF NOT EXISTS " + TABLE_ACADEMIC_BACKGROUND + " ( " +
@@ -332,20 +348,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_LOGO + " NUMBER," +
             COLUMN_LOGO_NOTE + " VARCHAR " +
             ")";
+*/
 
-    private String CREATE_TABLE_SUBSIDIARY_SPECIFIC_INFORMATION = "CREATE TABLE IF NOT EXISTS " + TABLE_SUBSIDIARY_SPECIFIC_INFORMATION + " ( " +
-            COLUMN_COMPANY_ID + " NUMBER," +
-            COLUMN_SUBSIDIARY_NAME + " VARCHAR," +
-            COLUMN_STREET + " VARCHAR," +
-            COLUMN_POSTAL_CODE + " VARCHAR," +
-            COLUMN_PO_BOX + " VARCHAR," +
-            COLUMN_CITY + " VARCHAR," +
-            COLUMN_DISTRICT + " VARCHAR," +
-            COLUMN_COUNTRY + " NUMBER," +
-            COLUMN_LOGO + " NUMBER," +
-            COLUMN_LOGO_NOTE + " VARCHAR " +
-            ")";
-            */
 
     private String CREATE_TABLE_SERVICES = "CREATE TABLE IF NOT EXISTS " + TABLE_SERVICES + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
@@ -445,6 +449,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_OFFERS);
         db.execSQL(CREATE_TABLE_NEEDS);
         db.execSQL(CREATE_TABLE_CONTATC_PERSON);
+        db.execSQL(CREATE_TABLE_REFERENCES);
+        db.execSQL(CREATE_TABLE_OWNERS);
+        db.execSQL(CREATE_TABLE_MANAGERS);
+        db.execSQL(CREATE_TABLE_SUBSIDIARY);
         //db.execSQL(CREATE_TABLE_ACADEMIC_BACKGROUND);
         //db.execSQL(CREATE_TABLE_PROFESSIONAL_BACKGROUND);
         //db.execSQL(CREATE_TABLE_AFFILIATION);
@@ -478,6 +486,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEEDS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACT_PERSON);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_REFERENCES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OWNERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MANAGERS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBSIDIARIES);
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_ACADEMIC_BACKGROUND);
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROFESSIONAL_BACKGROUND);
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_AFFILIATION);
@@ -513,6 +525,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //addValue(result, TABLE_OFFERS);
         //addValue(result, TABLE_NEEDS);
         addValue(result, TABLE_CONTACT_PERSON);
+        addValue(result, TABLE_REFERENCES);
+        addValue(result, TABLE_OWNERS);
+        addValue(result, TABLE_MANAGERS);
+        addValue(result, TABLE_SUBSIDIARIES);
         //addValue(result, TABLE_ACADEMIC_BACKGROUND);
         //addValue(result, TABLE_PROFESSIONAL_BACKGROUND);
         //addValue(result, TABLE_AFFILIATION);

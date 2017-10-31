@@ -1016,7 +1016,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             for (int i = 0; i < add.getRows(); i++) {
                 Log.v("Adapter", "Current Column = " + tableColumnNames[i]);
-                if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_SECTOR) && !add.getTableName().equals(DatabaseHelper.TABLE_AFFILIATION)) {
+                if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_SECTOR)) {
                     items.add(position, helper.buildMultiSelectDropdown(columnNames[i],
                             add.getTableName(),
                             tableColumnNames[i],
@@ -1298,13 +1298,13 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             return currentRowOffers++;
         } else if (tableName.equals(DatabaseHelper.TABLE_NEEDS)) {
             return currentRowNeeds++;
-        } else if (tableName.equals(DatabaseHelper.TABLE_ACADEMIC_BACKGROUND)) {
+        } /*else if (tableName.equals(DatabaseHelper.TABLE_ACADEMIC_BACKGROUND)) {
             return currentRowAcademicBackground++;
         } else if (tableName.equals(DatabaseHelper.TABLE_PROFESSIONAL_BACKGROUND)) {
             return currentRowProfessionalBackground++;
         } else if (tableName.equals(DatabaseHelper.TABLE_AFFILIATION)) {
             return currentRowAffiliation++;
-        } else if (tableName.equals(DatabaseHelper.TABLE_PRODUCTS_AND_PRODUCT_DETAILS)) {
+        }*/ else if (tableName.equals(DatabaseHelper.TABLE_PRODUCTS_AND_PRODUCT_DETAILS)) {
             return currentRowProducts++;
         } else if (tableName.equals(DatabaseHelper.TABLE_SERVICES)) {
             return currentRowServices++;
@@ -1324,13 +1324,13 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             currentRowOffers = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_NEEDS)) {
             currentRowNeeds = value;
-        } else if (tableName.equals(DatabaseHelper.TABLE_ACADEMIC_BACKGROUND)) {
+        } /*else if (tableName.equals(DatabaseHelper.TABLE_ACADEMIC_BACKGROUND)) {
             currentRowAcademicBackground = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_PROFESSIONAL_BACKGROUND)) {
             currentRowProfessionalBackground = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_AFFILIATION)) {
             currentRowAffiliation = value;
-        } else if (tableName.equals(DatabaseHelper.TABLE_PRODUCTS_AND_PRODUCT_DETAILS)) {
+        }*/ else if (tableName.equals(DatabaseHelper.TABLE_PRODUCTS_AND_PRODUCT_DETAILS)) {
             currentRowProducts = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_SERVICES)) {
             currentRowServices = value;
