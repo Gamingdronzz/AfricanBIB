@@ -264,7 +264,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_EMAIL + " VARCHAR," +
             COLUMN_WEBSITE + " VARCHAR," +
             COLUMN_LOGO + " BLOB," +
-            COLUMN_TYPE_OF_ORGANISATION + " INTEGER" +
+            COLUMN_TYPE_OF_ORGANISATION + " NUMBER" +
             ")";
 
     private String CREATE_TABLE_OWNERS = "CREATE TABLE IF NOT EXISTS " + TABLE_OWNERS + " ( " +
@@ -846,6 +846,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
+    public byte[] getBlobValue(String columnName, String tableName,int rowid) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        byte[] result = null;
+        try {
+            String query = "SELECT " + columnName + "  FROM " + tableName + " WHERE " + COLUMN_COMPANY_ID + " = " + getCurrentCompanyId()+ " AND " + COLUMN_ROW_ID + " = " + rowid;
+            cursor = db.rawQuery(query, null);
+            cursor.moveToFirst();
+            if (cursor.getCount() != 0) {
+                result = cursor.getBlob(0);
+                Log.v(TAG, "Query = " + query +
+                        "\nResult =  " + result);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+            if (db != null) db.close();
+        }
+        return result;
+    }
     public void updateIntValue(String TableName, String ColumnName, int value) {
         SQLiteDatabase db = this.getWritableDatabase();
         Log.v(TAG, "Updating Table = " + TableName);

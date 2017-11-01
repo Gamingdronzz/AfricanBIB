@@ -4,7 +4,6 @@ package biz.africanbib.Adapters;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -13,7 +12,6 @@ import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
@@ -37,14 +35,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.linchaolong.android.imagepicker.ImagePicker;
 import com.linchaolong.android.imagepicker.cropper.CropImage;
 import com.linchaolong.android.imagepicker.cropper.CropImageView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-
 import java.util.List;
 
 import biz.africanbib.Models.Add;
@@ -52,16 +48,14 @@ import biz.africanbib.Models.Divider;
 import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.Heading;
 import biz.africanbib.Models.MultiSelectDropdown;
-
 import biz.africanbib.Models.SimpleDate;
 import biz.africanbib.Models.SimpleEditText;
 import biz.africanbib.Models.SimpleImage;
 import biz.africanbib.Models.SimpleText;
-
-import biz.africanbib.Tools.Helper;
-import biz.africanbib.ViewHolders.MyCustomMultiSelectionSpinner;
 import biz.africanbib.R;
 import biz.africanbib.Tools.DatabaseHelper;
+import biz.africanbib.Tools.Helper;
+import biz.africanbib.ViewHolders.MyCustomMultiSelectionSpinner;
 import biz.africanbib.ViewHolders.ViewHolderHeading;
 
 
@@ -1016,6 +1010,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             for (int i = 0; i < add.getRows(); i++) {
                 Log.v("Adapter", "Current Column = " + tableColumnNames[i]);
+
                 if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_SECTOR)) {
                     items.add(position, helper.buildMultiSelectDropdown(columnNames[i],
                             add.getTableName(),
@@ -1025,13 +1020,25 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             currentRowNo, "sector"
                     ));
                     notifyItemInserted(position);
-
                 } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_INDUSTRY)) {
                     items.add(position, helper.buildDropDown(
                             columnNames[i],
                             helper.getIndustryList(),
                             databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
                             add.getTableName(), tableColumnNames[i], currentRowNo, "industry"));
+                    notifyItemInserted(position);
+                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_TYPE_OF_ORGANISATION)) {
+                    items.add(position, helper.buildDropDown(columnNames[i],
+                            new String[]{"Business Partnership",
+                                    "International NGO",
+                                    "Freelance",
+                                    "Public Institution",
+                                    "Individual Enterprise",
+                                    "Local NGO",
+                                    "Privately Held Company",
+                                    "Publicly Held Institution"},
+                            databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
+                            add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
                     notifyItemInserted(position);
                 } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_DATE)) {
                     items.add(position, helper.buildDate(
@@ -1045,17 +1052,17 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 } else if (columnNames[i].equals("Country")) {
                     items.add(position, helper.buildDropDown(columnNames[i], helper.getCountryNames(), 0, add.getTableName(), tableColumnNames[i], currentRowNo, "country"));
                     notifyItemInserted(position);
-                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_MEDIA)) {
+                }
+               /* else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_MEDIA) || tableColumnNames[i].equals(DatabaseHelper.COLUMN_LOGO)) {
                     Bitmap image = null;
-                    try
-                    {
-                        image = helper.createBitmapFromByteArray(databaseHelper.getBlobValue(tableColumnNames[i], add.getTableName()));
+                    try {
+                    image = helper.createBitmapFromByteArray(databaseHelper.getBlobValue(tableColumnNames[i], add.getTableName(),currentRowNo));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     items.add(position, helper.buildImage(columnNames[i], image, add.getTableName(), tableColumnNames[i], xmlTags[i]));
                     notifyItemInserted(position);
-                } else {
+                }*/  else {
                     items.add(position, helper.buildEditText(columnNames[i], "", add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
                     Log.v("Adapter", "Inserting Edittext " + columnNames[i] + " at " + i);
                     notifyItemInserted(position);
@@ -1087,7 +1094,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         @Override
         public void onClick(final View view) {
-Log.v("Adapter","Clicked on :"+position);
+            Log.v("Adapter", "Clicked on :" + position);
             final int MyVersion = Build.VERSION.SDK_INT;
             if (MyVersion > Build.VERSION_CODES.LOLLIPOP_MR1) {
                 if (!checkIfAlreadyhavePermission()) {
@@ -1095,14 +1102,14 @@ Log.v("Adapter","Clicked on :"+position);
                 } else {
                     showImageChooser(adapter, position);
                 }
-            }
-
+            } else
+                showImageChooser(adapter, position);
         }
 
     }
 
     private boolean checkIfAlreadyhavePermission() {
-        int result = ContextCompat.checkSelfPermission(context.getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int result = ContextCompat.checkSelfPermission(context.getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);
         return result == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -1166,6 +1173,7 @@ Log.v("Adapter","Clicked on :"+position);
 
 
         });
+
     }
 
     private class CustomDateChooser implements View.OnClickListener {

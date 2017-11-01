@@ -6,7 +6,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.util.Xml;
 import android.view.KeyEvent;
@@ -37,9 +36,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import biz.africanbib.Models.Add;
 import biz.africanbib.Models.Divider;
@@ -428,19 +425,22 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     private void addXmlContent(ArrayList<Object> items, XmlSerializer xmlSerializer) throws IOException {
-        for (int i = 0; i < items.size() - 1; i++) {
+        String headTag = null;
+        for (int i = 0; i < items.size()-1; i++) {
 
-            String startTag = null;
             Object item = items.get(i);
-            boolean tagSet = false;
             Log.v(TAG, "i =" + i);
             if (items.get(i) instanceof Heading) {
-
-                startTag = ((Heading) items.get(i)).getXmlTag();
-                Log.v(TAG, "Start Tag = " + startTag + ": i =" + i);
-                if (startTag != null) {
-                    xmlSerializer.startTag(null, startTag);
-                    tagSet = true;
+                headTag = ((Heading) items.get(i)).getXmlTag();
+                Log.v(TAG, "Start Tag = " + headTag + ": i =" + i);
+                if (headTag != null) {
+                    xmlSerializer.startTag(null, headTag);
+                }
+                if(i==items.size()-2){
+                    if (headTag != null) {
+                        Log.v(TAG, "ENDTAG " + headTag);
+                        xmlSerializer.endTag(null, headTag);
+                    }
                 }
             } else {
                 while (!(item instanceof Heading)) {
@@ -532,8 +532,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             xmlSerializer.endTag(null, tag);
                         }
                     }
-
-                    if (i < items.size() - 1) {
+                    if (i < items.size()-1) {
                         i++;
                         item = items.get(i);
                     } else {
@@ -542,10 +541,12 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
                 }
                 i--;
+                if (headTag != null) {
+                    Log.v(TAG, "ENDTAG " + headTag);
+                    xmlSerializer.endTag(null, headTag);
+                }
             }
-            if (tagSet) {
-                xmlSerializer.endTag(null, startTag);
-            }
+
         }
     }
 
@@ -560,9 +561,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
             while ((aDataRow = myReader.readLine()) != null) {
                 aBuffer += aDataRow + "\n";
-                Log.v("XML", "\n" + aDataRow);
+                //Log.v("XML", "\n" + aDataRow);
             }
-            //Log.v(TAG, aBuffer);
+            Log.v(TAG, aBuffer);
             myReader.close();
             fIn.close();
         } catch (FileNotFoundException e) {
@@ -571,7 +572,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             e.printStackTrace();
         }
 
-        VolleyHelper volleyHelper = new VolleyHelper(this, this);
+        /*VolleyHelper volleyHelper = new VolleyHelper(this, this);
 
         Map<String, String> params = new HashMap<>();
         params.put("xml", aBuffer);
@@ -581,7 +582,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         params.put("companylogo", logo);
         params.put("keyvisual", keyvisuallogo);
         volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
-        awesomeInfoDialog.setMessage("Submitting files to server");
+        awesomeInfoDialog.setMessage("Submitting files to server");*/
 
     }
 
@@ -611,22 +612,17 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         JSONObject jsonObject = helper.getJson(str);
 
         try {
-            if (jsonObject.get("result").equals(helper.SUCCESS))
-            {
+            if (jsonObject.get("result").equals(helper.SUCCESS)) {
                 awesomeInfoDialog.setMessage("Succesfully uploaded Business");
-                databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE,DatabaseHelper.COLUMN_STATUS,1);
-            }
-            else
-            {
+                databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
+            } else {
                 awesomeInfoDialog.setMessage("Business Already Uploaded");
-                databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE,DatabaseHelper.COLUMN_STATUS,1);
+                databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
             }
-        }
-        catch (JSONException jse)
-        {
+        } catch (JSONException jse) {
 
         }
-       //awesomeInfoDialog.setMessage(str);
+        //awesomeInfoDialog.setMessage(str);
         awesomeInfoDialog.setCancelable(true);
 
     }

@@ -2,6 +2,7 @@ package biz.africanbib.Tabs;
 
 
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -252,8 +253,7 @@ public class Tab2 extends Fragment {
         columnName = DatabaseHelper.COLUMN_COUNTRY;
         items.add(helper.buildDropDown("Country", helper.getCountryNames(), 0, tableName, columnName, -1, "country"));
 
-
-        items.add(new Heading("REFERENCES", null));
+        items.add(new SimpleText("REFERENCES", "contact"));
         tableName = DatabaseHelper.TABLE_REFERENCES;
         String[] xmltags = new String[]{
                 "organisationtype",
@@ -283,29 +283,29 @@ public class Tab2 extends Fragment {
         if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
             int[] ids = databaseHelper.getrowids(tableName);
             if (ids != null) {
-
                 for (int i = 0; i < ids.length; i++) {
-                    for (int j = titles.length -1; j >=0 ; j--) {
+                    for (int j = titles.length - 1; j >= 0; j--) {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_TYPE_OF_ORGANISATION)) {
-                            items.add(
-                                    helper.buildDropDown(
-                                            titles[j],
-                                            new String[]{"Business Partnership",
-                                                    "International NPO",
-                                                    "Freelance",
-                                                    "Public institution",
-                                                    "Individual Enterprise",
-                                                    "Local NPO",
-                                                    "Privately held company",
-                                                    "Publicly held institution"},
-                                            selectedPosition,
-                                            tableName,
-                                            columnNames[j],
-                                            -1, xmltags[j]));
+                            selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
+                            items.add(helper.buildDropDown(titles[j], new String[]{"Business Partnership",
+                                            "International NGO",
+                                            "Freelance",
+                                            "Public Institution",
+                                            "Individual Enterprise",
+                                            "Local NGO",
+                                            "Privately Held Company",
+                                            "Publicly Held Institution"}, selectedPosition, tableName, columnNames[j],
+                                    ids[i], xmltags[j]));
                         }
-                        if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
-                            items.add(helper.buildImage(titles[j], null, tableName, columnNames[j], xmltags[j]));
-                        } else {
+                       /* if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
+                            Bitmap image = null;
+                            try {
+                                image = helper.createBitmapFromByteArray(databaseHelper.getBlobValue(columnNames[j], tableName,ids[i]));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            items.add(helper.buildImage(titles[j], image, tableName, columnNames[j], xmltags[j]));
+                        }*/ else {
                             items.add(
                                     helper.buildEditText(
                                             titles[j],
@@ -314,8 +314,9 @@ public class Tab2 extends Fragment {
                                             columnNames[j],
                                             ids[i], xmltags[j]));
                         }
+                        items.add(new Divider());
                     }
-                    items.add(new Divider());
+
                 }
                 refrencesRows = ids.length;
             }
@@ -327,7 +328,7 @@ public class Tab2 extends Fragment {
                 columnNames, xmltags));
 
 
-        items.add(new Heading("OWNERS", null));
+        items.add(new SimpleText("OWNERS", "contact"));
         tableName = DatabaseHelper.TABLE_OWNERS;
         xmltags = new String[]{
                 "logo",
@@ -367,44 +368,6 @@ public class Tab2 extends Fragment {
                 DatabaseHelper.COLUMN_FIRST_NAME,
                 DatabaseHelper.COLUMN_LAST_NAME,
                 DatabaseHelper.COLUMN_PREFIX
-        }; xmltags = new String[]{
-                "logo",
-                "affiliation",
-                "professional",
-                "academic",
-                "email",
-                "telephone",
-                "nationality",
-                "birthday",
-                "firstname",
-                "lastname",
-                "prefix"
-        };
-        titles = new String[]{
-                "Logo",
-                "Affiliation",
-                "Professional",
-                "Academic",
-                "E-Mail",
-                "Telephone",
-                "Nationality",
-                "Birthday",
-                "First Name",
-                "Last Name",
-                "Prefix",
-        };
-        columnNames = new String[]{
-                DatabaseHelper.COLUMN_LOGO,
-                DatabaseHelper.COLUMN_AFFILIATION,
-                DatabaseHelper.COLUMN_PROFESSIONAL,
-                DatabaseHelper.COLUMN_ACADEMIC,
-                DatabaseHelper.COLUMN_EMAIL,
-                DatabaseHelper.COLUMN_TELEPHONE,
-                DatabaseHelper.COLUMN_NATIONALITY,
-                DatabaseHelper.COLUMN_BIRTHDAY,
-                DatabaseHelper.COLUMN_FIRST_NAME,
-                DatabaseHelper.COLUMN_LAST_NAME,
-                DatabaseHelper.COLUMN_PREFIX
         };
         if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
             int[] ids = databaseHelper.getrowids(tableName);
@@ -412,9 +375,15 @@ public class Tab2 extends Fragment {
 
                 for (int i = 0; i < ids.length; i++) {
 
-                    for (int j = titles.length-1; j >=0 ; j--) {
+                    for (int j = titles.length - 1; j >= 0; j--) {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
-                            items.add(helper.buildImage(titles[j], null, tableName, columnNames[j], xmltags[j]));
+                            Bitmap image = null;
+                            try {
+                                image = helper.createBitmapFromByteArray(databaseHelper.getBlobValue(columnName, tableName));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            items.add(helper.buildImage(titles[j], image, tableName, columnNames[j], xmltags[j]));
                         } else {
                             items.add(
                                     helper.buildEditText(
@@ -437,7 +406,7 @@ public class Tab2 extends Fragment {
                 columnNames, xmltags));
 
 
-        items.add(new Heading("MANAGERS", null));
+        items.add(new SimpleText("MANAGERS", "contact"));
         tableName = DatabaseHelper.TABLE_MANAGERS;
         xmltags = new String[]{
                 "logo",
@@ -484,9 +453,15 @@ public class Tab2 extends Fragment {
 
                 for (int i = 0; i < ids.length; i++) {
 
-                    for (int j = titles.length-1; j >=0; j--) {
+                    for (int j = titles.length - 1; j >= 0; j--) {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
-                            items.add(helper.buildImage(titles[j], null, tableName, columnNames[j], xmltags[j]));
+                            Bitmap image = null;
+                            try {
+                                image = helper.createBitmapFromByteArray(databaseHelper.getBlobValue(columnName, tableName));
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            items.add(helper.buildImage(titles[j], image, tableName, columnNames[j], xmltags[j]));
                         } else {
                             items.add(
                                     helper.buildEditText(
