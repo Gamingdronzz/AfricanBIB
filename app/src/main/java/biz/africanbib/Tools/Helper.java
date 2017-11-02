@@ -460,11 +460,12 @@ public class Helper {
 
     }
 
-    public SimpleImage buildImage(String title, Bitmap image, String tableName, String columnName, String xmlTag) {
+    public SimpleImage buildImage(String title,  int rowNo ,Bitmap image, String tableName, String columnName, String xmlTag) {
 
         if (MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS) {
             return new SimpleImageBuilder()
                     .setTitle(title)
+                    .setRowNo(rowNo)
                     .setTableName(tableName)
                     .setColumnName(columnName)
                     .setXmlTag(xmlTag)
@@ -472,6 +473,7 @@ public class Helper {
         } else {
             return new SimpleImageBuilder()
                     .setTitle(title)
+                    .setRowNo(rowNo)
                     .setTableName(tableName)
                     .setColumnName(columnName)
                     .setImage(image)

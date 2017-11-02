@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 public class SimpleImageBuilder {
     private String title;
+    private int rowno;
     private Bitmap image;
     private String columnName;
     private String tableName;
@@ -34,7 +35,13 @@ public class SimpleImageBuilder {
         return this;
     }
 
+    public SimpleImageBuilder setRowNo(int rowNo) {
+        this.rowno = rowNo;
+        return this;
+    }
+
+
     public SimpleImage createSimpleImage() {
-        return new SimpleImage(title, image, columnName, tableName,xmlTag);
+        return new SimpleImage(title,rowno, image, columnName, tableName,xmlTag);
     }
 }

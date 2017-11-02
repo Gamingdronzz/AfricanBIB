@@ -9,10 +9,19 @@ import android.graphics.Bitmap;
 public class SimpleImage
 {
     private String title;
+    private int rowno;
     private Bitmap image;
     private String columnName;
     private String tableName;
     private String xmlTag;
+
+    public void setRowno(int rowno) {
+        this.rowno = rowno;
+    }
+    public int getRowno() {
+        return rowno;
+    }
+
 
     public String getXmlTag() {
         return xmlTag;
@@ -54,11 +63,14 @@ public class SimpleImage
         this.image = image;
     }
 
-    public SimpleImage(String title, Bitmap image, String columnName, String tableName,String xmlTag) {
+    public SimpleImage(String title, int rowno,Bitmap image, String columnName, String tableName,String xmlTag) {
         this.title = title;
+        this.rowno=rowno;
         this.image = image;
         this.columnName = columnName;
         this.tableName = tableName;
         this.xmlTag = xmlTag;
     }
+
+
 }

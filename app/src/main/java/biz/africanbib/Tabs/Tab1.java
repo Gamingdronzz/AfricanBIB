@@ -175,9 +175,7 @@ public class Tab1 extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //=  databaseHelper.getIntValue(columnName, tableName);
-        items.add(helper.buildImage(corporateLogo, image, tableName, columnName, "logo"));
-        //items.add(helper.buildDropDown("Corporate Logo", new String[]{"Collected", "Not Collected"}, selectedPosition, tableName, columnName, -1));
+        items.add(helper.buildImage(corporateLogo, -1,image, tableName, columnName, "logo"));
 
         columnName = DatabaseHelper.COLUMN_KEYVISUAL_PHOTO;
         Bitmap keyvisual = null;
@@ -186,7 +184,7 @@ public class Tab1 extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        items.add(helper.buildImage(keyVisual, keyvisual, tableName, columnName, "keyvisual"));
+        items.add(helper.buildImage(keyVisual, -1,keyvisual, tableName, columnName, "keyvisual"));
         //items.add(helper.buildDropDown("Keyvisual (Photo)", new String[]{"Collected", "Not Collected"}, selectedPosition, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_LOGO_NOTE;

@@ -71,19 +71,19 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     FragmentManager fragmentManager;
     DatabaseHelper databaseHelper;
     private int currentRowOffers = 1;
-    private int currentRowAcademicBackground = 1;
-    private int currentRowAffiliation = 1;
+    private int currentRowReferences = 1;
+    private int currentRowOwners = 1;
     private int currentRowAwards = 1;
     private int currentRowIndustry = 1;
     private int currentRowLatestNews = 1;
     private int currentRowNeeds = 1;
-    private int currentRowProfessionalBackground = 1;
+    private int currentRowManagers = 1;
     private int currentRowProducts = 1;
     private int currentRowServices = 1;
 
     Fragment context;
 
-    ImagePicker imagePicker;
+   ImagePicker imagePicker;
 
 
     private final int
@@ -1052,17 +1052,25 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 } else if (columnNames[i].equals("Country")) {
                     items.add(position, helper.buildDropDown(columnNames[i], helper.getCountryNames(), 0, add.getTableName(), tableColumnNames[i], currentRowNo, "country"));
                     notifyItemInserted(position);
-                }
-               /* else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_MEDIA) || tableColumnNames[i].equals(DatabaseHelper.COLUMN_LOGO)) {
+                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_MEDIA)) {
                     Bitmap image = null;
                     try {
-                    image = helper.createBitmapFromByteArray(databaseHelper.getBlobValue(tableColumnNames[i], add.getTableName(),currentRowNo));
+                        image = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(tableColumnNames[i], add.getTableName(), currentRowNo));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    items.add(position, helper.buildImage(columnNames[i], image, add.getTableName(), tableColumnNames[i], xmlTags[i]));
+                    items.add(position, helper.buildImage(columnNames[i], currentRowNo, image, add.getTableName(), tableColumnNames[i], xmlTags[i]));
                     notifyItemInserted(position);
-                }*/  else {
+                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_LOGO)) {
+                    Bitmap image = null;
+                    try {
+                        image = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(tableColumnNames[i], add.getTableName(), currentRowNo));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    items.add(position, helper.buildImage(columnNames[i], currentRowNo, image, add.getTableName(), tableColumnNames[i], xmlTags[i]));
+                    notifyItemInserted(position);
+                } else {
                     items.add(position, helper.buildEditText(columnNames[i], "", add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
                     Log.v("Adapter", "Inserting Edittext " + columnNames[i] + " at " + i);
                     notifyItemInserted(position);
@@ -1127,8 +1135,10 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 Bitmap bitmap = BitmapFactory.decodeFile(imageUri.getPath());
                 simpleImage.setImage(bitmap);
                 adapter.notifyItemChanged(position);
-                databaseHelper.updateBlobValue(simpleImage.getTableName(), simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
-
+                if (simpleImage.getRowno() == -1)
+                    databaseHelper.updateBlobValue(simpleImage.getTableName(), simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
+                else
+                    databaseHelper.updateRowWithBlob(simpleImage.getTableName(), simpleImage.getRowno(), simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
             }
 
             @Override
@@ -1137,7 +1147,11 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 Bitmap bitmap = BitmapFactory.decodeFile(imageUri.getPath());
                 simpleImage.setImage(bitmap);
                 adapter.notifyItemChanged(position);
-                databaseHelper.updateBlobValue(simpleImage.getTableName(), simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
+                //databaseHelper.updateBlobValue(simpleImage.getTableName(), simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
+                if (simpleImage.getRowno() == -1)
+                    databaseHelper.updateBlobValue(simpleImage.getTableName(), simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
+                else
+                    databaseHelper.updateRowWithBlob(simpleImage.getTableName(), simpleImage.getRowno(), simpleImage.getColumnName(), helper.createByteArrayFromBitmap(bitmap));
 
                 //draweeView.setImageURI(imageUri);
                 //draweeView.getHierarchy().setRoundingParams(RoundingParams.asCircle());
@@ -1155,6 +1169,9 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     ratio.set(471, 146);
                 } else if (simpleImage.getTitle().equals("")) {
 
+                } else {
+                    size.set(210, 145);
+                    ratio.set(42, 29);
                 }
                 builder
                         .setMultiTouchEnabled(true)
@@ -1306,13 +1323,13 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             return currentRowOffers++;
         } else if (tableName.equals(DatabaseHelper.TABLE_NEEDS)) {
             return currentRowNeeds++;
-        } /*else if (tableName.equals(DatabaseHelper.TABLE_ACADEMIC_BACKGROUND)) {
-            return currentRowAcademicBackground++;
-        } else if (tableName.equals(DatabaseHelper.TABLE_PROFESSIONAL_BACKGROUND)) {
-            return currentRowProfessionalBackground++;
-        } else if (tableName.equals(DatabaseHelper.TABLE_AFFILIATION)) {
-            return currentRowAffiliation++;
-        }*/ else if (tableName.equals(DatabaseHelper.TABLE_PRODUCTS_AND_PRODUCT_DETAILS)) {
+        } else if (tableName.equals(DatabaseHelper.TABLE_REFERENCES)) {
+            return currentRowReferences++;
+        } else if (tableName.equals(DatabaseHelper.TABLE_MANAGERS)) {
+            return currentRowManagers++;
+        } else if (tableName.equals(DatabaseHelper.TABLE_OWNERS)) {
+            return currentRowOwners++;
+        } else if (tableName.equals(DatabaseHelper.TABLE_PRODUCTS_AND_PRODUCT_DETAILS)) {
             return currentRowProducts++;
         } else if (tableName.equals(DatabaseHelper.TABLE_SERVICES)) {
             return currentRowServices++;

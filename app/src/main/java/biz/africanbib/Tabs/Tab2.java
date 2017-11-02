@@ -297,15 +297,15 @@ public class Tab2 extends Fragment {
                                             "Publicly Held Institution"}, selectedPosition, tableName, columnNames[j],
                                     ids[i], xmltags[j]));
                         }
-                       /* if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
-                            Bitmap image = null;
+                        if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
+                            Bitmap logo = null;
                             try {
-                                image = helper.createBitmapFromByteArray(databaseHelper.getBlobValue(columnNames[j], tableName,ids[i]));
+                                logo = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName, ids[i]));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            items.add(helper.buildImage(titles[j], image, tableName, columnNames[j], xmltags[j]));
-                        }*/ else {
+                            items.add(helper.buildImage(titles[j], ids[i], logo, tableName, columnNames[j], xmltags[j]));
+                        } else {
                             items.add(
                                     helper.buildEditText(
                                             titles[j],
@@ -320,12 +320,8 @@ public class Tab2 extends Fragment {
                 }
                 refrencesRows = ids.length;
             }
-
-
         }
-        items.add(helper.buildAdd(7, titles,
-                tableName,
-                columnNames, xmltags));
+        items.add(helper.buildAdd(7, titles, tableName, columnNames, xmltags));
 
 
         items.add(new SimpleText("OWNERS", "contact"));
@@ -377,13 +373,13 @@ public class Tab2 extends Fragment {
 
                     for (int j = titles.length - 1; j >= 0; j--) {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
-                            Bitmap image = null;
+                            Bitmap ownerLogo = null;
                             try {
-                                image = helper.createBitmapFromByteArray(databaseHelper.getBlobValue(columnName, tableName));
+                                ownerLogo = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName,ids[i]));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            items.add(helper.buildImage(titles[j], image, tableName, columnNames[j], xmltags[j]));
+                            items.add(helper.buildImage(titles[j], ids[i], ownerLogo, tableName, columnNames[j], xmltags[j]));
                         } else {
                             items.add(
                                     helper.buildEditText(
@@ -455,13 +451,13 @@ public class Tab2 extends Fragment {
 
                     for (int j = titles.length - 1; j >= 0; j--) {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
-                            Bitmap image = null;
+                            Bitmap managerLogo = null;
                             try {
-                                image = helper.createBitmapFromByteArray(databaseHelper.getBlobValue(columnName, tableName));
+                                managerLogo = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName,ids[i]));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            items.add(helper.buildImage(titles[j], image, tableName, columnNames[j], xmltags[j]));
+                            items.add(helper.buildImage(titles[j], ids[i], managerLogo, tableName, columnNames[j], xmltags[j]));
                         } else {
                             items.add(
                                     helper.buildEditText(

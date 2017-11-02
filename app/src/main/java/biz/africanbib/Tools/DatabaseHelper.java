@@ -822,6 +822,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.v(TAG, TableName + "." + ColumnName + " updated with value = " + value);
         if (db != null) db.close();
     }
+    public void updateRowWithBlob(String TableName, int rowNo,String ColumnName, byte[] value) {
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(ColumnName, value);
+        long result = db.update(TableName, values, COLUMN_COMPANY_ID + " = ? AND " + COLUMN_ROW_ID + " = ?", new String[]{getCurrentCompanyId() + "", rowNo + ""});
+        Log.v(TAG, TableName + "." + ColumnName + " updated with value = " + value);
+        if (db != null) db.close();
+    }
 
     public byte[] getBlobValue(String columnName, String tableName) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -846,7 +855,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public byte[] getBlobValue(String columnName, String tableName,int rowid) {
+    public byte[] getBlobFromRow(String columnName, String tableName,int rowid) {
         SQLiteDatabase db = this.getReadableDatabase();
         byte[] result = null;
         try {

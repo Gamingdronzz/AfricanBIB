@@ -183,7 +183,7 @@ public class Tab3 extends Fragment {
                     for (int j = titles.length - 1; j >= 0; j--) {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_MEDIA)) {
                             items.add(helper.buildImage(
-                                    titles[j],
+                                    titles[j],ids[i],
                                     helper.createBitmapFromByteArray(databaseHelper.getBlobValue(columnNames[j], tableName)),
                                     tableName,
                                     columnNames[j],
