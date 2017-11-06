@@ -442,7 +442,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         public ViewHolderDivider(View v) {
             super(v);
-            this.divider = (View) v.findViewById(R.id.divider);
+            this.divider =  v.findViewById(R.id.divider);
         }
 
     }
@@ -1123,11 +1123,12 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
 
     private void showImageChooser(final ComplexRecyclerViewAdapter adapter, final int position) {
-        final SimpleImage simpleImage = (SimpleImage) items.get(position);
+       final SimpleImage simpleImage = (SimpleImage) items.get(position);
         Log.v("Adapter", "Clicked at = " + simpleImage.getTitle());
         imagePicker = new ImagePicker();
         imagePicker.setTitle("Select Image");
         imagePicker.setCropImage(true);
+        Log.d("Adapter", context.toString());
         imagePicker.startChooser(context, new ImagePicker.Callback() {
             @Override
             public void onPickImage(Uri imageUri) {
@@ -1161,6 +1162,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             public void cropConfig(CropImage.ActivityBuilder builder) {
                 Point size = new Point();
                 Point ratio = new Point();
+                Log.v("Adapter", "cropConfig");
                 if (simpleImage.getTitle().equals("Corporate Logo")) {
                     size.set(210, 145);
                     ratio.set(42, 29);
@@ -1349,13 +1351,13 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             currentRowOffers = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_NEEDS)) {
             currentRowNeeds = value;
-        } /*else if (tableName.equals(DatabaseHelper.TABLE_ACADEMIC_BACKGROUND)) {
-            currentRowAcademicBackground = value;
-        } else if (tableName.equals(DatabaseHelper.TABLE_PROFESSIONAL_BACKGROUND)) {
-            currentRowProfessionalBackground = value;
-        } else if (tableName.equals(DatabaseHelper.TABLE_AFFILIATION)) {
-            currentRowAffiliation = value;
-        }*/ else if (tableName.equals(DatabaseHelper.TABLE_PRODUCTS_AND_PRODUCT_DETAILS)) {
+        } else if (tableName.equals(DatabaseHelper.TABLE_OWNERS)) {
+            currentRowOwners = value;
+        } else if (tableName.equals(DatabaseHelper.TABLE_MANAGERS)) {
+            currentRowManagers = value;
+        } else if (tableName.equals(DatabaseHelper.TABLE_REFERENCES)) {
+            currentRowReferences = value;
+        } else if (tableName.equals(DatabaseHelper.TABLE_PRODUCTS_AND_PRODUCT_DETAILS)) {
             currentRowProducts = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_SERVICES)) {
             currentRowServices = value;

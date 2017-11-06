@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -41,7 +40,7 @@ public class Tab2 extends Fragment {
     int refrencesRows;
     int managerRows;
 
-    ArrayList<Object> items;
+    ArrayList<Object> items = new ArrayList<>();
 
     public ArrayList<Object> getList() {
         return items;
@@ -76,9 +75,9 @@ public class Tab2 extends Fragment {
         }
         adapter.updateRow(DatabaseHelper.TABLE_NEEDS, needRows);
         adapter.updateRow(DatabaseHelper.TABLE_OFFERS, offerrows);
-        //adapter.updateRow(DatabaseHelper.TABLE_PROFESSIONAL_BACKGROUND, professionalBackgroundRows);
-        //adapter.updateRow(DatabaseHelper.TABLE_ACADEMIC_BACKGROUND, academicBackgroundRows);
-        //adapter.updateRow(DatabaseHelper.TABLE_AFFILIATION, affiliationRows);
+        adapter.updateRow(DatabaseHelper.TABLE_OWNERS, ownerRows);
+        adapter.updateRow(DatabaseHelper.TABLE_REFERENCES, refrencesRows);
+        adapter.updateRow(DatabaseHelper.TABLE_MANAGERS, managerRows);
         //SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
         //snapHelper.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
@@ -89,7 +88,7 @@ public class Tab2 extends Fragment {
     public void onConfigurationChanged(Configuration config) {
         super.onConfigurationChanged(config);
         // Check for the rotation
-        if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+        /*if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
             Toast.makeText(this.getContext(), "LANDSCAPE", Toast.LENGTH_SHORT).show();
             setupGridLayout(true);
 
@@ -102,7 +101,7 @@ public class Tab2 extends Fragment {
             }
 
 
-        }
+        }*/
     }
 
     private void setupGridLayout(boolean multiColumn) {
@@ -134,13 +133,10 @@ public class Tab2 extends Fragment {
 
         String columnName = DatabaseHelper.COLUMN_NEED;
         String tableName = DatabaseHelper.TABLE_NEEDS;
-
         String value;
-
         items.add(new Heading("INVESTMENT OPPURTUNTIES", "investmentOpportunities"));
         items.add(new SimpleText("Needs"));
         Log.v("Tab2", "Business type = " + MainActivity.typeOfBusiness);
-
 
         if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
             int[] ids = databaseHelper.getrowids(tableName);
@@ -252,6 +248,7 @@ public class Tab2 extends Fragment {
         items.add(helper.buildEditText("District / State", value, tableName, columnName, -1, "district"));
         columnName = DatabaseHelper.COLUMN_COUNTRY;
         items.add(helper.buildDropDown("Country", helper.getCountryNames(), 0, tableName, columnName, -1, "country"));
+        items.add(new Divider());
 
         items.add(new SimpleText("REFERENCES", "contact"));
         tableName = DatabaseHelper.TABLE_REFERENCES;
@@ -296,8 +293,7 @@ public class Tab2 extends Fragment {
                                             "Privately Held Company",
                                             "Publicly Held Institution"}, selectedPosition, tableName, columnNames[j],
                                     ids[i], xmltags[j]));
-                        }
-                        if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
+                        } else if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
                             Bitmap logo = null;
                             try {
                                 logo = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName, ids[i]));
@@ -314,9 +310,8 @@ public class Tab2 extends Fragment {
                                             columnNames[j],
                                             ids[i], xmltags[j]));
                         }
-                        items.add(new Divider());
                     }
-
+                    items.add(new Divider());
                 }
                 refrencesRows = ids.length;
             }
@@ -375,7 +370,7 @@ public class Tab2 extends Fragment {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
                             Bitmap ownerLogo = null;
                             try {
-                                ownerLogo = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName,ids[i]));
+                                ownerLogo = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName, ids[i]));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
@@ -453,7 +448,7 @@ public class Tab2 extends Fragment {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
                             Bitmap managerLogo = null;
                             try {
-                                managerLogo = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName,ids[i]));
+                                managerLogo = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName, ids[i]));
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }

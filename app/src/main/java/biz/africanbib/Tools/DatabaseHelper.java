@@ -366,7 +366,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_PRODUCTS + " VARCHAR, " +
             COLUMN_TITLE + " VARCHAR," +
             COLUMN_DESCRIPTION + " VARCHAR," +
-            COLUMN_MEDIA + " VARCHAR" +
+            COLUMN_MEDIA + " BLOB" +
             ")";
 
     //private String CREATE_TABLE_PRODUCT_DETAILS = "CREATE TABLE IF NOT EXISTS " + TABLE_PRODUCT_DETAILS + " ( " +
@@ -453,14 +453,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_OWNERS);
         db.execSQL(CREATE_TABLE_MANAGERS);
         db.execSQL(CREATE_TABLE_SUBSIDIARY);
-        //db.execSQL(CREATE_TABLE_ACADEMIC_BACKGROUND);
-        //db.execSQL(CREATE_TABLE_PROFESSIONAL_BACKGROUND);
-        //db.execSQL(CREATE_TABLE_AFFILIATION);
-        //db.execSQL(CREATE_TABLE_REFERENCE_SPECIFIC_INFORMATION);
-        //db.execSQL(CREATE_TABLE_SUBSIDIARY_SPECIFIC_INFORMATION);
         db.execSQL(CREATE_TABLE_SERVICES);
         db.execSQL(CREATE_TABLE_PRODUCTS);
-        //db.execSQL(CREATE_TABLE_PRODUCT_DETAILS);
         db.execSQL(CREATE_TABLE_COMPANY_INDICATORS);
         db.execSQL(CREATE_TABLE_AWARDS);
         db.execSQL(CREATE_TABLE_LATEST_NEWS);
@@ -522,12 +516,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         addValue(result, TABLE_COMPANY_POSTAL_ADDRESS);
         addValue(result, TABLE_COMPANY_PHYSICAL_ADDRESS);
         addValue(result, TABLE_COMPANY_SPECIFIC_INFORMATION);
-        //addValue(result, TABLE_OFFERS);
-        //addValue(result, TABLE_NEEDS);
+        addValue(result, TABLE_OFFERS);
+        addValue(result, TABLE_NEEDS);
         addValue(result, TABLE_CONTACT_PERSON);
-        //addValue(result, TABLE_REFERENCES);
-        //addValue(result, TABLE_OWNERS);
-        //addValue(result, TABLE_MANAGERS);
+        addValue(result, TABLE_REFERENCES);
+        addValue(result, TABLE_OWNERS);
+        addValue(result, TABLE_MANAGERS);
         addValue(result, TABLE_SUBSIDIARIES);
         //addValue(result, TABLE_ACADEMIC_BACKGROUND);
         //addValue(result, TABLE_PROFESSIONAL_BACKGROUND);
@@ -535,10 +529,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //addValue(result, TABLE_REFERENCE_SPECIFIC_INFORMATION);
         //addValue(result, TABLE_SUBSIDIARY_SPECIFIC_INFORMATION);
         //addValue(result, TABLE_SERVICES);
-        //addValue(result, TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
+        addValue(result, TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
         addValue(result, TABLE_COMPANY_INDICATORS);
-        //addValue(result, TABLE_AWARDS);
-        //addValue(result, TABLE_LATEST_NEWS);
+        addValue(result, TABLE_AWARDS);
+        addValue(result, TABLE_LATEST_NEWS);
         addValue(result, TABLE_BUSINESS_CORRESPONDING_LANGUAGES);
         //addValue(result, TABLE_SECTORS);
         addValue(result, TABLE_SOURCE_OF_DATA);
@@ -558,7 +552,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_OFFERS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_NEEDS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_CONTACT_PERSON, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
-            db.delete(TABLE_CONTACT_PERSON, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
+            db.delete(TABLE_REFERENCES, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_OWNERS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_MANAGERS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             //db.delete(TABLE_REFERENCE_SPECIFIC_INFORMATION, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
@@ -827,9 +821,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(ColumnName, value);
-        long result = db.update(TableName, values, COLUMN_COMPANY_ID + " = ? AND " + COLUMN_ROW_ID + " = ?", new String[]{getCurrentCompanyId() + "", rowNo + ""});
-        Log.v(TAG, TableName + "." + ColumnName + " updated with value = " + value);
-        if (db != null) db.close();
+        db.update(TableName, values, COLUMN_COMPANY_ID + " = ? AND " + COLUMN_ROW_ID + " = ?", new String[]{getCurrentCompanyId() + "", rowNo + ""});
+        db.close();
     }
 
     public byte[] getBlobValue(String columnName, String tableName) {
@@ -841,8 +834,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
             if (cursor.getCount() != 0) {
                 result = cursor.getBlob(0);
-                Log.v(TAG, "Query = " + query +
-                        "\nResult =  " + result);
             } else {
                 return null;
             }
@@ -864,8 +855,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
             if (cursor.getCount() != 0) {
                 result = cursor.getBlob(0);
-                Log.v(TAG, "Query = " + query +
-                        "\nResult =  " + result);
             } else {
                 return null;
             }
