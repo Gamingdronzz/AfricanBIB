@@ -34,6 +34,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.linchaolong.android.imagepicker.ImagePicker;
 import com.linchaolong.android.imagepicker.cropper.CropImage;
@@ -1117,7 +1118,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     private boolean checkIfAlreadyhavePermission() {
-        int result = ContextCompat.checkSelfPermission(context.getActivity(), Manifest.permission.READ_EXTERNAL_STORAGE);
+        int result = ContextCompat.checkSelfPermission(context.getContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
         return result == PackageManager.PERMISSION_GRANTED;
     }
 
@@ -1160,6 +1161,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             @Override
             public void cropConfig(CropImage.ActivityBuilder builder) {
+                Log.v("Image : ","Image = " + builder.toString());
                 Point size = new Point();
                 Point ratio = new Point();
                 Log.v("Adapter", "cropConfig");
@@ -1169,12 +1171,14 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 } else if (simpleImage.getTitle().equals("Keyvisual (Photo)")) {
                     size.set(942, 292);
                     ratio.set(471, 146);
-                } else if (simpleImage.getTitle().equals("")) {
+                //} else if (simpleImage.getTitle().equals("")) {
 
                 } else {
                     size.set(210, 145);
                     ratio.set(42, 29);
                 }
+
+
                 builder
                         .setMultiTouchEnabled(true)
                         .setGuidelines(CropImageView.Guidelines.OFF)
@@ -1187,7 +1191,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             @Override
             public void onPermissionDenied(int requestCode, String[] permissions,
                                            int[] grantResults) {
-
+                //Toast.makeText("Please give permissions",Toast.LENGTH_SHORT).show();
             }
 
 

@@ -1,6 +1,8 @@
 package biz.africanbib.Tabs;
 
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -763,6 +766,33 @@ public class Tab2 extends Fragment {
             } else if (items[i] instanceof DropDown) {
                 DropDown ob = (DropDown) items[i];
                 Log.d("Company", ob.getHeading() + " = " + ob.getSelectedPosition());
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+            Log.d("Tab1", "Request Code  " + requestCode);
+            adapter.onActivityResult(requestCode, resultCode, data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    adapter.onRequestPermissionsResult(requestCode,permissions,grantResults);
+                } else {
+                    Toast.makeText(getActivity(), "Please give your permission.", Toast.LENGTH_LONG).show();
+                }
+                break;
             }
         }
     }
