@@ -1,6 +1,8 @@
 package biz.africanbib.Tabs;
 
 
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -11,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -289,7 +292,6 @@ public class Tab3 extends Fragment {
 
 
         columnName = DatabaseHelper.COLUMN_FREELANCE_ASSOCIATES;
-
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("No. of Freelance Associates", value, tableName, columnName, -1, "numFreelancers"));
 
@@ -315,11 +317,11 @@ public class Tab3 extends Fragment {
 
 
         columnName = DatabaseHelper.COLUMN_LAST_EMPLOYEE_TRAINING;
-
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Last Employee Training", value, tableName, columnName, -1, "lastTraining"));
 
-        items.add(new Heading("AWARDS", null));
+        items.add(new Heading("AWARDS AND NEWS", null));
+        items.add(new SimpleText("AWARDS", "awards"));
         tableName = DatabaseHelper.TABLE_AWARDS;
         xmlTags = new String[]{
                 "awardfile",
@@ -353,7 +355,7 @@ public class Tab3 extends Fragment {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_DATE)) {
                             items.add(helper.buildDate(
                                     titles[j],
-                                    helper.toDays(databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i])),
+                                    databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
                                     tableName,
                                     columnNames[j],
                                     ids[i], xmlTags[j]));
@@ -374,8 +376,9 @@ public class Tab3 extends Fragment {
 
         }
         items.add(helper.buildAdd(6, titles, tableName, columnNames, xmlTags));
+        items.add(new Divider());
 
-        items.add(new Heading("LATEST NEWS", "news"));
+        items.add(new SimpleText("LATEST NEWS", "news"));
         tableName = DatabaseHelper.TABLE_LATEST_NEWS;
         titles = new String[]{
                 "Description",
@@ -399,7 +402,7 @@ public class Tab3 extends Fragment {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_DATE)) {
                             items.add(helper.buildDate(
                                     titles[j],
-                                    helper.toDays(databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i])),
+                                    databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
                                     tableName,
                                     columnNames[j],
                                     ids[i], xmlTags[j]));
@@ -435,6 +438,32 @@ public class Tab3 extends Fragment {
             } else if (items[i] instanceof DropDown) {
                 DropDown ob = (DropDown) items[i];
                 Log.d("Company", ob.getHeading() + " = " + ob.getSelectedPosition());
+            }
+        }
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+            Log.d("Tab3", "Request Code  " + requestCode);
+            adapter.onActivityResult(requestCode, resultCode, data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    adapter.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                } else {
+                    Toast.makeText(getActivity(), "Please give your permission.", Toast.LENGTH_LONG).show();
+                }
+                break;
             }
         }
     }

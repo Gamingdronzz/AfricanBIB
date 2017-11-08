@@ -185,7 +185,7 @@ public class Tab2 extends Fragment {
         items.add(helper.buildAdd(1, new String[]{"Offer"}, DatabaseHelper.TABLE_OFFERS, new String[]{DatabaseHelper.COLUMN_OFFER}, new String[]{"offer"}));
 
 
-        items.add(new Heading("CONTACT PERSON", null));
+        items.add(new Heading("CONTACT PERSON", "contact"));
         tableName = DatabaseHelper.TABLE_CONTACT_PERSON;
         columnName = DatabaseHelper.COLUMN_FIRST_NAME;
         value = databaseHelper.getStringValue(columnName, tableName);
@@ -253,7 +253,7 @@ public class Tab2 extends Fragment {
         items.add(helper.buildDropDown("Country", helper.getCountryNames(), 0, tableName, columnName, -1, "country"));
         items.add(new Divider());
 
-        items.add(new SimpleText("REFERENCES", "contact"));
+        items.add(new SimpleText("REFERENCES", "person"));
         tableName = DatabaseHelper.TABLE_REFERENCES;
         String[] xmltags = new String[]{
                 "organisationtype",
@@ -322,7 +322,7 @@ public class Tab2 extends Fragment {
         items.add(helper.buildAdd(7, titles, tableName, columnNames, xmltags));
 
 
-        items.add(new SimpleText("OWNERS", "contact"));
+        items.add(new SimpleText("OWNERS", "person"));
         tableName = DatabaseHelper.TABLE_OWNERS;
         xmltags = new String[]{
                 "logo",
@@ -400,7 +400,7 @@ public class Tab2 extends Fragment {
                 columnNames, xmltags));
 
 
-        items.add(new SimpleText("MANAGERS", "contact"));
+        items.add(new SimpleText("MANAGERS", "person"));
         tableName = DatabaseHelper.TABLE_MANAGERS;
         xmltags = new String[]{
                 "logo",
@@ -774,7 +774,7 @@ public class Tab2 extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         try {
             super.onActivityResult(requestCode, resultCode, data);
-            Log.d("Tab1", "Request Code  " + requestCode);
+            Log.d("Tab2", "Request Code  " + requestCode);
             adapter.onActivityResult(requestCode, resultCode, data);
         } catch (Exception e) {
             e.printStackTrace();

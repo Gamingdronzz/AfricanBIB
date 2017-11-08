@@ -34,7 +34,6 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.linchaolong.android.imagepicker.ImagePicker;
 import com.linchaolong.android.imagepicker.cropper.CropImage;
@@ -1244,7 +1243,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         public void onDateSet(DatePicker view, int year, int month, int day) {
             SimpleDate simpleDate = (SimpleDate) adapter.items.get(position);
             month = month + 1;
-            String stringOfDate = day + " - " + month + " - " + year;
+            String stringOfDate = day + "/" + month + "/" + year;
 
             simpleDate.setValue(stringOfDate);
             adapter.notifyItemChanged(position);

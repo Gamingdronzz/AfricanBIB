@@ -6,6 +6,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.util.Xml;
 import android.view.KeyEvent;
@@ -36,13 +37,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import biz.africanbib.Models.Add;
 import biz.africanbib.Models.Divider;
 import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.Heading;
 import biz.africanbib.Models.MultiSelectDropdown;
+import biz.africanbib.Models.SimpleDate;
 import biz.africanbib.Models.SimpleEditText;
 import biz.africanbib.Models.SimpleImage;
 import biz.africanbib.Models.SimpleText;
@@ -293,16 +297,14 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         //Creating our pager blogAdapter
         adapter = new ViewPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
-
-        Tab1 tab1 = (Tab1) adapter.getItem(0);
         //Adding blogAdapter to pager
         viewPager.setAdapter(adapter);
 
         //Adding onTabSelectedListener to swipe views
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-
         tabLayout.addOnTabSelectedListener(this);
         viewPager.setOffscreenPageLimit(5);
+        viewPager.setCurrentItem(0);
         viewPager.getAdapter().notifyDataSetChanged();
 
     }
@@ -427,7 +429,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     private void addXmlContent(ArrayList<Object> items, XmlSerializer xmlSerializer) throws IOException {
         String headTag = null;
-        for (int i = 0; i < items.size()-1; i++) {
+        for (int i = 0; i < items.size() - 1; i++) {
 
             Object item = items.get(i);
             Log.v(TAG, "i =" + i);
@@ -437,16 +439,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 if (headTag != null) {
                     xmlSerializer.startTag(null, headTag);
                 }
-                if(i==items.size()-2){
-                    if (headTag != null) {
-                        Log.v(TAG, "ENDTAG " + headTag);
-                        xmlSerializer.endTag(null, headTag);
-                    }
-                }
             } else {
                 while (!(item instanceof Heading)) {
 
-                    //Log.v(TAG, "Inside heading while :  i = " + i);
                     if (item instanceof SimpleEditText) {
                         SimpleEditText simpleEditText = (SimpleEditText) item;
                         Log.v(TAG, "Found " + simpleEditText.getTitle() + " with value = " + simpleEditText.getValue() + " where i = " + i);
@@ -479,6 +474,19 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
 
                     }
+                    if (item instanceof SimpleDate) {
+                        SimpleDate date = (SimpleDate) item;
+                        Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
+                        xmlSerializer.startTag(null, date.getXmlTag());
+                        if (date.getValue() != null) {
+                            xmlSerializer.text(helper.toDays(date.getValue()));
+                        } else {
+                            xmlSerializer.text("null");
+                        }
+                        xmlSerializer.endTag(null, date.getXmlTag());
+                    }
+                    if (item instanceof SimpleImage) {
+                    }
                     if (item instanceof SimpleText) {
                         SimpleText simpleText = (SimpleText) item;
                         Log.v(TAG, "Found " + simpleText.getTitle() + " where i = " + i);
@@ -503,7 +511,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                     if (item instanceof SimpleEditText) {
                                         SimpleEditText simpleEditText = (SimpleEditText) item;
                                         xmlSerializer.startTag(null, simpleEditText.getXmlTag());
-                                        xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
+                                        if (simpleEditText.getValue() != null) {
+                                            xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
+                                        } else {
+                                            xmlSerializer.text("null");
+                                        }
                                         xmlSerializer.endTag(null, simpleEditText.getXmlTag());
                                     }
 
@@ -522,7 +534,19 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                             xmlSerializer.text(helper.getStringFromSelectedIndex(multiSelectDropdown.getItems(), index));
                                             xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
                                         }
-
+                                    }
+                                    if (item instanceof SimpleDate) {
+                                        SimpleDate date = (SimpleDate) item;
+                                        Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
+                                        xmlSerializer.startTag(null, date.getXmlTag());
+                                        if (date.getValue() != null) {
+                                            xmlSerializer.text(helper.toDays(date.getValue()));
+                                        } else {
+                                            xmlSerializer.text("null");
+                                        }
+                                        xmlSerializer.endTag(null, date.getXmlTag());
+                                    }
+                                    if (item instanceof SimpleImage) {
                                     }
                                 }
                                 i++;
@@ -533,7 +557,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             xmlSerializer.endTag(null, tag);
                         }
                     }
-                    if (i < items.size()-1) {
+                    if (i < items.size() - 1) {
                         i++;
                         item = items.get(i);
                     } else {
@@ -573,7 +597,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             e.printStackTrace();
         }
 
-        /*VolleyHelper volleyHelper = new VolleyHelper(this, this);
+        VolleyHelper volleyHelper = new VolleyHelper(this, this);
 
         Map<String, String> params = new HashMap<>();
         params.put("xml", aBuffer);
@@ -583,7 +607,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         params.put("companylogo", logo);
         params.put("keyvisual", keyvisuallogo);
         volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
-        awesomeInfoDialog.setMessage("Submitting files to server");*/
+        awesomeInfoDialog.setMessage("Submitting files to server");
 
     }
 

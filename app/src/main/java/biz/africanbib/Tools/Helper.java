@@ -460,7 +460,7 @@ public class Helper {
 
     }
 
-    public SimpleImage buildImage(String title,  int rowNo ,Bitmap image, String tableName, String columnName, String xmlTag) {
+    public SimpleImage buildImage(String title, int rowNo, Bitmap image, String tableName, String columnName, String xmlTag) {
 
         if (MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS) {
             return new SimpleImageBuilder()
@@ -871,7 +871,7 @@ public class Helper {
         Date d = null;
         if (date != null) {
             try {
-                d = new SimpleDateFormat("DD/MM/YYYY").parse(date);
+                d = new SimpleDateFormat("DD/MM/yyyy").parse(date);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

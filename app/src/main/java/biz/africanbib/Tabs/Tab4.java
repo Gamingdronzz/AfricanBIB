@@ -255,8 +255,7 @@ public class Tab4 extends Fragment {
             items.add(helper.buildEditText("Place of Collection (Specify)", value, tableName, columnName, -1,"collectedBy"));
         }
         columnName = DatabaseHelper.COLUMN_DATE;
-        value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildDate("Date/Time", helper.toDays(value), tableName, columnName, -1,"date"));
+        items.add(helper.buildDate("Date/Time", databaseHelper.getStringValue(columnName, tableName), tableName, columnName, -1,"date"));
         columnName = DatabaseHelper.COLUMN_LOCATION;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Name of Location / Event", value, tableName, columnName, -1,"location"));
