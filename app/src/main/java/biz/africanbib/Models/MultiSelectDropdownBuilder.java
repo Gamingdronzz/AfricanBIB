@@ -8,6 +8,7 @@ import java.util.List;
 public class MultiSelectDropdownBuilder {
     private String title;
     private String[] items;
+    private int[] itemUid;
     private List<Integer> selectedIndices = new ArrayList<>();
     private String columnName;
     private String tableName;
@@ -21,6 +22,11 @@ public class MultiSelectDropdownBuilder {
 
     public MultiSelectDropdownBuilder setItems(String[] items) {
         this.items = items;
+        return this;
+    }
+
+    public MultiSelectDropdownBuilder setItemUid(int[] itemUid) {
+        this.itemUid = itemUid;
         return this;
     }
 
@@ -58,6 +64,6 @@ public class MultiSelectDropdownBuilder {
         {
             Log.v("Multi","Selected indices in builder is not null");
         }
-        return new MultiSelectDropdown(title, items, selectedIndices, columnName, tableName, rowno,xmlTag);
+        return new MultiSelectDropdown(title, items, itemUid,selectedIndices, columnName, tableName, rowno,xmlTag);
     }
 }

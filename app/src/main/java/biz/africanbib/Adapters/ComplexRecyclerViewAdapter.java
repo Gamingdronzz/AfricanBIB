@@ -1015,7 +1015,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     items.add(position, helper.buildMultiSelectDropdown(columnNames[i],
                             add.getTableName(),
                             tableColumnNames[i],
-                            helper.manageMultiSelectList(0),
+                            helper.manageMultiSelectList(0),helper.manageMultiSelectList2(0),
                             null,
                             currentRowNo, "sector"
                     ));

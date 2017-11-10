@@ -179,7 +179,8 @@ public class Tab4 extends Fragment {
                         "Chichewa",
                         "Tigrinya",
                         "Xhosa"
-                }, selectionLanguages, -1,"businessLanguage"));
+                },
+                new int[]{},selectionLanguages, -1,"businessLanguage"));
 
 
         items.add(new SimpleText("Industries"));
@@ -221,6 +222,7 @@ public class Tab4 extends Fragment {
                             tableName,
                             columnNames[0],
                             helper.manageMultiSelectList(selectedIndex),
+                            helper.manageMultiSelectList2(selectedIndex),
                             selectedIndices,
                             ids[i],"sector"
                     ));

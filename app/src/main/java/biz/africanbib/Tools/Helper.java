@@ -424,7 +424,7 @@ public class Helper {
                 .createAdd();
     }
 
-    public MultiSelectDropdown buildMultiSelectDropdown(String title, String tableName, String columnName, String[] items, List<Integer> selectedIndices, int rowno, String xmlTag) {
+    public MultiSelectDropdown buildMultiSelectDropdown(String title, String tableName, String columnName, String[] items, int[] uids, List<Integer> selectedIndices, int rowno, String xmlTag) {
         //Log.v("Helper","Selected Indices for " + title + " = " + selectedIndices.toString());
         return new MultiSelectDropdownBuilder()
                 .setRowno(rowno)
@@ -432,6 +432,7 @@ public class Helper {
                 .setTableName(tableName)
                 .setColumnName(columnName)
                 .setItems(items)
+                .setItemUid(uids)
                 .setSelectedIndices(selectedIndices)
                 .setXmlTag(xmlTag)
                 .createMultiSelectDropdown();
@@ -549,7 +550,7 @@ public class Helper {
             case 0:
                 result = new String[]{
                         "Horticulture & Forestry",
-                        "Cereals & Grains	",
+                        "Cereals & Grains",
                         "Fruits & Vegetables",
                         "Animal Production",
                         "Plants & Fertilizers",
@@ -836,8 +837,113 @@ public class Helper {
                 break;
         }
         return result;
-        //notifyDataSetChanged();
-        //items.add(position+1,multiSelectDropdown);
+
+    }
+
+
+    public int[] manageMultiSelectList2(int i) {
+        int[] result = null;
+        switch (i) {
+            case 0:
+                result = new int[]{1, 2, 3, 4, 5, 6, 7};
+                break;
+            case 1:
+                result = new int[]{8, 9, 10, 11, 12, 307, 308, 309};
+                break;
+            case 2:
+                result = new int[]{13, 14, 15, 16, 17, 18, 310, 311, 312, 313, 314, 315, 316, 317};
+                break;
+            case 3:
+                result = new int[]{19, 20, 21, 22, 135, 136, 137};
+                break;
+            case 4:
+                result = new int[]{23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36};
+                break;
+            case 5:
+                result = new int[]{37, 38, 39};
+                break;
+            case 6:
+                result = new int[]{40, 41, 42, 43, 44, 45, 46, 47};
+                break;
+            case 7:
+                result = new int[]{48, 49, 50, 51};
+                break;
+            case 8:
+                result = new int[]{52, 53, 54, 55, 56};
+                break;
+            case 9:
+                result = new int[]{57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69};
+                break;
+            case 10:
+                result = new int[]{70, 71, 72, 73, 74, 75, 76};
+                break;
+            case 11:
+                result = new int[]{77, 78, 79};
+                break;
+            case 12:
+                result = new int[]{80, 81, 82, 83, 84};
+                break;
+            case 13:
+                result = new int[]{85, 86, 87};
+                break;
+            case 14:
+                result = new int[]{88, 89, 90};
+                break;
+            case 15:
+                result = new int[]{91, 92, 93, 94};
+                break;
+            case 16:
+                result = new int[]{95, 96, 97, 98};
+                break;
+            case 17:
+                result = new int[]{99, 100, 101, 102, 103, 104, 105};
+                break;
+            case 18:
+                result = new int[]{106, 107, 108};
+                break;
+            case 19:
+                result = new int[]{109, 110, 111};
+                break;
+            case 20:
+                result = new int[]{112, 113, 114, 115};
+                break;
+            case 21:
+                result = new int[]{116, 117, 118, 235, 236};
+                break;
+            case 22:
+                result = new int[]{119, 120, 121, 122, 123, 124};
+                break;
+            case 23:
+                result = new int[]{125, 126, 127, 128, 129, 130};
+                break;
+            case 24:
+                result = new int[]{131, 132, 133, 134};
+                break;
+            case 25:
+                result = new int[]{254, 255, 256, 257};
+                break;
+            case 26:
+                result = new int[]{258, 259, 260, 261, 262, 263, 264, 265, 266};
+                break;
+            case 27:
+                result = new int[]{267,
+                        268,
+                        269,
+                        270,
+                        271,
+                        272,
+                };
+                break;
+            case 28:
+                result = new int[]{273,
+                        274,
+                        275,
+                        276,
+                        277,
+                };
+                break;
+        }
+        return result;
     }
 
     public byte[] createByteArrayFromBitmap(Bitmap bitmap) {
@@ -862,6 +968,9 @@ public class Helper {
         return items[index];
     }
 
+    public int getIdFromSelectedIndex(int[] ids, int index) {
+        return ids[index];
+    }
 
     public static String forReplacementString(String aInput) {
         return Matcher.quoteReplacement(aInput);

@@ -6,7 +6,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.util.Log;
 import android.util.Xml;
 import android.view.KeyEvent;
@@ -37,9 +36,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import biz.africanbib.Models.Add;
 import biz.africanbib.Models.Divider;
@@ -531,7 +528,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                         for (int index :
                                                 indices) {
                                             xmlSerializer.startTag(null, multiSelectDropdown.getXmlTag());
-                                            xmlSerializer.text(helper.getStringFromSelectedIndex(multiSelectDropdown.getItems(), index));
+                                            xmlSerializer.text(helper.getStringFromSelectedIndex(multiSelectDropdown.getItems(), index)+","+helper.getIdFromSelectedIndex(multiSelectDropdown.getItemUid(),index));
                                             xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
                                         }
                                     }
@@ -597,7 +594,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             e.printStackTrace();
         }
 
-        VolleyHelper volleyHelper = new VolleyHelper(this, this);
+       /* VolleyHelper volleyHelper = new VolleyHelper(this, this);
 
         Map<String, String> params = new HashMap<>();
         params.put("xml", aBuffer);
@@ -607,7 +604,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         params.put("companylogo", logo);
         params.put("keyvisual", keyvisuallogo);
         volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
-        awesomeInfoDialog.setMessage("Submitting files to server");
+        awesomeInfoDialog.setMessage("Submitting files to server");*/
 
     }
 
