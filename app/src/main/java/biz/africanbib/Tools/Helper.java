@@ -10,8 +10,10 @@ import android.util.Log;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlSerializer;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -550,10 +552,10 @@ public class Helper {
             case 0:
                 result = new String[]{
                         "Horticulture & Forestry",
-                        "Cereals & Grains",
                         "Fruits & Vegetables",
-                        "Animal Production",
                         "Plants & Fertilizers",
+                        "Cereals & Grains",
+                        "Animal Production",
                         "Agricultural Production",
                         "Animals & Livestock"
                 };
@@ -562,77 +564,78 @@ public class Helper {
                 result = new String[]{
                         "Banking Institutions",
                         "Tax Services",
-                        "Non-Compulsory Pensions",
                         "Insurance",
                         "Financial Consultants",
-                        "insurance & Savings",
-                        "Venture capital/Private Equity",
+                        "Venture Capital & Private Equity",
                         "Micro & SME Finance",
-                        "Payment Systems, Securities Clearance & Settlement"
+                        "Payment Systems, securities clearance & settlement",
+                        "Non-compulsory pensions"
                 };
                 break;
             case 2:
                 result = new String[]{
                         "Aerospace",
+                        "Civil Engineering",
+                        "Finishings",
                         "Electrical Engineering",
+                        "Architecture & Planning",
+                        "Construction",
                         "Equipment",
                         "Structural Engineering",
                         "Traffic Engineering",
-                        "Civil Engineering",
-                        "Architecture & Planning",
-                        "Finishings",
-                        "Mechanical / Industrial Engineering",
+                        "Mechanical/Industial Engineering",
                         "Public Works",
                         "Landscape Architecture",
-                        "Construction",
                         "Building Materials",
-                        "Metrology / Control Engineering"
+                        "Metrology/Control Engineering"
                 };
                 break;
             case 3:
                 result = new String[]{
-                        "Design",
+                        "Design Online Media",
+                        "Photography",
                         "Media Production",
-                        "Online Media",
                         "Print Media",
                         "Graphic Design",
-                        "Photography"
+                        "Design",
+                        "Online Media"
                 };
                 break;
             case 4:
                 result = new String[]{
                         "Administrative Services",
+                        "Design & Research Offices",
+                        "Packaging",
                         "Retail Outlets",
+                        "Business Consultancy",
+                        "Environment",
                         "Property",
+                        "Training",
+                        "Cleaning",
+                        "Maintenance & Repairs",
+                        "Professional Bodies",
                         "Translating & Interpreting",
                         "Storage",
-                        "Design/Research Offices",
-                        "Maintenance/Repairs",
-                        "Training",
-                        "Professional Bodies",
-                        "Security Services",
-                        "Packaging",
-                        "Environment",
-                        "Cleaning"
+                        "Security-Services"
                 };
                 break;
             case 5:
                 result = new String[]{
-                        "Chemicals – Basic Products & Derivates",
+                        "Cosmetics",
                         "Pharmaceuticals",
-                        "Cosmetics"
+                        "Chemicals - Basic Products & Derivatives"
                 };
                 break;
             case 6:
                 result = new String[]{
                         "Bread & Cakes",
-                        "Meats",
-                        "Food Processing",
                         "Frozen Foods",
-                        "Drinks",
-                        "Wines",
                         "Dairy Products",
-                        "Tinned Foods"
+                        "Meats",
+                        "Drinks",
+                        "Tinned Foods",
+                        "Food Processing",
+                        "Wines"
                 };
                 break;
             case 7:
@@ -645,45 +648,44 @@ public class Helper {
                 break;
             case 8:
                 result = new String[]{
-                        "Sheet Material & Tubes",
+                        "Sheet Metal & Tubes",
+                        "Steel & Metals",
+                        "Finished Metal Products",
                         "Tools & Hardware",
-                        "Steels & Metals",
-                        "Transformation",
-                        "Steels & Metals",
-                        "Finished Metal Products"
+                        "Steel & Metal Transformation"
                 };
                 break;
             case 9:
                 result = new String[]{
                         "Agriculture",
-                        "Environment",
-                        "Metals",
-                        "Temperature Control",
-                        "Food Industry",
-                        "Paper / Printing",
-                        "Wood",
-                        "Textiles",
                         "Construction",
+                        "Environment",
+                        "Wood",
                         "Handling",
+                        "Metals",
                         "Plastics & Rubber",
+                        "Temperature Control",
                         "Chemicals & Pharmaceutics",
-                        "Maritime"
+                        "Food Industry",
+                        "Maritime",
+                        "Paper / Printing",
+                        "Textiles",
                 };
                 break;
             case 10:
                 result = new String[]{
                         "Aeronautics",
-                        "Materials & Equipment",
-                        "Rental",
                         "Industrial Vehicles",
-                        "Cars",
                         "Boats",
-                        "Cycles"
+                        "Material & Equipment",
+                        "Cars",
+                        "Cycles",
+                        "Rental"
                 };
                 break;
             case 11:
                 result = new String[]{
-                        "Packaging - Plastic",
+                        "Packaging -Plastic",
                         "Plastics",
                         "Rubber"
                 };
@@ -691,10 +693,10 @@ public class Helper {
             case 12:
                 result = new String[]{
                         "Furniture for Business",
-                        "Wood Carving",
                         "Home Furniture",
-                        "Wood – Finished Products",
-                        "Wood"
+                        "Wood",
+                        "Wood Carving",
+                        "Wood - Finished Products"
                 };
                 break;
             case 13:
@@ -729,19 +731,19 @@ public class Helper {
                 break;
             case 17:
                 result = new String[]{
-                        "Motors",
-                        "Lighting",
+                        "Electrical & Electronic Components",
+                        "Hi-Fi & Household Appliances",
                         "Electronic Equipment",
+                        "Motors",
                         "Electricity",
                         "Security",
-                        "Hi-Fi & Household Appliances",
-                        "Electrical / Electronic Components"
+                        "Lighting"
                 };
                 break;
             case 18:
                 result = new String[]{
                         "Finished Products",
-                        "Raw Materials",
+                        "Paper raw Materials",
                         "Packaging Materials – Paper & Cardboard"
                 };
                 break;
@@ -764,26 +766,28 @@ public class Helper {
                 result = new String[]{
                         "Electronic Publishing",
                         "Printing",
-                        "Publishing"
+                        "Publishing",
+                        "Electronic ",
+                        "Publishing Printing"
                 };
                 break;
             case 22:
                 result = new String[]{
-                        "Arts & Entertainment",
+                        "Art & Entertainment",
+                        "Jewelry",
+                        "Co-packing",
                         "Presents",
-                        "Sport - Articles & Equipment",
-                        "Jewellery",
                         "Games & Toys",
-                        "Co-packing"
+                        "Sport - Articles & Equipment"
                 };
                 break;
             case 23:
                 result = new String[]{
                         "Air Transport",
-                        "Specialized Transport",
                         "Sea & River Transport",
-                        "Road Transport",
                         "Rail Transport",
+                        "Specialized Transport",
+                        "Road Transport",
                         "Transport Auxiliaries"
                 };
                 break;
@@ -805,34 +809,34 @@ public class Helper {
                 break;
             case 26:
                 result = new String[]{
-                        "Biotechnologies",
-                        "Fitness & Spa",
-                        "Nursing",
-                        "Health Centres",
-                        "Medical Services",
-                        "Medical Equipment",
-                        "Physical Therapy",
+                        "Biotechnologies ",
+                        "Medical Services ",
                         "Rehabilitation",
-                        "Home Care"
+                        "Fitness & Spa ",
+                        "Medical Equipment ",
+                        "Home Care",
+                        "Health Centers ",
+                        "Physical Therapy ",
+                        "Nursing"
                 };
                 break;
             case 27:
                 result = new String[]{
-                        "Academia",
-                        "Libraries",
-                        "E-learning Centers",
-                        "Day care",
-                        "Adult Literacy / Non-Formal Education",
-                        "Pre - Primary Education"
+                        "Academia ",
+                        "E-learning Centers ",
+                        "Adult literacy/non-formal education",
+                        "Libraries ",
+                        "Daycare ",
+                        "Pre-primary education"
                 };
                 break;
             case 28:
                 result = new String[]{
-                        "Primary Education",
-                        "University",
-                        "Secondary Education",
-                        "Tertiary Education",
-                        "Vocational Training"
+                        "Primary education ",
+                        "University ",
+                        "Secondary education",
+                        "Vocational training ",
+                        "Tertiary education"
                 };
                 break;
         }
@@ -944,6 +948,33 @@ public class Helper {
                 break;
         }
         return result;
+    }
+
+    public void childTags(MultiSelectDropdown multiSelectDropdown, int index, XmlSerializer xmlSerializer) {
+        if (multiSelectDropdown.getColumnName().equals(DatabaseHelper.COLUMN_SECTOR)) {
+            try {
+                xmlSerializer.startTag(null, "uid");
+                xmlSerializer.text(String.valueOf(getIdFromSelectedIndex(multiSelectDropdown.getItemUid(), index)));
+                xmlSerializer.endTag(null, "uid");
+                xmlSerializer.startTag(null, "name");
+                xmlSerializer.text(getStringFromSelectedIndex(multiSelectDropdown.getItems(), index));
+                xmlSerializer.endTag(null, "name");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        if (multiSelectDropdown.getColumnName().equals(DatabaseHelper.COLUMN_LANGUAGE)) {
+            try {
+                xmlSerializer.startTag(null, "uid");
+                xmlSerializer.text(String.valueOf(getIdFromSelectedIndex(multiSelectDropdown.getItemUid(), index)));
+                xmlSerializer.endTag(null, "uid");
+                xmlSerializer.startTag(null, "language");
+                xmlSerializer.text(getStringFromSelectedIndex(multiSelectDropdown.getItems(), index));
+                xmlSerializer.endTag(null, "language");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public byte[] createByteArrayFromBitmap(Bitmap bitmap) {

@@ -466,7 +466,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         for (int index :
                                 indices) {
                             xmlSerializer.startTag(null, multiSelectDropdown.getXmlTag());
-                            xmlSerializer.text(helper.getStringFromSelectedIndex(multiSelectDropdown.getItems(), index));
+                            helper.childTags(multiSelectDropdown,index,xmlSerializer);
                             xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
                         }
 
@@ -528,7 +528,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                         for (int index :
                                                 indices) {
                                             xmlSerializer.startTag(null, multiSelectDropdown.getXmlTag());
-                                            xmlSerializer.text(helper.getStringFromSelectedIndex(multiSelectDropdown.getItems(), index)+","+helper.getIdFromSelectedIndex(multiSelectDropdown.getItemUid(),index));
+                                            helper.childTags(multiSelectDropdown,index,xmlSerializer);
                                             xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
                                         }
                                     }

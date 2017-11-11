@@ -45,16 +45,13 @@ public class Tab4 extends Fragment {
     public String placeOfCollection = "Place of Collection *";
 
 
-    public boolean getAccepted()
-    {
+    public boolean getAccepted() {
         return accept.isChecked();
     }
 
-    public ArrayList<Object> getList()
-    {
+    public ArrayList<Object> getList() {
         return items;
     }
-
 
 
     public ComplexRecyclerViewAdapter getAdapter() {
@@ -78,7 +75,7 @@ public class Tab4 extends Fragment {
     private void init(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_4);
         accept = (CheckBox) view.findViewById(R.id.accept);
-        adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager(),this);
+        adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager(), this);
         if (isTab) {
             setupGridLayout(true);
         } else {
@@ -140,8 +137,7 @@ public class Tab4 extends Fragment {
         databaseHelper.getTableData(DatabaseHelper.TABLE_SECTORS);
 
 
-
-        items.add(new Heading("BUSINESS INFORMATION",null));
+        items.add(new Heading("BUSINESS INFORMATION", null));
 
         String tableName = DatabaseHelper.TABLE_BUSINESS_CORRESPONDING_LANGUAGES;
         String columnName = DatabaseHelper.COLUMN_LANGUAGE;
@@ -157,30 +153,30 @@ public class Tab4 extends Fragment {
                 tableName,
                 columnName,
                 new String[]{
-                        "English",
-                        "Somali",
-                        "Arabic	",
-                        "Ndebele",
-                        "Seychellois",
-                        "Shona",
-                        "French",
-                        "Amharic",
-                        "Portuguese",
-                        "Swazi",
-                        "Kinyarwanda",
-                        "Zulu",
-                        "German",
-                        "Malagasy",
-                        "Swahili",
-                        "Sango",
-                        "Creole",
                         "Afrikaans",
-                        "Spanish",
+                        "Amharic",
+                        "Arabic",
                         "Chichewa",
+                        "English",
+                        "French",
+                        "German",
+                        "Kinyarwanda",
+                        "Malagasy",
+                        "Ndebele",
+                        "Portuguese",
+                        "Sango",
+                        "Seychellois Creole",
+                        "Shona",
+                        "Somali",
+                        "Spanish",
+                        "Swahili",
+                        "Swazi",
                         "Tigrinya",
-                        "Xhosa"
+                        "Xhosa",
+                        "Zulu"
                 },
-                new int[]{},selectionLanguages, -1,"businessLanguage"));
+                new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 10, 12, 13, 14, 15, 16, 17, 18, 19, 21, 20},
+                selectionLanguages, -1, "businessLanguage"));
 
 
         items.add(new SimpleText("Industries"));
@@ -216,7 +212,7 @@ public class Tab4 extends Fragment {
                             selectedIndex,
                             tableName,
                             columnNames[1],
-                            ids[i],"industry"));
+                            ids[i], "industry"));
 
                     items.add(helper.buildMultiSelectDropdown(titles[0],
                             tableName,
@@ -224,7 +220,7 @@ public class Tab4 extends Fragment {
                             helper.manageMultiSelectList(selectedIndex),
                             helper.manageMultiSelectList2(selectedIndex),
                             selectedIndices,
-                            ids[i],"sector"
+                            ids[i], "sector"
                     ));
                 }
                 industryRows = ids.length;
@@ -234,39 +230,39 @@ public class Tab4 extends Fragment {
         }
         items.add(helper.buildAdd(2, titles,
                 tableName,
-                columnNames,new String[]{"sector","industry"}));
+                columnNames, new String[]{"sector", "industry"}));
 
 
-        items.add(new Heading("SOURCE OF DATA",null));
+        items.add(new Heading("SOURCE OF DATA", null));
 
         tableName = DatabaseHelper.TABLE_SOURCE_OF_DATA;
         columnName = DatabaseHelper.COLUMN_NAME_OF_COLLECTOR;
         String value;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText(nameOfCollector, value, tableName, columnName, -1,"approvedBy"));
+        items.add(helper.buildEditText(nameOfCollector, value, tableName, columnName, -1, "approvedBy"));
         columnName = DatabaseHelper.COLUMN_AUTHORIZED_BY;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText(authorizedBy, value, tableName, columnName, -1,"authorizedBy"));
+        items.add(helper.buildEditText(authorizedBy, value, tableName, columnName, -1, "authorizedBy"));
         columnName = DatabaseHelper.COLUMN_PLACE_OF_COLECTION;
         int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
         items.add(helper.buildDropDown(placeOfCollection,
-                new String[]{"Event", "Company", "Others"}, selectedPosition, tableName, columnName, -1,"collectedBy"));
+                new String[]{"Event", "Company", "Others"}, selectedPosition, tableName, columnName, -1, "collectedBy"));
         if (selectedPosition == 2) {
             columnName = DatabaseHelper.COLUMN_OTHERS_SPECIFY;
             value = databaseHelper.getStringValue(columnName, tableName);
-            items.add(helper.buildEditText("Place of Collection (Specify)", value, tableName, columnName, -1,"collectedBy"));
+            items.add(helper.buildEditText("Place of Collection (Specify)", value, tableName, columnName, -1, "collectedBy"));
         }
         columnName = DatabaseHelper.COLUMN_DATE;
-        items.add(helper.buildDate("Date/Time", databaseHelper.getStringValue(columnName, tableName), tableName, columnName, -1,"date"));
+        items.add(helper.buildDate("Date/Time", databaseHelper.getStringValue(columnName, tableName), tableName, columnName, -1, "date"));
         columnName = DatabaseHelper.COLUMN_LOCATION;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Name of Location / Event", value, tableName, columnName, -1,"location"));
+        items.add(helper.buildEditText("Name of Location / Event", value, tableName, columnName, -1, "location"));
         items.add(helper.buildDropDown("Country of Location / Event",
-                helper.getCountryNames(), selectedPosition, tableName, columnName, -1,"countryoflocation"));
+                helper.getCountryNames(), selectedPosition, tableName, columnName, -1, "countryoflocation"));
         items.add(new SimpleText("DISCLAIMER\n\n" +
                 "I certify that the information provided in this form is true, complete and correct to the best of my knowledge and belief. I understand that the information provided in this form is checked and updated by AfricanBIB GmbH on the AfricanBIB website with due diligence on a regular basis. This notwithstanding, data may become subject to changes during the intervening period. Therefore AfricanBIB GmbH does not assume any liability or guarantee for the timeliness, accuracy and completeness of the information provided. This applies also to other websites that may be accessed through hyperlinks. AfricanBIB GmbH assumes no responsibility for the contents of websites that can be accessed through such links.\n" +
                 "Further, AfricanBIB GmbH reserves the right to change or amend the information provided at any time and without prior notice.\n" +
-                "Contents and structure of this form sites are copyright protected. Reproduction of information or data content, in particular the use of text (whether in full or in part), pictures or graphics, requires the prior approval of AfricanBIB GmbH.\n","disclaimer"));
+                "Contents and structure of this form sites are copyright protected. Reproduction of information or data content, in particular the use of text (whether in full or in part), pictures or graphics, requires the prior approval of AfricanBIB GmbH.\n", "disclaimer"));
 
 
         return items;
