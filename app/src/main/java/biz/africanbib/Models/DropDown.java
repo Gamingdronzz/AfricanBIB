@@ -6,10 +6,15 @@ import android.util.Log;
  * Created by Balpreet on 30-Jul-17.
  */
 
-public class DropDown
-{
+public class DropDown {
     private String heading;
     private String xmlTag;
+    private String[] list;
+    private int[] code;
+    private int selectedPosition = 0;
+    private int rowno = -1;
+    private String columnName;
+    private String tableName;
 
     public String getXmlTag() {
         return xmlTag;
@@ -19,12 +24,6 @@ public class DropDown
         this.xmlTag = xmlTag;
     }
 
-    private String[] list;
-    private int selectedPosition = 0;
-
-    private String columnName;
-    private String tableName;
-
     public int getRowno() {
         return rowno;
     }
@@ -33,11 +32,18 @@ public class DropDown
         this.rowno = rowno;
     }
 
-    private int rowno = -1;
+    public int[] getCode() {
+        return code;
+    }
 
-    public DropDown(String heading, String[] list, int selectedPosition, String columnName, String tableName, int rowno,String xmlTag) {
+    public void setCode(int[] code) {
+        this.code = code;
+    }
+
+    public DropDown(String heading, String[] list, int[] code,int selectedPosition, String columnName, String tableName, int rowno, String xmlTag) {
         this.heading = heading;
         this.list = list;
+        this.code = code;
         this.selectedPosition = selectedPosition;
         this.columnName = columnName;
         this.tableName = tableName;
@@ -62,7 +68,6 @@ public class DropDown
     }
 
 
-
     public String[] getList() {
         return list;
     }
@@ -76,7 +81,7 @@ public class DropDown
     }
 
     public void setSelectedPosition(int selectedPosition) {
-        Log.v("DropDown","Selected position = " + selectedPosition);
+        Log.v("DropDown", "Selected position = " + selectedPosition);
         this.selectedPosition = selectedPosition;
     }
 
@@ -88,7 +93,7 @@ public class DropDown
         this.heading = heading;
     }
 
-    public DropDown(String heading,String[] list) {
+    public DropDown(String heading, String[] list) {
 
         this.heading = heading;
         this.list = list;

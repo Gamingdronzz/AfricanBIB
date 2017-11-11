@@ -208,7 +208,7 @@ public class Tab4 extends Fragment {
                     }
                     int selectedIndex = databaseHelper.getIntFromRow(tableName, columnNames[1], ids[i]);
                     items.add(helper.buildDropDown(
-                            titles[1], helper.getIndustryList(),
+                            titles[1], helper.getIndustryList(),helper.getIndustryCodes(),
                             selectedIndex,
                             tableName,
                             columnNames[1],
@@ -246,7 +246,7 @@ public class Tab4 extends Fragment {
         columnName = DatabaseHelper.COLUMN_PLACE_OF_COLECTION;
         int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
         items.add(helper.buildDropDown(placeOfCollection,
-                new String[]{"Event", "Company", "Others"}, selectedPosition, tableName, columnName, -1, "collectedBy"));
+                new String[]{"Event", "Company", "Others"},new int[]{0}, selectedPosition, tableName, columnName, -1, "collectedBy"));
         if (selectedPosition == 2) {
             columnName = DatabaseHelper.COLUMN_OTHERS_SPECIFY;
             value = databaseHelper.getStringValue(columnName, tableName);
@@ -257,8 +257,9 @@ public class Tab4 extends Fragment {
         columnName = DatabaseHelper.COLUMN_LOCATION;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Name of Location / Event", value, tableName, columnName, -1, "location"));
+        columnName=DatabaseHelper.COLUMN_COUNTRY;
         items.add(helper.buildDropDown("Country of Location / Event",
-                helper.getCountryNames(), selectedPosition, tableName, columnName, -1, "countryoflocation"));
+                helper.getCountryNames(),helper.getCountryCodes() ,selectedPosition, tableName, columnName, -1, "countryoflocation"));
         items.add(new SimpleText("DISCLAIMER\n\n" +
                 "I certify that the information provided in this form is true, complete and correct to the best of my knowledge and belief. I understand that the information provided in this form is checked and updated by AfricanBIB GmbH on the AfricanBIB website with due diligence on a regular basis. This notwithstanding, data may become subject to changes during the intervening period. Therefore AfricanBIB GmbH does not assume any liability or guarantee for the timeliness, accuracy and completeness of the information provided. This applies also to other websites that may be accessed through hyperlinks. AfricanBIB GmbH assumes no responsibility for the contents of websites that can be accessed through such links.\n" +
                 "Further, AfricanBIB GmbH reserves the right to change or amend the information provided at any time and without prior notice.\n" +

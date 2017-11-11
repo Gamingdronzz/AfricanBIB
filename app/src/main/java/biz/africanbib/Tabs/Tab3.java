@@ -254,7 +254,7 @@ public class Tab3 extends Fragment {
                 "201 - 500 Employees",
                 "501 - 1,000 Employees",
                 "1,001 - 10,000 Employees",
-                "10,001 or More"}, selectedPosition, tableName, columnName, -1, "companySize"));
+                "10,001 or More"}, new int[]{0, 1,2,3,4,5,6,7},selectedPosition, tableName, columnName, -1, "companySize"));
 
         columnName = DatabaseHelper.COLUMN_FOUNDING_YEAR_OF_COMPANY;
         String value;
@@ -304,7 +304,7 @@ public class Tab3 extends Fragment {
                 "15,000-50,000",
                 "50,000-150,000",
                 "150,000-500,000",
-                "more than 500,000"}, selectedPosition, tableName, columnName, -1, "investmentVolume"));
+                "more than 500,000"},  new int[]{0, 1,2,3,4,5,6},selectedPosition, tableName, columnName, -1, "investmentVolume"));
 
 
         columnName = DatabaseHelper.COLUMN_EMPLOYEE_ADDITIONAL_TRAINING;
@@ -313,7 +313,7 @@ public class Tab3 extends Fragment {
                 "4 Times / Year ",
                 "Twice / year",
                 "Once / Year",
-                "Once Every 2 Years"}, selectedPosition, tableName, columnName, -1, "employeeAdditionalTraining"));
+                "Once Every 2 Years"}, new int[]{0, 1,2,3}, selectedPosition, tableName, columnName, -1, "employeeAdditionalTraining"));
 
 
         columnName = DatabaseHelper.COLUMN_LAST_EMPLOYEE_TRAINING;

@@ -83,7 +83,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     Fragment context;
 
-   ImagePicker imagePicker;
+    ImagePicker imagePicker;
 
 
     private final int
@@ -442,7 +442,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         public ViewHolderDivider(View v) {
             super(v);
-            this.divider =  v.findViewById(R.id.divider);
+            this.divider = v.findViewById(R.id.divider);
         }
 
     }
@@ -1015,7 +1015,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     items.add(position, helper.buildMultiSelectDropdown(columnNames[i],
                             add.getTableName(),
                             tableColumnNames[i],
-                            helper.manageMultiSelectList(0),helper.manageMultiSelectList2(0),
+                            helper.manageMultiSelectList(0), helper.manageMultiSelectList2(0),
                             null,
                             currentRowNo, "sector"
                     ));
@@ -1023,7 +1023,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_INDUSTRY)) {
                     items.add(position, helper.buildDropDown(
                             columnNames[i],
-                            helper.getIndustryList(),
+                            helper.getIndustryList(), helper.getIndustryCodes(),
                             databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
                             add.getTableName(), tableColumnNames[i], currentRowNo, "industry"));
                     notifyItemInserted(position);
@@ -1036,9 +1036,64 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                     "Individual Enterprise",
                                     "Local NGO",
                                     "Privately Held Company",
-                                    "Publicly Held Institution"},
+                                    "Publicly Held Institution"}, new int[]{0, 3, 1, 6, 2, 4, 5, 7},
                             databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
                             add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
+                    notifyItemInserted(position);
+                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_POSITION_IN_COMPANY)) {
+                    items.add(position, helper.buildDropDown(columnNames[i],
+                            new String[]{"Student/Intern",
+                                    "Entry Level",
+                                    "Professional / Experienced",
+                                    "Manager (Manager / Supervisor)",
+                                    "Executive (VP, SVP etc)",
+                                    "Senior Executive (CEO,CFO)"},
+                            new int[]{0}, databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
+                            add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
+                    notifyItemInserted(position);
+                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_COMPANY_SIZE)) {
+                    items.add(position, helper.buildDropDown(columnNames[i],
+                            new String[]{
+                                    "Self Employed",
+                                    "1 - 10 Employees",
+                                    "11 - 50 Employees",
+                                    "51 - 200 Employees",
+                                    "201 - 500 Employees",
+                                    "501 - 1,000 Employees",
+                                    "1,001 - 10,000 Employees",
+                                    "10,001 or More"}, new int[]{0, 1, 2, 3, 4, 5, 6, 7}, databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
+                            add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
+                    notifyItemInserted(position);
+                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_INVESTMENT_VOLUME)) {
+                    items.add(position, helper.buildDropDown(columnNames[i],
+                            new String[]{
+                                    "Less than 5,000",
+                                    "5,000-10,000",
+                                    "10,000-15,000",
+                                    "15,000-50,000",
+                                    "50,000-150,000",
+                                    "150,000-500,000",
+                                    "more than 500,000"}, new int[]{0, 1, 2, 3, 4, 5, 6}, databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
+                            add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
+                    notifyItemInserted(position);
+                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_EMPLOYEE_ADDITIONAL_TRAINING)) {
+                    items.add(position, helper.buildDropDown(columnNames[i],
+                            new String[]{
+                                    "4 Times / Year ",
+                                    "Twice / year",
+                                    "Once / Year",
+                                    "Once Every 2 Years"}, new int[]{0, 1, 2, 3}, databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
+                            add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
+                    notifyItemInserted(position);
+                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_TYPE_OF_ACTIVITIES)) {
+                    items.add(position, helper.buildDropDown(columnNames[i],
+                            new String[]{"Manufacturing", "Service Provider", "Manufacturing + Service Provider"},
+                            new int[]{1, 2, 3},
+                            databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
+                            add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
+                    notifyItemInserted(position);
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_COUNTRY)) {
+                    items.add(position, helper.buildDropDown(columnNames[i], helper.getCountryNames(), helper.getCountryCodes(), 0, add.getTableName(), tableColumnNames[i], currentRowNo, "country"));
                     notifyItemInserted(position);
                 } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_DATE)) {
                     items.add(position, helper.buildDate(
@@ -1048,9 +1103,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             tableColumnNames[i],
                             currentRowNo, "date"));
                     Log.v("Adapter", "Inserting Date " + columnNames[i] + " at " + i);
-                    notifyItemInserted(position);
-                } else if (columnNames[i].equals("Country")) {
-                    items.add(position, helper.buildDropDown(columnNames[i], helper.getCountryNames(), 0, add.getTableName(), tableColumnNames[i], currentRowNo, "country"));
                     notifyItemInserted(position);
                 } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_MEDIA)) {
                     Bitmap image = null;
@@ -1123,7 +1175,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
 
     private void showImageChooser(final ComplexRecyclerViewAdapter adapter, final int position) {
-       final SimpleImage simpleImage = (SimpleImage) items.get(position);
+        final SimpleImage simpleImage = (SimpleImage) items.get(position);
         Log.v("Adapter", "Clicked at = " + simpleImage.getTitle());
         imagePicker = new ImagePicker();
         imagePicker.setTitle("Select Image");
@@ -1160,7 +1212,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             @Override
             public void cropConfig(CropImage.ActivityBuilder builder) {
-                Log.v("Image : ","Image = " + builder.toString());
+                Log.v("Image : ", "Image = " + builder.toString());
                 Point size = new Point();
                 Point ratio = new Point();
                 Log.v("Adapter", "cropConfig");
@@ -1170,7 +1222,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 } else if (simpleImage.getTitle().equals("Keyvisual (Photo)")) {
                     size.set(942, 292);
                     ratio.set(471, 146);
-                //} else if (simpleImage.getTitle().equals("")) {
+                    //} else if (simpleImage.getTitle().equals("")) {
 
                 } else {
                     size.set(210, 145);

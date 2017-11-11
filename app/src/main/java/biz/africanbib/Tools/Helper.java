@@ -159,206 +159,131 @@ public class Helper {
 
     public String[] getCountryNames() {
         String[] names = new String[]{
-                "Afghanistan",
                 "Albania",
                 "Algeria",
-                "Andorra",
                 "Angola",
-                "Antigua and Barbuda",
                 "Argentina",
-                "Armenia",
-                "Australia",
                 "Austria",
-                "Azerbaijan",
-                "Bahamas",
-                "Bahrain",
-                "Bangladesh",
-                "Barbados",
                 "Belarus",
                 "Belgium",
                 "Belize",
                 "Benin",
-                "Bhutan",
                 "Bolivia",
                 "Bosnia and Herzegovina",
                 "Botswana",
-                "Brazil",
-                "Brunei",
+                "Brasil",
                 "Bulgaria",
                 "Burkina Faso",
                 "Burundi",
-                "Cabo Verde",
-                "Cambodia",
+                "Cote d'Ivoire",
                 "Cameroon",
                 "Canada",
-                "Central African Republic (CAR)",
+                "Cape Verde",
+                "Central African Republic",
                 "Chad",
                 "Chile",
-                "China",
                 "Colombia",
                 "Comoros",
-                "Democratic Republic of the Congo",
-                "Republic of the Congo",
+                "Congo, Dem. Rep.",
+                "Congo, Rep.",
                 "Costa Rica",
-                "Cote d'Ivoire",
                 "Croatia",
                 "Cuba",
-                "Cyprus",
                 "Czech Republic",
                 "Denmark",
                 "Djibouti",
-                "Dominica",
                 "Dominican Republic",
-                "Ecuador",
-                "Egypt",
                 "El Salvador",
+                "Ecuador",
                 "Equatorial Guinea",
+                "Eqypt",
                 "Eritrea",
                 "Estonia",
                 "Ethiopia",
-                "Fiji",
                 "Finland",
                 "France",
+                "French Guiana",
                 "Gabon",
                 "Gambia",
-                "Georgia",
                 "Germany",
                 "Ghana",
                 "Greece",
-                "Grenada",
                 "Guatemala",
                 "Guinea",
                 "Guinea-Bissau",
                 "Guyana",
-                "Haiti",
                 "Honduras",
                 "Hungary",
                 "Iceland",
-                "India",
-                "Indonesia",
-                "Iran",
-                "Iraq",
                 "Ireland",
-                "Israel",
                 "Italy",
                 "Jamaica",
-                "Japan",
-                "Jordan",
-                "Kazakhstan",
-                "Kenya",
-                "Kiribati",
-                "Kosovo",
-                "Kuwait",
-                "Kyrgyzstan",
-                "Laos",
                 "Latvia",
-                "Lebanon",
+                "Lithuania",
+                "Kenya",
                 "Lesotho",
                 "Liberia",
                 "Libya",
-                "Liechtenstein",
-                "Lithuania",
-                "Luxembourg",
-                "Macedonia (FYROM)",
                 "Madagascar",
                 "Malawi",
-                "Malaysia",
-                "Maldives",
                 "Mali",
-                "Malta",
-                "Marshall Islands",
                 "Mauritania",
                 "Mauritius",
                 "Mexico",
-                "Micronesia",
                 "Moldova",
-                "Monaco",
-                "Mongolia",
-                "Montenegro",
                 "Morocco",
                 "Mozambique",
-                "Myanmar (Burma)",
                 "Namibia",
-                "Nauru",
-                "Nepal",
                 "Netherlands",
-                "New Zealand",
                 "Nicaragua",
                 "Niger",
                 "Nigeria",
-                "North Korea",
                 "Norway",
-                "Oman",
-                "Pakistan",
-                "Palau",
-                "Palestine",
                 "Panama",
-                "Papua New Guinea",
                 "Paraguay",
                 "Peru",
-                "Philippines",
                 "Poland",
                 "Portugal",
-                "Qatar",
                 "Romania",
                 "Russia",
                 "Rwanda",
-                "Saint Kitts and Nevis",
-                "Saint Lucia",
-                "Saint Vincent and the Grenadines",
-                "Samoa",
-                "San Marino",
                 "Sao Tome and Principe",
-                "Saudi Arabia",
-                "Senegal",
                 "Serbia",
+                "Senegal",
                 "Seychelles",
                 "Sierra Leone",
-                "Singapore",
                 "Slovakia",
                 "Slovenia",
-                "Solomon Islands",
                 "Somalia",
                 "South Africa",
-                "South Korea",
                 "South Sudan",
                 "Spain",
-                "Sri Lanka",
                 "Sudan",
                 "Suriname",
                 "Swaziland",
                 "Sweden",
                 "Switzerland",
-                "Syria",
-                "Taiwan",
-                "Tajikistan",
                 "Tanzania",
-                "Thailand",
-                "Timor-Leste",
                 "Togo",
-                "Tonga",
-                "Trinidad and Tobago",
                 "Tunisia",
                 "Turkey",
-                "Turkmenistan",
-                "Tuvalu",
                 "Uganda",
                 "Ukraine",
-                "United Arab Emirates (UAE)",
-                "United Kingdom (UK)",
-                "United States of America (USA)",
+                "United Kingdom",
+                "USA",
                 "Uruguay",
-                "Uzbekistan",
-                "Vanuatu",
-                "Vatican City (Holy See)",
                 "Venezuela",
-                "Vietnam",
-                "Yemen",
+                "Western Sahara",
                 "Zambia",
                 "Zimbabwe"
         };
         return names;
 
+    }
+
+    public int[] getCountryCodes() {
+        int[] codes = new int[]{92, 2, 3, 87, 93, 94, 91, 125, 4, 138, 95, 5, 139, 96, 6, 7, 13, 1, 89, 8, 9, 10, 140, 141, 55, 11, 12, 127, 97, 128, 98, 99, 14, 129, 130, 142, 16, 15, 17, 100, 18, 101, 88, 143, 19, 20, 56, 21, 102, 131, 22, 23, 144, 132, 103, 104, 105, 106, 133, 107, 108, 24, 25, 26, 27, 28, 29, 30, 31, 52, 134, 109, 32, 33, 34, 110, 135, 35, 36, 111, 136, 145, 146, 112, 113, 114, 115, 37, 38, 116, 39, 40, 41, 117, 118, 42, 43, 53, 119, 44, 147, 45, 120, 121, 46, 47, 48, 122, 49, 123, 124, 90, 148, 149, 54, 50, 51};
+        return codes;
     }
 
     public boolean isTab() {
@@ -392,12 +317,13 @@ public class Helper {
 
     }
 
-    public DropDown buildDropDown(String heading, String[] list, int selectedPosition, String tableName, String columnName, int rowno, String xmlTag) {
+    public DropDown buildDropDown(String heading, String[] list, int[] code, int selectedPosition, String tableName, String columnName, int rowno, String xmlTag) {
         if (MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS) {
 
             return new DropDownBuilder()
                     .setHeading(heading)
                     .setList(list)
+                    .setCodes(code)
                     .setTableName(tableName)
                     .setColumnName(columnName)
                     .setRowno(rowno)
@@ -407,6 +333,7 @@ public class Helper {
             return new DropDownBuilder()
                     .setHeading(heading)
                     .setList(list)
+                    .setCodes(code)
                     .setSelectedPosition(selectedPosition)
                     .setTableName(tableName)
                     .setXmlTag(xmlTag)
@@ -545,6 +472,9 @@ public class Helper {
                 };
     }
 
+    public int[] getIndustryCodes() {
+        return new int[]{278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306};
+    }
 
     public String[] manageMultiSelectList(int i) {
         String[] result = null;
@@ -974,6 +904,16 @@ public class Helper {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public String getSelectedValue(DropDown dropDown, int index) {
+        if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_POSITION_IN_COMPANY)) {
+            return dropDown.getList()[index];
+        } else if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PLACE_OF_COLECTION)) {
+            return " ";
+        } else {
+            return String.valueOf(dropDown.getCode()[index]);
         }
     }
 

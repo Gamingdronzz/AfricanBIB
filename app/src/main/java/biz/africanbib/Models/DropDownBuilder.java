@@ -3,6 +3,7 @@ package biz.africanbib.Models;
 public class DropDownBuilder {
     private String heading;
     private String[] list;
+    private int[] code;
     private int selectedPosition;
     private String columnName;
     private String tableName;
@@ -16,6 +17,10 @@ public class DropDownBuilder {
 
     public DropDownBuilder setList(String[] list) {
         this.list = list;
+        return this;
+    }
+    public DropDownBuilder setCodes(int[] code) {
+        this.code = code;
         return this;
     }
 
@@ -45,6 +50,6 @@ public class DropDownBuilder {
     }
 
     public DropDown createDropDown() {
-        return new DropDown(heading, list, selectedPosition, columnName, tableName, rowno, xmlTag);
+        return new DropDown(heading, list, code,selectedPosition, columnName, tableName, rowno, xmlTag);
     }
 }

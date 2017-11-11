@@ -48,10 +48,11 @@ public class Tab1 extends Fragment {
 
 
     int a = 0;
-    public ArrayList<Object> getList()
-    {
+
+    public ArrayList<Object> getList() {
         return items;
     }
+
     //Overriden method onCreateView
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -169,13 +170,12 @@ public class Tab1 extends Fragment {
 
         columnName = DatabaseHelper.COLUMN_LOGO;
         Bitmap image = null;
-        try
-        {
+        try {
             image = helper.createBitmapFromByteArray(databaseHelper.getBlobValue(columnName, tableName));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        items.add(helper.buildImage(corporateLogo, -1,image, tableName, columnName, "logo"));
+        items.add(helper.buildImage(corporateLogo, -1, image, tableName, columnName, "logo"));
 
         columnName = DatabaseHelper.COLUMN_KEYVISUAL_PHOTO;
         Bitmap keyvisual = null;
@@ -184,7 +184,7 @@ public class Tab1 extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        items.add(helper.buildImage(keyVisual, -1,keyvisual, tableName, columnName, "keyvisual"));
+        items.add(helper.buildImage(keyVisual, -1, keyvisual, tableName, columnName, "keyvisual"));
         //items.add(helper.buildDropDown("Keyvisual (Photo)", new String[]{"Collected", "Not Collected"}, selectedPosition, tableName, columnName, -1));
 
         columnName = DatabaseHelper.COLUMN_LOGO_NOTE;
@@ -246,7 +246,7 @@ public class Tab1 extends Fragment {
 
         columnName = DatabaseHelper.COLUMN_COUNTRY;
         int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(helper.buildDropDown("Country", helper.getCountryNames(), selectedPosition, tableName, columnName, -1, "country"));
+        items.add(helper.buildDropDown("Country", helper.getCountryNames(), helper.getCountryCodes(), selectedPosition, tableName, columnName, -1, "country"));
 
 
         items.add(new Heading("COMPANY PHYSICAL ADRESS", "contact"));
@@ -279,7 +279,7 @@ public class Tab1 extends Fragment {
 
         columnName = DatabaseHelper.COLUMN_COUNTRY;
         selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(helper.buildDropDown(country, helper.getCountryNames(), selectedPosition, tableName, columnName, -1, "country"));
+        items.add(helper.buildDropDown(country, helper.getCountryNames(), helper.getCountryCodes(), selectedPosition, tableName, columnName, -1, "country"));
 
 
         items.add(new Heading("COMPANY SPECIFIC INFORMATION", "about"));
@@ -293,16 +293,17 @@ public class Tab1 extends Fragment {
         columnName = DatabaseHelper.COLUMN_TYPE_OF_ORGANISATION;
         selectedPosition = databaseHelper.getIntValue(columnName, tableName);
         items.add(helper.buildDropDown("Type of Orgainsation", new String[]{"Business Partnership",
-                "International NGO",
-                "Freelance",
-                "Public Institution",
-                "Individual Enterprise",
-                "Local NGO",
-                "Privately Held Company",
-                "Publicly Held Institution"}, selectedPosition, tableName, columnName, -1, "typeOrganization"));
+                        "International NGO",
+                        "Freelance",
+                        "Public Institution",
+                        "Individual Enterprise",
+                        "Local NGO",
+                        "Privately Held Company",
+                        "Publicly Held Institution"},
+                new int[]{0, 3, 1, 6, 2, 4, 5, 7}, selectedPosition, tableName, columnName, -1, "typeOrganization"));
         columnName = DatabaseHelper.COLUMN_TYPE_OF_ACTIVITIES;
         selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(helper.buildDropDown("Type of Activities", new String[]{"Manufacturing", "Service Provider"}, selectedPosition, tableName, columnName, -1, "typeActivities"));
+        items.add(helper.buildDropDown("Type of Activities", new String[]{"Manufacturing", "Service Provider","Manufacturing + Service Provider"}, new int[]{1,2,3},selectedPosition, tableName, columnName, -1, "typeActivities"));
         columnName = DatabaseHelper.COLUMN_ABOUT_US;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("About Us", value, tableName, columnName, -1, "aboutStatement"));
@@ -337,7 +338,7 @@ public class Tab1 extends Fragment {
             case 1: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    adapter.onRequestPermissionsResult(requestCode,permissions,grantResults);
+                    adapter.onRequestPermissionsResult(requestCode, permissions, grantResults);
                 } else {
                     Toast.makeText(getActivity(), "Please give your permission.", Toast.LENGTH_LONG).show();
                 }

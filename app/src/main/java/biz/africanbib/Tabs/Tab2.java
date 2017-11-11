@@ -203,6 +203,7 @@ public class Tab2 extends Fragment {
                                 "Ms.",
                                 "Dr",
                                 "Prof."},
+                        new int[]{0, 1, 2, 3, 4},
                         selectedPosition,
                         tableName,
                         columnName,
@@ -218,6 +219,7 @@ public class Tab2 extends Fragment {
                                 "Manager (Manager / Supervisor)",
                                 "Executive (VP, SVP etc)",
                                 "Senior Executive (CEO,CFO)"},
+                        new int[]{0},
                         selectedPosition,
                         tableName,
                         columnName,
@@ -250,7 +252,7 @@ public class Tab2 extends Fragment {
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("District / State", value, tableName, columnName, -1, "district"));
         columnName = DatabaseHelper.COLUMN_COUNTRY;
-        items.add(helper.buildDropDown("Country", helper.getCountryNames(), 0, tableName, columnName, -1, "country"));
+        items.add(helper.buildDropDown("Country", helper.getCountryNames(),helper.getCountryCodes(), 0, tableName, columnName, -1, "country"));
         items.add(new Divider());
 
         items.add(new SimpleText("REFERENCES", "person"));
@@ -294,7 +296,7 @@ public class Tab2 extends Fragment {
                                             "Individual Enterprise",
                                             "Local NGO",
                                             "Privately Held Company",
-                                            "Publicly Held Institution"}, selectedPosition, tableName, columnNames[j],
+                                            "Publicly Held Institution"},new int[]{0, 3, 1, 6, 2, 4, 5, 7}, selectedPosition, tableName, columnNames[j],
                                     ids[i], xmltags[j]));
                         } else if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
                             Bitmap logo = null;
@@ -496,7 +498,7 @@ public class Tab2 extends Fragment {
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("District / State", value, tableName, columnName, -1, "district"));
         columnName = DatabaseHelper.COLUMN_COUNTRY;
-        items.add(helper.buildDropDown("Country", helper.getCountryNames(), 0, tableName, columnName, -1, "country"));
+        items.add(helper.buildDropDown("Country", helper.getCountryNames(),helper.getCountryCodes(), 0, tableName, columnName, -1, "country"));
         columnName = DatabaseHelper.COLUMN_TELEPHONE;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Telephone/Cellphone", value, tableName, columnName, -1, "telephone"));
@@ -788,7 +790,7 @@ public class Tab2 extends Fragment {
             case 1: {
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    adapter.onRequestPermissionsResult(requestCode,permissions,grantResults);
+                    adapter.onRequestPermissionsResult(requestCode, permissions, grantResults);
                 } else {
                     Toast.makeText(getActivity(), "Please give your permission.", Toast.LENGTH_LONG).show();
                 }

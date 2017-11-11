@@ -453,10 +453,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
                     if (item instanceof DropDown) {
                         DropDown dropDown = (DropDown) item;
-                        Log.v(TAG, "Found " + dropDown.getHeading() + " with value = " + dropDown.getSelectedPosition() + " where i = " + i);
-                        xmlSerializer.startTag(null, dropDown.getXmlTag());
-                        xmlSerializer.text(String.valueOf(dropDown.getSelectedPosition()));
-                        xmlSerializer.endTag(null, dropDown.getXmlTag());
+                        xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
+                        xmlSerializer.text(helper.getSelectedValue(dropDown,dropDown.getSelectedPosition() ));
+                        xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
                     }
 
                     if (item instanceof MultiSelectDropdown) {
@@ -517,8 +516,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                     }
 
                                     if (item instanceof DropDown) {
+                                        DropDown dropDown = (DropDown) item;
                                         xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
-                                        xmlSerializer.text(String.valueOf(((DropDown) item).getSelectedPosition()));
+                                        xmlSerializer.text(helper.getSelectedValue(dropDown,dropDown.getSelectedPosition() ));
                                         xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
                                     }
                                     if (item instanceof MultiSelectDropdown) {
