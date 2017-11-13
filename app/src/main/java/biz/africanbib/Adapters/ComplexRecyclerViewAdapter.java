@@ -1103,6 +1103,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                     "Prof."},
                             new int[]{0, 1, 2, 3, 4}, databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
                             add.getTableName(), columnNames[i], currentRowNo, "prefix"));
+                    notifyItemInserted(position);
                 } else if (columnNames[i].equals(DatabaseHelper.COLUMN_COUNTRY)) {
                     items.add(position, helper.buildDropDown(columnNames[i], helper.getCountryNames(), helper.getCountryCodes(), 0, add.getTableName(), tableColumnNames[i], currentRowNo, "country"));
                     notifyItemInserted(position);
@@ -1114,6 +1115,14 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             tableColumnNames[i],
                             currentRowNo, "date"));
                     Log.v("Adapter", "Inserting Date " + columnNames[i] + " at " + i);
+                    notifyItemInserted(position);
+                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_BIRTHDAY)) {
+                    items.add(position, helper.buildDate(
+                            columnNames[i],
+                            databaseHelper.getStringFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
+                            add.getTableName(),
+                            tableColumnNames[i],
+                            currentRowNo, "birthday"));
                     notifyItemInserted(position);
                 } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_MEDIA)) {
                     Bitmap image = null;

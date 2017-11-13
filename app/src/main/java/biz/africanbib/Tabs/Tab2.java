@@ -254,7 +254,7 @@ public class Tab2 extends Fragment {
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("District / State", value, tableName, columnName, -1, "district"));
         columnName = DatabaseHelper.COLUMN_COUNTRY;
-        items.add(helper.buildDropDown("Country", helper.getCountryNames(),helper.getCountryCodes(), 0, tableName, columnName, -1, "country"));
+        items.add(helper.buildDropDown("Country", helper.getCountryNames(), helper.getCountryCodes(), 0, tableName, columnName, -1, "country"));
         items.add(new Divider());
 
         items.add(new SimpleText("REFERENCES", "person"));
@@ -298,7 +298,7 @@ public class Tab2 extends Fragment {
                                             "Individual Enterprise",
                                             "Local NGO",
                                             "Privately Held Company",
-                                            "Publicly Held Institution"},new int[]{0, 3, 1, 6, 2, 4, 5, 7}, selectedPosition, tableName, columnNames[j],
+                                            "Publicly Held Institution"}, new int[]{0, 3, 1, 6, 2, 4, 5, 7}, selectedPosition, tableName, columnNames[j],
                                     ids[i], xmltags[j]));
                         } else if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
                             Bitmap logo = null;
@@ -382,17 +382,19 @@ public class Tab2 extends Fragment {
                                 e.printStackTrace();
                             }
                             items.add(helper.buildImage(titles[j], ids[i], ownerLogo, tableName, columnNames[j], xmltags[j]));
-                        } else if(columnNames[j].equals(DatabaseHelper.COLUMN_PREFIX)){
-                            selectedPosition=databaseHelper.getIntFromRow(tableName,columnNames[j],ids[i]);
-                            items.add(helper.buildDropDown( "Prefix",
+                        } else if (columnNames[j].equals(DatabaseHelper.COLUMN_PREFIX)) {
+                            selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
+                            items.add(helper.buildDropDown("Prefix",
                                     new String[]{"Mr.",
                                             "Mrs.",
                                             "Ms.",
                                             "Dr",
                                             "Prof."},
-                                    new int[]{0, 1, 2, 3, 4},selectedPosition,tableName,columnNames[j],ids[i],"prefix"));
-                        }
-                        else {
+                                    new int[]{0, 1, 2, 3, 4}, selectedPosition, tableName, columnNames[j], ids[i], "prefix"));
+                        } else if (columnNames[j].equals(DatabaseHelper.COLUMN_BIRTHDAY)) {
+                            items.add(helper.buildDate(titles[j], databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                    tableName, columnNames[j], ids[i], xmltags[j]));
+                        } else {
                             items.add(
                                     helper.buildEditText(
                                             titles[j],
@@ -470,17 +472,19 @@ public class Tab2 extends Fragment {
                                 e.printStackTrace();
                             }
                             items.add(helper.buildImage(titles[j], ids[i], managerLogo, tableName, columnNames[j], xmltags[j]));
-                        } else if(columnNames[j].equals(DatabaseHelper.COLUMN_PREFIX)){
-                            selectedPosition=databaseHelper.getIntFromRow(tableName,columnNames[j],ids[i]);
-                            items.add(helper.buildDropDown( "Prefix",
+                        } else if (columnNames[j].equals(DatabaseHelper.COLUMN_PREFIX)) {
+                            selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
+                            items.add(helper.buildDropDown("Prefix",
                                     new String[]{"Mr.",
                                             "Mrs.",
                                             "Ms.",
                                             "Dr",
                                             "Prof."},
-                                    new int[]{0, 1, 2, 3, 4},selectedPosition,tableName,columnNames[j],ids[i],"prefix"));
-                        }
-                        else {
+                                    new int[]{0, 1, 2, 3, 4}, selectedPosition, tableName, columnNames[j], ids[i], "prefix"));
+                        } else if (columnNames[j].equals(DatabaseHelper.COLUMN_BIRTHDAY)) {
+                            items.add(helper.buildDate(titles[j], databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                    tableName, columnNames[j], ids[i], xmltags[j]));
+                        } else {
                             items.add(
                                     helper.buildEditText(
                                             titles[j],
@@ -520,7 +524,7 @@ public class Tab2 extends Fragment {
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("District / State", value, tableName, columnName, -1, "district"));
         columnName = DatabaseHelper.COLUMN_COUNTRY;
-        items.add(helper.buildDropDown("Country", helper.getCountryNames(),helper.getCountryCodes(), 0, tableName, columnName, -1, "country"));
+        items.add(helper.buildDropDown("Country", helper.getCountryNames(), helper.getCountryCodes(), 0, tableName, columnName, -1, "country"));
         columnName = DatabaseHelper.COLUMN_TELEPHONE;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Telephone/Cellphone", value, tableName, columnName, -1, "telephone"));
@@ -534,7 +538,49 @@ public class Tab2 extends Fragment {
         return items;
     }
 
+    private void getValuesFromViews() {
+        Object[] items;
+        items = new Object[adapter.getItemCount()];
+        for (int i = 0; i < items.length; i++) {
+            //Log.d("Company","I = " + i);
+            items[i] = adapter.getItem(i);
+            if (items[i] instanceof SimpleEditText) {
+                SimpleEditText ob = (SimpleEditText) items[i];
+                Log.d("Company", ob.getTitle() + " = " + ob.getValue());
+            } else if (items[i] instanceof DropDown) {
+                DropDown ob = (DropDown) items[i];
+                Log.d("Company", ob.getHeading() + " = " + ob.getSelectedPosition());
+            }
+        }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+            Log.d("Tab2", "Request Code  " + requestCode);
+            adapter.onActivityResult(requestCode, resultCode, data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    adapter.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                } else {
+                    Toast.makeText(getActivity(), "Please give your permission.", Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+        }
+    }
+}
 /*
         columnName = DatabaseHelper.COLUMN_NATIONALITY;
 
@@ -778,46 +824,3 @@ public class Tab2 extends Fragment {
 */
 
 
-    private void getValuesFromViews() {
-        Object[] items;
-        items = new Object[adapter.getItemCount()];
-        for (int i = 0; i < items.length; i++) {
-            //Log.d("Company","I = " + i);
-            items[i] = adapter.getItem(i);
-            if (items[i] instanceof SimpleEditText) {
-                SimpleEditText ob = (SimpleEditText) items[i];
-                Log.d("Company", ob.getTitle() + " = " + ob.getValue());
-            } else if (items[i] instanceof DropDown) {
-                DropDown ob = (DropDown) items[i];
-                Log.d("Company", ob.getHeading() + " = " + ob.getSelectedPosition());
-            }
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
-            super.onActivityResult(requestCode, resultCode, data);
-            Log.d("Tab2", "Request Code  " + requestCode);
-            adapter.onActivityResult(requestCode, resultCode, data);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case 1: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    adapter.onRequestPermissionsResult(requestCode, permissions, grantResults);
-                } else {
-                    Toast.makeText(getActivity(), "Please give your permission.", Toast.LENGTH_LONG).show();
-                }
-                break;
-            }
-        }
-    }
-}
