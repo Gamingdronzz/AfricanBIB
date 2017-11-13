@@ -76,8 +76,8 @@ public class Tab2 extends Fragment {
         } else {
             setupGridLayout(false);
         }
-        adapter.updateRow(DatabaseHelper.TABLE_NEEDS, needRows);
-        adapter.updateRow(DatabaseHelper.TABLE_OFFERS, offerrows);
+        //adapter.updateRow(DatabaseHelper.TABLE_NEEDS, needRows);
+        //adapter.updateRow(DatabaseHelper.TABLE_OFFERS, offerrows);
         adapter.updateRow(DatabaseHelper.TABLE_OWNERS, ownerRows);
         adapter.updateRow(DatabaseHelper.TABLE_REFERENCES, refrencesRows);
         adapter.updateRow(DatabaseHelper.TABLE_MANAGERS, managerRows);
@@ -134,9 +134,7 @@ public class Tab2 extends Fragment {
 
         //items.add(new SimpleEditText(""));
 
-        String columnName = DatabaseHelper.COLUMN_NEED;
-        String tableName = DatabaseHelper.TABLE_NEEDS;
-        String value;
+
         /*
         items.add(new Heading("INVESTMENT OPPURTUNTIES", "investmentOpportunities"));
         items.add(new SimpleText("Needs"));
@@ -186,9 +184,12 @@ public class Tab2 extends Fragment {
         items.add(helper.buildAdd(1, new String[]{"Offer"}, DatabaseHelper.TABLE_OFFERS, new String[]{DatabaseHelper.COLUMN_OFFER}, new String[]{"offer"}));
 
 */
+        String columnName = DatabaseHelper.COLUMN_FIRST_NAME;
+        String tableName = DatabaseHelper.TABLE_CONTACT_PERSON;
+        String value;
         items.add(new Heading("CONTACT PERSON", "contact"));
-        tableName = DatabaseHelper.TABLE_CONTACT_PERSON;
-        columnName = DatabaseHelper.COLUMN_FIRST_NAME;
+        //tableName = DatabaseHelper.TABLE_CONTACT_PERSON;
+        //columnName = DatabaseHelper.COLUMN_FIRST_NAME;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("First name", value, tableName, columnName, -1, "firstname"));
         columnName = DatabaseHelper.COLUMN_LAST_NAME;
