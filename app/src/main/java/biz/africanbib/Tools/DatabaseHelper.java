@@ -775,7 +775,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public int getIntFromRow(String tableName, String columnName, int rowid) {
         SQLiteDatabase db = this.getReadableDatabase();
-        int result = -1;
+        int result = 0;
         try {
             String query = "SELECT " + columnName + " FROM " + tableName + " WHERE " + COLUMN_COMPANY_ID + " = " + getCurrentCompanyId() + " AND " + COLUMN_ROW_ID + " = " + rowid;
             Log.v(TAG, "Query = " + query);

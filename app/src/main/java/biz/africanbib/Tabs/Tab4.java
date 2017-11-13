@@ -243,6 +243,7 @@ public class Tab4 extends Fragment {
         columnName = DatabaseHelper.COLUMN_AUTHORIZED_BY;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText(authorizedBy, value, tableName, columnName, -1, "authorizedBy"));
+
         columnName = DatabaseHelper.COLUMN_PLACE_OF_COLECTION;
         int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
         items.add(helper.buildDropDown(placeOfCollection,
@@ -252,8 +253,9 @@ public class Tab4 extends Fragment {
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText("Place of Collection (Specify)", value, tableName, columnName, -1, "collectedBy"));
         }
+
         columnName = DatabaseHelper.COLUMN_DATE;
-        items.add(helper.buildDate("Date/Time", databaseHelper.getStringValue(columnName, tableName), tableName, columnName, -1, "date"));
+        items.add(helper.buildDate("Date/Time", databaseHelper.getStringValue(columnName, tableName), tableName, columnName, -1, null));
         columnName = DatabaseHelper.COLUMN_LOCATION;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Name of Location / Event", value, tableName, columnName, -1, "location"));

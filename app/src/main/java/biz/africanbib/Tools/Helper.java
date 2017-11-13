@@ -911,8 +911,9 @@ public class Helper {
         if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_POSITION_IN_COMPANY)) {
             return dropDown.getList()[index];
         } else if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PLACE_OF_COLECTION)) {
-            return " ";
+            return dropDown.getList()[index];
         } else {
+            Log.d(TAG,dropDown.getColumnName());
             return String.valueOf(dropDown.getCode()[index]);
         }
     }
