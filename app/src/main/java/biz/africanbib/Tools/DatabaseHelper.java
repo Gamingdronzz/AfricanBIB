@@ -32,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 10 ;
+    public static final int DATABASE_VERSION = 11 ;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -41,8 +41,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_COMPANY_POSTAL_ADDRESS = "TableCompanyPostalAddress";
     public static final String TABLE_COMPANY_PHYSICAL_ADDRESS = "TableCompanyPhysicalAddress";
     public static final String TABLE_COMPANY_SPECIFIC_INFORMATION = "TableCompanySpecificInformation";
-    public static final String TABLE_OFFERS = "TableOffers";
-    public static final String TABLE_NEEDS = "TableNeeds";
+    //public static final String TABLE_OFFERS = "TableOffers";
+    //public static final String TABLE_NEEDS = "TableNeeds";
     public static final String TABLE_CONTACT_PERSON = "TableContactPerson";
     public static final String TABLE_REFERENCES = "TableReference";
     public static final String TABLE_OWNERS = "TableOwners";
@@ -93,6 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_VISION = "COLUMN_VISION";
     public static final String COLUMN_MISSION_STATEMENT = "COLUMN_MISSION_STATEMENT";
     public static final String COLUMN_GUIDING_PRINCIPALS = "COLUMN_GUIDING_PRINCIPALS";
+    public static final String COLUMN_INVESTMENT_OPPORTUNITIES = "COLUMN_INVESTMENT_OPPORTUNITIES";
 
     public static final String COLUMN_OFFER = "COLUMN_OFFER";
     public static final String COLUMN_ROW_ID = "COLUMN_ROW_ID";
@@ -221,10 +222,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_ABOUT_US + " VARCHAR," +
             COLUMN_VISION + " VARCHAR," +
             COLUMN_MISSION_STATEMENT + " VARCHAR," +
-            COLUMN_GUIDING_PRINCIPALS + " VARCHAR " +
+            COLUMN_GUIDING_PRINCIPALS + " VARCHAR, " +
+            COLUMN_INVESTMENT_OPPORTUNITIES + " VARCHAR " +
             ")";
 
 
+    /*
     private String CREATE_TABLE_OFFERS = "CREATE TABLE IF NOT EXISTS " + TABLE_OFFERS + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_ROW_ID + " INTEGER," +
@@ -237,6 +240,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_NEED + " VARCHAR" +
             ")";
 
+*/
     private String CREATE_TABLE_CONTATC_PERSON = "CREATE TABLE IF NOT EXISTS " + TABLE_CONTACT_PERSON + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_FIRST_NAME + " VARCHAR," +
@@ -446,8 +450,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_COMPANY_POSTAL_ADDRESS);
         db.execSQL(CREATE_TABLE_COMPANY_PHYSICAL_ADDRESS);
         db.execSQL(CREATE_TABLE_COMPANY_SPECIFIC_INFORMATION);
-        db.execSQL(CREATE_TABLE_OFFERS);
-        db.execSQL(CREATE_TABLE_NEEDS);
+        //db.execSQL(CREATE_TABLE_OFFERS);
+        //db.execSQL(CREATE_TABLE_NEEDS);
         db.execSQL(CREATE_TABLE_CONTATC_PERSON);
         db.execSQL(CREATE_TABLE_REFERENCES);
         db.execSQL(CREATE_TABLE_OWNERS);
@@ -477,8 +481,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY_POSTAL_ADDRESS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY_PHYSICAL_ADDRESS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY_SPECIFIC_INFORMATION);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFERS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEEDS);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_OFFERS);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEEDS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_CONTACT_PERSON);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_REFERENCES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_OWNERS);
@@ -516,8 +520,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         addValue(result, TABLE_COMPANY_POSTAL_ADDRESS);
         addValue(result, TABLE_COMPANY_PHYSICAL_ADDRESS);
         addValue(result, TABLE_COMPANY_SPECIFIC_INFORMATION);
-        addValue(result, TABLE_OFFERS);
-        addValue(result, TABLE_NEEDS);
+        //addValue(result, TABLE_OFFERS);
+        //addValue(result, TABLE_NEEDS);
         addValue(result, TABLE_CONTACT_PERSON);
         addValue(result, TABLE_REFERENCES);
         addValue(result, TABLE_OWNERS);
@@ -549,8 +553,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_COMPANY_POSTAL_ADDRESS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_COMPANY_PHYSICAL_ADDRESS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_COMPANY_SPECIFIC_INFORMATION, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
-            db.delete(TABLE_OFFERS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
-            db.delete(TABLE_NEEDS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
+            //db.delete(TABLE_OFFERS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
+            //db.delete(TABLE_NEEDS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_CONTACT_PERSON, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_REFERENCES, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_OWNERS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});

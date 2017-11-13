@@ -137,6 +137,7 @@ public class Tab2 extends Fragment {
         String columnName = DatabaseHelper.COLUMN_NEED;
         String tableName = DatabaseHelper.TABLE_NEEDS;
         String value;
+        /*
         items.add(new Heading("INVESTMENT OPPURTUNTIES", "investmentOpportunities"));
         items.add(new SimpleText("Needs"));
         Log.v("Tab2", "Business type = " + MainActivity.typeOfBusiness);
@@ -184,7 +185,7 @@ public class Tab2 extends Fragment {
         }
         items.add(helper.buildAdd(1, new String[]{"Offer"}, DatabaseHelper.TABLE_OFFERS, new String[]{DatabaseHelper.COLUMN_OFFER}, new String[]{"offer"}));
 
-
+*/
         items.add(new Heading("CONTACT PERSON", "contact"));
         tableName = DatabaseHelper.TABLE_CONTACT_PERSON;
         columnName = DatabaseHelper.COLUMN_FIRST_NAME;

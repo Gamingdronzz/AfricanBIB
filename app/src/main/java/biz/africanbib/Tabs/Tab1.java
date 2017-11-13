@@ -317,6 +317,11 @@ public class Tab1 extends Fragment {
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Guiding Principals", value, tableName, columnName, -1, "guidingPrinciples"));
 
+
+        columnName = DatabaseHelper.COLUMN_INVESTMENT_OPPORTUNITIES;
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(helper.buildEditText("Investment Opportunities", value, tableName, columnName, -1, "investmentOpportunities"));
+
         return items;
     }
 

@@ -58,6 +58,8 @@ import biz.africanbib.Tools.Helper;
 import biz.africanbib.ViewHolders.MyCustomMultiSelectionSpinner;
 import biz.africanbib.ViewHolders.ViewHolderHeading;
 
+import static biz.africanbib.Tools.DatabaseHelper.COLUMN_OTHERS_SPECIFY;
+
 
 /**
  * Created by Balpreet on 30-Jul-17.
@@ -649,8 +651,9 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 if (dropDown.getRowno() == -1) {
                     if (dropDown.getHeading().equals("Place of Collection")) {
                         if (i == 2) {
-                            items.add(position + 1, helper.buildEditText("Place of Collection (Specify)", "", DatabaseHelper.TABLE_SOURCE_OF_DATA, DatabaseHelper.COLUMN_OTHERS_SPECIFY, -1, "placeofcollection"));
+                            items.add(position+1,helper.buildEditText("Place of Collection (Specify)", "", dropDown.getTableName(), COLUMN_OTHERS_SPECIFY, -1,"collectedBy"));
                             notifyItemInserted(position + 1);
+                            notifyDataSetChanged();
                         }
                     }
                     databaseHelper.updateIntValue(dropDown.getTableName(), dropDown.getColumnName(), i);
@@ -664,7 +667,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     }
                     databaseHelper.updateRowWithInt(dropDown.getTableName(), dropDown.getRowno(), dropDown.getColumnName(), i);
                 }
-
 
                 //Log.v("Adapter", "Selected item of " + dropDown.getHeading() + " = " + i);
                 dropDown.setSelectedPosition(i);
@@ -1376,11 +1378,12 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private int manageRowNo(Add add) {
         String tableName = add.getTableName();
-        if (tableName.equals(DatabaseHelper.TABLE_OFFERS)) {
+        /*if (tableName.equals(DatabaseHelper.TABLE_OFFERS)) {
             return currentRowOffers++;
         } else if (tableName.equals(DatabaseHelper.TABLE_NEEDS)) {
             return currentRowNeeds++;
-        } else if (tableName.equals(DatabaseHelper.TABLE_REFERENCES)) {
+            */
+        if (tableName.equals(DatabaseHelper.TABLE_REFERENCES)) {
             return currentRowReferences++;
         } else if (tableName.equals(DatabaseHelper.TABLE_MANAGERS)) {
             return currentRowManagers++;
@@ -1402,11 +1405,13 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public void updateRow(String tableName, int value) {
         Log.d("Adapter", "Updating within adapter");
-        if (tableName.equals(DatabaseHelper.TABLE_OFFERS)) {
+
+        /*if (tableName.equals(DatabaseHelper.TABLE_OFFERS)) {
             currentRowOffers = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_NEEDS)) {
             currentRowNeeds = value;
-        } else if (tableName.equals(DatabaseHelper.TABLE_OWNERS)) {
+            */
+        if (tableName.equals(DatabaseHelper.TABLE_OWNERS)) {
             currentRowOwners = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_MANAGERS)) {
             currentRowManagers = value;

@@ -955,8 +955,11 @@ public class Helper {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            long days = TimeUnit.DAYS.convert(d.getTime(), TimeUnit.MILLISECONDS);
-            return String.valueOf(days);
+            if(d!=null) {
+                long days = TimeUnit.DAYS.convert(d.getTime(), TimeUnit.MILLISECONDS);
+                return String.valueOf(days);
+            }
+            else return " ";
 
         } else return " ";
     }
