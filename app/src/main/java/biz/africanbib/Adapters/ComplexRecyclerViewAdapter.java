@@ -651,7 +651,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 if (dropDown.getRowno() == -1) {
                     if (dropDown.getHeading().equals("Place of Collection")) {
                         if (i == 2) {
-                            items.add(position+1,helper.buildEditText("Place of Collection (Specify)", "", dropDown.getTableName(), COLUMN_OTHERS_SPECIFY, -1,"collectedBy"));
+                            items.add(position + 1, helper.buildEditText("Place of Collection (Specify)", "", dropDown.getTableName(), COLUMN_OTHERS_SPECIFY, -1, "collectedBy"));
                             notifyItemInserted(position + 1);
                             notifyDataSetChanged();
                         }
@@ -1094,6 +1094,15 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
                             add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
                     notifyItemInserted(position);
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_PREFIX)) {
+                    items.add(helper.buildDropDown("Prefix",
+                            new String[]{"Mr.",
+                                    "Mrs.",
+                                    "Ms.",
+                                    "Dr",
+                                    "Prof."},
+                            new int[]{0, 1, 2, 3, 4}, databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
+                            add.getTableName(), columnNames[i], currentRowNo, "prefix"));
                 } else if (columnNames[i].equals(DatabaseHelper.COLUMN_COUNTRY)) {
                     items.add(position, helper.buildDropDown(columnNames[i], helper.getCountryNames(), helper.getCountryCodes(), 0, add.getTableName(), tableColumnNames[i], currentRowNo, "country"));
                     notifyItemInserted(position);

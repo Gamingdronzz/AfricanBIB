@@ -382,7 +382,17 @@ public class Tab2 extends Fragment {
                                 e.printStackTrace();
                             }
                             items.add(helper.buildImage(titles[j], ids[i], ownerLogo, tableName, columnNames[j], xmltags[j]));
-                        } else {
+                        } else if(columnNames[j].equals(DatabaseHelper.COLUMN_PREFIX)){
+                            selectedPosition=databaseHelper.getIntFromRow(tableName,columnNames[j],ids[i]);
+                            items.add(helper.buildDropDown( "Prefix",
+                                    new String[]{"Mr.",
+                                            "Mrs.",
+                                            "Ms.",
+                                            "Dr",
+                                            "Prof."},
+                                    new int[]{0, 1, 2, 3, 4},selectedPosition,tableName,columnNames[j],ids[i],"prefix"));
+                        }
+                        else {
                             items.add(
                                     helper.buildEditText(
                                             titles[j],
@@ -460,7 +470,17 @@ public class Tab2 extends Fragment {
                                 e.printStackTrace();
                             }
                             items.add(helper.buildImage(titles[j], ids[i], managerLogo, tableName, columnNames[j], xmltags[j]));
-                        } else {
+                        } else if(columnNames[j].equals(DatabaseHelper.COLUMN_PREFIX)){
+                            selectedPosition=databaseHelper.getIntFromRow(tableName,columnNames[j],ids[i]);
+                            items.add(helper.buildDropDown( "Prefix",
+                                    new String[]{"Mr.",
+                                            "Mrs.",
+                                            "Ms.",
+                                            "Dr",
+                                            "Prof."},
+                                    new int[]{0, 1, 2, 3, 4},selectedPosition,tableName,columnNames[j],ids[i],"prefix"));
+                        }
+                        else {
                             items.add(
                                     helper.buildEditText(
                                             titles[j],
