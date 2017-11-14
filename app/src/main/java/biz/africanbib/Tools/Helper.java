@@ -965,7 +965,7 @@ public class Helper {
         Date d = null;
         if (date != null) {
             try {
-                d = new SimpleDateFormat("DD/MM/yyyy").parse(date);
+                d = new SimpleDateFormat("dd/mm/yyyy").parse(date);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

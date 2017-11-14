@@ -427,21 +427,26 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private void addXmlContent(ArrayList<Object> items, XmlSerializer xmlSerializer) throws IOException {
         String headTag = null;
         for (int i = 0; i < items.size() - 1; i++) {
-
             Object item = items.get(i);
             Log.v(TAG, "i =" + i);
             if (items.get(i) instanceof Heading) {
-                headTag = ((Heading) items.get(i)).getXmlTag();
-                Log.v(TAG, "Start Tag = " + headTag + ": i =" + i);
-                if (headTag != null) {
-                    xmlSerializer.startTag(null, headTag);
+                Heading heading = (Heading) items.get(i);
+                if (heading.getHeading().equals("OWNERS/MANAGERS/REFERENCES")) {
+                    headTag = null;
+                    i = getContactXml(i, items, xmlSerializer);
+                } else {
+                    headTag = heading.getXmlTag();
+                    if (headTag != null) {
+                        Log.v(TAG, "START TAG " + headTag);
+                        xmlSerializer.startTag(null, headTag);
+                    }
                 }
             } else {
                 while (!(item instanceof Heading)) {
 
                     if (item instanceof SimpleEditText) {
                         SimpleEditText simpleEditText = (SimpleEditText) item;
-                        Log.v(TAG, "Found " + simpleEditText.getTitle() + " with value = " + simpleEditText.getValue() + " where i = " + i);
+                        // Log.v(TAG, "Found " + simpleEditText.getTitle() + " with value = " + simpleEditText.getValue() + " where i = " + i);
                         if (simpleEditText.getValue() != null) {
                             if (!simpleEditText.getValue().isEmpty()) {
                                 xmlSerializer.startTag(null, simpleEditText.getXmlTag());
@@ -453,7 +458,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
                     if (item instanceof SimpleDate) {
                         SimpleDate date = (SimpleDate) item;
-                        Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
+                        //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
                         if (date.getValue() != null) {
                             xmlSerializer.startTag(null, date.getXmlTag());
                             xmlSerializer.text(helper.toDays(date.getValue()));
@@ -488,7 +493,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
                     if (item instanceof MultiSelectDropdown) {
                         MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) item;
-                        Log.v(TAG, "Found " + multiSelectDropdown.getTitle() + " with value = " + multiSelectDropdown.getSelectedIndices() + " where i = " + i);
+                        //Log.v(TAG, "Found " + multiSelectDropdown.getTitle() + " with value = " + multiSelectDropdown.getSelectedIndices() + " where i = " + i);
                         List<Integer> indices = multiSelectDropdown.getSelectedIndices();
                         if (indices.size() > 0) {
                             for (int index : indices) {
@@ -501,7 +506,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
                     if (item instanceof SimpleText) {
                         SimpleText simpleText = (SimpleText) item;
-                        Log.v(TAG, "Found " + simpleText.getTitle() + " where i = " + i);
+                        //Log.v(TAG, "Found " + simpleText.getTitle() + " where i = " + i);
                         if (simpleText.getXmlTag() != null) {
                             if (simpleText.getXmlTag().equals("disclaimer"))
                                 break;
@@ -509,8 +514,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         String tag = ((SimpleText) item).getXmlTag();
                         if (tag != null) {
                             xmlSerializer.startTag(null, tag);
+                            Log.v(TAG, "Simple Start Tag = " + tag);
                         }
-                        Log.v(TAG, "Simple text Start Tag = " + tag + " : i = " + i);
                         i++;
                         item = items.get(i);
                         if (item instanceof Add) {
@@ -539,7 +544,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
                                     if (item instanceof MultiSelectDropdown) {
                                         MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) item;
-                                        Log.v(TAG, "Found " + multiSelectDropdown.getTitle() + " with value = " + multiSelectDropdown.getSelectedIndices() + " where i = " + i);
                                         List<Integer> indices = multiSelectDropdown.getSelectedIndices();
                                         if (indices.size() > 0) {
                                             for (int index :
@@ -553,7 +557,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
                                     if (item instanceof SimpleDate) {
                                         SimpleDate date = (SimpleDate) item;
-                                        Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
                                         if (date.getValue() != null) {
                                             xmlSerializer.startTag(null, date.getXmlTag());
                                             xmlSerializer.text(helper.toDays(date.getValue()));
@@ -566,6 +569,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             }
                         }
                         if (tag != null) {
+                            Log.v(TAG, "Simple End Tag = " + tag);
                             xmlSerializer.endTag(null, tag);
                         }
                     }
@@ -585,6 +589,71 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             }
 
         }
+    }
+
+    private int getContactXml(int i, ArrayList<Object> items, XmlSerializer xmlSerializer) throws IOException {
+        int j = i + 1;
+        Object obj = items.get(j);
+        while (!(obj instanceof Heading)) {
+            if (obj instanceof SimpleText) {
+                j++;
+                while (!(items.get(j) instanceof Add)) {
+
+                    xmlSerializer.startTag(null, "contact");
+                    obj = items.get(j);
+                    while (!(obj instanceof Divider)) {
+
+                        if (obj instanceof SimpleEditText) {
+                            SimpleEditText simpleEditText = (SimpleEditText) obj;
+                            if (simpleEditText.getValue() != null) {
+                                if (!simpleEditText.getValue().isEmpty()) {
+                                    xmlSerializer.startTag(null, simpleEditText.getXmlTag());
+                                    xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
+                                    xmlSerializer.endTag(null, simpleEditText.getXmlTag());
+                                }
+                            }
+                        }
+                        if (obj instanceof DropDown) {
+                            DropDown dropDown = (DropDown) obj;
+                            xmlSerializer.startTag(null, ((DropDown) obj).getXmlTag());
+                            xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
+                            xmlSerializer.endTag(null, ((DropDown) obj).getXmlTag());
+                        }
+                        if (obj instanceof MultiSelectDropdown) {
+                            MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) obj;
+                            Log.v(TAG, "Found " + multiSelectDropdown.getTitle() + " with value = " + multiSelectDropdown.getSelectedIndices() + " where i = " + i);
+                            List<Integer> indices = multiSelectDropdown.getSelectedIndices();
+                            if (indices.size() > 0) {
+                                for (int index :
+                                        indices) {
+                                    xmlSerializer.startTag(null, multiSelectDropdown.getXmlTag());
+                                    helper.childTags(multiSelectDropdown, index, xmlSerializer);
+                                    xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
+                                }
+                            }
+                        }
+                        if (obj instanceof SimpleDate) {
+                            SimpleDate date = (SimpleDate) obj;
+                            if (date.getValue() != null) {
+                                xmlSerializer.startTag(null, date.getXmlTag());
+                                xmlSerializer.text(helper.toDays(date.getValue()));
+                                xmlSerializer.endTag(null, date.getXmlTag());
+                            }
+                        }
+                        j++;
+                        obj = items.get(j);
+                    }
+                    xmlSerializer.endTag(null, "contact");
+                    j++;
+                    obj = items.get(j);
+                }
+            }
+            if (items.get(j) instanceof Add) {
+                j++;
+                obj = items.get(j);
+            }
+        }
+        return j-1;
     }
 
     private void showXML() {

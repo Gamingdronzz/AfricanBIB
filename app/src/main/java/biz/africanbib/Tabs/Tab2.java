@@ -257,7 +257,8 @@ public class Tab2 extends Fragment {
         items.add(helper.buildDropDown("Country", helper.getCountryNames(), helper.getCountryCodes(), 0, tableName, columnName, -1, "country"));
         items.add(new Divider());
 
-        items.add(new SimpleText("REFERENCES", "person"));
+        items.add(new Heading("OWNERS/MANAGERS/REFERENCES", null));
+        items.add(new SimpleText("REFERENCES", "contact"));
         tableName = DatabaseHelper.TABLE_REFERENCES;
         String[] xmltags = new String[]{
                 "organisationtype",
@@ -328,7 +329,7 @@ public class Tab2 extends Fragment {
         items.add(helper.buildAdd(7, titles, tableName, columnNames, xmltags));
 
 
-        items.add(new SimpleText("OWNERS", "person"));
+        items.add(new SimpleText("OWNERS", "contact"));
         tableName = DatabaseHelper.TABLE_OWNERS;
         xmltags = new String[]{
                 "logo",
@@ -414,7 +415,7 @@ public class Tab2 extends Fragment {
                 columnNames, xmltags));
 
 
-        items.add(new SimpleText("MANAGERS", "person"));
+        items.add(new SimpleText("MANAGERS", "contact"));
         tableName = DatabaseHelper.TABLE_MANAGERS;
         xmltags = new String[]{
                 "logo",
@@ -500,7 +501,7 @@ public class Tab2 extends Fragment {
                 columnNames, xmltags));
 
 
-        items.add(new Heading("SUBSIDIARIES", null));
+        items.add(new Heading("SUBSIDIARIES", "contact"));
         tableName = DatabaseHelper.TABLE_SUBSIDIARIES;
         columnName = DatabaseHelper.COLUMN_SUBSIDIARY_NAME;
         value = databaseHelper.getStringValue(columnName, tableName);
