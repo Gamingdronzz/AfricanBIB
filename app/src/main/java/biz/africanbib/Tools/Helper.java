@@ -392,7 +392,7 @@ public class Helper {
 
     public SimpleImage buildImage(String title, int rowNo, Bitmap image, String tableName, String columnName, String xmlTag) {
 
-        if (MainActivity.typeOfBusiness == MainActivity.NEWBUSINESS) {
+        if (image == null) {
             return new SimpleImageBuilder()
                     .setTitle(title)
                     .setRowNo(rowNo)

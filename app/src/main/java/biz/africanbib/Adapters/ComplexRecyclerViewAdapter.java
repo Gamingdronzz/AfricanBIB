@@ -497,6 +497,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         private CustomImageChooser customImageChooser;
 
         public void setImage(Bitmap image) {
+            if(image!=null)
             this.imageView.setImageBitmap(image);
         }
 
@@ -556,9 +557,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         if (simpleImage != null) {
             viewHolderSimpleImage.customImageChooser.updatePosition(position);
             viewHolderSimpleImage.setTitle(simpleImage.getTitle());
-            if (simpleImage.getImage() == null) {
-
-            } else {
+            if (simpleImage.getImage() != null) {
                 viewHolderSimpleImage.setImage(simpleImage.getImage());
             }
 
@@ -1120,31 +1119,11 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             currentRowNo, "birthday"));
                     notifyItemInserted(position);
                 } else if (columnNames[i].equals(DatabaseHelper.COLUMN_MEDIA)) {
-                    Bitmap image = null;
-                    try {
-                        image = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[i], add.getTableName(), currentRowNo));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    items.add(position, helper.buildImage(titles[i], currentRowNo, image, add.getTableName(), columnNames[i], xmlTags[i]));
+                    items.add(position, helper.buildImage(titles[i], currentRowNo, null, add.getTableName(), columnNames[i], xmlTags[i]));
                     notifyItemInserted(position);
                 } else if (columnNames[i].equals(DatabaseHelper.COLUMN_LOGO)) {
-                    Bitmap image = null;
-                    try {
-                        image = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[i], add.getTableName(), currentRowNo));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if(image==null)
-                    {
-                        Log.v("Adapter","Image not found for " +  add.getTableName() + "for row = " + currentRowNo);
-                    }
-                    else
-                    {
-                        Log.v("Adapter","Image found for " +  add.getTableName() + "for row = " + currentRowNo);
-                    }
-                    items.add(position, helper.buildImage(titles[i], currentRowNo, image, add.getTableName(), columnNames[i], xmlTags[i]));
-                    Log.v("Adapter", "Inserting Image " + titles[i] + " at " + i + " with table = " + add.getTableName() + " row no = " + currentRowNo);
+                    items.add(position, helper.buildImage(titles[i], currentRowNo, null, add.getTableName(), columnNames[i], xmlTags[i]));
+                    Log.v("Adapter", "Inserting empty Image " + titles[i] + " at " + i + " with table = " + add.getTableName() + " row no = " + currentRowNo);
                     notifyItemInserted(position);
                 } else {
                     items.add(position, helper.buildEditText(titles[i], "", add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
@@ -1208,7 +1187,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         imagePicker.startChooser(context, new ImagePicker.Callback() {
             @Override
             public void onPickImage(Uri imageUri) {
-                Log.v("Adapter", "Picked Path = " + imageUri.getPath());
+                Log.v("Adapter", "Picked Path = " + imageUri.getPath() + " position = " + position);
                 Bitmap bitmap = BitmapFactory.decodeFile(imageUri.getPath());
                 simpleImage.setImage(bitmap);
                 adapter.notifyItemChanged(position);
