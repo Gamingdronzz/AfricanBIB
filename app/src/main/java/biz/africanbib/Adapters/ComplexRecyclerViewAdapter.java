@@ -1135,6 +1135,14 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+                    if(image==null)
+                    {
+                        Log.v("Adapter","Image not found for " +  add.getTableName() + "for row = " + currentRowNo);
+                    }
+                    else
+                    {
+                        Log.v("Adapter","Image found for " +  add.getTableName() + "for row = " + currentRowNo);
+                    }
                     items.add(position, helper.buildImage(titles[i], currentRowNo, image, add.getTableName(), columnNames[i], xmlTags[i]));
                     Log.v("Adapter", "Inserting Image " + titles[i] + " at " + i + " with table = " + add.getTableName() + " row no = " + currentRowNo);
                     notifyItemInserted(position);

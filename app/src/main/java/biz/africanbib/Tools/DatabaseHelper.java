@@ -845,7 +845,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (db != null) db.close();
     }
     public void updateRowWithBlob(String TableName, int rowNo,String ColumnName, byte[] value) {
-
+        Log.v(TAG, "Updating Table = " + TableName + " Row = " + rowNo);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(ColumnName, value);
