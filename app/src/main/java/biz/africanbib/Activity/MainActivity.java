@@ -456,7 +456,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
                     }
 
-                    if (item instanceof SimpleDate) {
+                    else if (item instanceof SimpleDate) {
                         SimpleDate date = (SimpleDate) item;
                         //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
                         if (date.getValue() != null) {
@@ -465,8 +465,18 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             xmlSerializer.endTag(null, date.getXmlTag());
                         }
                     }
+                    else if (item instanceof SimpleImage) {
+                        SimpleImage simpleImage = (SimpleImage) item;
+                        //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
+                        if (simpleImage.getImage() != null) {
+                            xmlSerializer.startTag(null, simpleImage.getXmlTag());
+                            String tagName =helper.checkForInput(simpleImage.getTitle());
+                            xmlSerializer.text(tagName+".jpg");
+                            xmlSerializer.endTag(null, simpleImage.getXmlTag());
+                        }
+                    }
 
-                    if (item instanceof DropDown) {
+                    else if (item instanceof DropDown) {
                         DropDown dropDown = (DropDown) item;
                         String collectedBy;
                         xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
@@ -491,7 +501,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
                     }
 
-                    if (item instanceof MultiSelectDropdown) {
+                    else if (item instanceof MultiSelectDropdown) {
                         MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) item;
                         //Log.v(TAG, "Found " + multiSelectDropdown.getTitle() + " with value = " + multiSelectDropdown.getSelectedIndices() + " where i = " + i);
                         List<Integer> indices = multiSelectDropdown.getSelectedIndices();
@@ -504,7 +514,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
                     }
 
-                    if (item instanceof SimpleText) {
+                    else if (item instanceof SimpleText) {
                         SimpleText simpleText = (SimpleText) item;
                         //Log.v(TAG, "Found " + simpleText.getTitle() + " where i = " + i);
                         if (simpleText.getXmlTag() != null) {
@@ -563,6 +573,16 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                             xmlSerializer.endTag(null, date.getXmlTag());
                                         }
                                     }
+                                    if (item instanceof SimpleImage) {
+                                        SimpleImage simpleImage = (SimpleImage) item;
+                                        //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
+                                        if (simpleImage.getImage() != null) {
+                                            xmlSerializer.startTag(null, simpleImage.getXmlTag());
+                                            String tagName =helper.checkForInput(simpleImage.getTitle());
+                                            xmlSerializer.text(tagName+".jpg");
+                                            xmlSerializer.endTag(null, simpleImage.getXmlTag());
+                                        }
+                                    }
                                 }
                                 i++;
                                 item = items.get(i);
@@ -573,6 +593,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             xmlSerializer.endTag(null, tag);
                         }
                     }
+
+
                     if (i < items.size() - 1) {
                         i++;
                         item = items.get(i);

@@ -647,18 +647,19 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
             if (userSelect) {
                 DropDown dropDown = (DropDown) items.get(position);
-                notifyItemChanged(position);
+                //notifyItemChanged(position);
                 if (dropDown.getRowno() == -1) {
-                    if (dropDown.getHeading().equals("Place of Collection")) {
+                    if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PLACE_OF_COLECTION)) {
                         if (i == 2) {
+                            Log.v("Adapter", "Place of collection Selected = " + i);
                             items.add(position + 1, helper.buildEditText("Place of Collection (Specify)", "", dropDown.getTableName(), COLUMN_OTHERS_SPECIFY, -1, "collectedBy"));
                             notifyItemInserted(position + 1);
-                            notifyDataSetChanged();
+                            //notifyDataSetChanged();
                         }
                     }
                     databaseHelper.updateIntValue(dropDown.getTableName(), dropDown.getColumnName(), i);
                 } else {
-                    if (dropDown.getHeading().equals("Industry")) {
+                    if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_INDUSTRY)) {
                         Log.v("Adapter", "Industry Selected = " + i);
                         manageMultiSelectList(i);
                         MultiSelectDropdown multiselect = (MultiSelectDropdown) items.get(position + 1);
