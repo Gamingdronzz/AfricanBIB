@@ -287,8 +287,10 @@ public class Tab2 extends Fragment {
         if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
             int[] ids = databaseHelper.getrowids(tableName);
             if (ids != null) {
+                Log.v("Reference", "ID Length = " + ids.length);
                 for (int i = 0; i < ids.length; i++) {
                     for (int j = titles.length - 1; j >= 0; j--) {
+                        Log.v("Reference", "I = " + i + "\nJ = " + j);
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_TYPE_OF_ORGANISATION)) {
                             selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
                             items.add(helper.buildDropDown(titles[j], new String[]{"Business Partnership",
@@ -384,13 +386,9 @@ public class Tab2 extends Fragment {
                             items.add(helper.buildImage(titles[j], ids[i], ownerLogo, tableName, columnNames[j], xmltags[j]));
                         } else if (columnNames[j].equals(DatabaseHelper.COLUMN_PREFIX)) {
                             selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
-                            items.add(helper.buildDropDown("Prefix",
-                                    new String[]{"Mr.",
-                                            "Mrs.",
-                                            "Ms.",
-                                            "Dr",
-                                            "Prof."},
-                                    new int[]{0, 1, 2, 3, 4}, selectedPosition, tableName, columnNames[j], ids[i], "prefix"));
+                            items.add(helper.buildDropDown(titles[j],
+                                    helper.getPrefixList(),
+                                    new int[]{0, 1, 2, 3, 4}, selectedPosition, tableName, columnNames[j], ids[i], xmltags[j]));
                         } else if (columnNames[j].equals(DatabaseHelper.COLUMN_BIRTHDAY)) {
                             items.add(helper.buildDate(titles[j], databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
                                     tableName, columnNames[j], ids[i], xmltags[j]));
@@ -474,13 +472,9 @@ public class Tab2 extends Fragment {
                             items.add(helper.buildImage(titles[j], ids[i], managerLogo, tableName, columnNames[j], xmltags[j]));
                         } else if (columnNames[j].equals(DatabaseHelper.COLUMN_PREFIX)) {
                             selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
-                            items.add(helper.buildDropDown("Prefix",
-                                    new String[]{"Mr.",
-                                            "Mrs.",
-                                            "Ms.",
-                                            "Dr",
-                                            "Prof."},
-                                    new int[]{0, 1, 2, 3, 4}, selectedPosition, tableName, columnNames[j], ids[i], "prefix"));
+                            items.add(helper.buildDropDown(titles[j],
+                                    helper.getPrefixList(),
+                                    helper.getPrefixCodes(), selectedPosition, tableName, columnNames[j], ids[i], xmltags[j]));
                         } else if (columnNames[j].equals(DatabaseHelper.COLUMN_BIRTHDAY)) {
                             items.add(helper.buildDate(titles[j], databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
                                     tableName, columnNames[j], ids[i], xmltags[j]));

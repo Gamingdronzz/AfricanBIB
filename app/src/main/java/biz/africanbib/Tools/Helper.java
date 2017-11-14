@@ -472,6 +472,19 @@ public class Helper {
                 };
     }
 
+    public String[] getPrefixList() {
+        return new String[]{"Mr.",
+                "Mrs.",
+                "Ms.",
+                "Dr",
+                "Prof."};
+    }
+
+    public int[] getPrefixCodes() {
+        return new int[]{0,1,2,3,4};
+    }
+
+
     public int[] getIndustryCodes() {
         return new int[]{278, 279, 280, 281, 282, 283, 284, 285, 286, 287, 288, 289, 290, 291, 292, 293, 294, 295, 296, 297, 298, 299, 300, 301, 302, 303, 304, 305, 306};
     }

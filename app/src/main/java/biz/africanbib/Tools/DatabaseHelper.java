@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.design.widget.TabLayout;
 import android.util.Log;
 
 import biz.africanbib.Models.PreviousBusiness;
@@ -523,9 +524,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //addValue(result, TABLE_OFFERS);
         //addValue(result, TABLE_NEEDS);
         addValue(result, TABLE_CONTACT_PERSON);
-        addValue(result, TABLE_REFERENCES);
-        addValue(result, TABLE_OWNERS);
-        addValue(result, TABLE_MANAGERS);
+        //addValue(result, TABLE_REFERENCES);
+        //addValue(result, TABLE_OWNERS);
+        //addValue(result, TABLE_MANAGERS);
         addValue(result, TABLE_SUBSIDIARIES);
         //addValue(result, TABLE_ACADEMIC_BACKGROUND);
         //addValue(result, TABLE_PROFESSIONAL_BACKGROUND);
@@ -533,10 +534,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //addValue(result, TABLE_REFERENCE_SPECIFIC_INFORMATION);
         //addValue(result, TABLE_SUBSIDIARY_SPECIFIC_INFORMATION);
         //addValue(result, TABLE_SERVICES);
-        addValue(result, TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
+        //addValue(result, TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
         addValue(result, TABLE_COMPANY_INDICATORS);
-        addValue(result, TABLE_AWARDS);
-        addValue(result, TABLE_LATEST_NEWS);
+        //addValue(result, TABLE_AWARDS);
+        //addValue(result, TABLE_LATEST_NEWS);
         addValue(result, TABLE_BUSINESS_CORRESPONDING_LANGUAGES);
         //addValue(result, TABLE_SECTORS);
         addValue(result, TABLE_SOURCE_OF_DATA);
@@ -806,6 +807,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         result = db.update(TableName, values, COLUMN_COMPANY_ID + " = " + getCurrentCompanyId(), null);
         Log.v(TAG, TableName + "." + ColumnName + " updated with value = " + value);
         if (db != null) db.close();
+
+
+        db = getReadableDatabase();
+
+        try {
+            String query = "SELECT " + ColumnName + " FROM " + TableName + " WHERE " + COLUMN_COMPANY_ID + " = " + getCurrentCompanyId();
+            Log.v(TAG, "Query = " + query);
+            cursor = db.rawQuery(query, null);
+            cursor.moveToFirst();
+            if (cursor.getCount() != 0) {
+                for(int i=0;i<cursor.getCount();i++)
+                Log.v("Database","Value = " + cursor.getString(0));
+
+            } else {
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            cursor.close();
+            if (db != null) db.close();
+        }
+
+
     }
 
     public void updateBlobValue(String TableName, String ColumnName, byte[] value) {

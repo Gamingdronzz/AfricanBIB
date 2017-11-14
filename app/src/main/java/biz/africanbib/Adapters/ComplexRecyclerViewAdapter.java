@@ -1002,35 +1002,35 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             Add add = (Add) items.get(position);
             Log.v("Adapter", "Clicked at = " + add.getTableName());
             items.add(position, new Divider());
+            String[] titles = add.getTitles();
             String[] columnNames = add.getColumnNames();
-            String[] tableColumnNames = add.getTableColumnNames();
             String[] xmlTags = add.getXmlTags();
             int currentRowNo = manageRowNo(add);
-            Log.v("Adapter", "Current Row = " + currentRowNo);
+            //Log.v("Adapter", "Current Row = " + currentRowNo);
 
             databaseHelper.insertRow(add.getTableName(), currentRowNo);
 
             for (int i = 0; i < add.getRows(); i++) {
-                Log.v("Adapter", "Current Column = " + tableColumnNames[i]);
+                //Log.v("Adapter", "Current Column = " + columnNames[i]);
 
-                if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_SECTOR)) {
-                    items.add(position, helper.buildMultiSelectDropdown(columnNames[i],
+                if (columnNames[i].equals(DatabaseHelper.COLUMN_SECTOR)) {
+                    items.add(position, helper.buildMultiSelectDropdown(titles[i],
                             add.getTableName(),
-                            tableColumnNames[i],
+                            columnNames[i],
                             helper.manageMultiSelectList(0), helper.manageMultiSelectList2(0),
                             null,
                             currentRowNo, "sector"
                     ));
                     notifyItemInserted(position);
-                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_INDUSTRY)) {
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_INDUSTRY)) {
                     items.add(position, helper.buildDropDown(
-                            columnNames[i],
+                            titles[i],
                             helper.getIndustryList(), helper.getIndustryCodes(),
-                            databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
-                            add.getTableName(), tableColumnNames[i], currentRowNo, "industry"));
+                            databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
+                            add.getTableName(), columnNames[i], currentRowNo, "industry"));
                     notifyItemInserted(position);
-                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_TYPE_OF_ORGANISATION)) {
-                    items.add(position, helper.buildDropDown(columnNames[i],
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_TYPE_OF_ORGANISATION)) {
+                    items.add(position, helper.buildDropDown(titles[i],
                             new String[]{"Business Partnership",
                                     "International NGO",
                                     "Freelance",
@@ -1039,22 +1039,22 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                     "Local NGO",
                                     "Privately Held Company",
                                     "Publicly Held Institution"}, new int[]{0, 3, 1, 6, 2, 4, 5, 7},
-                            databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
-                            add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
+                            databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
+                            add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
                     notifyItemInserted(position);
-                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_POSITION_IN_COMPANY)) {
-                    items.add(position, helper.buildDropDown(columnNames[i],
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_POSITION_IN_COMPANY)) {
+                    items.add(position, helper.buildDropDown(titles[i],
                             new String[]{"Student/Intern",
                                     "Entry Level",
                                     "Professional / Experienced",
                                     "Manager (Manager / Supervisor)",
                                     "Executive (VP, SVP etc)",
                                     "Senior Executive (CEO,CFO)"},
-                            new int[]{0}, databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
-                            add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
+                            new int[]{0}, databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
+                            add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
                     notifyItemInserted(position);
-                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_COMPANY_SIZE)) {
-                    items.add(position, helper.buildDropDown(columnNames[i],
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_COMPANY_SIZE)) {
+                    items.add(position, helper.buildDropDown(titles[i],
                             new String[]{
                                     "Self Employed",
                                     "1 - 10 Employees",
@@ -1063,11 +1063,11 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                     "201 - 500 Employees",
                                     "501 - 1,000 Employees",
                                     "1,001 - 10,000 Employees",
-                                    "10,001 or More"}, new int[]{0, 1, 2, 3, 4, 5, 6, 7}, databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
-                            add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
+                                    "10,001 or More"}, new int[]{0, 1, 2, 3, 4, 5, 6, 7}, databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
+                            add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
                     notifyItemInserted(position);
-                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_INVESTMENT_VOLUME)) {
-                    items.add(position, helper.buildDropDown(columnNames[i],
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_INVESTMENT_VOLUME)) {
+                    items.add(position, helper.buildDropDown(titles[i],
                             new String[]{
                                     "Less than 5,000",
                                     "5,000-10,000",
@@ -1075,86 +1075,81 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                     "15,000-50,000",
                                     "50,000-150,000",
                                     "150,000-500,000",
-                                    "more than 500,000"}, new int[]{0, 1, 2, 3, 4, 5, 6}, databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
-                            add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
+                                    "more than 500,000"}, new int[]{0, 1, 2, 3, 4, 5, 6}, databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
+                            add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
                     notifyItemInserted(position);
-                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_EMPLOYEE_ADDITIONAL_TRAINING)) {
-                    items.add(position, helper.buildDropDown(columnNames[i],
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_EMPLOYEE_ADDITIONAL_TRAINING)) {
+                    items.add(position, helper.buildDropDown(titles[i],
                             new String[]{
                                     "4 Times / Year ",
                                     "Twice / year",
                                     "Once / Year",
-                                    "Once Every 2 Years"}, new int[]{0, 1, 2, 3}, databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
-                            add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
+                                    "Once Every 2 Years"}, new int[]{0, 1, 2, 3}, databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
+                            add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
                     notifyItemInserted(position);
-                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_TYPE_OF_ACTIVITIES)) {
-                    items.add(position, helper.buildDropDown(columnNames[i],
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_TYPE_OF_ACTIVITIES)) {
+                    items.add(position, helper.buildDropDown(titles[i],
                             new String[]{"Manufacturing", "Service Provider", "Manufacturing + Service Provider"},
                             new int[]{1, 2, 3},
-                            databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
-                            add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
+                            databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
+                            add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
                     notifyItemInserted(position);
                 } else if (columnNames[i].equals(DatabaseHelper.COLUMN_PREFIX)) {
-                    items.add(helper.buildDropDown("Prefix",
-                            new String[]{"Mr.",
-                                    "Mrs.",
-                                    "Ms.",
-                                    "Dr",
-                                    "Prof."},
-                            new int[]{0, 1, 2, 3, 4}, databaseHelper.getIntFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
-                            add.getTableName(), columnNames[i], currentRowNo, "prefix"));
+                    items.add(position, helper.buildDropDown(titles[i], helper.getPrefixList(), helper.getPrefixCodes(), 0, add.getTableName(), columnNames[i], currentRowNo, "prefix"));
+                    Log.v("Adapter", "Inserting Dropdown " + titles[i] + " at " + i + " with table = " + add.getTableName() + " row no = " + currentRowNo);
                     notifyItemInserted(position);
-                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_COUNTRY)) {
-                    items.add(position, helper.buildDropDown(columnNames[i], helper.getCountryNames(), helper.getCountryCodes(), 0, add.getTableName(), tableColumnNames[i], currentRowNo, "country"));
+                } else if (titles[i].equals(DatabaseHelper.COLUMN_COUNTRY)) {
+                    items.add(position, helper.buildDropDown(titles[i], helper.getCountryNames(), helper.getCountryCodes(), 0, add.getTableName(), columnNames[i], currentRowNo, "country"));
                     notifyItemInserted(position);
-                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_DATE)) {
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_DATE)) {
                     items.add(position, helper.buildDate(
-                            columnNames[i],
-                            databaseHelper.getStringFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
+                            titles[i],
+                            databaseHelper.getStringFromRow(add.getTableName(), columnNames[i], currentRowNo),
                             add.getTableName(),
-                            tableColumnNames[i],
+                            columnNames[i],
                             currentRowNo, "date"));
-                    Log.v("Adapter", "Inserting Date " + columnNames[i] + " at " + i);
+                    //Log.v("Adapter", "Inserting Date " + columnNames[i] + " at " + i);
                     notifyItemInserted(position);
-                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_BIRTHDAY)) {
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_BIRTHDAY)) {
                     items.add(position, helper.buildDate(
-                            columnNames[i],
-                            databaseHelper.getStringFromRow(add.getTableName(), tableColumnNames[i], currentRowNo),
+                            titles[i],
+                            databaseHelper.getStringFromRow(add.getTableName(), columnNames[i], currentRowNo),
                             add.getTableName(),
-                            tableColumnNames[i],
+                            columnNames[i],
                             currentRowNo, "birthday"));
                     notifyItemInserted(position);
-                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_MEDIA)) {
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_MEDIA)) {
                     Bitmap image = null;
                     try {
-                        image = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(tableColumnNames[i], add.getTableName(), currentRowNo));
+                        image = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[i], add.getTableName(), currentRowNo));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    items.add(position, helper.buildImage(columnNames[i], currentRowNo, image, add.getTableName(), tableColumnNames[i], xmlTags[i]));
+                    items.add(position, helper.buildImage(titles[i], currentRowNo, image, add.getTableName(), columnNames[i], xmlTags[i]));
                     notifyItemInserted(position);
-                } else if (tableColumnNames[i].equals(DatabaseHelper.COLUMN_LOGO)) {
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_LOGO)) {
                     Bitmap image = null;
                     try {
-                        image = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(tableColumnNames[i], add.getTableName(), currentRowNo));
+                        image = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[i], add.getTableName(), currentRowNo));
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    items.add(position, helper.buildImage(columnNames[i], currentRowNo, image, add.getTableName(), tableColumnNames[i], xmlTags[i]));
+                    items.add(position, helper.buildImage(titles[i], currentRowNo, image, add.getTableName(), columnNames[i], xmlTags[i]));
+                    Log.v("Adapter", "Inserting Image " + titles[i] + " at " + i + " with table = " + add.getTableName() + " row no = " + currentRowNo);
                     notifyItemInserted(position);
                 } else {
-                    items.add(position, helper.buildEditText(columnNames[i], "", add.getTableName(), tableColumnNames[i], currentRowNo, xmlTags[i]));
-                    Log.v("Adapter", "Inserting Edittext " + columnNames[i] + " at " + i);
+                    items.add(position, helper.buildEditText(titles[i], "", add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
+                    //Log.v("Adapter", "Inserting Edittext " + columnNames[i] + " at " + i + " with row no = " + currentRowNo);//
                     notifyItemInserted(position);
                 }
 
             }
 
             if (!clicked) {
-                items.add(position, new Divider());
+                //items.add(position, new Divider());
                 clicked = true;
             }
-            Log.v("Adapter", "Inserted");
+            //Log.v("Adapter", "Inserted");
             notifyDataSetChanged();
         }
 
@@ -1200,7 +1195,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         imagePicker = new ImagePicker();
         imagePicker.setTitle("Select Image");
         imagePicker.setCropImage(true);
-        Log.d("Adapter", context.toString());
+
         imagePicker.startChooser(context, new ImagePicker.Callback() {
             @Override
             public void onPickImage(Uri imageUri) {
@@ -1235,7 +1230,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 Log.v("Image : ", "Image = " + builder.toString());
                 Point size = new Point();
                 Point ratio = new Point();
-                Log.v("Adapter", "cropConfig");
+                //Log.v("Adapter", "cropConfig");
                 if (simpleImage.getTitle().equals("Corporate Logo")) {
                     size.set(210, 145);
                     ratio.set(42, 29);
@@ -1346,10 +1341,11 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 if (currentlyFocusedPosition != -1) {
                     if (items.get(currentlyFocusedPosition) instanceof SimpleEditText) {
                         SimpleEditText simpleEditText = (SimpleEditText) items.get(currentlyFocusedPosition);
-                        Log.v("Complex Adapter", "Lost Focus Position  = " + currentlyFocusedPosition +
+                        /*Log.v("Complex Adapter", "Lost Focus Position  = " + currentlyFocusedPosition +
                                 "\nTitle = " + simpleEditText.getTitle() +
                                 "\nColumn = " + simpleEditText.getColumnName() +
                                 "\nTable = " + simpleEditText.getTableName());
+                                */
                         if (simpleEditText.getRowno() == -1) {
                             databaseHelper.updateStringValue(simpleEditText.getTableName(), simpleEditText.getColumnName(), simpleEditText.getValue());
                         } else {

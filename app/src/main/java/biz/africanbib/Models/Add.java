@@ -22,7 +22,7 @@ public class Add {
 
     private String[] tableColumnNames = null;
 
-    public String[] getTableColumnNames() {
+    public String[] getColumnNames() {
         return tableColumnNames;
     }
 
@@ -72,7 +72,7 @@ public class Add {
         this.columnNames = columnNames;
     }
 
-    public String[] getColumnNames() {
+    public String[] getTitles() {
 
         return columnNames;
     }
