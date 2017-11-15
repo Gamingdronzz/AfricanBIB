@@ -426,16 +426,28 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     private void addXmlContent(ArrayList<Object> items, XmlSerializer xmlSerializer) throws IOException {
         String headTag = null;
+        String personTag;
         for (int i = 0; i < items.size() - 1; i++) {
+            personTag = null;
             Object item = items.get(i);
             Log.v(TAG, "i =" + i);
             if (items.get(i) instanceof Heading) {
                 Heading heading = (Heading) items.get(i);
+                headTag = heading.getXmlTag();
                 if (heading.getHeading().equals("OWNERS/MANAGERS/REFERENCES")) {
                     headTag = null;
                     i = getContactXml(i, items, xmlSerializer);
+                } else if (heading.getHeading().equals("CONTACT PERSON")) {
+                    xmlSerializer.startTag(null, headTag);
+                    xmlSerializer.startTag(null, "type");
+                    xmlSerializer.text("0");
+                    xmlSerializer.endTag(null, "type");
+                } else if (heading.getHeading().equals("SUBSIDIARIES")) {
+                    xmlSerializer.startTag(null, headTag);
+                    xmlSerializer.startTag(null, "type");
+                    xmlSerializer.text("4");
+                    xmlSerializer.endTag(null, "type");
                 } else {
-                    headTag = heading.getXmlTag();
                     if (headTag != null) {
                         Log.v(TAG, "START TAG " + headTag);
                         xmlSerializer.startTag(null, headTag);
@@ -454,9 +466,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                 xmlSerializer.endTag(null, simpleEditText.getXmlTag());
                             }
                         }
-                    }
-
-                    else if (item instanceof SimpleDate) {
+                    } else if (item instanceof SimpleDate) {
                         SimpleDate date = (SimpleDate) item;
                         //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
                         if (date.getValue() != null) {
@@ -464,21 +474,22 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             xmlSerializer.text(helper.toDays(date.getValue()));
                             xmlSerializer.endTag(null, date.getXmlTag());
                         }
-                    }
-                    else if (item instanceof SimpleImage) {
+                    } else if (item instanceof SimpleImage) {
                         SimpleImage simpleImage = (SimpleImage) item;
                         //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
                         if (simpleImage.getImage() != null) {
                             xmlSerializer.startTag(null, simpleImage.getXmlTag());
-                            String tagName =helper.checkForInput(simpleImage.getTitle());
-                            xmlSerializer.text(tagName+".jpg");
+                            String tagName = helper.checkForInput(simpleImage.getTitle());
+                            xmlSerializer.text(tagName + ".jpg");
                             xmlSerializer.endTag(null, simpleImage.getXmlTag());
                         }
-                    }
-
-                    else if (item instanceof DropDown) {
+                    } else if (item instanceof DropDown) {
                         DropDown dropDown = (DropDown) item;
                         String collectedBy;
+                        if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PREFIX)) {
+                            personTag = "person";
+                            xmlSerializer.startTag(null, personTag);
+                        }
                         xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
                         if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PLACE_OF_COLECTION)) {
                             if (helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()).equals("Others")) {
@@ -499,9 +510,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         } else
                             xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
                         xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
-                    }
-
-                    else if (item instanceof MultiSelectDropdown) {
+                    } else if (item instanceof MultiSelectDropdown) {
                         MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) item;
                         //Log.v(TAG, "Found " + multiSelectDropdown.getTitle() + " with value = " + multiSelectDropdown.getSelectedIndices() + " where i = " + i);
                         List<Integer> indices = multiSelectDropdown.getSelectedIndices();
@@ -512,9 +521,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                 xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
                             }
                         }
-                    }
-
-                    else if (item instanceof SimpleText) {
+                    } else if (item instanceof SimpleText) {
                         SimpleText simpleText = (SimpleText) item;
                         //Log.v(TAG, "Found " + simpleText.getTitle() + " where i = " + i);
                         if (simpleText.getXmlTag() != null) {
@@ -578,8 +585,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                         //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
                                         if (simpleImage.getImage() != null) {
                                             xmlSerializer.startTag(null, simpleImage.getXmlTag());
-                                            String tagName =helper.checkForInput(simpleImage.getTitle());
-                                            xmlSerializer.text(tagName+".jpg");
+                                            String tagName = helper.checkForInput(simpleImage.getTitle());
+                                            xmlSerializer.text(tagName + ".jpg");
                                             xmlSerializer.endTag(null, simpleImage.getXmlTag());
                                         }
                                     }
@@ -604,6 +611,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
                 }
                 i--;
+                if (personTag != null) {
+                    xmlSerializer.endTag(null, personTag);
+                }
                 if (headTag != null) {
                     Log.v(TAG, "ENDTAG " + headTag);
                     xmlSerializer.endTag(null, headTag);
@@ -616,13 +626,29 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private int getContactXml(int i, ArrayList<Object> items, XmlSerializer xmlSerializer) throws IOException {
         int j = i + 1;
         Object obj = items.get(j);
+        String personTag;
         while (!(obj instanceof Heading)) {
             if (obj instanceof SimpleText) {
+                SimpleText simpleText = (SimpleText) obj;
                 j++;
                 while (!(items.get(j) instanceof Add)) {
 
                     xmlSerializer.startTag(null, "contact");
+                    if (simpleText.getTitle().equals("OWNERS")) {
+                        xmlSerializer.startTag(null, "type");
+                        xmlSerializer.text("1");
+                        xmlSerializer.endTag(null, "type");
+                    } else if (simpleText.getTitle().equals("MANAGERS")) {
+                        xmlSerializer.startTag(null, "type");
+                        xmlSerializer.text("2");
+                        xmlSerializer.endTag(null, "type");
+                    } else if (simpleText.getTitle().equals("REFERENCES")) {
+                        xmlSerializer.startTag(null, "type");
+                        xmlSerializer.text("3");
+                        xmlSerializer.endTag(null, "type");
+                    }
                     obj = items.get(j);
+                    personTag = null;
                     while (!(obj instanceof Divider)) {
 
                         if (obj instanceof SimpleEditText) {
@@ -637,6 +663,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
                         if (obj instanceof DropDown) {
                             DropDown dropDown = (DropDown) obj;
+                            if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PREFIX)) {
+                                personTag = "person";
+                                xmlSerializer.startTag(null, personTag);
+                            }
                             xmlSerializer.startTag(null, ((DropDown) obj).getXmlTag());
                             xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
                             xmlSerializer.endTag(null, ((DropDown) obj).getXmlTag());
@@ -665,6 +695,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         j++;
                         obj = items.get(j);
                     }
+                    if (personTag != null)
+                        xmlSerializer.endTag(null, personTag);
                     xmlSerializer.endTag(null, "contact");
                     j++;
                     obj = items.get(j);
@@ -675,7 +707,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 obj = items.get(j);
             }
         }
-        return j-1;
+        return j - 1;
     }
 
     private void showXML() {

@@ -188,44 +188,6 @@ public class Tab2 extends Fragment {
         String tableName = DatabaseHelper.TABLE_CONTACT_PERSON;
         String value;
         items.add(new Heading("CONTACT PERSON", "contact"));
-        //tableName = DatabaseHelper.TABLE_CONTACT_PERSON;
-        //columnName = DatabaseHelper.COLUMN_FIRST_NAME;
-        value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("First name", value, tableName, columnName, -1, "firstname"));
-        columnName = DatabaseHelper.COLUMN_LAST_NAME;
-        value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Last name", value, tableName, columnName, -1, "lastname"));
-        columnName = DatabaseHelper.COLUMN_PREFIX;
-        int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(
-                helper.buildDropDown(
-                        "Prefix",
-                        new String[]{"Mr.",
-                                "Mrs.",
-                                "Ms.",
-                                "Dr",
-                                "Prof."},
-                        new int[]{0, 1, 2, 3, 4},
-                        selectedPosition,
-                        tableName,
-                        columnName,
-                        -1, "prefix"));
-        columnName = DatabaseHelper.COLUMN_POSITION_IN_COMPANY;
-        selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(
-                helper.buildDropDown(
-                        "Position in company/institution",
-                        new String[]{"Student/Intern",
-                                "Entry Level",
-                                "Professional / Experienced",
-                                "Manager (Manager / Supervisor)",
-                                "Executive (VP, SVP etc)",
-                                "Senior Executive (CEO,CFO)"},
-                        new int[]{0},
-                        selectedPosition,
-                        tableName,
-                        columnName,
-                        -1, "position"));
         columnName = DatabaseHelper.COLUMN_TELEPHONE;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Telephone", value, tableName, columnName, -1, "telephone"));
@@ -255,7 +217,44 @@ public class Tab2 extends Fragment {
         items.add(helper.buildEditText("District / State", value, tableName, columnName, -1, "district"));
         columnName = DatabaseHelper.COLUMN_COUNTRY;
         items.add(helper.buildDropDown("Country", helper.getCountryNames(), helper.getCountryCodes(), 0, tableName, columnName, -1, "country"));
-        items.add(new Divider());
+        columnName = DatabaseHelper.COLUMN_PREFIX;
+        int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
+        items.add(
+                helper.buildDropDown(
+                        "Prefix",
+                        new String[]{"Mr.",
+                                "Mrs.",
+                                "Ms.",
+                                "Dr",
+                                "Prof."},
+                        new int[]{0, 1, 2, 3, 4},
+                        selectedPosition,
+                        tableName,
+                        columnName,
+                        -1, "prefix"));
+        columnName = DatabaseHelper.COLUMN_FIRST_NAME;
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(helper.buildEditText("First name", value, tableName, columnName, -1, "firstname"));
+        columnName = DatabaseHelper.COLUMN_LAST_NAME;
+        value = databaseHelper.getStringValue(columnName, tableName);
+        items.add(helper.buildEditText("Last name", value, tableName, columnName, -1, "lastname"));
+        columnName = DatabaseHelper.COLUMN_POSITION_IN_COMPANY;
+        selectedPosition = databaseHelper.getIntValue(columnName, tableName);
+        items.add(
+                helper.buildDropDown(
+                        "Position in company/institution",
+                        new String[]{"Student/Intern",
+                                "Entry Level",
+                                "Professional / Experienced",
+                                "Manager (Manager / Supervisor)",
+                                "Executive (VP, SVP etc)",
+                                "Senior Executive (CEO,CFO)"},
+                        new int[]{0},
+                        selectedPosition,
+                        tableName,
+                        columnName,
+                        -1, "position"));
+
 
         items.add(new Heading("OWNERS/MANAGERS/REFERENCES", null));
         items.add(new SimpleText("REFERENCES", "contact"));
@@ -336,39 +335,39 @@ public class Tab2 extends Fragment {
                 "affiliation",
                 "professional",
                 "academic",
-                "email",
-                "telephone",
                 "nationality",
                 "birthday",
                 "firstname",
                 "lastname",
-                "prefix"
+                "prefix",
+                "email",
+                "telephone"
         };
         titles = new String[]{
                 "Logo",
                 "Affiliation",
                 "Professional",
                 "Academic",
-                "E-Mail",
-                "Telephone",
                 "Nationality",
                 "Birthday",
                 "First Name",
                 "Last Name",
                 "Prefix",
+                "E-Mail",
+                "Telephone"
         };
         columnNames = new String[]{
                 DatabaseHelper.COLUMN_LOGO,
                 DatabaseHelper.COLUMN_AFFILIATION,
                 DatabaseHelper.COLUMN_PROFESSIONAL,
                 DatabaseHelper.COLUMN_ACADEMIC,
-                DatabaseHelper.COLUMN_EMAIL,
-                DatabaseHelper.COLUMN_TELEPHONE,
                 DatabaseHelper.COLUMN_NATIONALITY,
                 DatabaseHelper.COLUMN_BIRTHDAY,
                 DatabaseHelper.COLUMN_FIRST_NAME,
                 DatabaseHelper.COLUMN_LAST_NAME,
-                DatabaseHelper.COLUMN_PREFIX
+                DatabaseHelper.COLUMN_PREFIX,
+                DatabaseHelper.COLUMN_EMAIL,
+                DatabaseHelper.COLUMN_TELEPHONE
         };
         if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
             int[] ids = databaseHelper.getrowids(tableName);
@@ -422,39 +421,39 @@ public class Tab2 extends Fragment {
                 "affiliation",
                 "professional",
                 "academic",
-                "email",
-                "telephone",
                 "nationality",
                 "birthday",
                 "firstname",
                 "lastname",
-                "prefix"
+                "prefix",
+                "email",
+                "telephone",
         };
         titles = new String[]{
                 "Logo",
                 "Affiliation",
                 "Professional",
                 "Academic",
-                "E-Mail",
-                "Telephone",
                 "Nationality",
                 "Birthday",
                 "First Name",
                 "Last Name",
                 "Prefix",
+                "E-Mail",
+                "Telephone"
         };
         columnNames = new String[]{
                 DatabaseHelper.COLUMN_LOGO,
                 DatabaseHelper.COLUMN_AFFILIATION,
                 DatabaseHelper.COLUMN_PROFESSIONAL,
                 DatabaseHelper.COLUMN_ACADEMIC,
-                DatabaseHelper.COLUMN_EMAIL,
-                DatabaseHelper.COLUMN_TELEPHONE,
                 DatabaseHelper.COLUMN_NATIONALITY,
                 DatabaseHelper.COLUMN_BIRTHDAY,
                 DatabaseHelper.COLUMN_FIRST_NAME,
                 DatabaseHelper.COLUMN_LAST_NAME,
-                DatabaseHelper.COLUMN_PREFIX
+                DatabaseHelper.COLUMN_PREFIX,
+                DatabaseHelper.COLUMN_EMAIL,
+                DatabaseHelper.COLUMN_TELEPHONE
         };
         if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
             int[] ids = databaseHelper.getrowids(tableName);
