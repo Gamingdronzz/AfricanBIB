@@ -2,34 +2,43 @@ package biz.africanbib.Activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import biz.africanbib.R;
 import biz.africanbib.Tools.DatabaseHelper;
 
 public class SplashScreen extends AppCompatActivity {
 
-    Button addBusiness,editBusiness;
-DatabaseHelper databaseHelper;
+    Button addBusiness, editBusiness;
+    LinearLayout linearLayout ;
+    DatabaseHelper databaseHelper;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
-        databaseHelper = new DatabaseHelper(getApplicationContext(),DatabaseHelper.DATABASE_NAME,null,DatabaseHelper.DATABASE_VERSION);
+        databaseHelper = new DatabaseHelper(getApplicationContext(), DatabaseHelper.DATABASE_NAME, null, DatabaseHelper.DATABASE_VERSION);
         bindVIews();
         //ShowNextActivity();
     }
 
-    private void bindVIews()
-    {
+    private void bindVIews() {
         addBusiness = (Button) findViewById(R.id.button_add_business);
         editBusiness = (Button) findViewById(R.id.button_edit_business);
-
+        linearLayout = (LinearLayout) findViewById(R.id.poweredBy);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openCompanyWebsite();
+            }
+        });
         addBusiness.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -44,32 +53,38 @@ DatabaseHelper databaseHelper;
             }
         });
     }
-/*
-    private void ShowNextActivity() {
-        new Handler().postDelayed(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        LoadNextActivity();
-                    }
-                },
-                1000
-        );
+
+    private void openCompanyWebsite()
+    {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+        browserIntent.setData(Uri.parse("http://www.gamingdronzz.com"));
+        startActivity(browserIntent);
     }
-*/
+
+    /*
+        private void ShowNextActivity() {
+            new Handler().postDelayed(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            LoadNextActivity();
+                        }
+                    },
+                    1000
+            );
+        }
+    */
     private void LoadNextActivity(boolean newBusiness) {
 
-        if(newBusiness ) {
+        if (newBusiness) {
             Intent intent = new Intent();
             intent.setClass(getApplicationContext(), InitialCompanyDetails.class);
             intent.putExtra("type", MainActivity.NEWBUSINESS);
             startActivity(intent);
-        }
-        else
-        {
+        } else {
             Intent intent = new Intent();
-            intent.setClass(getApplicationContext(),PreviousBusinessLists.class);
-            intent.putExtra("type",MainActivity.EDITBUSINESS);
+            intent.setClass(getApplicationContext(), PreviousBusinessLists.class);
+            intent.putExtra("type", MainActivity.EDITBUSINESS);
             startActivity(intent);
         }
     }
