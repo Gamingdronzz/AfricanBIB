@@ -10,11 +10,12 @@
 
     <ImageView
         android:id="@+id/logo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
         android:layout_alignParentTop="true"
         android:layout_centerInParent="true"
-        android:layout_marginTop="@dimen/margin_large"
+        android:layout_marginBottom="@dimen/margin_xxlarge"
+        android:layout_marginTop="@dimen/margin_xxlarge"
         android:background="@android:color/transparent"
         android:src="@drawable/logo" />
 
@@ -37,12 +38,14 @@
             android:background="@drawable/ps__button_dropbox"
             android:drawablePadding="@dimen/padding_medium"
             android:drawableRight="@android:drawable/ic_menu_add"
-            android:paddingStart="@dimen/padding_xlarge"
             android:drawableTint="@color/colorBlack"
             android:gravity="center|center_vertical"
+            android:paddingBottom="@dimen/padding_large"
             android:paddingLeft="@dimen/padding_xlarge"
+            android:paddingStart="@dimen/padding_xlarge"
+            android:paddingTop="@dimen/padding_large"
             android:text="@string/add_business"
-            android:textSize="@dimen/text_small" />
+            android:textSize="@dimen/text_xlarge" />
 
 
         <Button
@@ -55,10 +58,12 @@
             android:drawableRight="@android:drawable/ic_menu_edit"
             android:drawableTint="@color/colorBlack"
             android:gravity="center|center_vertical"
+            android:paddingBottom="@dimen/padding_large"
             android:paddingLeft="@dimen/padding_xlarge"
             android:paddingStart="@dimen/padding_xlarge"
+            android:paddingTop="@dimen/padding_large"
             android:text="@string/edit_business"
-            android:textSize="@dimen/text_small" />
+            android:textSize="@dimen/text_xlarge" />
 
 
     </LinearLayout>
@@ -75,12 +80,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_small"
-            android:drawableBottom="@drawable/gdlogo"
+            android:drawableBottom="@drawable/gdlogo2"
             android:fontFamily="sans-serif-condensed"
             android:text="Powered By"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="15sp" />
+            android:textSize="@dimen/text_large" />
 
         <TextView
             android:layout_width="match_parent"
@@ -90,7 +95,7 @@
             android:text="@string/website"
             android:textAlignment="center"
             android:textColor="#0000ff"
-            android:textSize="15sp" />
+            android:textSize="@dimen/text_large" />
     </LinearLayout>
 
 </RelativeLayout>
