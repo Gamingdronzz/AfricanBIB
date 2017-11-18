@@ -450,6 +450,14 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     xmlSerializer.startTag(null, "type");
                     xmlSerializer.text("4");
                     xmlSerializer.endTag(null, "type");
+                } else if (heading.getHeading().equals("COMPANY POSTAL ADDRESS") || heading.getHeading().equals("COMPANY CONTACT")) {
+                    xmlSerializer.startTag(null, headTag);
+                    xmlSerializer.startTag(null, "type");
+                    xmlSerializer.text("0");
+                    xmlSerializer.endTag(null, "type");
+                    xmlSerializer.startTag(null, "isPrimary");
+                    xmlSerializer.text("1");
+                    xmlSerializer.endTag(null, "isPrimary");
                 } else {
                     if (headTag != null) {
                         Log.v(TAG, "START TAG " + headTag);
