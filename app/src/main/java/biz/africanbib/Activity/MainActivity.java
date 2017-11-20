@@ -509,33 +509,48 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
                     } else if (item instanceof DropDown) {
                         DropDown dropDown = (DropDown) item;
-                        String collectedBy;
+                        String collectedBy = " ";
                         if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PREFIX)) {
                             personTag = "person";
                             xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, personTag);
                         }
-                        xmlSerializer.text(System.getProperty("line.separator"));
-                        xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
                         if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PLACE_OF_COLECTION)) {
                             if (helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()).equals("Others")) {
                                 SimpleEditText edt = (SimpleEditText) items.get(++i);
                                 SimpleDate date = (SimpleDate) items.get(++i);
-                                if (edt.getValue().trim().length()== 0)
-                                    collectedBy = helper.toDays(date.getValue());
-                                else
+                                if (edt.getValue().trim().length() == 0) {
+                                    if (date.getValue() != null && date.getValue().trim().length() != 0) {
+                                        xmlSerializer.text(System.getProperty("line.separator"));
+                                        xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
+                                        collectedBy = helper.toDays(date.getValue());
+                                        xmlSerializer.text(collectedBy);
+                                        xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
+                                    }
+                                } else {
+                                    xmlSerializer.text(System.getProperty("line.separator"));
+                                    xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
                                     collectedBy = Helper.forReplacementString(edt.getValue()) + " , " + helper.toDays(date.getValue());
+                                    xmlSerializer.text(collectedBy);
+                                    xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
+                                }
                             } else {
                                 if (items.get(i + 1) instanceof SimpleEditText) {
                                     i = i + 2;
                                 } else i++;
                                 SimpleDate date = (SimpleDate) items.get(i);
+                                xmlSerializer.text(System.getProperty("line.separator"));
+                                xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
                                 collectedBy = helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()) + ", " + helper.toDays(date.getValue());
+                                xmlSerializer.text(collectedBy);
+                                xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
                             }
-                            xmlSerializer.text(collectedBy);
-                        } else
+                        } else {
+                            xmlSerializer.text(System.getProperty("line.separator"));
+                            xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
                             xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
-                        xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
+                            xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
+                        }
                     } else if (item instanceof MultiSelectDropdown) {
                         MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) item;
                         //Log.v(TAG, "Found " + multiSelectDropdown.getTitle() + " with value = " + multiSelectDropdown.getSelectedIndices() + " where i = " + i);

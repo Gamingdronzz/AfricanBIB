@@ -979,9 +979,9 @@ public class Helper {
                 long days = TimeUnit.DAYS.convert(d.getTime(), TimeUnit.MILLISECONDS);
                 return String.valueOf(days);
             }
-            else return " ";
+            else return "N/A";
 
-        } else return " ";
+        } else return "N/A";
     }
 }
 
