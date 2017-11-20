@@ -402,6 +402,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
             xmlSerializer.setOutput(writer);
             xmlSerializer.startDocument("UTF-8", true);
+            xmlSerializer.text(System.getProperty("line.separator"));
             xmlSerializer.startTag(null, "Organisation");
 
             addXmlContent(items1, xmlSerializer);
@@ -409,6 +410,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             addXmlContent(items3, xmlSerializer);
             addXmlContent(items4, xmlSerializer);
 
+            xmlSerializer.text(System.getProperty("line.separator"));
             xmlSerializer.endTag(null, "Organisation");
             xmlSerializer.endDocument();
             xmlSerializer.flush();
@@ -441,26 +443,34 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     headTag = null;
                     i = getContactXml(i, items, xmlSerializer);
                 } else if (heading.getHeading().equals("CONTACT PERSON")) {
+                    xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, headTag);
+                    xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, "type");
                     xmlSerializer.text("0");
                     xmlSerializer.endTag(null, "type");
                 } else if (heading.getHeading().equals("SUBSIDIARIES")) {
+                    xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, headTag);
+                    xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, "type");
                     xmlSerializer.text("4");
                     xmlSerializer.endTag(null, "type");
                 } else if (heading.getHeading().equals("COMPANY POSTAL ADDRESS") || heading.getHeading().equals("COMPANY CONTACT")) {
+                    xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, headTag);
+                    xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, "type");
                     xmlSerializer.text("0");
                     xmlSerializer.endTag(null, "type");
+                    xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, "isPrimary");
                     xmlSerializer.text("1");
                     xmlSerializer.endTag(null, "isPrimary");
                 } else {
                     if (headTag != null) {
                         Log.v(TAG, "START TAG " + headTag);
+                        xmlSerializer.text(System.getProperty("line.separator"));
                         xmlSerializer.startTag(null, headTag);
                     }
                 }
@@ -472,6 +482,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         // Log.v(TAG, "Found " + simpleEditText.getTitle() + " with value = " + simpleEditText.getValue() + " where i = " + i);
                         if (simpleEditText.getValue() != null) {
                             if (!simpleEditText.getValue().isEmpty()) {
+                                xmlSerializer.text(System.getProperty("line.separator"));
                                 xmlSerializer.startTag(null, simpleEditText.getXmlTag());
                                 xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
                                 xmlSerializer.endTag(null, simpleEditText.getXmlTag());
@@ -481,6 +492,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         SimpleDate date = (SimpleDate) item;
                         //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
                         if (date.getValue() != null) {
+                            xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, date.getXmlTag());
                             xmlSerializer.text(helper.toDays(date.getValue()));
                             xmlSerializer.endTag(null, date.getXmlTag());
@@ -489,6 +501,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         SimpleImage simpleImage = (SimpleImage) item;
                         //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
                         if (simpleImage.getImage() != null) {
+                            xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, simpleImage.getXmlTag());
                             String tagName = helper.checkForInput(simpleImage.getTitle());
                             xmlSerializer.text(tagName + ".jpg");
@@ -499,8 +512,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         String collectedBy;
                         if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PREFIX)) {
                             personTag = "person";
+                            xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, personTag);
                         }
+                        xmlSerializer.text(System.getProperty("line.separator"));
                         xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
                         if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PLACE_OF_COLECTION)) {
                             if (helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()).equals("Others")) {
@@ -515,7 +530,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                     i = i + 2;
                                 } else i++;
                                 SimpleDate date = (SimpleDate) items.get(i);
-                                collectedBy = helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()) + " , " + helper.toDays(date.getValue());
+                                collectedBy = helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()) + ", " + helper.toDays(date.getValue());
                             }
                             xmlSerializer.text(collectedBy);
                         } else
@@ -527,6 +542,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         List<Integer> indices = multiSelectDropdown.getSelectedIndices();
                         if (indices.size() > 0) {
                             for (int index : indices) {
+                                xmlSerializer.text(System.getProperty("line.separator"));
                                 xmlSerializer.startTag(null, multiSelectDropdown.getXmlTag());
                                 helper.childTags(multiSelectDropdown, index, xmlSerializer);
                                 xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
@@ -541,6 +557,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
                         String tag = ((SimpleText) item).getXmlTag();
                         if (tag != null) {
+                            xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, tag);
                             Log.v(TAG, "Simple Start Tag = " + tag);
                         }
@@ -556,6 +573,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                         SimpleEditText simpleEditText = (SimpleEditText) item;
                                         if (simpleEditText.getValue() != null) {
                                             if (!simpleEditText.getValue().isEmpty()) {
+                                                xmlSerializer.text(System.getProperty("line.separator"));
                                                 xmlSerializer.startTag(null, simpleEditText.getXmlTag());
                                                 xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
                                                 xmlSerializer.endTag(null, simpleEditText.getXmlTag());
@@ -565,6 +583,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
                                     if (item instanceof DropDown) {
                                         DropDown dropDown = (DropDown) item;
+                                        xmlSerializer.text(System.getProperty("line.separator"));
                                         xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
                                         xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
                                         xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
@@ -576,6 +595,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                         if (indices.size() > 0) {
                                             for (int index :
                                                     indices) {
+                                                xmlSerializer.text(System.getProperty("line.separator"));
                                                 xmlSerializer.startTag(null, multiSelectDropdown.getXmlTag());
                                                 helper.childTags(multiSelectDropdown, index, xmlSerializer);
                                                 xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
@@ -586,6 +606,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                     if (item instanceof SimpleDate) {
                                         SimpleDate date = (SimpleDate) item;
                                         if (date.getValue() != null) {
+                                            xmlSerializer.text(System.getProperty("line.separator"));
                                             xmlSerializer.startTag(null, date.getXmlTag());
                                             xmlSerializer.text(helper.toDays(date.getValue()));
                                             xmlSerializer.endTag(null, date.getXmlTag());
@@ -595,6 +616,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                         SimpleImage simpleImage = (SimpleImage) item;
                                         //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
                                         if (simpleImage.getImage() != null) {
+                                            xmlSerializer.text(System.getProperty("line.separator"));
                                             xmlSerializer.startTag(null, simpleImage.getXmlTag());
                                             String tagName = helper.checkForInput(simpleImage.getTitle());
                                             xmlSerializer.text(tagName + ".jpg");
@@ -608,6 +630,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
                         if (tag != null) {
                             Log.v(TAG, "Simple End Tag = " + tag);
+                            xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.endTag(null, tag);
                         }
                     }
@@ -623,10 +646,12 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 }
                 i--;
                 if (personTag != null) {
+                    xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.endTag(null, personTag);
                 }
                 if (headTag != null) {
                     Log.v(TAG, "ENDTAG " + headTag);
+                    xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.endTag(null, headTag);
                 }
             }
@@ -644,16 +669,20 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 j++;
                 while (!(items.get(j) instanceof Add)) {
 
+                    xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, "contact");
                     if (simpleText.getTitle().equals("OWNERS")) {
+                        xmlSerializer.text(System.getProperty("line.separator"));
                         xmlSerializer.startTag(null, "type");
                         xmlSerializer.text("1");
                         xmlSerializer.endTag(null, "type");
                     } else if (simpleText.getTitle().equals("MANAGERS")) {
+                        xmlSerializer.text(System.getProperty("line.separator"));
                         xmlSerializer.startTag(null, "type");
                         xmlSerializer.text("2");
                         xmlSerializer.endTag(null, "type");
                     } else if (simpleText.getTitle().equals("REFERENCES")) {
+                        xmlSerializer.text(System.getProperty("line.separator"));
                         xmlSerializer.startTag(null, "type");
                         xmlSerializer.text("3");
                         xmlSerializer.endTag(null, "type");
@@ -666,6 +695,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             SimpleEditText simpleEditText = (SimpleEditText) obj;
                             if (simpleEditText.getValue() != null) {
                                 if (!simpleEditText.getValue().isEmpty()) {
+                                    xmlSerializer.text(System.getProperty("line.separator"));
                                     xmlSerializer.startTag(null, simpleEditText.getXmlTag());
                                     xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
                                     xmlSerializer.endTag(null, simpleEditText.getXmlTag());
@@ -676,8 +706,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             DropDown dropDown = (DropDown) obj;
                             if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PREFIX)) {
                                 personTag = "person";
+                                xmlSerializer.text(System.getProperty("line.separator"));
                                 xmlSerializer.startTag(null, personTag);
                             }
+                            xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, ((DropDown) obj).getXmlTag());
                             xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
                             xmlSerializer.endTag(null, ((DropDown) obj).getXmlTag());
@@ -689,6 +721,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             if (indices.size() > 0) {
                                 for (int index :
                                         indices) {
+                                    xmlSerializer.text(System.getProperty("line.separator"));
                                     xmlSerializer.startTag(null, multiSelectDropdown.getXmlTag());
                                     helper.childTags(multiSelectDropdown, index, xmlSerializer);
                                     xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
@@ -698,6 +731,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         if (obj instanceof SimpleDate) {
                             SimpleDate date = (SimpleDate) obj;
                             if (date.getValue() != null) {
+                                xmlSerializer.text(System.getProperty("line.separator"));
                                 xmlSerializer.startTag(null, date.getXmlTag());
                                 xmlSerializer.text(helper.toDays(date.getValue()));
                                 xmlSerializer.endTag(null, date.getXmlTag());
@@ -706,8 +740,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         j++;
                         obj = items.get(j);
                     }
-                    if (personTag != null)
+                    if (personTag != null) {
+                        xmlSerializer.text(System.getProperty("line.separator"));
                         xmlSerializer.endTag(null, personTag);
+                    }
+                    xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.endTag(null, "contact");
                     j++;
                     obj = items.get(j);
@@ -779,7 +816,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     @Override
     public void onResponse(String str) {
-        Log.v("xml", "xml = " + str);
         JSONObject jsonObject = helper.getJson(str);
 
         try {

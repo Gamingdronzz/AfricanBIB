@@ -896,24 +896,30 @@ public class Helper {
     public void childTags(MultiSelectDropdown multiSelectDropdown, int index, XmlSerializer xmlSerializer) {
         if (multiSelectDropdown.getColumnName().equals(DatabaseHelper.COLUMN_SECTOR)) {
             try {
+                xmlSerializer.text(System.getProperty("line.separator"));
                 xmlSerializer.startTag(null, "uid");
                 xmlSerializer.text(String.valueOf(getIdFromSelectedIndex(multiSelectDropdown.getItemUid(), index)));
                 xmlSerializer.endTag(null, "uid");
+                xmlSerializer.text(System.getProperty("line.separator"));
                 xmlSerializer.startTag(null, "name");
                 xmlSerializer.text(getStringFromSelectedIndex(multiSelectDropdown.getItems(), index));
                 xmlSerializer.endTag(null, "name");
+                xmlSerializer.text(System.getProperty("line.separator"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
         if (multiSelectDropdown.getColumnName().equals(DatabaseHelper.COLUMN_LANGUAGE)) {
             try {
+                xmlSerializer.text(System.getProperty("line.separator"));
                 xmlSerializer.startTag(null, "uid");
                 xmlSerializer.text(String.valueOf(getIdFromSelectedIndex(multiSelectDropdown.getItemUid(), index)));
                 xmlSerializer.endTag(null, "uid");
+                xmlSerializer.text(System.getProperty("line.separator"));
                 xmlSerializer.startTag(null, "language");
                 xmlSerializer.text(getStringFromSelectedIndex(multiSelectDropdown.getItems(), index));
                 xmlSerializer.endTag(null, "language");
+                xmlSerializer.text(System.getProperty("line.separator"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
