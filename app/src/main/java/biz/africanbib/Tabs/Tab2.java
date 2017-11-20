@@ -194,7 +194,7 @@ public class Tab2 extends Fragment {
         columnName = DatabaseHelper.COLUMN_CELLPHONE;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Cellphone", value, tableName, columnName, -1, "cellphone"));
-        columnName = DatabaseHelper.COLUMN_FASCIMILE;
+        columnName = DatabaseHelper.COLUMN_FAX;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Fax", value, tableName, columnName, -1, "fax"));
         columnName = DatabaseHelper.COLUMN_EMAIL;

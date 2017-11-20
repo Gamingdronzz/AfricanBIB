@@ -1395,10 +1395,11 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             return currentRowProducts++;
         } else if (tableName.equals(DatabaseHelper.TABLE_SERVICES)) {
             return currentRowServices++;
-        } else if (tableName.equals(DatabaseHelper.TABLE_AWARDS)) {
+        /*} else if (tableName.equals(DatabaseHelperTABLE_AWARDS)) {
             return currentRowAwards++;
         } else if (tableName.equals(DatabaseHelper.TABLE_LATEST_NEWS)) {
             return currentRowLatestNews++;
+            */
         } else if (tableName.equals(DatabaseHelper.TABLE_SECTORS)) {
             return currentRowIndustry++;
         }
@@ -1423,10 +1424,12 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             currentRowProducts = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_SERVICES)) {
             currentRowServices = value;
+            /*
         } else if (tableName.equals(DatabaseHelper.TABLE_AWARDS)) {
             currentRowAwards = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_LATEST_NEWS)) {
             currentRowLatestNews = value;
+            */
         } else if (tableName.equals(DatabaseHelper.TABLE_SECTORS)) {
             currentRowIndustry = value;
         }

@@ -168,7 +168,7 @@ public class Tab1 extends Fragment {
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText(registerationNumber, value, tableName, columnName, -1, "registrationNumber"));
 
-        columnName=   ;
+        columnName= DatabaseHelper.COLUMN_NGO_DIASPORA  ;
         int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
         items.add(helper.buildDropDown("Company/NGO/DIASPORA", new String[]{"Company", "NGO", "Diaspora"},
                 new int[]{0, 1, 2}, selectedPosition, tableName, columnName, -1, "companyNgoDiaspora"));
@@ -214,7 +214,7 @@ public class Tab1 extends Fragment {
         columnName = DatabaseHelper.COLUMN_CELLPHONE;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Cellphone", value, tableName, columnName, -1, "cellphone"));
-        columnName = DatabaseHelper.COLUMN_FASCIMILE;
+        columnName = DatabaseHelper.COLUMN_FAX;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Fax", value, tableName, columnName, -1, "fax"));
 

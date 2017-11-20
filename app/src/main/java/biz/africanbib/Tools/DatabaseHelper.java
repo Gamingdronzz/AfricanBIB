@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.support.design.widget.TabLayout;
 import android.util.Log;
 
 import biz.africanbib.Models.PreviousBusiness;
@@ -33,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 11 ;
+    public static final int DATABASE_VERSION = 12 ;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -55,10 +54,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     //public static final String TABLE_REFERENCE_SPECIFIC_INFORMATION = "TableReferenceSpecificInformation";
     //public static final String TABLE_SUBSIDIARY_SPECIFIC_INFORMATION = "TableSubsidiarySpecificInformation";
     public static final String TABLE_SERVICES = "TableServices";
-    public static final String TABLE_PRODUCTS_AND_PRODUCT_DETAILS = "TableProducts";
+    public static final String TABLE_PRODUCTS_AND_PRODUCT_DETAILS = "TableProductsAndProductDetails";
+    public static final String TABLE_OTHER_PRODUCT_DATA = "TableOtherProductData";
+
     public static final String TABLE_COMPANY_INDICATORS = "TableCompanyIndicators";
-    public static final String TABLE_AWARDS = "TableAwards";
-    public static final String TABLE_LATEST_NEWS = "TableLatestNews";
+    //public static final String TABLE_AWARDS = "TableAwards";
+    //public static final String TABLE_LATEST_NEWS = "TableLatestNews";
     public static final String TABLE_BUSINESS_CORRESPONDING_LANGUAGES = "TableBusinessCorrespondingLanguages";
     public static final String TABLE_SECTORS = "TableSectors";
     public static final String TABLE_SOURCE_OF_DATA = "TableSourceofData";
@@ -73,10 +74,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_KEYVISUAL_NOTE = "COLUMN_KEYVISUAL_NOTE";
     public static final String COLUMN_BRIEF_DESCRIPTION = "COLUMN_BRIEF_DESCRIPTION";
     public static final String COLUMN_STATUS = "COLUMN_STATUS";
+    public static final String COLUMN_NGO_DIASPORA = "COLUMN_NGO_DIASPORA";
 
     public static final String COLUMN_TELEPHONE = "COLUMN_TELEPHONE";
     public static final String COLUMN_CELLPHONE = "COLUMN_CELLPHONE";
-    public static final String COLUMN_FASCIMILE = "COLUMN_FASCIMILE";
+    public static final String COLUMN_FAX = "COLUMN_FAX";
     public static final String COLUMN_EMAIL = "COLUMN_EMAIL";
     public static final String COLUMN_WEBSITE = "COLUMN_WEBSITE";
 
@@ -96,11 +98,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_GUIDING_PRINCIPALS = "COLUMN_GUIDING_PRINCIPALS";
     public static final String COLUMN_INVESTMENT_OPPORTUNITIES = "COLUMN_INVESTMENT_OPPORTUNITIES";
 
-    public static final String COLUMN_OFFER = "COLUMN_OFFER";
+    //public static final String COLUMN_OFFER = "COLUMN_OFFER";
     public static final String COLUMN_ROW_ID = "COLUMN_ROW_ID";
-    public static final String COLUMN_NEED = "COLUMN_NEED";
+    //public static final String COLUMN_NEED = "COLUMN_NEED";
 
-    public static final String COLUMN_TYPE = "COLUMN_TYPE";
+    //public static final String COLUMN_TYPE = "COLUMN_TYPE";
 
     public static final String COLUMN_FIRST_NAME = "COLUMN_FIRST_NAME";
     public static final String COLUMN_LAST_NAME = "COLUMN_LAST_NAME";
@@ -108,29 +110,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_POSITION_IN_COMPANY = "COLUMN_POSITION_IN_COMPANY";
     public static final String COLUMN_NATIONALITY = "COLUMN_NATIONALITY";
     public static final String COLUMN_BIRTHDAY = "COLUMN_BIRTHDAY";
-    public static final String COLUMN_PHOTO = "COLUMN_PHOTO";
-    public static final String COLUMN_VIDEO = "COLUMN_VIDEO";
-    public static final String COLUMN_PHOTO_NOTE = "COLUMN_PHOTO_NOTE";
-    public static final String COLUMN_VIDEO_NOTE = "COLUMN_VIDEO_NOTE";
+//    public static final String COLUMN_PHOTO = "COLUMN_PHOTO";
+//    public static final String COLUMN_VIDEO = "COLUMN_VIDEO";
+//    public static final String COLUMN_PHOTO_NOTE = "COLUMN_PHOTO_NOTE";
+//    public static final String COLUMN_VIDEO_NOTE = "COLUMN_VIDEO_NOTE";
 
 
-    public static final String COLUMN_NAME_OF_INSTITUTION = "COLUMN_NAME_OF_INSTITUTION";
-    public static final String COLUMN_SUBJECT_FOCUS = "COLUMN_SUBJECT_FOCUS";
+//    public static final String COLUMN_NAME_OF_INSTITUTION = "COLUMN_NAME_OF_INSTITUTION";
+//    public static final String COLUMN_SUBJECT_FOCUS = "COLUMN_SUBJECT_FOCUS";
     public static final String COLUMN_DATE = "COLUMN_DATE";
 
-    public static final String COLUMN_JOB_TITLE = "COLUMN_JOB_TITLE";
-    public static final String COLUMN_NAME_OF_EMPLOYER = "COLUMN_NAME_OF_EMPLOYER";
-    public static final String COLUMN_JOB_DESCRIPTION = "COLUMN_JOB_DESCRIPTION";
+//    public static final String COLUMN_JOB_TITLE = "COLUMN_JOB_TITLE";
+//    public static final String COLUMN_NAME_OF_EMPLOYER = "COLUMN_NAME_OF_EMPLOYER";
+//    public static final String COLUMN_JOB_DESCRIPTION = "COLUMN_JOB_DESCRIPTION";
 
-    public static final String COLUMN_NAME_OF_ASSOCIATION = "COLUMN_NAME_OF_ASSOCIATION";
+//    public static final String COLUMN_NAME_OF_ASSOCIATION = "COLUMN_NAME_OF_ASSOCIATION";
     public static final String COLUMN_SECTOR = "COLUMN_SECTOR";
 
     public static final String COLUMN_INSTITUTION_NAME = "COLUMN_INSTITUTION_NAME";
-    public static final String COLUMN_ORGANISATION_TYPE = "COLUMN_ORGANISATION_TYPE";
+//    public static final String COLUMN_ORGANISATION_TYPE = "COLUMN_ORGANISATION_TYPE";
 
     public static final String COLUMN_SUBSIDIARY_NAME = "COLUMN_SUBSIDIARY_NAME";
 
-    public static final String COLUMN_SERVICE = "COLUMN_SERVICE";
+    public static final String COLUMN_SERVICES = "COLUMN_SERVICES";
     public static final String COLUMN_PRODUCTS = "COLUMN_PRODUCTS";
 
 
@@ -185,13 +187,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_LOGO_NOTE + " VARCHAR," +
             COLUMN_KEYVISUAL_NOTE + " VARCHAR," +
             COLUMN_BRIEF_DESCRIPTION + " VARCHAR, " +
+            COLUMN_NGO_DIASPORA + " NUMBER, " +
             COLUMN_STATUS + " INTEGER " +
             ")";
     private String CREATE_TABLE_COMPANY_CONTACT = "CREATE TABLE IF NOT EXISTS " + TABLE_COMPANY_CONTACT + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_TELEPHONE + " VARCHAR," +
             COLUMN_CELLPHONE + " VARCHAR," +
-            COLUMN_FASCIMILE + " VARCHAR," +
+            COLUMN_FAX + " VARCHAR," +
             COLUMN_EMAIL + " VARCHAR," +
             COLUMN_WEBSITE + " VARCHAR " +
             ")";
@@ -250,7 +253,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_POSITION_IN_COMPANY + " NUMBER," +
             COLUMN_TELEPHONE + " VARCHAR," +
             COLUMN_CELLPHONE + " VARCHAR," +
-            COLUMN_FASCIMILE + " VARCHAR," +
+            COLUMN_FAX + " VARCHAR," +
             COLUMN_EMAIL + " VARCHAR," +
             COLUMN_STREET + " VARCHAR," +
             COLUMN_CITY + " VARCHAR," +
@@ -356,19 +359,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 */
 
 
-    private String CREATE_TABLE_SERVICES = "CREATE TABLE IF NOT EXISTS " + TABLE_SERVICES + " ( " +
+    private String CREATE_TABLE_OTHER_PRODUCT_DATA = "CREATE TABLE IF NOT EXISTS " + TABLE_OTHER_PRODUCT_DATA + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
-            COLUMN_ROW_ID + " INTEGER," +
-            COLUMN_SERVICE + " VARCHAR," +
-            COLUMN_TITLE + " VARCHAR," +
-            COLUMN_DESCRIPTION + " VARCHAR," +
-            COLUMN_MEDIA + " VARCHAR" +
+            COLUMN_PRODUCTS + " VARCHAR, " +
+            COLUMN_SERVICES + " VARCHAR" +
             ")";
 
     private String CREATE_TABLE_PRODUCTS = "CREATE TABLE IF NOT EXISTS " + TABLE_PRODUCTS_AND_PRODUCT_DETAILS + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_ROW_ID + " INTEGER," +
-            COLUMN_PRODUCTS + " VARCHAR, " +
             COLUMN_TITLE + " VARCHAR," +
             COLUMN_DESCRIPTION + " VARCHAR," +
             COLUMN_MEDIA + " BLOB" +
@@ -399,7 +398,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_LAST_EMPLOYEE_TRAINING + " VARCHAR" +
             ")";
 
-    private String CREATE_TABLE_AWARDS = "CREATE TABLE IF NOT EXISTS " + TABLE_AWARDS + " ( " +
+    /*private String CREATE_TABLE_AWARDS = "CREATE TABLE IF NOT EXISTS " + TABLE_AWARDS + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_ROW_ID + " INTEGER," +
             COLUMN_AWARD_NAME + " VARCHAR," +
@@ -417,7 +416,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_TITLE + " VARCHAR," +
             COLUMN_DESCRIPTION + " VARCHAR " +
             ")";
-
+*/
     private String CREATE_TABLE_BUSINESS_CORRESPONDING_LANGUAGES = "CREATE TABLE IF NOT EXISTS " + TABLE_BUSINESS_CORRESPONDING_LANGUAGES + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_LANGUAGE + " VARCHAR " +
@@ -458,11 +457,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_OWNERS);
         db.execSQL(CREATE_TABLE_MANAGERS);
         db.execSQL(CREATE_TABLE_SUBSIDIARY);
-        db.execSQL(CREATE_TABLE_SERVICES);
+        db.execSQL(CREATE_TABLE_OTHER_PRODUCT_DATA);
         db.execSQL(CREATE_TABLE_PRODUCTS);
         db.execSQL(CREATE_TABLE_COMPANY_INDICATORS);
-        db.execSQL(CREATE_TABLE_AWARDS);
-        db.execSQL(CREATE_TABLE_LATEST_NEWS);
+        //db.execSQL(CREATE_TABLE_AWARDS);
+        //db.execSQL(CREATE_TABLE_LATEST_NEWS);
         db.execSQL(CREATE_TABLE_BUSINESS_CORRESPONDING_LANGUAGES);
         db.execSQL(CREATE_TABLE_SECTORS);
         db.execSQL(CREATE_TABLE_SOURCE_OF_DATA);
@@ -494,11 +493,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_AFFILIATION);
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_REFERENCE_SPECIFIC_INFORMATION);
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBSIDIARY_SPECIFIC_INFORMATION);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_SERVICES);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OTHER_PRODUCT_DATA);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY_INDICATORS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_AWARDS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LATEST_NEWS);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_AWARDS);
+        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_LATEST_NEWS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUSINESS_CORRESPONDING_LANGUAGES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SECTORS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SOURCE_OF_DATA);
@@ -535,6 +534,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //addValue(result, TABLE_SUBSIDIARY_SPECIFIC_INFORMATION);
         //addValue(result, TABLE_SERVICES);
         //addValue(result, TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
+        addValue(result, TABLE_OTHER_PRODUCT_DATA);
         addValue(result, TABLE_COMPANY_INDICATORS);
         //addValue(result, TABLE_AWARDS);
         //addValue(result, TABLE_LATEST_NEWS);
@@ -563,17 +563,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //db.delete(TABLE_REFERENCE_SPECIFIC_INFORMATION, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             //db.delete(TABLE_SUBSIDIARY_SPECIFIC_INFORMATION, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_SERVICES, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
+            db.delete(TABLE_OTHER_PRODUCT_DATA, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_PRODUCTS_AND_PRODUCT_DETAILS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             //db.delete(TABLE_PRODUCT_DETAILS,COLUMN_COMPANY_ID + " = ?",new String[]{id+""});
             db.delete(TABLE_COMPANY_INDICATORS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
-            db.delete(TABLE_AWARDS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
-            db.delete(TABLE_LATEST_NEWS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
+            //db.delete(TABLE_AWARDS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
+            //db.delete(TABLE_LATEST_NEWS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_BUSINESS_CORRESPONDING_LANGUAGES, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_SECTORS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_SOURCE_OF_DATA, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_COMPANY_PROFILE, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             return true;
         } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }
@@ -705,7 +707,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int[] result = null;
         try {
             String query = "SELECT " + COLUMN_ROW_ID + " FROM " + tableName + " WHERE " + COLUMN_COMPANY_ID + " = " + getCurrentCompanyId();
-            //Log.v(TAG, "Query = " + query);
+            Log.v(TAG, "Query = " + query);
             cursor = db.rawQuery(query, null);
             cursor.moveToFirst();
             if (cursor.getCount() > 0) {

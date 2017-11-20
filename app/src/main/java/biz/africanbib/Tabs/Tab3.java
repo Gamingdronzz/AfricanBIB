@@ -72,8 +72,8 @@ public class Tab3 extends Fragment {
         }
         //SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
         //snapHelper.attachToRecyclerView(recyclerView);
-        adapter.updateRow(DatabaseHelper.TABLE_AWARDS, awardRows);
-        adapter.updateRow(DatabaseHelper.TABLE_LATEST_NEWS, newsRows);
+        //adapter.updateRow(DatabaseHelper.TABLE_AWARDS, awardRows);
+        //adapter.updateRow(DatabaseHelper.TABLE_LATEST_NEWS, newsRows);
         adapter.updateRow(DatabaseHelper.TABLE_PRODUCTS_AND_PRODUCT_DETAILS, productDetailsRows);
         adapter.updateRow(DatabaseHelper.TABLE_SERVICES, serviceRows);
         recyclerView.setAdapter(adapter);
@@ -200,7 +200,13 @@ public class Tab3 extends Fragment {
         }
         items.add(helper.buildAdd(3, titles, tableName, columnNames, xmlTags));
 
+        tableName = DatabaseHelper.TABLE_OTHER_PRODUCT_DATA;
+        String columnName = DatabaseHelper.COLUMN_PRODUCTS;
+        String value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Products", value, tableName, columnName, -1, "products"));
+
+        columnName = DatabaseHelper.COLUMN_SERVICES;
+        value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Services", value, tableName, columnName, -1, "services"));
 
        /* items.add(new SimpleText("Services & Service Details"));
@@ -246,7 +252,7 @@ public class Tab3 extends Fragment {
 */
         items.add(new Heading("COMPANY INDICATORS", "indicators"));
         tableName = DatabaseHelper.TABLE_COMPANY_INDICATORS;
-        String columnName = DatabaseHelper.COLUMN_COMPANY_SIZE;
+        columnName = DatabaseHelper.COLUMN_COMPANY_SIZE;
         int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
         items.add(helper.buildDropDown("Company / Institution Size", new String[]{
                 "Self Employed",
@@ -259,7 +265,6 @@ public class Tab3 extends Fragment {
                 "10,001 or More"}, new int[]{0, 1, 2, 3, 4, 5, 6, 7}, selectedPosition, tableName, columnName, -1, "companySize"));
 
         columnName = DatabaseHelper.COLUMN_FOUNDING_YEAR_OF_COMPANY;
-        String value;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Founding year of Company / Institution", value, tableName, columnName, -1, "foundingYear"));
         columnName = DatabaseHelper.COLUMN_AGE_OF_ACTIVE_BUSINESS;
@@ -321,6 +326,7 @@ public class Tab3 extends Fragment {
         columnName = DatabaseHelper.COLUMN_LAST_EMPLOYEE_TRAINING;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Last Employee Training", value, tableName, columnName, -1, "lastTraining"));
+
 
         /*items.add(new Heading("AWARDS AND NEWS", null));
         items.add(new SimpleText("AWARDS", "awards"));
@@ -423,10 +429,11 @@ public class Tab3 extends Fragment {
             }
         }
         items.add(helper.buildAdd(3, titles, tableName, columnNames, xmlTags));
+        */
 
         return items;
     }
-*/
+
 
     private void getValuesFromViews() {
         Object[] items;
