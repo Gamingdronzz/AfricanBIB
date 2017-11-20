@@ -32,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 13;
+    public static final int DATABASE_VERSION = 15;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -47,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_REFERENCES = "TableReference";
     public static final String TABLE_OWNERS = "TableOwners";
     public static final String TABLE_MANAGERS = "TableManagers";
-    public static final String TABLE_SUBSIDIARIES = "Subsidiaries";
+    public static final String TABLE_SUBSIDIARIES = "TableSubsidiaries";
     //public static final String TABLE_ACADEMIC_BACKGROUND = "TableAcademicBackground";
     //public static final String TABLE_PROFESSIONAL_BACKGROUND = "TableProfessionalBackground";
     //public static final String TABLE_AFFILIATION = "TableAffiliation";
@@ -173,9 +173,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_OTHERS_SPECIFY = "COLUMN_OTHERS_SPECIFY";
     public static final String COLUMN_LOCATION = "COLUMN_LOCATION";
     public static final String COLUMN_ACCEPTANCE = "COLUMN_ACCEPTANCE";
-    public static final String COLUMN_GRANT_FREE_ACCESS = "COLUMN GRANT FREE ACCESS";
-    public static final String COLUMN_BUSINESS_CARD_GENERATION = "COLUMN BUSINESS CARD GENERATION";
-    public static final String COLUMN_DATE_GRANT_FREE_ACCESS = "COLUMN DATE GRANT FREE ACCESS";
+    public static final String COLUMN_GRANT_FREE_ACCESS = "COLUMN_GRANT_FREE_ACCESS";
+    public static final String COLUMN_BUSINESS_CARD_GENERATION = "COLUMN_BUSINESS_CARD_GENERATION";
+    public static final String COLUMN_DATE_GRANT_FREE_ACCESS = "COLUMN_DATE_GRANT_FREE_ACCESS";
 
 
     public Cursor cursor;
@@ -440,9 +440,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_OTHERS_SPECIFY + " VARCHAR," +
             COLUMN_DATE + " VARCHAR," +
             COLUMN_LOCATION + " VARCHAR," +
-            COLUMN_GRANT_FREE_ACCESS + " VARCHAR," +
+            COLUMN_GRANT_FREE_ACCESS + " NUMBER," +
             COLUMN_DATE_GRANT_FREE_ACCESS + " VARCHAR," +
-            COLUMN_BUSINESS_CARD_GENERATION + " VARCHAR," +
+            COLUMN_BUSINESS_CARD_GENERATION + " NUMBER," +
             COLUMN_COUNTRY + " NUMBER," +
             COLUMN_ACCEPTANCE + " VARCHAR " +
             ")";
