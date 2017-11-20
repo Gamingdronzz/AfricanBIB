@@ -32,7 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 12 ;
+    public static final int DATABASE_VERSION = 13;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -47,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_REFERENCES = "TableReference";
     public static final String TABLE_OWNERS = "TableOwners";
     public static final String TABLE_MANAGERS = "TableManagers";
-    public static final String TABLE_SUBSIDIARIES="Subsidiaries";
+    public static final String TABLE_SUBSIDIARIES = "Subsidiaries";
     //public static final String TABLE_ACADEMIC_BACKGROUND = "TableAcademicBackground";
     //public static final String TABLE_PROFESSIONAL_BACKGROUND = "TableProfessionalBackground";
     //public static final String TABLE_AFFILIATION = "TableAffiliation";
@@ -116,7 +116,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //    public static final String COLUMN_VIDEO_NOTE = "COLUMN_VIDEO_NOTE";
 
 
-//    public static final String COLUMN_NAME_OF_INSTITUTION = "COLUMN_NAME_OF_INSTITUTION";
+    //    public static final String COLUMN_NAME_OF_INSTITUTION = "COLUMN_NAME_OF_INSTITUTION";
 //    public static final String COLUMN_SUBJECT_FOCUS = "COLUMN_SUBJECT_FOCUS";
     public static final String COLUMN_DATE = "COLUMN_DATE";
 
@@ -124,7 +124,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 //    public static final String COLUMN_NAME_OF_EMPLOYER = "COLUMN_NAME_OF_EMPLOYER";
 //    public static final String COLUMN_JOB_DESCRIPTION = "COLUMN_JOB_DESCRIPTION";
 
-//    public static final String COLUMN_NAME_OF_ASSOCIATION = "COLUMN_NAME_OF_ASSOCIATION";
+    //    public static final String COLUMN_NAME_OF_ASSOCIATION = "COLUMN_NAME_OF_ASSOCIATION";
     public static final String COLUMN_SECTOR = "COLUMN_SECTOR";
 
     public static final String COLUMN_INSTITUTION_NAME = "COLUMN_INSTITUTION_NAME";
@@ -173,6 +173,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_OTHERS_SPECIFY = "COLUMN_OTHERS_SPECIFY";
     public static final String COLUMN_LOCATION = "COLUMN_LOCATION";
     public static final String COLUMN_ACCEPTANCE = "COLUMN_ACCEPTANCE";
+    public static final String COLUMN_GRANT_FREE_ACCESS = "COLUMN GRANT FREE ACCESS";
+    public static final String COLUMN_BUSINESS_CARD_GENERATION = "COLUMN BUSINESS CARD GENERATION";
+    public static final String COLUMN_DATE_GRANT_FREE_ACCESS = "COLUMN DATE GRANT FREE ACCESS";
 
 
     public Cursor cursor;
@@ -437,6 +440,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_OTHERS_SPECIFY + " VARCHAR," +
             COLUMN_DATE + " VARCHAR," +
             COLUMN_LOCATION + " VARCHAR," +
+            COLUMN_GRANT_FREE_ACCESS + " VARCHAR," +
+            COLUMN_DATE_GRANT_FREE_ACCESS + " VARCHAR," +
+            COLUMN_BUSINESS_CARD_GENERATION + " VARCHAR," +
             COLUMN_COUNTRY + " NUMBER," +
             COLUMN_ACCEPTANCE + " VARCHAR " +
             ")";
@@ -819,8 +825,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor = db.rawQuery(query, null);
             cursor.moveToFirst();
             if (cursor.getCount() != 0) {
-                for(int i=0;i<cursor.getCount();i++)
-                Log.v("Database","Value = " + cursor.getString(0));
+                for (int i = 0; i < cursor.getCount(); i++)
+                    Log.v("Database", "Value = " + cursor.getString(0));
 
             } else {
             }
@@ -846,7 +852,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         Log.v(TAG, TableName + "." + ColumnName + " updated with value = " + value);
         if (db != null) db.close();
     }
-    public void updateRowWithBlob(String TableName, int rowNo,String ColumnName, byte[] value) {
+
+    public void updateRowWithBlob(String TableName, int rowNo, String ColumnName, byte[] value) {
         Log.v(TAG, "Updating Table = " + TableName + " Row = " + rowNo);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -876,11 +883,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return result;
     }
 
-    public byte[] getBlobFromRow(String columnName, String tableName,int rowid) {
+    public byte[] getBlobFromRow(String columnName, String tableName, int rowid) {
         SQLiteDatabase db = this.getReadableDatabase();
         byte[] result = null;
         try {
-            String query = "SELECT " + columnName + "  FROM " + tableName + " WHERE " + COLUMN_COMPANY_ID + " = " + getCurrentCompanyId()+ " AND " + COLUMN_ROW_ID + " = " + rowid;
+            String query = "SELECT " + columnName + "  FROM " + tableName + " WHERE " + COLUMN_COMPANY_ID + " = " + getCurrentCompanyId() + " AND " + COLUMN_ROW_ID + " = " + rowid;
             cursor = db.rawQuery(query, null);
             cursor.moveToFirst();
             if (cursor.getCount() != 0) {
@@ -896,6 +903,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         }
         return result;
     }
+
     public void updateIntValue(String TableName, String ColumnName, int value) {
         SQLiteDatabase db = this.getWritableDatabase();
         Log.v(TAG, "Updating Table = " + TableName);

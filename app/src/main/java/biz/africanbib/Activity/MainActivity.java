@@ -481,7 +481,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         SimpleEditText simpleEditText = (SimpleEditText) item;
                         // Log.v(TAG, "Found " + simpleEditText.getTitle() + " with value = " + simpleEditText.getValue() + " where i = " + i);
                         if (simpleEditText.getValue() != null) {
-                            if (!simpleEditText.getValue().isEmpty()) {
+                            if (simpleEditText.getValue().trim().length() != 0) {
                                 xmlSerializer.text(System.getProperty("line.separator"));
                                 xmlSerializer.startTag(null, simpleEditText.getXmlTag());
                                 xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
@@ -521,7 +521,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             if (helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()).equals("Others")) {
                                 SimpleEditText edt = (SimpleEditText) items.get(++i);
                                 SimpleDate date = (SimpleDate) items.get(++i);
-                                if (edt.getValue().equals(" "))
+                                if (edt.getValue().trim().length()== 0)
                                     collectedBy = helper.toDays(date.getValue());
                                 else
                                     collectedBy = Helper.forReplacementString(edt.getValue()) + " , " + helper.toDays(date.getValue());
@@ -572,7 +572,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                     if (item instanceof SimpleEditText) {
                                         SimpleEditText simpleEditText = (SimpleEditText) item;
                                         if (simpleEditText.getValue() != null) {
-                                            if (!simpleEditText.getValue().isEmpty()) {
+                                            if (simpleEditText.getValue().trim().length() != 0) {
                                                 xmlSerializer.text(System.getProperty("line.separator"));
                                                 xmlSerializer.startTag(null, simpleEditText.getXmlTag());
                                                 xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
@@ -694,7 +694,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         if (obj instanceof SimpleEditText) {
                             SimpleEditText simpleEditText = (SimpleEditText) obj;
                             if (simpleEditText.getValue() != null) {
-                                if (!simpleEditText.getValue().isEmpty()) {
+                                if (simpleEditText.getValue().trim().length() != 0) {
                                     xmlSerializer.text(System.getProperty("line.separator"));
                                     xmlSerializer.startTag(null, simpleEditText.getXmlTag());
                                     xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
