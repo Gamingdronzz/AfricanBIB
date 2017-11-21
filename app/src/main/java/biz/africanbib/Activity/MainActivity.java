@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     Helper helper;
     public static boolean first = true;
     private Button buttonValidate;
+    List<ImageData> imageData;
 
 
     AwesomeInfoDialog awesomeInfoDialog;
@@ -101,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     private void init() {
         helper = new Helper(this);
+        imageData = new ArrayList<>();
         goLeft.setVisibility(View.INVISIBLE);
         awesomeInfoDialog = new AwesomeInfoDialog(this)
                 .setTitle("Generating XML")
@@ -501,11 +503,17 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         SimpleImage simpleImage = (SimpleImage) item;
                         //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
                         if (simpleImage.getImage() != null) {
+
                             xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, simpleImage.getXmlTag());
-                            String tagName = helper.checkForInput(simpleImage.getTitle());
+                            String tagName = helper.checkForInput(simpleImage.getTitle().toLowerCase());
+                            tagName = tagName.replace("*", "");
+                            tagName = tagName.replace("photo", "");
+                            tagName = tagName.replace("(", "");
+                            tagName = tagName.replace(") ", "");
                             xmlSerializer.text(tagName + ".jpg");
                             xmlSerializer.endTag(null, simpleImage.getXmlTag());
+                            imageData.add(new ImageData(simpleImage.getColumnName(), simpleImage.getTableName(), tagName));
                         }
                     } else if (item instanceof DropDown) {
                         DropDown dropDown = (DropDown) item;
@@ -634,8 +642,13 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                             xmlSerializer.text(System.getProperty("line.separator"));
                                             xmlSerializer.startTag(null, simpleImage.getXmlTag());
                                             String tagName = helper.checkForInput(simpleImage.getTitle());
+                                            tagName = tagName.replace("*", "");
+                                            tagName = tagName.replace("photo", "");
+                                            tagName = tagName.replace("(", "");
+                                            tagName = tagName.replace(") ", "");
                                             xmlSerializer.text(tagName + ".jpg");
                                             xmlSerializer.endTag(null, simpleImage.getXmlTag());
+                                            imageData.add(new ImageData(simpleImage.getColumnName(), simpleImage.getTableName(), tagName));
                                         }
                                     }
                                 }
@@ -786,6 +799,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 aBuffer += aDataRow + "\n";
                 //Log.v("XML", "\n" + aDataRow);
             }
+            aBuffer = aBuffer.replace("<.?></.?>", "");
             Log.v(TAG, aBuffer);
             myReader.close();
             fIn.close();
@@ -800,10 +814,22 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         Map<String, String> params = new HashMap<>();
         params.put("xml", aBuffer);
         params.put("businessName", companyName);
-        String logo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_LOGO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
-        String keyvisuallogo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_KEYVISUAL_PHOTO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
-        params.put("companylogo", logo);
-        params.put("keyvisual", keyvisuallogo);
+        int size = imageData.size();
+
+        String[] images = new String[size];
+        String[] imagenames = new String[size];
+        int i = 0;
+        for (ImageData id :
+                imageData) {
+            images[i] = Base64.encodeToString(databaseHelper.getBlobValue(id.ColumnName, id.TableName), Base64.DEFAULT);
+            imagenames[i] = id.Name;
+            //params.put(id.Name, value);
+        }
+        //String logo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_LOGO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
+        //String keyvisuallogo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_KEYVISUAL_PHOTO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
+        //params.put("companylogo", logo);
+        //params.put("keyvisual", keyvisuallogo);
+        //params.put("images",images);
         volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
         awesomeInfoDialog.setMessage("Submitting files to server");
 
@@ -847,5 +873,18 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         //awesomeInfoDialog.setMessage(str);
         awesomeInfoDialog.setCancelable(true);
 
+    }
+
+    private class ImageData {
+        String ColumnName;
+        String TableName;
+        String Name;
+
+
+        public ImageData(String columnName, String tableName, String name) {
+            ColumnName = columnName;
+            TableName = tableName;
+            Name = name;
+        }
     }
 }
