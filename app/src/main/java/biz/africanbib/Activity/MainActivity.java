@@ -66,6 +66,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     public static int typeOfBusiness;
     public static final int NEWBUSINESS = 1;
     public static final int EDITBUSINESS = 2;
+    public int productMediaCount = 0;
+    public int referencesCount = 0;
+    public int ownersCount = 0;
+    public int managersCount = 0;
     //This is our tablayout
     private TabLayout tabLayout;
     //This is our viewPager
@@ -509,6 +513,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             String tagName = helper.checkForInput(simpleImage.getTitle().toLowerCase());
                             tagName = tagName.replace("*", "");
                             tagName = tagName.replace("photo", "");
+                            tagName = tagName.replace(" ", "");
                             tagName = tagName.replace("(", "");
                             tagName = tagName.replace(") ", "");
                             xmlSerializer.text(tagName + ".jpg");
@@ -602,17 +607,13 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                                 xmlSerializer.endTag(null, simpleEditText.getXmlTag());
                                             }
                                         }
-                                    }
-
-                                    if (item instanceof DropDown) {
+                                    } else if (item instanceof DropDown) {
                                         DropDown dropDown = (DropDown) item;
                                         xmlSerializer.text(System.getProperty("line.separator"));
                                         xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
                                         xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
                                         xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
-                                    }
-
-                                    if (item instanceof MultiSelectDropdown) {
+                                    } else if (item instanceof MultiSelectDropdown) {
                                         MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) item;
                                         List<Integer> indices = multiSelectDropdown.getSelectedIndices();
                                         if (indices.size() > 0) {
@@ -624,9 +625,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                                 xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
                                             }
                                         }
-                                    }
-
-                                    if (item instanceof SimpleDate) {
+                                    } else if (item instanceof SimpleDate) {
                                         SimpleDate date = (SimpleDate) item;
                                         if (date.getValue() != null) {
                                             xmlSerializer.text(System.getProperty("line.separator"));
@@ -634,8 +633,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                             xmlSerializer.text(helper.toDays(date.getValue()));
                                             xmlSerializer.endTag(null, date.getXmlTag());
                                         }
-                                    }
-                                    if (item instanceof SimpleImage) {
+                                    } else if (item instanceof SimpleImage) {
                                         SimpleImage simpleImage = (SimpleImage) item;
                                         //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
                                         if (simpleImage.getImage() != null) {
@@ -646,6 +644,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                             tagName = tagName.replace("photo", "");
                                             tagName = tagName.replace("(", "");
                                             tagName = tagName.replace(") ", "");
+                                            if (simpleImage.getTitle().equals("Product Media (Photo / Documents)")) {
+                                                tagName = tagName.replace("Photo/Documents)", "");
+                                                productMediaCount++;
+                                                tagName = tagName + productMediaCount;
+                                            }
                                             xmlSerializer.text(tagName + ".jpg");
                                             xmlSerializer.endTag(null, simpleImage.getXmlTag());
                                             imageData.add(new ImageData(simpleImage.getColumnName(), simpleImage.getTableName(), tagName));
@@ -729,8 +732,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                     xmlSerializer.endTag(null, simpleEditText.getXmlTag());
                                 }
                             }
-                        }
-                        if (obj instanceof DropDown) {
+                        } else if (obj instanceof DropDown) {
                             DropDown dropDown = (DropDown) obj;
                             if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PREFIX)) {
                                 personTag = "person";
@@ -741,8 +743,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             xmlSerializer.startTag(null, ((DropDown) obj).getXmlTag());
                             xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
                             xmlSerializer.endTag(null, ((DropDown) obj).getXmlTag());
-                        }
-                        if (obj instanceof MultiSelectDropdown) {
+                        } else if (obj instanceof MultiSelectDropdown) {
                             MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) obj;
                             Log.v(TAG, "Found " + multiSelectDropdown.getTitle() + " with value = " + multiSelectDropdown.getSelectedIndices() + " where i = " + i);
                             List<Integer> indices = multiSelectDropdown.getSelectedIndices();
@@ -755,14 +756,40 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                     xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
                                 }
                             }
-                        }
-                        if (obj instanceof SimpleDate) {
+                        } else if (obj instanceof SimpleDate) {
                             SimpleDate date = (SimpleDate) obj;
                             if (date.getValue() != null) {
                                 xmlSerializer.text(System.getProperty("line.separator"));
                                 xmlSerializer.startTag(null, date.getXmlTag());
                                 xmlSerializer.text(helper.toDays(date.getValue()));
                                 xmlSerializer.endTag(null, date.getXmlTag());
+                            }
+                        } else if (obj instanceof SimpleImage) {
+                            SimpleImage simpleImage = (SimpleImage) obj;
+                            //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
+                            if (simpleImage.getImage() != null) {
+                                xmlSerializer.text(System.getProperty("line.separator"));
+                                xmlSerializer.startTag(null, simpleImage.getXmlTag());
+                                String tagName = helper.checkForInput(simpleImage.getTitle());
+                                tagName = tagName.replace("*", "");
+                                tagName = tagName.replace("photo", "");
+                                tagName = tagName.replace("(", "");
+                                tagName = tagName.replace(") ", "");
+                                if (simpleImage.getTitle().equals("Manager Logo")) {
+                                    managersCount++;
+                                    tagName = tagName + managersCount;
+                                }
+                                if (simpleImage.getTitle().equals("Owners Logo")) {
+                                    ownersCount++;
+                                    tagName = tagName + ownersCount;
+                                }
+                                if (simpleImage.getTitle().equals("Institution Logo")) {
+                                    referencesCount++;
+                                    tagName = tagName + referencesCount;
+                                }
+                                xmlSerializer.text(tagName + ".jpg");
+                                xmlSerializer.endTag(null, simpleImage.getXmlTag());
+                                imageData.add(new ImageData(simpleImage.getColumnName(), simpleImage.getTableName(), tagName));
                             }
                         }
                         j++;

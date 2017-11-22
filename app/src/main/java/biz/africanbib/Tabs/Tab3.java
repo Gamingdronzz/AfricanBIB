@@ -163,7 +163,7 @@ public class Tab3 extends Fragment {
                 "description",
                 "title"};
         String[] titles = new String[]{
-                "Media (Photo / Documents)",
+                "Product Media (Photo / Documents)",
                 "Description",
                 "Title"};
         String[] columnNames = new String[]{

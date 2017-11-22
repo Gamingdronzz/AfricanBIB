@@ -344,7 +344,7 @@ public class Tab2 extends Fragment {
                 "telephone"
         };
         titles = new String[]{
-                "Logo",
+                "Owners Logo",
                 "Affiliation",
                 "Professional",
                 "Academic",
@@ -430,7 +430,7 @@ public class Tab2 extends Fragment {
                 "telephone",
         };
         titles = new String[]{
-                "Logo",
+                "Manager Logo",
                 "Affiliation",
                 "Professional",
                 "Academic",
