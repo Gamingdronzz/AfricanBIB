@@ -82,6 +82,7 @@ public class SplashScreen extends AppCompatActivity {
 
         imageView.clearAnimation();
         imageView.startAnimation(anim);
+
         anim.setAnimationListener(new Animation.AnimationListener() {
             @Override
             public void onAnimationStart(Animation animation) {
@@ -93,8 +94,8 @@ public class SplashScreen extends AppCompatActivity {
                 linearLayout.setVisibility(View.VISIBLE);
                 linearLayout.clearAnimation();
                 linearLayout.startAnimation(animationBounce);
-            }
 
+            }
             @Override
             public void onAnimationRepeat(Animation animation) {
 

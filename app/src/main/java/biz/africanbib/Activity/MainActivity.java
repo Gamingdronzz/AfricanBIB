@@ -852,10 +852,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             imagenames[i] = id.Name;
             //params.put(id.Name, value);
         }
-        //String logo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_LOGO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
-        //String keyvisuallogo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_KEYVISUAL_PHOTO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
-        //params.put("companylogo", logo);
-        //params.put("keyvisual", keyvisuallogo);
+        String logo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_LOGO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
+        String keyvisuallogo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_KEYVISUAL_PHOTO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
+        params.put("companylogo", logo);
+        params.put("keyvisual", keyvisuallogo);
         //params.put("images",images);
         volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
         awesomeInfoDialog.setMessage("Submitting files to server");
