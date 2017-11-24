@@ -3,12 +3,15 @@ package biz.africanbib.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import biz.africanbib.R;
@@ -17,7 +20,8 @@ import biz.africanbib.Tools.DatabaseHelper;
 public class SplashScreen extends AppCompatActivity {
 
     Button addBusiness, editBusiness;
-    LinearLayout linearLayout ;
+    LinearLayout linearLayout;
+    ImageView imageView;
     DatabaseHelper databaseHelper;
 
     @Override
@@ -27,12 +31,17 @@ public class SplashScreen extends AppCompatActivity {
         databaseHelper = new DatabaseHelper(getApplicationContext(), DatabaseHelper.DATABASE_NAME, null, DatabaseHelper.DATABASE_VERSION);
         bindVIews();
         //ShowNextActivity();
+        StartAnimations();
     }
 
     private void bindVIews() {
         addBusiness = (Button) findViewById(R.id.button_add_business);
+        addBusiness.setVisibility(View.INVISIBLE);
         editBusiness = (Button) findViewById(R.id.button_edit_business);
+        editBusiness.setVisibility(View.INVISIBLE);
+        imageView = (ImageView) findViewById(R.id.logo);
         linearLayout = (LinearLayout) findViewById(R.id.poweredBy);
+        linearLayout.setVisibility(View.INVISIBLE);
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,26 +63,66 @@ public class SplashScreen extends AppCompatActivity {
         });
     }
 
-    private void openCompanyWebsite()
-    {
+    private void openCompanyWebsite() {
         Intent browserIntent = new Intent(Intent.ACTION_VIEW);
         browserIntent.setData(Uri.parse("http://www.gamingdronzz.com"));
         startActivity(browserIntent);
     }
 
-    /*
-        private void ShowNextActivity() {
-            new Handler().postDelayed(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            LoadNextActivity();
-                        }
-                    },
-                    1000
-            );
-        }
-    */
+    private void StartAnimations() {
+        final Animation anim = AnimationUtils.loadAnimation(this, R.anim.alpha);
+        final Animation animationBounce = AnimationUtils.loadAnimation(this, R.anim.bounce);
+        final Animation add = AnimationUtils.loadAnimation(this, R.anim.add);
+        final Animation edit = AnimationUtils.loadAnimation(this, R.anim.edit);
+
+        anim.reset();
+        animationBounce.reset();
+        add.reset();
+        edit.reset();
+
+        imageView.clearAnimation();
+        imageView.startAnimation(anim);
+        anim.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                linearLayout.setVisibility(View.VISIBLE);
+                linearLayout.clearAnimation();
+                linearLayout.startAnimation(animationBounce);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        animationBounce.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                addBusiness.clearAnimation();
+                editBusiness.clearAnimation();
+                addBusiness.setVisibility(View.VISIBLE);
+                addBusiness.startAnimation(add);
+                editBusiness.setVisibility(View.VISIBLE);
+                editBusiness.startAnimation(edit);
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+    }
+
     private void LoadNextActivity(boolean newBusiness) {
 
         if (newBusiness) {
