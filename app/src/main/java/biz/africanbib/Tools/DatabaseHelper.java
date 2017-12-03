@@ -7,6 +7,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import biz.africanbib.Models.PreviousBusiness;
 
 /**
@@ -32,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 15;
+    public static final int DATABASE_VERSION = 16;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -75,6 +78,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_BRIEF_DESCRIPTION = "COLUMN_BRIEF_DESCRIPTION";
     public static final String COLUMN_STATUS = "COLUMN_STATUS";
     public static final String COLUMN_NGO_DIASPORA = "COLUMN_NGO_DIASPORA";
+    public static final String COLUMN_DATE_OF_ADDITION = "COLUMN_DATE_OF_ADDITION";
+    public static final String COLUMN_TIME_OF_ADDITION = "COLUMN_TIME_OF_ADDITION";
+    public static final String COLUMN_DATE_OF_UPLOADING = "COLUMN_DATE_OF_UPLOADING";
+    public static final String COLUMN_TIME_OF_UPLOADING = "COLUMN_TIME_OF_UPLOADING";
 
     public static final String COLUMN_TELEPHONE = "COLUMN_TELEPHONE";
     public static final String COLUMN_CELLPHONE = "COLUMN_CELLPHONE";
@@ -191,7 +198,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_KEYVISUAL_NOTE + " VARCHAR," +
             COLUMN_BRIEF_DESCRIPTION + " VARCHAR, " +
             COLUMN_NGO_DIASPORA + " NUMBER, " +
-            COLUMN_STATUS + " INTEGER " +
+            COLUMN_STATUS + " INTEGER, " +
+            COLUMN_DATE_OF_ADDITION + " VARCHAR, " +
+            COLUMN_TIME_OF_ADDITION + " VARCHAR, " +
+            COLUMN_DATE_OF_UPLOADING + " VARCHAR, " +
+            COLUMN_TIME_OF_UPLOADING + " VARCHAR " +
+
             ")";
     private String CREATE_TABLE_COMPANY_CONTACT = "CREATE TABLE IF NOT EXISTS " + TABLE_COMPANY_CONTACT + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
@@ -519,6 +531,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_COMPANY_NAME, businessName);
+        Calendar c= Calendar.getInstance();
+        values.put(COLUMN_DATE_OF_ADDITION, new SimpleDateFormat("dd-MM-yyyy").format(c.getTime()));
+        values.put(COLUMN_TIME_OF_ADDITION, new SimpleDateFormat("hh:mm:ss a").format(c.getTime()));
         long result = db.insert(TABLE_COMPANY_PROFILE, null, values);
         Log.v(TAG, "Insert = " + result);
 
@@ -568,7 +583,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             db.delete(TABLE_MANAGERS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             //db.delete(TABLE_REFERENCE_SPECIFIC_INFORMATION, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             //db.delete(TABLE_SUBSIDIARY_SPECIFIC_INFORMATION, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
-            db.delete(TABLE_SERVICES, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
+//            db.delete(TABLE_SERVICES, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_OTHER_PRODUCT_DATA, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_PRODUCTS_AND_PRODUCT_DETAILS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             //db.delete(TABLE_PRODUCT_DETAILS,COLUMN_COMPANY_ID + " = ?",new String[]{id+""});
@@ -599,7 +614,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         PreviousBusiness[] result = null;
         try {
-            String query = "SELECT " + COLUMN_COMPANY_ID + "," + COLUMN_COMPANY_NAME + "," + COLUMN_STATUS + "  FROM " + TABLE_COMPANY_PROFILE;
+            String query = "SELECT " +
+                    COLUMN_COMPANY_ID + "," +
+                    COLUMN_COMPANY_NAME + "," +
+                    COLUMN_STATUS + "," +
+                    COLUMN_DATE_OF_ADDITION + "," +
+                    COLUMN_TIME_OF_ADDITION + "," +
+                    COLUMN_DATE_OF_UPLOADING + "," +
+                    COLUMN_TIME_OF_UPLOADING +
+                    "  FROM " + TABLE_COMPANY_PROFILE;
             //Log.v(TAG, "Query = " + query);
             cursor = db.rawQuery(query, null);
             cursor.moveToFirst();
@@ -610,6 +633,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     result[i].setBusinessID(cursor.getInt(0));
                     result[i].setBusinessName(cursor.getString(1));
                     result[i].setUploadStatus(cursor.getInt(2) != 0);
+                    result[i].setDateOfAddition(cursor.getString(3));
+                    result[i].setTimeOfAddition(cursor.getString(4));
+                    result[i].setDateOfUploading(cursor.getString(5));
+                    result[i].setTimeOfUploading(cursor.getString(6));
                     cursor.moveToNext();
                 }
             } else {

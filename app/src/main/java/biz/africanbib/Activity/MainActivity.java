@@ -168,11 +168,13 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         ArrayList<Object> items2 = tab2.getList();
         ArrayList<Object> items3 = tab3.getList();
+        int i=-1;
         if (tab4.getAccepted()) {
 
             ArrayList<Object> items = tab1.getList();
             for (Object o :
                     items) {
+                i++;
                 if (o instanceof SimpleEditText) {
                     SimpleEditText simpleEditText = (SimpleEditText) o;
 
@@ -180,14 +182,21 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     //Business Name
                     if (simpleEditText.getTitle().equals(tab1.businessName)) {
                         if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid Business Name in Tab1", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Please enter a valid Business Name", Toast.LENGTH_SHORT).show();
+                            viewPager.setCurrentItem(0);
+                            simpleEditText.setFocused(true);
+                            tab4.getAdapter().notifyItemChanged(i);
+
                             return;
                         }
                     }
 
                     if (simpleEditText.getTitle().equals(tab1.registerationNumber)) {
                         if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid Registeration Number in Tab1", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Please enter a valid Registeration Number", Toast.LENGTH_SHORT).show();
+                            viewPager.setCurrentItem(0);
+                            simpleEditText.setFocused(true);
+                            tab1.getAdapter().notifyItemChanged(i);
                             return;
                         }
                     }
@@ -195,7 +204,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     //Telephone
                     if (simpleEditText.getTitle().equals(tab1.telephone)) {
                         if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid Telephone in Tab 1", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Please enter a valid Telephone", Toast.LENGTH_SHORT).show();
+                            viewPager.setCurrentItem(0);
+                            simpleEditText.setFocused(true);
+                            tab1.getAdapter().notifyItemChanged(i);
+
                             return;
                         }
                     }
@@ -204,7 +217,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     //City
                     if (simpleEditText.getTitle().equals(tab1.city_town)) {
                         if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid City / Town in Tab 1", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Please enter a valid City / Town", Toast.LENGTH_SHORT).show();
+                            viewPager.setCurrentItem(0);
+                            simpleEditText.setFocused(true);
+                            tab1.getAdapter().notifyItemChanged(i);
+
                             return;
                         }
                     }
@@ -213,7 +230,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     //State
                     if (simpleEditText.getTitle().equals(tab1.state)) {
                         if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid State in Tab 1", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Please enter a valid State", Toast.LENGTH_SHORT).show();
+                            viewPager.setCurrentItem(0);
+                            simpleEditText.setFocused(true);
+                            tab1.getAdapter().notifyItemChanged(i);
+
                             return;
                         }
                     }
@@ -222,7 +243,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     //Country
                     if (simpleEditText.getTitle().equals(tab1.country)) {
                         if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid Country in Tab 1", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Please enter a valid Country", Toast.LENGTH_SHORT).show();
+                            viewPager.setCurrentItem(0);
+                            simpleEditText.setFocused(true);
+                            tab1.getAdapter().notifyItemChanged(i);
+
                             return;
                         }
                     }
@@ -230,14 +255,17 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     SimpleImage simpleImage = (SimpleImage) o;
                     if (simpleImage.getTitle().equals(tab1.corporateLogo)) {
                         if (simpleImage.getImage() == null) {
-                            Toast.makeText(this, "Please select Corporate Logo in Tab1", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Please select Corporate Logo", Toast.LENGTH_SHORT).show();
+                            viewPager.setCurrentItem(0);
                             return;
                         }
                     }
 
                     if (simpleImage.getTitle().equals(tab1.keyVisual)) {
                         if (simpleImage.getImage() == null) {
-                            Toast.makeText(this, "Please select KeyVisual Photo in Tab1", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Please select KeyVisual Photo", Toast.LENGTH_SHORT).show();
+                            tab1.getAdapter().notifyItemChanged(i);
+                            viewPager.setCurrentItem(0);
                             return;
                         }
                     }
@@ -245,9 +273,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             }
 
             //items.clear();
+            i=-1;
             ArrayList<Object> items4 = tab4.getList();
             for (Object o :
                     items4) {
+                i++;
                 if (o instanceof SimpleEditText) {
                     SimpleEditText simpleEditText = (SimpleEditText) o;
 
@@ -255,7 +285,12 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     //Business Name
                     if (simpleEditText.getTitle().equals(tab4.nameOfCollector)) {
                         if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid Collector Name in Tab4", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Please enter a valid Collector Name", Toast.LENGTH_SHORT).show();
+                            viewPager.setCurrentItem(3);
+                            simpleEditText.setFocused(true);
+                            tab4.getAdapter().notifyItemChanged(i);
+
+                            Log.v("Validate","position = " + i);
                             return;
                         }
                     }
@@ -263,7 +298,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     //Telephone
                     if (simpleEditText.getTitle().equals(tab4.authorizedBy)) {
                         if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid Authorizing Name in Tab 4", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Please enter a valid Authorizing Name", Toast.LENGTH_SHORT).show();
+                            viewPager.setCurrentItem(3);
+                            simpleEditText.setFocused(true);
+                            tab4.getAdapter().notifyItemChanged(i);
+
                             return;
                         }
                     }
@@ -272,7 +311,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     //City
                     if (simpleEditText.getTitle().equals(tab4.placeOfCollection)) {
                         if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid Place of Collection in Tab 4", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "Please enter a valid Place of Collection", Toast.LENGTH_SHORT).show();
+                            viewPager.setCurrentItem(3);
+                            simpleEditText.setFocused(true);
+                            tab4.getAdapter().notifyItemChanged(i);
+
                             return;
                         }
                     }

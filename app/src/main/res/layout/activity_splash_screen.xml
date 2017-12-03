@@ -42,6 +42,7 @@
             android:gravity="center|center_vertical"
             android:paddingLeft="@dimen/padding_xlarge"
             android:text="@string/add_business"
+            android:textColor="@color/colorWhite"
             android:textSize="@dimen/text_small" />
 
 
@@ -55,6 +56,7 @@
             android:drawableRight="@android:drawable/ic_menu_edit"
             android:drawableTint="@color/colorBlack"
             android:gravity="center|center_vertical"
+            android:textColor="@color/colorWhite"
             android:paddingLeft="@dimen/padding_xlarge"
             android:paddingStart="@dimen/padding_xlarge"
             android:text="@string/edit_business"

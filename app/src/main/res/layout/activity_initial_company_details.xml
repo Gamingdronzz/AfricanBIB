@@ -33,9 +33,10 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/circular_background"
+        android:background="@drawable/ps__button_stumble_upon"
         android:layout_marginTop="@dimen/margin_xxlarge"
         android:text="Submit"
+        android:textColor="@color/colorWhite"
         android:id="@+id/button_submit"
         android:textSize="@dimen/text_large"
         android:paddingLeft="@dimen/padding_xxlarge"

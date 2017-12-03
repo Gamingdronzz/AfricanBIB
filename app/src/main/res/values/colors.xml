@@ -5,12 +5,14 @@
     <color name="colorPrimaryDark">#0288D1</color>
     <color name="colorPrimaryLight">#B3E5FC</color>
     <color name="colorAccent">#607D8B</color>
+    <color name="colorAccentDark">#40515a</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
     <color name="icons">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
     <color name="colorWhite">#ffffff</color>
     <color name="colorOffWhite">#dddddd</color>
+    <color name="colorOffWhiteDark">#bebebe</color>
     <color name="colorRed">#ff0000</color>
     <color name="colorFacebook">#3760ac</color>
     <color name="colorGray">#6c6c6c</color>

@@ -3,14 +3,10 @@ package biz.africanbib.Adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.List;
@@ -27,6 +23,7 @@ public class RecyclerViewAdapterPreviousBusiness extends RecyclerView.Adapter<Re
     public RecyclerViewAdapterPreviousBusiness() {
 
     }
+
     public RecyclerViewAdapterPreviousBusiness(List<PreviousBusiness> previousBusinesses) {
         this.previousBusinessList = previousBusinesses;
 
@@ -44,15 +41,18 @@ public class RecyclerViewAdapterPreviousBusiness extends RecyclerView.Adapter<Re
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         PreviousBusiness model = previousBusinessList.get(position);
-        holder.textViewBusinessName.setText(model.getBusinessName());
-        Log.v(TAG,"Status = " + model.isUploadStatus());
-        if(model.isUploadStatus())
-        {
-            holder.imageViewUploadStatus.setImageResource(R.mipmap.ic_tick);
-        }
-        else
-        {
-            holder.imageViewUploadStatus.setImageResource(R.mipmap.ic_cross);
+        holder.buttonBusinessName.setText(model.getBusinessName());
+        holder.addedOn.setText("Added on : " + model.getDateOfAddition() + "at " + model.getTimeOfAddition());
+
+        Log.v(TAG, "Status = " + model.isUploadStatus());
+        if (model.isUploadStatus()) {
+            holder.buttonBusinessName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.ic_tick, 0);
+            holder.uploadedOn.setText("Uploaded on : " + model.getDateOfUploading() + " at " + model.getTimeOfUploading());
+            holder.uploadedOn.setVisibility(View.VISIBLE);
+        } else {
+
+            holder.buttonBusinessName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.ic_cross, 0);
+            holder.uploadedOn.setVisibility(View.GONE);
         }
 
     }
@@ -64,15 +64,19 @@ public class RecyclerViewAdapterPreviousBusiness extends RecyclerView.Adapter<Re
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder{
+    public class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView textViewBusinessName;
-        private ImageView imageViewUploadStatus;
+        private Button buttonBusinessName;
+        private TextView addedOn;
+        private TextView uploadedOn;
+        //private ImageView imageViewUploadStatus;
 
         private MyViewHolder(View itemView) {
             super(itemView);
-            textViewBusinessName = (TextView) itemView.findViewById(R.id.previous_business_name);
-            imageViewUploadStatus = (ImageView) itemView.findViewById(R.id.imageViewUploadStatus);
+            buttonBusinessName = (Button) itemView.findViewById(R.id.previous_business_name);
+            addedOn = (TextView) itemView.findViewById(R.id.txtview_addedon);
+            uploadedOn = (TextView) itemView.findViewById(R.id.txtview_uploadedon);
+            //imageViewUploadStatus = (ImageView) itemView.findViewById(R.id.imageViewUploadStatus);
 
         }
 

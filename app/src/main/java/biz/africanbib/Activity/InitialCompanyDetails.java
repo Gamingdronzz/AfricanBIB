@@ -21,9 +21,6 @@ public class InitialCompanyDetails extends AppCompatActivity{
     EditText editTextCompanyName;
     DatabaseHelper databaseHelper;
 
-    Response.Listener<String> listener;
-    Response.ErrorListener errorListener;
-
 
 
     @Override
@@ -31,23 +28,11 @@ public class InitialCompanyDetails extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_initial_company_details);
         button = (Button) findViewById(R.id.button_submit);
-        listener = new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
 
-            }
-        };
-
-        errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-
-            }
-        };
         databaseHelper = new DatabaseHelper(this,DatabaseHelper.DATABASE_NAME,null,DatabaseHelper.DATABASE_VERSION);
 
 
-        StringRequest request = new StringRequest(StringRequest.Method.POST,"www.google.com/abc.php",listener,errorListener);
+
 
 
 
