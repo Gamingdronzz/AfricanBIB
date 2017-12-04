@@ -525,6 +525,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
+    public  void updateDateTime(String TableName)
+    {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        Calendar c= Calendar.getInstance();
+        values.put(COLUMN_DATE_OF_UPLOADING, new SimpleDateFormat("dd-MM-yyyy").format(c.getTime()));
+        values.put(COLUMN_TIME_OF_UPLOADING, new SimpleDateFormat("hh:mm:ss a").format(c.getTime()));
+        long result = db.update(TableName, values, COLUMN_COMPANY_ID + " = " + getCurrentCompanyId(), null);
+        Log.v(TAG, String.valueOf(result));
+        if (db != null) db.close();
+    }
     public void addBusiness(String businessName) {
         SQLiteDatabase db = this.getWritableDatabase();
         Log.v(TAG, "Adding New Business : " + businessName);

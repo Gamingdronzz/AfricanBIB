@@ -933,6 +933,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             if (jsonObject.get("result").equals(helper.SUCCESS)) {
                 awesomeInfoDialog.setMessage("Succesfully uploaded Business");
                 databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
+                databaseHelper.updateDateTime(DatabaseHelper.TABLE_COMPANY_PROFILE);
             } else {
                 awesomeInfoDialog.setMessage("Business Already Uploaded");
                 databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
