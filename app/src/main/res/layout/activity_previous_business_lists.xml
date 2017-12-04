@@ -6,10 +6,19 @@
     android:background="@color/colorWhite"
     tools:context="biz.africanbib.Activity.PreviousBusinessLists">
 
+    <EditText
+        android:id="@+id/edtSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:drawableRight="@android:drawable/ic_menu_search" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_view_previous_businesses"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/edtSearch"
+        android:layout_marginTop="@dimen/margin_medium"
         android:paddingTop="@dimen/padding_large">
 
     </android.support.v7.widget.RecyclerView>

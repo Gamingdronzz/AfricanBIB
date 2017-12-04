@@ -63,6 +63,10 @@ public class RecyclerViewAdapterPreviousBusiness extends RecyclerView.Adapter<Re
         return previousBusinessList == null ? 0 : previousBusinessList.size();
     }
 
+    public void updateList(List<PreviousBusiness> temp) {
+        previousBusinessList = temp;
+        notifyDataSetChanged();
+    }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
 
