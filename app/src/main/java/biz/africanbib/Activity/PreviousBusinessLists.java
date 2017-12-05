@@ -82,7 +82,7 @@ public class PreviousBusinessLists extends AppCompatActivity implements View.OnC
     void filter(String text) {
         List<PreviousBusiness> temp = new ArrayList();
         for (PreviousBusiness p : modelList) {
-            if (p.getBusinessName().toLowerCase().contains(text)) {
+            if (p.getBusinessName().toLowerCase().contains(text.toLowerCase())) {
                 temp.add(p);
             }
         }
