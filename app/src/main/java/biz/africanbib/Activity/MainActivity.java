@@ -882,32 +882,32 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         VolleyHelper volleyHelper = new VolleyHelper(this, this);
 
         Map<String, String> params = new HashMap<>();
-        Map<String, String> params1 = new HashMap<>();
 
         params.put("xml", aBuffer);
         params.put("businessName", companyName);
 
-        String logo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_LOGO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
+       /* String logo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_LOGO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
         String keyvisuallogo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_KEYVISUAL_PHOTO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
         params.put("companylogo", logo);
         params.put("keyvisual", keyvisuallogo);
-        volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
+       */ volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
 
         int size = imageData.size();
         String[] images = new String[size];
         String[] imagenames = new String[size];
         int i = 0;
         for (ImageData id : imageData) {
+            Map<String, String> params1 = new HashMap<>();
             if (id.Row == -1)
                 images[i] = Base64.encodeToString(databaseHelper.getBlobValue(id.ColumnName, id.TableName), Base64.DEFAULT);
             else
                 images[i] = Base64.encodeToString(databaseHelper.getBlobFromRow(id.ColumnName, id.TableName, id.Row), Base64.DEFAULT);
             imagenames[i] = id.Name;
-            params1.clear();
-            params1.put("imageName", imagenames[i]);
+            params1.put("imagename", imagenames[i]);
             params1.put("image", images[i]);
+            params1.put("businessName",companyName);
             i++;
-            volleyHelper.makeStringRequest(helper.getBaseURL() + phpfile, "tag", params1);
+            volleyHelper.makeStringRequest(helper.getBaseURL() + "createimage.php", "tag"+i, params1);
         }
         awesomeInfoDialog.setMessage("Submitting files to server");
 
@@ -936,7 +936,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     @Override
     public void onResponse(String str) {
         JSONObject jsonObject = helper.getJson(str);
-
+        Log.d(TAG,jsonObject.toString());
         try {
             if (jsonObject.get("result").equals(helper.SUCCESS)) {
                 awesomeInfoDialog.setMessage("Succesfully uploaded Business");
