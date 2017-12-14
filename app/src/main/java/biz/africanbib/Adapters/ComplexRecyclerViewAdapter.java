@@ -72,7 +72,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     Helper helper;
     FragmentManager fragmentManager;
     DatabaseHelper databaseHelper;
-    private int currentRowOffers = 1;
+    private int currentRowSubsidiaries = 1;
     private int currentRowReferences = 1;
     private int currentRowOwners = 1;
     private int currentRowAwards = 1;
@@ -497,8 +497,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         private CustomImageChooser customImageChooser;
 
         public void setImage(Bitmap image) {
-            if(image!=null)
-            this.imageView.setImageBitmap(image);
+            if (image != null)
+                this.imageView.setImageBitmap(image);
         }
 
         public ViewHolderSimpleImage(View v, CustomImageChooser customImageChooser) {
@@ -1011,8 +1011,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             databaseHelper.insertRow(add.getTableName(), currentRowNo);
 
             for (int i = 0; i < add.getRows(); i++) {
-                //Log.v("Adapter", "Current Column = " + columnNames[i]);
-
                 if (columnNames[i].equals(DatabaseHelper.COLUMN_SECTOR)) {
                     items.add(position, helper.buildMultiSelectDropdown(titles[i],
                             add.getTableName(),
@@ -1395,12 +1393,12 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             return currentRowProducts++;
         } else if (tableName.equals(DatabaseHelper.TABLE_SERVICES)) {
             return currentRowServices++;
-        /*} else if (tableName.equals(DatabaseHelperTABLE_AWARDS)) {
-            return currentRowAwards++;
-        } else if (tableName.equals(DatabaseHelper.TABLE_LATEST_NEWS)) {
+        } else if (tableName.equals(DatabaseHelper.TABLE_SUBSIDIARIES)) {
+            return currentRowSubsidiaries++;
+        }/* else if (tableName.equals(DatabaseHelper.TABLE_LATEST_NEWS)) {
             return currentRowLatestNews++;
             */
-        } else if (tableName.equals(DatabaseHelper.TABLE_SECTORS)) {
+         else if (tableName.equals(DatabaseHelper.TABLE_SECTORS)) {
             return currentRowIndustry++;
         }
         return 0;
@@ -1424,10 +1422,10 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             currentRowProducts = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_SERVICES)) {
             currentRowServices = value;
-            /*
-        } else if (tableName.equals(DatabaseHelper.TABLE_AWARDS)) {
-            currentRowAwards = value;
-        } else if (tableName.equals(DatabaseHelper.TABLE_LATEST_NEWS)) {
+
+        } else if (tableName.equals(DatabaseHelper.TABLE_SUBSIDIARIES)) {
+            currentRowSubsidiaries = value;
+         /*}else if (tableName.equals(DatabaseHelper.TABLE_LATEST_NEWS)) {
             currentRowLatestNews = value;
             */
         } else if (tableName.equals(DatabaseHelper.TABLE_SECTORS)) {

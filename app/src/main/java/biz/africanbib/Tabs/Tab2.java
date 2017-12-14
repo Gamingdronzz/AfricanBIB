@@ -42,6 +42,7 @@ public class Tab2 extends Fragment {
     int ownerRows;
     int refrencesRows;
     int managerRows;
+    int subsidiaryRows;
 
     ArrayList<Object> items = new ArrayList<>();
 
@@ -81,6 +82,7 @@ public class Tab2 extends Fragment {
         adapter.updateRow(DatabaseHelper.TABLE_OWNERS, ownerRows);
         adapter.updateRow(DatabaseHelper.TABLE_REFERENCES, refrencesRows);
         adapter.updateRow(DatabaseHelper.TABLE_MANAGERS, managerRows);
+        adapter.updateRow(DatabaseHelper.TABLE_SUBSIDIARIES, subsidiaryRows);
         //SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
         //snapHelper.attachToRecyclerView(recyclerView);
         recyclerView.setAdapter(adapter);
@@ -256,7 +258,7 @@ public class Tab2 extends Fragment {
                         -1, "position"));
 
 
-        items.add(new Heading("OWNERS/MANAGERS/REFERENCES", null));
+        items.add(new Heading("OWNERS/MANAGERS/REFERENCES/SUBSIDIARIES", null));
         items.add(new SimpleText("REFERENCES", "contact"));
         tableName = DatabaseHelper.TABLE_REFERENCES;
         String[] xmltags = new String[]{
@@ -499,8 +501,69 @@ public class Tab2 extends Fragment {
                 tableName,
                 columnNames, xmltags));
 
+        items.add(new SimpleText("SUBSIDIARIES", "contact"));
+        tableName = DatabaseHelper.TABLE_SUBSIDIARIES;
+        xmltags = new String[]{
+                "website",
+                "email",
+                "telephone",
+                "country",
+                "district",
+                "postalcode",
+                "city",
+                "streetnumber",
+                "subsidiaryname"
+        };
+        titles = new String[]{
+                "Website",
+                "Email",
+                "Telephone/Cellphone",
+                "Country",
+                "District/State",
+                "Zip",
+                "City/Town",
+                "Street & Number",
+                "Subsidiary Name"};
+        columnNames = new String[]{
+                DatabaseHelper.COLUMN_WEBSITE,
+                DatabaseHelper.COLUMN_EMAIL,
+                DatabaseHelper.COLUMN_TELEPHONE,
+                DatabaseHelper.COLUMN_COUNTRY,
+                DatabaseHelper.COLUMN_DISTRICT,
+                DatabaseHelper.COLUMN_POSTAL_CODE,
+                DatabaseHelper.COLUMN_CITY,
+                DatabaseHelper.COLUMN_STREET,
+                DatabaseHelper.COLUMN_SUBSIDIARY_NAME};
+        if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
+            int[] ids = databaseHelper.getrowids(tableName);
+            if (ids != null) {
+                Log.v("Subsidiary", "ID Length = " + ids.length);
+                for (int i = 0; i < ids.length; i++) {
+                    for (int j = titles.length - 1; j >= 0; j--) {
+                        Log.v("subsidiary", "I = " + i + "\nJ = " + j);
+                        if (columnNames[j].equals(DatabaseHelper.COLUMN_COUNTRY)) {
+                            selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
+                            items.add(helper.buildDropDown(titles[j],helper.getCountryNames(),helper.getCountryCodes(), selectedPosition, tableName, columnNames[j],
+                                    ids[i], xmltags[j]));
+                        } else {
+                            items.add(
+                                    helper.buildEditText(
+                                            titles[j],
+                                            databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                            tableName,
+                                            columnNames[j],
+                                            ids[i], xmltags[j]));
+                        }
+                    }
+                    items.add(new Divider());
+                }
+                subsidiaryRows = ids.length;
+            }
+        }
+        items.add(helper.buildAdd(9, titles, tableName, columnNames, xmltags));
 
-        items.add(new Heading("SUBSIDIARIES", "contact"));
+
+       /* items.add(new Heading("SUBSIDIARIES", "contact"));
         tableName = DatabaseHelper.TABLE_SUBSIDIARIES;
         columnName = DatabaseHelper.COLUMN_SUBSIDIARY_NAME;
         value = databaseHelper.getStringValue(columnName, tableName);
@@ -528,8 +591,9 @@ public class Tab2 extends Fragment {
         columnName = DatabaseHelper.COLUMN_WEBSITE;
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Website", value, tableName, columnName, -1, "website"));
-
+*/
         return items;
+
     }
 
     private void getValuesFromViews() {

@@ -35,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 16;
+    public static final int DATABASE_VERSION = 18;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -62,7 +62,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String TABLE_COMPANY_INDICATORS = "TableCompanyIndicators";
     //public static final String TABLE_AWARDS = "TableAwards";
-    //public static final String TABLE_LATEST_NEWS = "TableLatestNews";
+    public static final String TABLE_LATEST_NEWS = "TableLatestNews";
     public static final String TABLE_BUSINESS_CORRESPONDING_LANGUAGES = "TableBusinessCorrespondingLanguages";
     public static final String TABLE_SECTORS = "TableSectors";
     public static final String TABLE_SOURCE_OF_DATA = "TableSourceofData";
@@ -325,6 +325,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private String CREATE_TABLE_SUBSIDIARY = "CREATE TABLE IF NOT EXISTS " + TABLE_SUBSIDIARIES + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
+            COLUMN_ROW_ID + " INTEGER," +
             COLUMN_SUBSIDIARY_NAME + " VARCHAR," +
             COLUMN_STREET + " VARCHAR," +
             COLUMN_CITY + " VARCHAR," +
@@ -423,7 +424,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_AWARD_TEL_FAX + " VARCHAR," +
             COLUMN_AWARD_FILE + " VARCHAR " +
             ")";
-
+*/
     private String CREATE_TABLE_LATEST_NEWS = "CREATE TABLE IF NOT EXISTS " + TABLE_LATEST_NEWS + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_ROW_ID + " INTEGER," +
@@ -431,7 +432,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_TITLE + " VARCHAR," +
             COLUMN_DESCRIPTION + " VARCHAR " +
             ")";
-*/
+
     private String CREATE_TABLE_BUSINESS_CORRESPONDING_LANGUAGES = "CREATE TABLE IF NOT EXISTS " + TABLE_BUSINESS_CORRESPONDING_LANGUAGES + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_LANGUAGE + " VARCHAR " +
@@ -479,7 +480,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_PRODUCTS);
         db.execSQL(CREATE_TABLE_COMPANY_INDICATORS);
         //db.execSQL(CREATE_TABLE_AWARDS);
-        //db.execSQL(CREATE_TABLE_LATEST_NEWS);
+        db.execSQL(CREATE_TABLE_LATEST_NEWS);
         db.execSQL(CREATE_TABLE_BUSINESS_CORRESPONDING_LANGUAGES);
         db.execSQL(CREATE_TABLE_SECTORS);
         db.execSQL(CREATE_TABLE_SOURCE_OF_DATA);
@@ -515,7 +516,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY_INDICATORS);
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_AWARDS);
-        //db.execSQL("DROP TABLE IF EXISTS " + TABLE_LATEST_NEWS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_LATEST_NEWS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUSINESS_CORRESPONDING_LANGUAGES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SECTORS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_SOURCE_OF_DATA);
@@ -600,7 +601,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //db.delete(TABLE_PRODUCT_DETAILS,COLUMN_COMPANY_ID + " = ?",new String[]{id+""});
             db.delete(TABLE_COMPANY_INDICATORS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             //db.delete(TABLE_AWARDS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
-            //db.delete(TABLE_LATEST_NEWS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
+            db.delete(TABLE_LATEST_NEWS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_BUSINESS_CORRESPONDING_LANGUAGES, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_SECTORS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_SOURCE_OF_DATA, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});

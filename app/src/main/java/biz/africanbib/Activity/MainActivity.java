@@ -488,7 +488,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             if (items.get(i) instanceof Heading) {
                 Heading heading = (Heading) items.get(i);
                 headTag = heading.getXmlTag();
-                if (heading.getHeading().equals("OWNERS/MANAGERS/REFERENCES")) {
+                if (heading.getHeading().equals("OWNERS/MANAGERS/REFERENCES/SUBSIDIARIES")) {
                     headTag = null;
                     i = getContactXml(i, items, xmlSerializer);
                 } else if (heading.getHeading().equals("CONTACT PERSON")) {
@@ -498,14 +498,14 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     xmlSerializer.startTag(null, "type");
                     xmlSerializer.text("0");
                     xmlSerializer.endTag(null, "type");
-                } else if (heading.getHeading().equals("SUBSIDIARIES")) {
+                } /*else if (heading.getHeading().equals("SUBSIDIARIES")) {
                     xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, headTag);
                     xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, "type");
                     xmlSerializer.text("4");
                     xmlSerializer.endTag(null, "type");
-                } else if (heading.getHeading().equals("COMPANY POSTAL ADDRESS") || heading.getHeading().equals("COMPANY CONTACT")) {
+                } */ else if (heading.getHeading().equals("COMPANY POSTAL ADDRESS") || heading.getHeading().equals("COMPANY CONTACT")) {
                     xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, headTag);
                     xmlSerializer.text(System.getProperty("line.separator"));
@@ -760,6 +760,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         xmlSerializer.startTag(null, "type");
                         xmlSerializer.text("3");
                         xmlSerializer.endTag(null, "type");
+                    } else if (simpleText.getTitle().equals("SUBSIDIARIES")) {
+                        xmlSerializer.text(System.getProperty("line.separator"));
+                        xmlSerializer.startTag(null, "type");
+                        xmlSerializer.text("4");
+                        xmlSerializer.endTag(null, "type");
                     }
                     obj = items.get(j);
                     personTag = null;
@@ -850,7 +855,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             }
             if (items.get(j) instanceof Add) {
                 j++;
-                obj = items.get(j);
+                if (j >= items.size())
+                    return j - 1;
+                else
+                    obj = items.get(j);
             }
         }
         return j - 1;
@@ -890,7 +898,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         String keyvisuallogo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_KEYVISUAL_PHOTO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
         params.put("companylogo", logo);
         params.put("keyvisual", keyvisuallogo);
-       */ volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
+       */
+        volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
 
         int size = imageData.size();
         String[] images = new String[size];
@@ -905,9 +914,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             imagenames[i] = id.Name;
             params1.put("imagename", imagenames[i]);
             params1.put("image", images[i]);
-            params1.put("businessName",companyName);
+            params1.put("businessName", companyName);
             i++;
-            volleyHelper.makeStringRequest(helper.getBaseURL() + "createimage.php", "tag"+i, params1);
+            volleyHelper.makeStringRequest(helper.getBaseURL() + "createimage.php", "tag" + i, params1);
         }
         awesomeInfoDialog.setMessage("Submitting files to server");
 
@@ -936,7 +945,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     @Override
     public void onResponse(String str) {
         JSONObject jsonObject = helper.getJson(str);
-        Log.d(TAG,jsonObject.toString());
+        Log.d(TAG, jsonObject.toString());
         try {
             if (jsonObject.get("result").equals(helper.SUCCESS)) {
                 awesomeInfoDialog.setMessage("Succesfully uploaded Business");

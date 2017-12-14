@@ -328,7 +328,7 @@ public class Tab3 extends Fragment {
         items.add(helper.buildEditText("Last Employee Training", value, tableName, columnName, -1, "lastTraining"));
 
 
-        /*items.add(new Heading("AWARDS AND NEWS", null));
+      /*
         items.add(new SimpleText("AWARDS", "awards"));
         tableName = DatabaseHelper.TABLE_AWARDS;
         xmlTags = new String[]{
@@ -385,20 +385,18 @@ public class Tab3 extends Fragment {
         }
         items.add(helper.buildAdd(6, titles, tableName, columnNames, xmlTags));
         items.add(new Divider());
-
+*/
+        items.add(new Heading("NEWS", null));
         items.add(new SimpleText("LATEST NEWS", "news"));
         tableName = DatabaseHelper.TABLE_LATEST_NEWS;
         titles = new String[]{
                 "Description",
-                "Title",
                 "Date"};
         xmlTags = new String[]{
                 "description",
-                "title",
                 "date"};
         columnNames = new String[]{
                 DatabaseHelper.COLUMN_DESCRIPTION,
-                DatabaseHelper.COLUMN_TITLE,
                 DatabaseHelper.COLUMN_DATE};
         if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
             int[] ids = databaseHelper.getrowids(tableName);
@@ -428,8 +426,7 @@ public class Tab3 extends Fragment {
                 newsRows = ids.length;
             }
         }
-        items.add(helper.buildAdd(3, titles, tableName, columnNames, xmlTags));
-        */
+        items.add(helper.buildAdd(2, titles, tableName, columnNames, xmlTags));
 
         return items;
     }
