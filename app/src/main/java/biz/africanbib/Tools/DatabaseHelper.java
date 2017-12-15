@@ -35,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 18;
+    public static final int DATABASE_VERSION = 19;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -59,6 +59,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String TABLE_SERVICES = "TableServices";
     public static final String TABLE_PRODUCTS_AND_PRODUCT_DETAILS = "TableProductsAndProductDetails";
     public static final String TABLE_OTHER_PRODUCT_DATA = "TableOtherProductData";
+    public static final String TABLE_OTHER_MEDIA = "TableOtherMedia";
 
     public static final String TABLE_COMPANY_INDICATORS = "TableCompanyIndicators";
     //public static final String TABLE_AWARDS = "TableAwards";
@@ -141,7 +142,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String COLUMN_SERVICES = "COLUMN_SERVICES";
     public static final String COLUMN_PRODUCTS = "COLUMN_PRODUCTS";
-
+    public static final String COLUMN_MEDIA_TYPE = "COLUMN_MEDIA_TYPE";
+    public static final String COLUMN_MEDIA_FILE = "COLUMN_MEDIA_FILE";
 
     public static final String COLUMN_TITLE = "COLUMN_TITLE";
     public static final String COLUMN_DESCRIPTION = "COLUMN_DESCRIPTION";
@@ -381,6 +383,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_SERVICES + " VARCHAR" +
             ")";
 
+    private String CREATE_TABLE_OTHER_MEDIA = "CREATE TABLE IF NOT EXISTS " + TABLE_OTHER_MEDIA + " ( " +
+            COLUMN_COMPANY_ID + " NUMBER," +
+            COLUMN_ROW_ID + " INTEGER," +
+            COLUMN_MEDIA_TYPE + " VARCHAR, " +
+            COLUMN_MEDIA_FILE + " VARCHAR" +
+            ")";
+
     private String CREATE_TABLE_PRODUCTS = "CREATE TABLE IF NOT EXISTS " + TABLE_PRODUCTS_AND_PRODUCT_DETAILS + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_ROW_ID + " INTEGER," +
@@ -478,6 +487,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_SUBSIDIARY);
         db.execSQL(CREATE_TABLE_OTHER_PRODUCT_DATA);
         db.execSQL(CREATE_TABLE_PRODUCTS);
+        db.execSQL(CREATE_TABLE_OTHER_MEDIA);
         db.execSQL(CREATE_TABLE_COMPANY_INDICATORS);
         //db.execSQL(CREATE_TABLE_AWARDS);
         db.execSQL(CREATE_TABLE_LATEST_NEWS);
@@ -513,6 +523,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_REFERENCE_SPECIFIC_INFORMATION);
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_SUBSIDIARY_SPECIFIC_INFORMATION);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_OTHER_PRODUCT_DATA);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_OTHER_MEDIA);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_PRODUCTS_AND_PRODUCT_DETAILS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMPANY_INDICATORS);
         //db.execSQL("DROP TABLE IF EXISTS " + TABLE_AWARDS);
@@ -526,24 +537,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     }
 
-    public  void updateDateTime(String TableName)
-    {
+    public void updateDateTime(String TableName) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        Calendar c= Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
         values.put(COLUMN_DATE_OF_UPLOADING, new SimpleDateFormat("dd-MM-yyyy").format(c.getTime()));
         values.put(COLUMN_TIME_OF_UPLOADING, new SimpleDateFormat("hh:mm:ss a").format(c.getTime()));
         long result = db.update(TableName, values, COLUMN_COMPANY_ID + " = " + getCurrentCompanyId(), null);
         Log.v(TAG, String.valueOf(result));
         if (db != null) db.close();
     }
+
     public void addBusiness(String businessName) {
         SQLiteDatabase db = this.getWritableDatabase();
         Log.v(TAG, "Adding New Business : " + businessName);
 
         ContentValues values = new ContentValues();
         values.put(COLUMN_COMPANY_NAME, businessName);
-        Calendar c= Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
         values.put(COLUMN_DATE_OF_ADDITION, new SimpleDateFormat("dd-MM-yyyy").format(c.getTime()));
         values.put(COLUMN_TIME_OF_ADDITION, new SimpleDateFormat("hh:mm:ss a").format(c.getTime()));
         long result = db.insert(TABLE_COMPANY_PROFILE, null, values);
@@ -559,7 +570,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //addValue(result, TABLE_REFERENCES);
         //addValue(result, TABLE_OWNERS);
         //addValue(result, TABLE_MANAGERS);
-        addValue(result, TABLE_SUBSIDIARIES);
+        //addValue(result, TABLE_SUBSIDIARIES);
         //addValue(result, TABLE_ACADEMIC_BACKGROUND);
         //addValue(result, TABLE_PROFESSIONAL_BACKGROUND);
         //addValue(result, TABLE_AFFILIATION);
@@ -597,6 +608,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             //db.delete(TABLE_SUBSIDIARY_SPECIFIC_INFORMATION, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
 //            db.delete(TABLE_SERVICES, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_OTHER_PRODUCT_DATA, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
+            db.delete(TABLE_OTHER_MEDIA, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             db.delete(TABLE_PRODUCTS_AND_PRODUCT_DETAILS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});
             //db.delete(TABLE_PRODUCT_DETAILS,COLUMN_COMPANY_ID + " = ?",new String[]{id+""});
             db.delete(TABLE_COMPANY_INDICATORS, COLUMN_COMPANY_ID + " = ?", new String[]{id + ""});

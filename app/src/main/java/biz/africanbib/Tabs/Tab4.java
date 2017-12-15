@@ -196,7 +196,6 @@ public class Tab4 extends Fragment {
             if (ids != null) {
                 List<Integer> selectedIndices = new ArrayList<>();
                 for (int i = 0; i < ids.length; i++) {
-                    items.add(new Divider());
                     String s = databaseHelper.getStringFromRow(tableName, columnNames[0], ids[i]);
 
                     selectedIndices = helper.getSelectedIndices(s);
@@ -222,6 +221,7 @@ public class Tab4 extends Fragment {
                             selectedIndices,
                             ids[i], "sector"
                     ));
+                    items.add(new Divider());
                 }
                 industryRows = ids.length;
             }

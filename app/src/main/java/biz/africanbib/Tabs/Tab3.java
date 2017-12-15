@@ -39,7 +39,7 @@ public class Tab3 extends Fragment {
     DatabaseHelper databaseHelper;
 
     private int productDetailsRows = 0;
-    private int awardRows = 0;
+    private int mediaRows = 0;
     private int newsRows = 0;
     private int serviceRows = 0;
     ArrayList<Object> items;
@@ -72,8 +72,8 @@ public class Tab3 extends Fragment {
         }
         //SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
         //snapHelper.attachToRecyclerView(recyclerView);
-        //adapter.updateRow(DatabaseHelper.TABLE_AWARDS, awardRows);
-        //adapter.updateRow(DatabaseHelper.TABLE_LATEST_NEWS, newsRows);
+        adapter.updateRow(DatabaseHelper.TABLE_OTHER_MEDIA, mediaRows);
+        adapter.updateRow(DatabaseHelper.TABLE_LATEST_NEWS, newsRows);
         adapter.updateRow(DatabaseHelper.TABLE_PRODUCTS_AND_PRODUCT_DETAILS, productDetailsRows);
         adapter.updateRow(DatabaseHelper.TABLE_SERVICES, serviceRows);
         recyclerView.setAdapter(adapter);
@@ -176,7 +176,6 @@ public class Tab3 extends Fragment {
             if (ids != null) {
 
                 for (int i = 0; i < ids.length; i++) {
-                    items.add(new Divider());
                     for (int j = titles.length - 1; j >= 0; j--) {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_MEDIA)) {
                             items.add(helper.buildImage(
@@ -194,8 +193,9 @@ public class Tab3 extends Fragment {
                                     ids[i], xmlTags[j]));
                         }
                     }
-                    productDetailsRows = ids.length;
+                    items.add(new Divider());
                 }
+                productDetailsRows = ids.length;
             }
         }
         items.add(helper.buildAdd(3, titles, tableName, columnNames, xmlTags));
@@ -203,11 +203,49 @@ public class Tab3 extends Fragment {
         tableName = DatabaseHelper.TABLE_OTHER_PRODUCT_DATA;
         String columnName = DatabaseHelper.COLUMN_PRODUCTS;
         String value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Products", value, tableName, columnName, -1, "products"));
+        items.add(helper.buildEditText("Product Description", value, tableName, columnName, -1, "products"));
 
         columnName = DatabaseHelper.COLUMN_SERVICES;
         value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Services", value, tableName, columnName, -1, "services"));
+        items.add(helper.buildEditText("Service Description", value, tableName, columnName, -1, "services"));
+
+        items.add(new SimpleText("Media", "media"));
+        tableName = DatabaseHelper.TABLE_OTHER_MEDIA;
+        xmlTags = new String[]{null, "type"};
+        titles = new String[]{
+                "Choose Media",
+                "Type of Media"};
+        columnNames = new String[]{
+                DatabaseHelper.COLUMN_MEDIA_FILE,
+                DatabaseHelper.COLUMN_MEDIA_TYPE
+        };
+        if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
+            int[] ids = databaseHelper.getrowids(tableName);
+            if (ids != null) {
+
+                for (int i = 0; i < ids.length; i++) {
+                    for (int j = titles.length - 1; j >= 0; j--) {
+                        if (columnNames[j].equals(DatabaseHelper.COLUMN_MEDIA_TYPE)) {
+                            int selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
+                            items.add(helper.buildDropDown(titles[j], new String[]{
+                                    "Photo",
+                                    "PDF",
+                            }, new int[]{1, 6}, selectedPosition, tableName, columnNames[j], ids[i], xmlTags[j]));
+                        } else {
+                            items.add(helper.buildEditText(
+                                    titles[j],
+                                    databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                    tableName,
+                                    columnNames[j],
+                                    ids[i], xmlTags[j]));
+                        }
+                    }
+                    items.add(new Divider());
+                }
+                mediaRows = ids.length;
+            }
+        }
+        items.add(helper.buildAdd(2, titles, tableName, columnNames, xmlTags));
 
        /* items.add(new SimpleText("Services & Service Details"));
         tableName = DatabaseHelper.TABLE_SERVICES;
@@ -401,9 +439,7 @@ public class Tab3 extends Fragment {
         if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
             int[] ids = databaseHelper.getrowids(tableName);
             if (ids != null) {
-
                 for (int i = 0; i < ids.length; i++) {
-                    items.add(new Divider());
                     for (int j = titles.length - 1; j >= 0; j--) {
                         if (columnNames[j].equals(DatabaseHelper.COLUMN_DATE)) {
                             items.add(helper.buildDate(
@@ -422,12 +458,12 @@ public class Tab3 extends Fragment {
                                             ids[i], xmlTags[j]));
                         }
                     }
+                    items.add(new Divider());
                 }
                 newsRows = ids.length;
             }
         }
         items.add(helper.buildAdd(2, titles, tableName, columnNames, xmlTags));
-
         return items;
     }
 

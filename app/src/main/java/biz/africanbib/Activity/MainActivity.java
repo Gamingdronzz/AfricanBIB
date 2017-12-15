@@ -452,7 +452,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             xmlSerializer.setOutput(writer);
             xmlSerializer.startDocument("UTF-8", true);
             xmlSerializer.text(System.getProperty("line.separator"));
-            xmlSerializer.startTag(null, "Organisation");
+            xmlSerializer.startTag(null, "Organization");
 
             addXmlContent(items1, xmlSerializer);
             addXmlContent(items2, xmlSerializer);
@@ -460,7 +460,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             addXmlContent(items4, xmlSerializer);
 
             xmlSerializer.text(System.getProperty("line.separator"));
-            xmlSerializer.endTag(null, "Organisation");
+            xmlSerializer.endTag(null, "Organization");
             xmlSerializer.endDocument();
             xmlSerializer.flush();
 
@@ -488,24 +488,14 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             if (items.get(i) instanceof Heading) {
                 Heading heading = (Heading) items.get(i);
                 headTag = heading.getXmlTag();
-                if (heading.getHeading().equals("OWNERS/MANAGERS/REFERENCES/SUBSIDIARIES")) {
-                    headTag = null;
-                    i = getContactXml(i, items, xmlSerializer);
-                } else if (heading.getHeading().equals("CONTACT PERSON")) {
+                if (heading.getHeading().equals("CONTACT PERSON")) {
                     xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, headTag);
                     xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, "type");
                     xmlSerializer.text("0");
                     xmlSerializer.endTag(null, "type");
-                } /*else if (heading.getHeading().equals("SUBSIDIARIES")) {
-                    xmlSerializer.text(System.getProperty("line.separator"));
-                    xmlSerializer.startTag(null, headTag);
-                    xmlSerializer.text(System.getProperty("line.separator"));
-                    xmlSerializer.startTag(null, "type");
-                    xmlSerializer.text("4");
-                    xmlSerializer.endTag(null, "type");
-                } */ else if (heading.getHeading().equals("COMPANY POSTAL ADDRESS") || heading.getHeading().equals("COMPANY CONTACT")) {
+                } else if (heading.getHeading().equals("COMPANY POSTAL ADDRESS") || heading.getHeading().equals("COMPANY CONTACT")) {
                     xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, headTag);
                     xmlSerializer.text(System.getProperty("line.separator"));
@@ -621,95 +611,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
                     } else if (item instanceof SimpleText) {
                         SimpleText simpleText = (SimpleText) item;
-                        //Log.v(TAG, "Found " + simpleText.getTitle() + " where i = " + i);
-                        if (simpleText.getXmlTag() != null) {
-                            if (simpleText.getXmlTag().equals("disclaimer"))
-                                break;
-                        }
-                        String tag = ((SimpleText) item).getXmlTag();
-                        if (tag != null) {
-                            xmlSerializer.text(System.getProperty("line.separator"));
-                            xmlSerializer.startTag(null, tag);
-                            Log.v(TAG, "Simple Start Tag = " + tag);
-                        }
-                        i++;
-                        item = items.get(i);
-                        if (item instanceof Add) {
-
-                        } else {       //Loop through the items until we find an object of class Add because Add denotes its the end of current group
-                            while (!(item instanceof Add)) {
-
-                                if (!(item instanceof Divider)) {
-                                    if (item instanceof SimpleEditText) {
-                                        SimpleEditText simpleEditText = (SimpleEditText) item;
-                                        if (simpleEditText.getValue() != null) {
-                                            if (simpleEditText.getValue().trim().length() != 0) {
-                                                xmlSerializer.text(System.getProperty("line.separator"));
-                                                xmlSerializer.startTag(null, simpleEditText.getXmlTag());
-                                                xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
-                                                xmlSerializer.endTag(null, simpleEditText.getXmlTag());
-                                            }
-                                        }
-                                    } else if (item instanceof DropDown) {
-                                        DropDown dropDown = (DropDown) item;
-                                        xmlSerializer.text(System.getProperty("line.separator"));
-                                        xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
-                                        xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
-                                        xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
-                                    } else if (item instanceof MultiSelectDropdown) {
-                                        MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) item;
-                                        List<Integer> indices = multiSelectDropdown.getSelectedIndices();
-                                        if (indices.size() > 0) {
-                                            for (int index :
-                                                    indices) {
-                                                xmlSerializer.text(System.getProperty("line.separator"));
-                                                xmlSerializer.startTag(null, multiSelectDropdown.getXmlTag());
-                                                helper.childTags(multiSelectDropdown, index, xmlSerializer);
-                                                xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
-                                            }
-                                        }
-                                    } else if (item instanceof SimpleDate) {
-                                        SimpleDate date = (SimpleDate) item;
-                                        if (date.getValue() != null) {
-                                            xmlSerializer.text(System.getProperty("line.separator"));
-                                            xmlSerializer.startTag(null, date.getXmlTag());
-                                            xmlSerializer.text(helper.toDays(date.getValue()));
-                                            xmlSerializer.endTag(null, date.getXmlTag());
-                                        }
-                                    } else if (item instanceof SimpleImage) {
-                                        SimpleImage simpleImage = (SimpleImage) item;
-                                        //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
-                                        if (simpleImage.getImage() != null) {
-                                            xmlSerializer.text(System.getProperty("line.separator"));
-                                            xmlSerializer.startTag(null, simpleImage.getXmlTag());
-                                            String tagName = helper.checkForInput(simpleImage.getTitle());
-                                            tagName = tagName.replace("*", "");
-                                            tagName = tagName.replace("photo", "");
-                                            tagName = tagName.replace("(", "");
-                                            tagName = tagName.replace(") ", "");
-                                            if (simpleImage.getTitle().equals("Product Media (Photo / Documents)")) {
-                                                tagName = tagName.replace("Photo/Documents)", "");
-                                                productMediaCount++;
-                                                tagName = tagName + productMediaCount;
-                                            }
-                                            xmlSerializer.text(tagName + ".jpg");
-                                            xmlSerializer.endTag(null, simpleImage.getXmlTag());
-                                            imageData.add(new ImageData(simpleImage.getColumnName(), simpleImage.getTableName(), simpleImage.getRowno(), tagName));
-                                        }
-                                    }
-                                }
-                                i++;
-                                item = items.get(i);
-                            }
-                        }
-                        if (tag != null) {
-                            Log.v(TAG, "Simple End Tag = " + tag);
-                            xmlSerializer.text(System.getProperty("line.separator"));
-                            xmlSerializer.endTag(null, tag);
-                        }
+                        i = simpleTextXml(simpleText, i, items, xmlSerializer);
                     }
-
-
                     if (i < items.size() - 1) {
                         i++;
                         item = items.get(i);
@@ -729,139 +632,152 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     xmlSerializer.endTag(null, headTag);
                 }
             }
-
         }
     }
 
-    private int getContactXml(int i, ArrayList<Object> items, XmlSerializer xmlSerializer) throws IOException {
-        int j = i + 1;
-        Object obj = items.get(j);
+    private int simpleTextXml(SimpleText simpleText, int i, ArrayList<Object> items, XmlSerializer xmlSerializer) throws IOException {
+        Object obj;
         String personTag;
-        while (!(obj instanceof Heading)) {
-            if (obj instanceof SimpleText) {
-                SimpleText simpleText = (SimpleText) obj;
-                j++;
-                while (!(items.get(j) instanceof Add)) {
-
-                    xmlSerializer.text(System.getProperty("line.separator"));
-                    xmlSerializer.startTag(null, "contact");
-                    if (simpleText.getTitle().equals("OWNERS")) {
-                        xmlSerializer.text(System.getProperty("line.separator"));
-                        xmlSerializer.startTag(null, "type");
-                        xmlSerializer.text("1");
-                        xmlSerializer.endTag(null, "type");
-                    } else if (simpleText.getTitle().equals("MANAGERS")) {
-                        xmlSerializer.text(System.getProperty("line.separator"));
-                        xmlSerializer.startTag(null, "type");
-                        xmlSerializer.text("2");
-                        xmlSerializer.endTag(null, "type");
-                    } else if (simpleText.getTitle().equals("REFERENCES")) {
-                        xmlSerializer.text(System.getProperty("line.separator"));
-                        xmlSerializer.startTag(null, "type");
-                        xmlSerializer.text("3");
-                        xmlSerializer.endTag(null, "type");
-                    } else if (simpleText.getTitle().equals("SUBSIDIARIES")) {
-                        xmlSerializer.text(System.getProperty("line.separator"));
-                        xmlSerializer.startTag(null, "type");
-                        xmlSerializer.text("4");
-                        xmlSerializer.endTag(null, "type");
-                    }
-                    obj = items.get(j);
-                    personTag = null;
-                    while (!(obj instanceof Divider)) {
-
-                        if (obj instanceof SimpleEditText) {
-                            SimpleEditText simpleEditText = (SimpleEditText) obj;
-                            if (simpleEditText.getValue() != null) {
-                                if (simpleEditText.getValue().trim().length() != 0) {
-                                    xmlSerializer.text(System.getProperty("line.separator"));
-                                    xmlSerializer.startTag(null, simpleEditText.getXmlTag());
-                                    xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
-                                    xmlSerializer.endTag(null, simpleEditText.getXmlTag());
-                                }
-                            }
-                        } else if (obj instanceof DropDown) {
-                            DropDown dropDown = (DropDown) obj;
-                            if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PREFIX)) {
-                                personTag = "person";
-                                xmlSerializer.text(System.getProperty("line.separator"));
-                                xmlSerializer.startTag(null, personTag);
-                            }
-                            xmlSerializer.text(System.getProperty("line.separator"));
-                            xmlSerializer.startTag(null, ((DropDown) obj).getXmlTag());
-                            xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
-                            xmlSerializer.endTag(null, ((DropDown) obj).getXmlTag());
-                        } else if (obj instanceof MultiSelectDropdown) {
-                            MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) obj;
-                            Log.v(TAG, "Found " + multiSelectDropdown.getTitle() + " with value = " + multiSelectDropdown.getSelectedIndices() + " where i = " + i);
-                            List<Integer> indices = multiSelectDropdown.getSelectedIndices();
-                            if (indices.size() > 0) {
-                                for (int index :
-                                        indices) {
-                                    xmlSerializer.text(System.getProperty("line.separator"));
-                                    xmlSerializer.startTag(null, multiSelectDropdown.getXmlTag());
-                                    helper.childTags(multiSelectDropdown, index, xmlSerializer);
-                                    xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
-                                }
-                            }
-                        } else if (obj instanceof SimpleDate) {
-                            SimpleDate date = (SimpleDate) obj;
-                            if (date.getValue() != null) {
-                                xmlSerializer.text(System.getProperty("line.separator"));
-                                xmlSerializer.startTag(null, date.getXmlTag());
-                                xmlSerializer.text(helper.toDays(date.getValue()));
-                                xmlSerializer.endTag(null, date.getXmlTag());
-                            }
-                        } else if (obj instanceof SimpleImage) {
-                            SimpleImage simpleImage = (SimpleImage) obj;
-                            //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
-                            if (simpleImage.getImage() != null) {
-                                xmlSerializer.text(System.getProperty("line.separator"));
-                                xmlSerializer.startTag(null, simpleImage.getXmlTag());
-                                String tagName = helper.checkForInput(simpleImage.getTitle());
-                                tagName = tagName.replace("*", "");
-                                tagName = tagName.replace("photo", "");
-                                tagName = tagName.replace("(", "");
-                                tagName = tagName.replace(") ", "");
-                                if (simpleImage.getTitle().equals("Manager Logo")) {
-                                    managersCount++;
-                                    tagName = tagName + managersCount;
-                                }
-                                if (simpleImage.getTitle().equals("Owners Logo")) {
-                                    ownersCount++;
-                                    tagName = tagName + ownersCount;
-                                }
-                                if (simpleImage.getTitle().equals("Institution Logo")) {
-                                    referencesCount++;
-                                    tagName = tagName + referencesCount;
-                                }
-                                xmlSerializer.text(tagName + ".jpg");
-                                xmlSerializer.endTag(null, simpleImage.getXmlTag());
-                                imageData.add(new ImageData(simpleImage.getColumnName(), simpleImage.getTableName(), simpleImage.getRowno(), tagName));
-                            }
-                        }
-                        j++;
-                        obj = items.get(j);
-                    }
-                    if (personTag != null) {
-                        xmlSerializer.text(System.getProperty("line.separator"));
-                        xmlSerializer.endTag(null, personTag);
-                    }
-                    xmlSerializer.text(System.getProperty("line.separator"));
-                    xmlSerializer.endTag(null, "contact");
-                    j++;
-                    obj = items.get(j);
-                }
+        Log.d(TAG, "size:" + items.size());
+        Log.d(TAG, "simpleTextXml: " + i + ":" + simpleText.getTitle());
+        String tag = simpleText.getXmlTag();
+        if (simpleText.getTitle().equals("DISCLAIMER\n\n" +
+                "I certify that the information provided in this form is true, complete and correct to the best of my knowledge and belief. I understand that the information provided in this form is checked and updated by AfricanBIB GmbH on the AfricanBIB website with due diligence on a regular basis. This notwithstanding, data may become subject to changes during the intervening period. Therefore AfricanBIB GmbH does not assume any liability or guarantee for the timeliness, accuracy and completeness of the information provided. This applies also to other websites that may be accessed through hyperlinks. AfricanBIB GmbH assumes no responsibility for the contents of websites that can be accessed through such links.\n" +
+                "Further, AfricanBIB GmbH reserves the right to change or amend the information provided at any time and without prior notice.\n" +
+                "Contents and structure of this form sites are copyright protected. Reproduction of information or data content, in particular the use of text (whether in full or in part), pictures or graphics, requires the prior approval of AfricanBIB GmbH.\n")) {
+            return i;
+        }
+        i++;
+        while (!(items.get(i) instanceof Add)) {
+            if (tag != null) {
+                xmlSerializer.text(System.getProperty("line.separator"));
+                xmlSerializer.startTag(null, tag);
             }
-            if (items.get(j) instanceof Add) {
-                j++;
-                if (j >= items.size())
-                    return j - 1;
-                else
-                    obj = items.get(j);
+            if (simpleText.getTitle().equals("OWNERS")) {
+                xmlSerializer.text(System.getProperty("line.separator"));
+                xmlSerializer.startTag(null, "type");
+                xmlSerializer.text("1");
+                xmlSerializer.endTag(null, "type");
+            } else if (simpleText.getTitle().equals("MANAGERS")) {
+                xmlSerializer.text(System.getProperty("line.separator"));
+                xmlSerializer.startTag(null, "type");
+                xmlSerializer.text("2");
+                xmlSerializer.endTag(null, "type");
+            } else if (simpleText.getTitle().equals("REFERENCES")) {
+                xmlSerializer.text(System.getProperty("line.separator"));
+                xmlSerializer.startTag(null, "type");
+                xmlSerializer.text("3");
+                xmlSerializer.endTag(null, "type");
+            } else if (simpleText.getTitle().equals("SUBSIDIARIES")) {
+                xmlSerializer.text(System.getProperty("line.separator"));
+                xmlSerializer.startTag(null, "type");
+                xmlSerializer.text("4");
+                xmlSerializer.endTag(null, "type");
+            }
+            obj = items.get(i);
+            personTag = null;
+            while (!(obj instanceof Divider)) {
+
+                if (obj instanceof SimpleEditText) {
+                    SimpleEditText simpleEditText = (SimpleEditText) obj;
+                    Log.d(TAG, "simpleTextXml: " + i + ":" + simpleEditText.getTitle());
+                    if (simpleEditText.getValue() != null) {
+                        if (simpleEditText.getValue().trim().length() != 0) {
+                            xmlSerializer.text(System.getProperty("line.separator"));
+                            xmlSerializer.startTag(null, simpleEditText.getXmlTag());
+                            xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
+                            xmlSerializer.endTag(null, simpleEditText.getXmlTag());
+                        }
+                    }
+                } else if (obj instanceof DropDown) {
+                    DropDown dropDown = (DropDown) obj;
+                    Log.d(TAG, "simpleTextXml: " + i + ":" + dropDown.getHeading());
+                    if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PREFIX)) {
+                        personTag = "person";
+                        xmlSerializer.text(System.getProperty("line.separator"));
+                        xmlSerializer.startTag(null, personTag);
+                    }
+                    xmlSerializer.text(System.getProperty("line.separator"));
+                    xmlSerializer.startTag(null, ((DropDown) obj).getXmlTag());
+                    xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
+                    xmlSerializer.endTag(null, ((DropDown) obj).getXmlTag());
+                } else if (obj instanceof MultiSelectDropdown) {
+                    MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) obj;
+                    Log.d(TAG, "simpleTextXml: " + i + ":" + multiSelectDropdown.getTitle());
+                    List<Integer> indices = multiSelectDropdown.getSelectedIndices();
+                    if (indices.size() > 0) {
+                        for (int index :
+                                indices) {
+                            xmlSerializer.text(System.getProperty("line.separator"));
+                            xmlSerializer.startTag(null, multiSelectDropdown.getXmlTag());
+                            helper.childTags(multiSelectDropdown, index, xmlSerializer);
+                            xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
+                        }
+                    }
+                } else if (obj instanceof SimpleDate) {
+                    SimpleDate date = (SimpleDate) obj;
+                    Log.d(TAG, "simpleTextXml: " + i + ":" + date.getTitle());
+                    if (date.getValue() != null) {
+                        xmlSerializer.text(System.getProperty("line.separator"));
+                        xmlSerializer.startTag(null, date.getXmlTag());
+                        xmlSerializer.text(helper.toDays(date.getValue()));
+                        xmlSerializer.endTag(null, date.getXmlTag());
+                    }
+                } else if (obj instanceof SimpleImage) {
+                    SimpleImage simpleImage = (SimpleImage) obj;
+                    Log.d(TAG, "simpleTextXml: " + i + ":" + simpleImage.getTitle());
+                    if (simpleImage.getImage() != null) {
+                        xmlSerializer.text(System.getProperty("line.separator"));
+                        xmlSerializer.startTag(null, simpleImage.getXmlTag());
+                        String tagName = helper.checkForInput(simpleImage.getTitle());
+                        tagName = tagName.replace("*", "");
+                        tagName = tagName.replace("photo", "");
+                        tagName = tagName.replace("(", "");
+                        tagName = tagName.replace(") ", "");
+                        if (simpleImage.getTitle().equals("Product Media (Photo / Documents)")) {
+                            tagName = tagName.replace("Photo/Documents)", "");
+                            productMediaCount++;
+                            tagName = tagName + productMediaCount;
+                        }
+                        if (simpleImage.getTitle().equals("Manager Logo")) {
+                            managersCount++;
+                            tagName = tagName + managersCount;
+                        }
+                        if (simpleImage.getTitle().equals("Owners Logo")) {
+                            ownersCount++;
+                            tagName = tagName + ownersCount;
+                        }
+                        if (simpleImage.getTitle().equals("Institution Logo")) {
+                            referencesCount++;
+                            tagName = tagName + referencesCount;
+                        }
+                        xmlSerializer.text(tagName + ".jpg");
+                        xmlSerializer.endTag(null, simpleImage.getXmlTag());
+                        imageData.add(new ImageData(simpleImage.getColumnName(), simpleImage.getTableName(), simpleImage.getRowno(), tagName));
+                    }
+                }
+                if (i < items.size() - 1) {
+                    i++;
+                    Log.d(TAG, "simpleTextXml: " + i);
+                    obj = items.get(i);
+                } else break;
+            }
+            if (personTag != null) {
+                xmlSerializer.text(System.getProperty("line.separator"));
+                xmlSerializer.endTag(null, personTag);
+            }
+            if (tag != null) {
+                xmlSerializer.text(System.getProperty("line.separator"));
+                xmlSerializer.endTag(null, tag);
+            }
+            if (i >= items.size() - 1)
+                return i;
+            else {
+                i++;
+                Log.d(TAG, "last : " + i);
             }
         }
-        return j - 1;
+        return i - 1;
     }
 
     private void showXML() {

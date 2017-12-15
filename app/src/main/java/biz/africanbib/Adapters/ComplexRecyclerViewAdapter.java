@@ -78,7 +78,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private int currentRowAwards = 1;
     private int currentRowIndustry = 1;
     private int currentRowLatestNews = 1;
-    private int currentRowNeeds = 1;
+    private int currentRowMedia = 1;
     private int currentRowManagers = 1;
     private int currentRowProducts = 1;
     private int currentRowServices = 1;
@@ -1040,6 +1040,13 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
                             add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
                     notifyItemInserted(position);
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_MEDIA_TYPE)) {
+
+                    items.add(position, helper.buildDropDown(titles[i], new String[]{
+                                    "Photo",
+                                    "PDF",
+                            }, new int[]{1, 6}, databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
+                            add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
                 } else if (columnNames[i].equals(DatabaseHelper.COLUMN_POSITION_IN_COMPANY)) {
                     items.add(position, helper.buildDropDown(titles[i],
                             new String[]{"Student/Intern",
@@ -1395,10 +1402,11 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             return currentRowServices++;
         } else if (tableName.equals(DatabaseHelper.TABLE_SUBSIDIARIES)) {
             return currentRowSubsidiaries++;
-        }/* else if (tableName.equals(DatabaseHelper.TABLE_LATEST_NEWS)) {
+        } else if (tableName.equals(DatabaseHelper.TABLE_LATEST_NEWS)) {
             return currentRowLatestNews++;
-            */
-         else if (tableName.equals(DatabaseHelper.TABLE_SECTORS)) {
+        } else if (tableName.equals(DatabaseHelper.TABLE_OTHER_MEDIA)) {
+            return currentRowMedia++;
+        } else if (tableName.equals(DatabaseHelper.TABLE_SECTORS)) {
             return currentRowIndustry++;
         }
         return 0;
@@ -1416,6 +1424,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             currentRowOwners = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_MANAGERS)) {
             currentRowManagers = value;
+        } else if (tableName.equals(DatabaseHelper.TABLE_OTHER_MEDIA)) {
+            currentRowMedia = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_REFERENCES)) {
             currentRowReferences = value;
         } else if (tableName.equals(DatabaseHelper.TABLE_PRODUCTS_AND_PRODUCT_DETAILS)) {
@@ -1425,9 +1435,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         } else if (tableName.equals(DatabaseHelper.TABLE_SUBSIDIARIES)) {
             currentRowSubsidiaries = value;
-         /*}else if (tableName.equals(DatabaseHelper.TABLE_LATEST_NEWS)) {
+        } else if (tableName.equals(DatabaseHelper.TABLE_LATEST_NEWS)) {
             currentRowLatestNews = value;
-            */
         } else if (tableName.equals(DatabaseHelper.TABLE_SECTORS)) {
             currentRowIndustry = value;
         }
