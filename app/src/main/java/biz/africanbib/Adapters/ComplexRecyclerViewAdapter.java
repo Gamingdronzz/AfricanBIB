@@ -1103,7 +1103,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     items.add(position, helper.buildDropDown(titles[i], helper.getPrefixList(), helper.getPrefixCodes(), 0, add.getTableName(), columnNames[i], currentRowNo, "prefix"));
                     Log.v("Adapter", "Inserting Dropdown " + titles[i] + " at " + i + " with table = " + add.getTableName() + " row no = " + currentRowNo);
                     notifyItemInserted(position);
-                } else if (titles[i].equals(DatabaseHelper.COLUMN_COUNTRY)) {
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_COUNTRY)) {
                     items.add(position, helper.buildDropDown(titles[i], helper.getCountryNames(), helper.getCountryCodes(), 0, add.getTableName(), columnNames[i], currentRowNo, "country"));
                     notifyItemInserted(position);
                 } else if (columnNames[i].equals(DatabaseHelper.COLUMN_DATE)) {
