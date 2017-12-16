@@ -410,7 +410,6 @@ public class Helper {
                     .setXmlTag(xmlTag)
                     .createSimpleImage();
         }
-
     }
 
     public List<Integer> getSelectedIndices(String list) {

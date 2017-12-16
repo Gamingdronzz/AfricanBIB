@@ -441,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     void Test(ArrayList<Object> items1, ArrayList<Object> items2, ArrayList<Object> items3, ArrayList<Object> items4) {
 
         try {
-            Log.v(TAG, "Trying to create xml File");
+            Log.v(TAG, "Trying to create xml FileChosed");
             File file = new File(getApplicationContext().getFilesDir(), companyName + ".xml");
             file.createNewFile();
             Log.v(TAG, "Path = " + file.getAbsolutePath());

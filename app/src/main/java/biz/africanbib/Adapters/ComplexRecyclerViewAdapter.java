@@ -30,6 +30,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,6 +40,7 @@ import com.linchaolong.android.imagepicker.ImagePicker;
 import com.linchaolong.android.imagepicker.cropper.CropImage;
 import com.linchaolong.android.imagepicker.cropper.CropImageView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -57,6 +59,8 @@ import biz.africanbib.Tools.DatabaseHelper;
 import biz.africanbib.Tools.Helper;
 import biz.africanbib.ViewHolders.MyCustomMultiSelectionSpinner;
 import biz.africanbib.ViewHolders.ViewHolderHeading;
+import yogesh.firzen.filelister.FileListerDialog;
+import yogesh.firzen.filelister.OnFileSelectedListener;
 
 import static biz.africanbib.Tools.DatabaseHelper.COLUMN_OTHERS_SPECIFY;
 
@@ -97,7 +101,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             DIVIDER = 5,
             MULTISELECT = 6,
             DATE = 7,
-            IMAGE = 8;
+            IMAGE = 8,
+            FILE = 9;
 
 
     public ComplexRecyclerViewAdapter(List<Object> items, FragmentManager manager, Fragment context) {
@@ -136,6 +141,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             val = DATE;
         } else if (items.get(position) instanceof SimpleImage) {
             val = IMAGE;
+        } else if (items.get(position) instanceof Button) {
+            val = FILE;
         }
         //Log.v("Adapter", "Case = " + val);
         return val;
@@ -187,6 +194,11 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 View viewImage = inflater.inflate(R.layout.viewholder_simple_image, viewGroup, false);
                 viewHolder = new ViewHolderSimpleImage(viewImage, new CustomImageChooser());
                 break;
+            case FILE:
+                View viewFile = inflater.inflate(R.layout.viewholder_choose_button, viewGroup, false);
+                viewHolder = new ViewHolderFile(viewFile, new CustomFileChooser());
+                break;
+
             default:
                 //View v = inflater.inflate(android.R.layout.simple_list_item_1, viewGroup, false);
                 //viewHolder = new RecyclerViewSimpleTextViewHolder(v);
@@ -234,6 +246,10 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             case IMAGE:
                 ViewHolderSimpleImage viewHolderImage = (ViewHolderSimpleImage) viewHolder;
                 configureViewHolderSimpleImage(viewHolderImage, position);
+                break;
+            case FILE:
+                ViewHolderFile viewHolderFile = (ViewHolderFile) viewHolder;
+                configureViewHolderFile(viewHolderFile, position);
                 break;
             default:
                 break;
@@ -519,12 +535,30 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
     }
 
+    private class ViewHolderFile extends RecyclerView.ViewHolder {
+        private Button button;
+        private CustomFileChooser customFileChooser;
+
+        public ViewHolderFile(View viewFile, CustomFileChooser customFileChooser) {
+            super(viewFile);
+            button = (Button) viewFile.findViewById(R.id.button_choose);
+            this.customFileChooser = customFileChooser;
+            button.setOnClickListener(customFileChooser);
+        }
+    }
 
     private void configureViewHolderHeading(ViewHolderHeading viewHolderHeading, int position) {
         Heading heading = (Heading) items.get(position);
         if (heading != null) {
             viewHolderHeading.setHeading(heading.getHeading());
 
+        }
+    }
+
+    private void configureViewHolderFile(ViewHolderFile viewHolderFile, int position) {
+        Button button = (Button) items.get(position);
+        if (button != null) {
+            viewHolderFile.customFileChooser.updatePosition(position);
         }
     }
 
@@ -1011,7 +1045,12 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             databaseHelper.insertRow(add.getTableName(), currentRowNo);
 
             for (int i = 0; i < add.getRows(); i++) {
-                if (columnNames[i].equals(DatabaseHelper.COLUMN_SECTOR)) {
+                if (add.getTableName().equals(DatabaseHelper.TABLE_OTHER_MEDIA)) {
+                    Button button = new Button(context.getContext());
+                    button.setId(currentRowNo);
+                    items.add(position, button);
+                    notifyItemInserted(position);
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_SECTOR)) {
                     items.add(position, helper.buildMultiSelectDropdown(titles[i],
                             add.getTableName(),
                             columnNames[i],
@@ -1040,13 +1079,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
                             add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
                     notifyItemInserted(position);
-                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_MEDIA_TYPE)) {
-
-                    items.add(position, helper.buildDropDown(titles[i], new String[]{
-                                    "Photo",
-                                    "PDF",
-                            }, new int[]{1, 6}, databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
-                            add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
                 } else if (columnNames[i].equals(DatabaseHelper.COLUMN_POSITION_IN_COMPANY)) {
                     items.add(position, helper.buildDropDown(titles[i],
                             new String[]{"Student/Intern",
@@ -1146,6 +1178,38 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             notifyDataSetChanged();
         }
 
+
+    }
+
+    private class CustomFileChooser implements View.OnClickListener {
+
+        private int position;
+        private ComplexRecyclerViewAdapter adapter;
+
+        public void updatePosition(int position) {
+            this.position = position;
+            adapter = ComplexRecyclerViewAdapter.this;
+
+        }
+
+        @Override
+        public void onClick(final View view) {
+            Button btn = (Button) items.get(position);
+            Log.d("Adapter", String.valueOf(btn.getId()));
+
+            FileListerDialog fileListerDialog = FileListerDialog.createFileListerDialog(context.getContext());
+            fileListerDialog.setOnFileSelectedListener(new OnFileSelectedListener() {
+                @Override
+                public void onFileSelected(File file, String path) {
+                    String filename = file.getName();
+                    Log.d("Adapter", filename);
+
+                    //code to save file name & type to COLUMN_MEDIA_FILE & COLUMN_MEDIA_TYPE with row no as btn.getId()
+
+                }
+            });
+            fileListerDialog.show();
+        }
 
     }
 
@@ -1466,4 +1530,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             a++;
         }
     }
+
+
 }

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -211,41 +212,25 @@ public class Tab3 extends Fragment {
 
         items.add(new SimpleText("Media", "media"));
         tableName = DatabaseHelper.TABLE_OTHER_MEDIA;
-        xmlTags = new String[]{null, "type"};
-        titles = new String[]{
-                "Choose Media",
-                "Type of Media"};
-        columnNames = new String[]{
-                DatabaseHelper.COLUMN_MEDIA_FILE,
-                DatabaseHelper.COLUMN_MEDIA_TYPE
-        };
+        columnNames = new String[]
+                {DatabaseHelper.COLUMN_MEDIA_TYPE,
+                        DatabaseHelper.COLUMN_MEDIA_FILE};
         if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
             int[] ids = databaseHelper.getrowids(tableName);
+            Button button;
             if (ids != null) {
 
                 for (int i = 0; i < ids.length; i++) {
-                    for (int j = titles.length - 1; j >= 0; j--) {
-                        if (columnNames[j].equals(DatabaseHelper.COLUMN_MEDIA_TYPE)) {
-                            int selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
-                            items.add(helper.buildDropDown(titles[j], new String[]{
-                                    "Photo",
-                                    "PDF",
-                            }, new int[]{1, 6}, selectedPosition, tableName, columnNames[j], ids[i], xmlTags[j]));
-                        } else {
-                            items.add(helper.buildEditText(
-                                    titles[j],
-                                    databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
-                                    tableName,
-                                    columnNames[j],
-                                    ids[i], xmlTags[j]));
-                        }
-                    }
+                    button = new Button(getContext());
+                    button.setId(ids[i]);
+                    //code to set  button text as choosen file name
+                    items.add(button);
                     items.add(new Divider());
                 }
                 mediaRows = ids.length;
             }
         }
-        items.add(helper.buildAdd(2, titles, tableName, columnNames, xmlTags));
+        items.add(helper.buildAdd(1, new String[]{}, tableName, columnNames, new String[]{}));
 
        /* items.add(new SimpleText("Services & Service Details"));
         tableName = DatabaseHelper.TABLE_SERVICES;
@@ -378,7 +363,7 @@ public class Tab3 extends Fragment {
                 "name"
         };
         titles = new String[]{
-                "Award (File)",
+                "Award (FileChosed)",
                 "Telephone / Fax",
                 "Description",
                 "Date",
