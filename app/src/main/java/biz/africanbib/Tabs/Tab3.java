@@ -211,9 +211,9 @@ public class Tab3 extends Fragment {
 
         items.add(new SimpleText("Media", "media"));
         tableName = DatabaseHelper.TABLE_OTHER_MEDIA;
-        columnNames = new String[]{DatabaseHelper.COLUMN_MEDIA_FILE,
-                DatabaseHelper.COLUMN_MEDIA_TYPE2,
-                DatabaseHelper.COLUMN_MEDIA_TYPE};
+        columnNames = new String[]{DatabaseHelper.COLUMN_SELECTED_FILE,
+                DatabaseHelper.COLUMN_FORMAT,
+                DatabaseHelper.COLUMN_FILE_TYPE};
         titles = new String[]{getResources().getString(R.string.choose_file),
                 "Select Format",
                 "File Type"};
@@ -225,7 +225,7 @@ public class Tab3 extends Fragment {
 
                 for (int i = 0; i < ids.length; i++) {
                     for (int j = titles.length - 1; j >= 0; j--) {
-                        if (columnNames[j].equals(DatabaseHelper.COLUMN_MEDIA_TYPE))
+                        if (columnNames[j].equals(DatabaseHelper.COLUMN_FILE_TYPE))
                             items.add(helper.buildDropDown(titles[j],
                                     new String[]{"Photo",
                                             "Video",
@@ -240,7 +240,7 @@ public class Tab3 extends Fragment {
                                     new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9},
                                     databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]),
                                     tableName, columnNames[i], ids[i], xmlTags[j]));
-                        else if (columnNames[j].equals(DatabaseHelper.COLUMN_MEDIA_TYPE2))
+                        else if (columnNames[j].equals(DatabaseHelper.COLUMN_FORMAT))
                             items.add(helper.buildDropDown(titles[j],
                                     new String[]{"Photo", "PDF"},
                                     new int[]{1, 2},

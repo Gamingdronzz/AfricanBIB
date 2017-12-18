@@ -1054,7 +1054,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             databaseHelper.insertRow(add.getTableName(), currentRowNo);
 
             for (int i = 0; i < add.getRows(); i++) {
-                if (columnNames[i].equals(DatabaseHelper.COLUMN_MEDIA_TYPE)) {
+                if (columnNames[i].equals(DatabaseHelper.COLUMN_FILE_TYPE)) {
                     items.add(position, helper.buildDropDown(
                             titles[i],
                             new String[]{"Photo",
@@ -1071,13 +1071,13 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
                             add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
                     notifyItemInserted(position);
-                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_MEDIA_TYPE2)) {
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_FORMAT)) {
                     items.add(position, helper.buildDropDown(titles[i],
                             new String[]{"Photo", "PDF"},
                             new int[]{1, 2},
                             databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
                             add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
-                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_MEDIA_FILE)) {
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_SELECTED_FILE)) {
                     items.add(position, helper.buildChooseFile(titles[i],
                             currentRowNo,
                             add.getTableName(),
@@ -1230,7 +1230,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         @Override
         public void onClick(final View view) {
             chooseFile = (ChooseFile) items.get(position);
-            int type = databaseHelper.getIntFromRow(chooseFile.getTableName(), DatabaseHelper.COLUMN_MEDIA_TYPE2, chooseFile.getRowno());
+            int type = databaseHelper.getIntFromRow(chooseFile.getTableName(), DatabaseHelper.COLUMN_FORMAT, chooseFile.getRowno());
             Intent i2 = new Intent(context.getContext(), FileChooser.class);
             i2.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.SINGLE_SELECTION.ordinal());
             if (type == 0) {

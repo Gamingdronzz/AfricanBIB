@@ -142,9 +142,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String COLUMN_SERVICES = "COLUMN_SERVICES";
     public static final String COLUMN_PRODUCTS = "COLUMN_PRODUCTS";
-    public static final String COLUMN_MEDIA_TYPE = "COLUMN_MEDIA_TYPE";
-    public static final String COLUMN_MEDIA_TYPE2="COLUMN_MEDIA_TYPE2";
-    public static final String COLUMN_MEDIA_FILE = "COLUMN_MEDIA_FILE";
+    public static final String COLUMN_FILE_TYPE = "COLUMN_FILE_TYPE";
+    public static final String COLUMN_FORMAT ="COLUMN_FORMAT";
+    public static final String COLUMN_SELECTED_FILE = "COLUMN_SELECTED_FILE";
 
     public static final String COLUMN_TITLE = "COLUMN_TITLE";
     public static final String COLUMN_DESCRIPTION = "COLUMN_DESCRIPTION";
@@ -387,9 +387,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private String CREATE_TABLE_OTHER_MEDIA = "CREATE TABLE IF NOT EXISTS " + TABLE_OTHER_MEDIA + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_ROW_ID + " INTEGER," +
-            COLUMN_MEDIA_TYPE + " INTEGER, " +
-            COLUMN_MEDIA_TYPE2 + " INTEGER," +
-            COLUMN_MEDIA_FILE + " VARCHAR" +
+            COLUMN_FILE_TYPE + " INTEGER, " +
+            COLUMN_FORMAT + " INTEGER," +
+            COLUMN_SELECTED_FILE + " VARCHAR" +
             ")";
 
     private String CREATE_TABLE_PRODUCTS = "CREATE TABLE IF NOT EXISTS " + TABLE_PRODUCTS_AND_PRODUCT_DETAILS + " ( " +
