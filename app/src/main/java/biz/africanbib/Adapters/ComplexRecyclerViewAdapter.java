@@ -537,14 +537,21 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private class ViewHolderFile extends RecyclerView.ViewHolder {
         private Button button;
+        private TextView title;
         private CustomFileChooser customFileChooser;
 
         public ViewHolderFile(View viewFile, CustomFileChooser customFileChooser) {
             super(viewFile);
             button = (Button) viewFile.findViewById(R.id.button_choose);
             this.customFileChooser = customFileChooser;
-            button.setOnClickListener(customFileChooser);
+            button.setOnClickListener(this.customFileChooser);
         }
+
+        public void setFileTitle(String fileTitle)
+        {
+            this.title.setText(fileTitle);
+        }
+
     }
 
     private void configureViewHolderHeading(ViewHolderHeading viewHolderHeading, int position) {

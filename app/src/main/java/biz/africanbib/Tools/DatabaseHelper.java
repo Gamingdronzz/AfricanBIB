@@ -386,7 +386,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private String CREATE_TABLE_OTHER_MEDIA = "CREATE TABLE IF NOT EXISTS " + TABLE_OTHER_MEDIA + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_ROW_ID + " INTEGER," +
-            COLUMN_MEDIA_TYPE + " VARCHAR, " +
+            COLUMN_MEDIA_TYPE + " INTEGER, " +
             COLUMN_MEDIA_FILE + " VARCHAR" +
             ")";
 

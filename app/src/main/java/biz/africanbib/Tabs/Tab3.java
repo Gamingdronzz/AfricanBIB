@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import biz.africanbib.Activity.MainActivity;
 import biz.africanbib.Adapters.ComplexRecyclerViewAdapter;
 import biz.africanbib.Models.Add;
+import biz.africanbib.Models.ChooseFile;
 import biz.africanbib.Models.Divider;
 import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.Heading;
@@ -217,20 +218,21 @@ public class Tab3 extends Fragment {
                         DatabaseHelper.COLUMN_MEDIA_FILE};
         if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
             int[] ids = databaseHelper.getrowids(tableName);
-            Button button;
+            //Button button;
             if (ids != null) {
 
                 for (int i = 0; i < ids.length; i++) {
-                    button = new Button(getContext());
-                    button.setId(ids[i]);
+                    //ChooseFile chooseFile =
+                    //button.setId(ids[i]);
                     //code to set  button text as choosen file name
-                    items.add(button);
+
+                    items.add(new ChooseFile(getResources().getString(R.string.choose_file),columnNames[i],tableName,ids[i],xmlTags[i]));
                     items.add(new Divider());
                 }
                 mediaRows = ids.length;
             }
         }
-        items.add(helper.buildAdd(1, new String[]{}, tableName, columnNames, new String[]{}));
+        items.add(helper.buildAdd(2, new String[]{}, tableName, columnNames, new String[]{}));
 
        /* items.add(new SimpleText("Services & Service Details"));
         tableName = DatabaseHelper.TABLE_SERVICES;
