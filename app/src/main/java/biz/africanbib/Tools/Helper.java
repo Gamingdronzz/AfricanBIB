@@ -27,6 +27,8 @@ import java.util.regex.Matcher;
 import biz.africanbib.Activity.MainActivity;
 import biz.africanbib.Models.Add;
 import biz.africanbib.Models.AddBuilder;
+import biz.africanbib.Models.ChooseFile;
+import biz.africanbib.Models.ChooseFileBuilder;
 import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.DropDownBuilder;
 import biz.africanbib.Models.MultiSelectDropdown;
@@ -412,6 +414,16 @@ public class Helper {
         }
     }
 
+    public ChooseFile buildChooseFile(String title, int rowNo, String tableName, String columnName, String xmlTag) {
+        return new ChooseFileBuilder()
+                .setTitle(title)
+                .setColumnName(columnName)
+                .setTabeName(tableName)
+                .setRowNo(rowNo)
+                .setXmlTag(xmlTag)
+                .createChooseFile();
+    }
+
     public List<Integer> getSelectedIndices(String list) {
         if (list == null)
             return null;
@@ -480,7 +492,7 @@ public class Helper {
     }
 
     public int[] getPrefixCodes() {
-        return new int[]{0,1,2,3,4};
+        return new int[]{0, 1, 2, 3, 4};
     }
 
 
@@ -931,7 +943,7 @@ public class Helper {
         } else if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PLACE_OF_COLECTION)) {
             return dropDown.getList()[index];
         } else {
-            Log.d(TAG,dropDown.getColumnName());
+            Log.d(TAG, dropDown.getColumnName());
             return String.valueOf(dropDown.getCode()[index]);
         }
     }
@@ -974,11 +986,10 @@ public class Helper {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if(d!=null) {
+            if (d != null) {
                 long days = TimeUnit.DAYS.convert(d.getTime(), TimeUnit.MILLISECONDS);
                 return String.valueOf(days);
-            }
-            else return "N/A";
+            } else return "N/A";
 
         } else return "N/A";
     }

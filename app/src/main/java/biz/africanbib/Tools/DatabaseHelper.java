@@ -35,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 19;
+    public static final int DATABASE_VERSION = 20;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -143,6 +143,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_SERVICES = "COLUMN_SERVICES";
     public static final String COLUMN_PRODUCTS = "COLUMN_PRODUCTS";
     public static final String COLUMN_MEDIA_TYPE = "COLUMN_MEDIA_TYPE";
+    public static final String COLUMN_MEDIA_TYPE2="COLUMN_MEDIA_TYPE2";
     public static final String COLUMN_MEDIA_FILE = "COLUMN_MEDIA_FILE";
 
     public static final String COLUMN_TITLE = "COLUMN_TITLE";
@@ -387,6 +388,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_ROW_ID + " INTEGER," +
             COLUMN_MEDIA_TYPE + " INTEGER, " +
+            COLUMN_MEDIA_TYPE2 + " INTEGER," +
             COLUMN_MEDIA_FILE + " VARCHAR" +
             ")";
 

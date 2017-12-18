@@ -13,7 +13,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import java.util.ArrayList;
 import biz.africanbib.Activity.MainActivity;
 import biz.africanbib.Adapters.ComplexRecyclerViewAdapter;
 import biz.africanbib.Models.Add;
-import biz.africanbib.Models.ChooseFile;
 import biz.africanbib.Models.Divider;
 import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.Heading;
@@ -213,26 +211,52 @@ public class Tab3 extends Fragment {
 
         items.add(new SimpleText("Media", "media"));
         tableName = DatabaseHelper.TABLE_OTHER_MEDIA;
-        columnNames = new String[]
-                {DatabaseHelper.COLUMN_MEDIA_TYPE,
-                        DatabaseHelper.COLUMN_MEDIA_FILE};
+        columnNames = new String[]{DatabaseHelper.COLUMN_MEDIA_FILE,
+                DatabaseHelper.COLUMN_MEDIA_TYPE2,
+                DatabaseHelper.COLUMN_MEDIA_TYPE};
+        titles = new String[]{getResources().getString(R.string.choose_file),
+                "Select Format",
+                "File Type"};
+        xmlTags = new String[]{"", "",
+                "type"};
         if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
             int[] ids = databaseHelper.getrowids(tableName);
-            //Button button;
             if (ids != null) {
 
                 for (int i = 0; i < ids.length; i++) {
-                    //ChooseFile chooseFile =
-                    //button.setId(ids[i]);
-                    //code to set  button text as choosen file name
+                    for (int j = titles.length - 1; j >= 0; j--) {
+                        if (columnNames[j].equals(DatabaseHelper.COLUMN_MEDIA_TYPE))
+                            items.add(helper.buildDropDown(titles[j],
+                                    new String[]{"Photo",
+                                            "Video",
+                                            "Business Report",
+                                            "Flyer",
+                                            "Directions",
+                                            "File",
+                                            "productphoto",
+                                            "productvideo",
+                                            "productfile"
+                                    },
+                                    new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9},
+                                    databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]),
+                                    tableName, columnName, ids[i], xmlTags[j]));
+                        else if (columnNames[j].equals(DatabaseHelper.COLUMN_MEDIA_TYPE2))
+                            items.add(helper.buildDropDown(titles[j],
+                                    new String[]{"Photo", "PDF"},
+                                    new int[]{1, 2},
+                                    databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]),
+                                    tableName, columnName, ids[i], xmlTags[j]));
+                        else
+                            items.add(helper.buildChooseFile(databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                    ids[i], tableName, columnNames[j], xmlTags[j]));
+                    }
 
-                    items.add(new ChooseFile(getResources().getString(R.string.choose_file),columnNames[i],tableName,ids[i],xmlTags[i]));
                     items.add(new Divider());
                 }
                 mediaRows = ids.length;
             }
         }
-        items.add(helper.buildAdd(2, new String[]{}, tableName, columnNames, new String[]{}));
+        items.add(helper.buildAdd(3, titles, tableName, columnNames, xmlTags));
 
        /* items.add(new SimpleText("Services & Service Details"));
         tableName = DatabaseHelper.TABLE_SERVICES;

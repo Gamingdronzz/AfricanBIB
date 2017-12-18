@@ -4,24 +4,15 @@ package biz.africanbib.Models;
  * Created by Balpreet on 30-Jul-17.
  */
 
-public class ChooseFile
-{
+public class ChooseFile {
     private String title;
     private String xmlTag;
-
     private String columnName;
     private String tableName;
     private int rowno = 0;
 
-    public int getRowno() {
-        return rowno;
+    public ChooseFile() {
     }
-
-    public void setRowno(int rowno) {
-        this.rowno = rowno;
-    }
-
-
 
     public ChooseFile(String title, String columnName, String tableName, int rowno, String xmlTag) {
         this.title = title;
@@ -29,6 +20,14 @@ public class ChooseFile
         this.tableName = tableName;
         this.rowno = rowno;
         this.xmlTag = xmlTag;
+    }
+
+    public int getRowno() {
+        return rowno;
+    }
+
+    public void setRowno(int rowno) {
+        this.rowno = rowno;
     }
 
     public String getColumnName() {
@@ -48,11 +47,18 @@ public class ChooseFile
     }
 
     public String getTitle() {
-
         return title;
     }
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getXmlTag() {
+        return xmlTag;
+    }
+
+    public void setXmlTag(String xmlTag) {
+        this.xmlTag = xmlTag;
     }
 }

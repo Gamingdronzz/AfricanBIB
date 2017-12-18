@@ -33,7 +33,7 @@ dependencies {
     compile 'com.github.linchaolong:ImagePicker:f9f3176d4f'
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.github.blennerSilva:AwesomeDialog:2.0.5'
-    compile 'yogesh.firzen:FilesLister:1.0.1.g'
+    compile 'com.adityak:browsemyfiles:1.7'
     testCompile 'junit:junit:4.12'
 
 }

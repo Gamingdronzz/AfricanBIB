@@ -36,16 +36,18 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.aditya.filebrowser.Constants;
+import com.aditya.filebrowser.FileChooser;
 import com.linchaolong.android.imagepicker.ImagePicker;
 import com.linchaolong.android.imagepicker.cropper.CropImage;
 import com.linchaolong.android.imagepicker.cropper.CropImageView;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import biz.africanbib.Models.Add;
+import biz.africanbib.Models.ChooseFile;
 import biz.africanbib.Models.Divider;
 import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.Heading;
@@ -59,9 +61,8 @@ import biz.africanbib.Tools.DatabaseHelper;
 import biz.africanbib.Tools.Helper;
 import biz.africanbib.ViewHolders.MyCustomMultiSelectionSpinner;
 import biz.africanbib.ViewHolders.ViewHolderHeading;
-import yogesh.firzen.filelister.FileListerDialog;
-import yogesh.firzen.filelister.OnFileSelectedListener;
 
+import static android.app.Activity.RESULT_OK;
 import static biz.africanbib.Tools.DatabaseHelper.COLUMN_OTHERS_SPECIFY;
 
 
@@ -71,6 +72,7 @@ import static biz.africanbib.Tools.DatabaseHelper.COLUMN_OTHERS_SPECIFY;
 
 public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private static final int PICK_FILE_REQUEST = 55;
     // The items to display in your RecyclerView
     private List<Object> items;
     Helper helper;
@@ -86,7 +88,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private int currentRowManagers = 1;
     private int currentRowProducts = 1;
     private int currentRowServices = 1;
-
+    public String path;
     Fragment context;
 
     ImagePicker imagePicker;
@@ -141,7 +143,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             val = DATE;
         } else if (items.get(position) instanceof SimpleImage) {
             val = IMAGE;
-        } else if (items.get(position) instanceof Button) {
+        } else if (items.get(position) instanceof ChooseFile) {
             val = FILE;
         }
         //Log.v("Adapter", "Case = " + val);
@@ -543,12 +545,12 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         public ViewHolderFile(View viewFile, CustomFileChooser customFileChooser) {
             super(viewFile);
             button = (Button) viewFile.findViewById(R.id.button_choose);
+            title = (TextView) viewFile.findViewById(R.id.text_view_simple_edit_text);
             this.customFileChooser = customFileChooser;
             button.setOnClickListener(this.customFileChooser);
         }
 
-        public void setFileTitle(String fileTitle)
-        {
+        public void setFileTitle(String fileTitle) {
             this.title.setText(fileTitle);
         }
 
@@ -563,9 +565,10 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     private void configureViewHolderFile(ViewHolderFile viewHolderFile, int position) {
-        Button button = (Button) items.get(position);
-        if (button != null) {
+        ChooseFile chooseFile = (ChooseFile) items.get(position);
+        if (chooseFile != null) {
             viewHolderFile.customFileChooser.updatePosition(position);
+            viewHolderFile.setFileTitle(chooseFile.getTitle());
         }
     }
 
@@ -1052,10 +1055,36 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             databaseHelper.insertRow(add.getTableName(), currentRowNo);
 
             for (int i = 0; i < add.getRows(); i++) {
-                if (add.getTableName().equals(DatabaseHelper.TABLE_OTHER_MEDIA)) {
-                    Button button = new Button(context.getContext());
-                    button.setId(currentRowNo);
-                    items.add(position, button);
+                if (columnNames[i].equals(DatabaseHelper.COLUMN_MEDIA_TYPE)) {
+                    items.add(position, helper.buildDropDown(
+                            titles[i],
+                            new String[]{"Photo",
+                                    "Video",
+                                    "Business Report",
+                                    "Flyer",
+                                    "Directions",
+                                    "File",
+                                    "productphoto",
+                                    "productvideo",
+                                    "productfile"
+                            },
+                            new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9},
+                            databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
+                            add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
+                    notifyItemInserted(position);
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_MEDIA_TYPE2)) {
+                    items.add(position, helper.buildDropDown(titles[i],
+                            new String[]{"Photo", "PDF"},
+                            new int[]{1, 2},
+                            databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
+                            add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_MEDIA_FILE)) {
+                    items.add(position, helper.buildChooseFile(titles[i],
+                            currentRowNo,
+                            add.getTableName(),
+                            columnNames[i],
+                            ""
+                    ));
                     notifyItemInserted(position);
                 } else if (columnNames[i].equals(DatabaseHelper.COLUMN_SECTOR)) {
                     items.add(position, helper.buildMultiSelectDropdown(titles[i],
@@ -1201,21 +1230,18 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         @Override
         public void onClick(final View view) {
-            Button btn = (Button) items.get(position);
-            Log.d("Adapter", String.valueOf(btn.getId()));
-
-            FileListerDialog fileListerDialog = FileListerDialog.createFileListerDialog(context.getContext());
-            fileListerDialog.setOnFileSelectedListener(new OnFileSelectedListener() {
-                @Override
-                public void onFileSelected(File file, String path) {
-                    String filename = file.getName();
-                    Log.d("Adapter", filename);
-
-                    //code to save file name & type to COLUMN_MEDIA_FILE & COLUMN_MEDIA_TYPE with row no as btn.getId()
-
-                }
-            });
-            fileListerDialog.show();
+            final ChooseFile chooseFile = (ChooseFile) items.get(position);
+            int type = databaseHelper.getIntFromRow(chooseFile.getTableName(), DatabaseHelper.COLUMN_MEDIA_TYPE2, chooseFile.getRowno());
+            Intent i2 = new Intent(context.getContext(), FileChooser.class);
+            i2.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.SINGLE_SELECTION.ordinal());
+            if (type == 1) {
+                i2.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "jpg;jpeg;png;bmp");
+            } else if (type == 2) {
+                i2.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "pdf;");
+            }
+            context.startActivityForResult(i2, PICK_FILE_REQUEST);
+            databaseHelper.updateRowWithString(chooseFile.getTableName(), chooseFile.getRowno(), chooseFile.getColumnName(), path);
+            Log.d("Adapter", "onclick " + path);
         }
 
     }
@@ -1451,6 +1477,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         public void selectedStrings(List<String> strings) {
 
         }
+
     }
 
 
@@ -1515,11 +1542,18 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         Log.d("Adapter", "Request Code  " + requestCode);
-        imagePicker.onActivityResult(context, requestCode, resultCode, data);
+        if (requestCode == PICK_FILE_REQUEST && data != null) {
+            if (resultCode == RESULT_OK) {
+                Uri file = data.getData();
+                path = file.getPath();
+                Log.d("Adapter", path);
+            }
+        } else imagePicker.onActivityResult(context, requestCode, resultCode, data);
+
     }
 
-
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[],
+                                           int[] grantResults) {
         imagePicker.onRequestPermissionsResult(context, requestCode, permissions, grantResults);
     }
 
