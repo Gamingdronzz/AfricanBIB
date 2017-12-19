@@ -247,8 +247,15 @@ public class Tab3 extends Fragment {
                                     databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]),
                                     tableName, columnNames[j], ids[i], xmlTags[j]));
                     */    else
-                            items.add(helper.buildChooseFile(databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
-                                    ids[i], tableName, columnNames[j], xmlTags[j]));
+                            items.add(
+                                    helper.buildChooseFile(
+                                            databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                            ids[i],
+                                            tableName,
+                                            columnNames[j],
+                                            xmlTags[j],
+                                            helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName, ids[i])),
+                                            databaseHelper.getStringFromRow(tableName,columnNames[i],ids[i])));
                     }
 
                     items.add(new Divider());

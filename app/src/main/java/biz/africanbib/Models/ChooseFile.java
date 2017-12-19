@@ -1,5 +1,7 @@
 package biz.africanbib.Models;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Balpreet on 30-Jul-17.
  */
@@ -11,15 +13,37 @@ public class ChooseFile {
     private String tableName;
     private int rowno = 0;
 
-    public ChooseFile() {
+    public String getPdfFilePath() {
+        return pdfFilePath;
     }
 
-    public ChooseFile(String title, String columnName, String tableName, int rowno, String xmlTag) {
+    public void setPdfFilePath(String pdfFilePath) {
+        this.pdfFilePath = pdfFilePath;
+    }
+
+    public Bitmap getImageFile() {
+
+        return imageFile;
+    }
+
+    public void setImageFile(Bitmap imageFile) {
+        this.imageFile = imageFile;
+    }
+
+    private Bitmap imageFile;
+    private String pdfFilePath;
+
+    public ChooseFile(String title, String xmlTag, String columnName, String tableName, int rowno, Bitmap imageFile, String pdfFilePath) {
         this.title = title;
+        this.xmlTag = xmlTag;
         this.columnName = columnName;
         this.tableName = tableName;
         this.rowno = rowno;
-        this.xmlTag = xmlTag;
+        this.imageFile = imageFile;
+        this.pdfFilePath = pdfFilePath;
+    }
+
+    public ChooseFile() {
     }
 
     public int getRowno() {

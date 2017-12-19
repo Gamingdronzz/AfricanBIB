@@ -1087,6 +1087,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             currentRowNo,
                             add.getTableName(),
                             columnNames[i],
+                            "",
+                            null,
                             ""
                     ));
                     notifyItemInserted(position);

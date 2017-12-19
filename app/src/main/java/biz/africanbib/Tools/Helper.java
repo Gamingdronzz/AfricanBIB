@@ -414,13 +414,15 @@ public class Helper {
         }
     }
 
-    public ChooseFile buildChooseFile(String title, int rowNo, String tableName, String columnName, String xmlTag) {
+    public ChooseFile buildChooseFile(String title, int rowNo, String tableName, String columnName, String xmlTag,Bitmap image,String pdfFilePath) {
         return new ChooseFileBuilder()
                 .setTitle(title)
                 .setColumnName(columnName)
-                .setTabeName(tableName)
-                .setRowNo(rowNo)
+                .setTableName(tableName)
+                .setRowno(rowNo)
                 .setXmlTag(xmlTag)
+                .setImageFile(image)
+                .setPdfFilePath(pdfFilePath)
                 .createChooseFile();
     }
 

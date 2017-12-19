@@ -1,6 +1,8 @@
 package biz.africanbib.Activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -728,6 +730,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             xmlSerializer.startTag(null, "photo");
                             xmlSerializer.text(filename);
                             xmlSerializer.endTag(null, "photo");
+                            imageData.add(new ImageData(chooseFile.getColumnName(),chooseFile.getTableName(),chooseFile.getRowno(),"Media"+chooseFile.getRowno()));
                         } else if (type == 1) {
                             xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, "file");
@@ -912,5 +915,17 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             Row = row;
             Name = name;
         }
+    }
+
+    private Bitmap getBitmapFromFile(String path)
+    {
+        File imgFile = new  File(path);
+        if(imgFile.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            //Drawable d = new BitmapDrawable(getResources(), myBitmap);
+            return myBitmap;
+
+        }
+        return null;
     }
 }
