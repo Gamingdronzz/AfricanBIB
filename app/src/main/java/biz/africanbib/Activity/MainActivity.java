@@ -720,22 +720,19 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 } else if (obj instanceof ChooseFile) {
                     ChooseFile chooseFile = (ChooseFile) obj;
                     int type = databaseHelper.getIntFromRow(chooseFile.getTableName(), DatabaseHelper.COLUMN_FORMAT, chooseFile.getRowno());
-                    String file = chooseFile.getTitle();
+                    String file = databaseHelper.getStringFromRow(chooseFile.getTableName(), chooseFile.getColumnName(), chooseFile.getRowno());
                     if (file != null) {
-                        Log.d(TAG, file);
-                        if (!(file.equals(getResources().getString(R.string.choose_file)))) {
-                            String filename = file.substring(file.lastIndexOf('/') + 1);
-                            if (type == 0) {
-                                xmlSerializer.text(System.getProperty("line.separator"));
-                                xmlSerializer.startTag(null, "photo");
-                                xmlSerializer.text(filename);
-                                xmlSerializer.endTag(null, "photo");
-                            } else {
-                                xmlSerializer.text(System.getProperty("line.separator"));
-                                xmlSerializer.startTag(null, "file");
-                                xmlSerializer.text(filename);
-                                xmlSerializer.endTag(null, "file");
-                            }
+                        String filename = file.substring(file.lastIndexOf('/') + 1);
+                        if (type == 0) {
+                            xmlSerializer.text(System.getProperty("line.separator"));
+                            xmlSerializer.startTag(null, "photo");
+                            xmlSerializer.text(filename);
+                            xmlSerializer.endTag(null, "photo");
+                        } else if (type == 1) {
+                            xmlSerializer.text(System.getProperty("line.separator"));
+                            xmlSerializer.startTag(null, "file");
+                            xmlSerializer.text(filename);
+                            xmlSerializer.endTag(null, "file");
                         }
                     }
                 } else if (obj instanceof SimpleDate) {

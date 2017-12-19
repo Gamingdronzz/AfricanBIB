@@ -92,7 +92,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private int currentRowServices = 1;
     public String path;
     int pos;
-    int type;
+    int type = -1;
     Fragment context;
     ChooseFile chooseFile;
 
@@ -1240,15 +1240,15 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             AlertDialog.Builder alt_bld = new AlertDialog.Builder(context.getContext());
             alt_bld.setTitle("Select File Format");
             alt_bld.setCancelable(false);
-            alt_bld.setSingleChoiceItems(formats, 0, new DialogInterface
+            alt_bld.setSingleChoiceItems(formats, -1, new DialogInterface
                     .OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
-                    databaseHelper.updateRowWithInt(chooseFile.getTableName(), chooseFile.getRowno(), DatabaseHelper.COLUMN_FORMAT, item);
+                    type=item;
                     Intent i2 = new Intent(context.getContext(), FileChooser.class);
                     i2.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.SINGLE_SELECTION.ordinal());
                     if (item == 0) {
                         i2.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "jpg;jpeg;png;bmp");
-                    } else {
+                    } else if(item==1){
                         i2.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "pdf;");
                     }
                     context.startActivityForResult(i2, PICK_FILE_REQUEST);
@@ -1573,6 +1573,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 path = file.getPath();
                 chooseFile.setTitle(path);
                 notifyItemChanged(pos);
+                databaseHelper.updateRowWithInt(chooseFile.getTableName(), chooseFile.getRowno(), DatabaseHelper.COLUMN_FORMAT, type);
                 databaseHelper.updateRowWithString(chooseFile.getTableName(), chooseFile.getRowno(), chooseFile.getColumnName(), path);
                 Log.d("Adapter", "onclick " + path);
             }
