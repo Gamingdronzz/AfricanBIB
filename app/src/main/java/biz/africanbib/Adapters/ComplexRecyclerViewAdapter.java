@@ -89,6 +89,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private int currentRowProducts = 1;
     private int currentRowServices = 1;
     public String path;
+    int pos;
     Fragment context;
     ChooseFile chooseFile;
 
@@ -1077,6 +1078,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             new int[]{1, 2},
                             databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
                             add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
+                    notifyItemInserted(position);
                 } else if (columnNames[i].equals(DatabaseHelper.COLUMN_SELECTED_FILE)) {
                     items.add(position, helper.buildChooseFile(titles[i],
                             currentRowNo,
@@ -1230,6 +1232,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         @Override
         public void onClick(final View view) {
             chooseFile = (ChooseFile) items.get(position);
+            pos = position;
             int type = databaseHelper.getIntFromRow(chooseFile.getTableName(), DatabaseHelper.COLUMN_FORMAT, chooseFile.getRowno());
             Intent i2 = new Intent(context.getContext(), FileChooser.class);
             i2.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.SINGLE_SELECTION.ordinal());
@@ -1543,6 +1546,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             if (resultCode == RESULT_OK) {
                 Uri file = data.getData();
                 path = file.getPath();
+                chooseFile.setTitle(path);
+                notifyItemChanged(pos);
                 databaseHelper.updateRowWithString(chooseFile.getTableName(), chooseFile.getRowno(), chooseFile.getColumnName(), path);
                 Log.d("Adapter", "onclick " + path);
             }

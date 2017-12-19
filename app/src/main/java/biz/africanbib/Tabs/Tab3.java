@@ -239,13 +239,13 @@ public class Tab3 extends Fragment {
                                     },
                                     new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9},
                                     databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]),
-                                    tableName, columnNames[i], ids[i], xmlTags[j]));
+                                    tableName, columnNames[j], ids[i], xmlTags[j]));
                         else if (columnNames[j].equals(DatabaseHelper.COLUMN_FORMAT))
                             items.add(helper.buildDropDown(titles[j],
                                     new String[]{"Photo", "PDF"},
                                     new int[]{1, 2},
                                     databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]),
-                                    tableName, columnNames[i], ids[i], xmlTags[j]));
+                                    tableName, columnNames[j], ids[i], xmlTags[j]));
                         else
                             items.add(helper.buildChooseFile(databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
                                     ids[i], tableName, columnNames[j], xmlTags[j]));

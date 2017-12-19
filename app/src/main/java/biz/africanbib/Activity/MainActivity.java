@@ -42,6 +42,7 @@ import java.util.List;
 import java.util.Map;
 
 import biz.africanbib.Models.Add;
+import biz.africanbib.Models.ChooseFile;
 import biz.africanbib.Models.Divider;
 import biz.africanbib.Models.DropDown;
 import biz.africanbib.Models.Heading;
@@ -692,15 +693,33 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 } else if (obj instanceof DropDown) {
                     DropDown dropDown = (DropDown) obj;
                     Log.d(TAG, "simpleTextXml: " + i + ":" + dropDown.getHeading());
-                    if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PREFIX)) {
-                        personTag = "person";
+                    if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_FORMAT)) {
+                        i++;
+                        ChooseFile chooseFile = (ChooseFile) items.get(i);
+                        String filename = chooseFile.getTitle().substring(chooseFile.getTitle().lastIndexOf('/')+1);
+                        int type = dropDown.getSelectedPosition();
+                        if (type == 0) {
+                            xmlSerializer.text(System.getProperty("line.separator"));
+                            xmlSerializer.startTag(null, "photo");
+                            xmlSerializer.text(filename);
+                            xmlSerializer.endTag(null, "photo");
+                        } else {
+                            xmlSerializer.text(System.getProperty("line.separator"));
+                            xmlSerializer.startTag(null, "file");
+                            xmlSerializer.text(filename);
+                            xmlSerializer.endTag(null, "file");
+                        }
+                    } else {
+                        if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PREFIX)) {
+                            personTag = "person";
+                            xmlSerializer.text(System.getProperty("line.separator"));
+                            xmlSerializer.startTag(null, personTag);
+                        }
                         xmlSerializer.text(System.getProperty("line.separator"));
-                        xmlSerializer.startTag(null, personTag);
+                        xmlSerializer.startTag(null, ((DropDown) obj).getXmlTag());
+                        xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
+                        xmlSerializer.endTag(null, ((DropDown) obj).getXmlTag());
                     }
-                    xmlSerializer.text(System.getProperty("line.separator"));
-                    xmlSerializer.startTag(null, ((DropDown) obj).getXmlTag());
-                    xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
-                    xmlSerializer.endTag(null, ((DropDown) obj).getXmlTag());
                 } else if (obj instanceof MultiSelectDropdown) {
                     MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) obj;
                     Log.d(TAG, "simpleTextXml: " + i + ":" + multiSelectDropdown.getTitle());
