@@ -4,6 +4,7 @@ package biz.africanbib.Adapters;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -18,6 +19,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -90,6 +92,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private int currentRowServices = 1;
     public String path;
     int pos;
+    int type;
     Fragment context;
     ChooseFile chooseFile;
 
@@ -1072,14 +1075,14 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
                             add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
                     notifyItemInserted(position);
-                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_FORMAT)) {
+                }/* else if (columnNames[i].equals(DatabaseHelper.COLUMN_FORMAT)) {
                     items.add(position, helper.buildDropDown(titles[i],
                             new String[]{"Photo", "PDF"},
                             new int[]{1, 2},
                             databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
                             add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
                     notifyItemInserted(position);
-                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_SELECTED_FILE)) {
+                }*/ else if (columnNames[i].equals(DatabaseHelper.COLUMN_SELECTED_FILE)) {
                     items.add(position, helper.buildChooseFile(titles[i],
                             currentRowNo,
                             add.getTableName(),
@@ -1233,15 +1236,37 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         public void onClick(final View view) {
             chooseFile = (ChooseFile) items.get(position);
             pos = position;
-            int type = databaseHelper.getIntFromRow(chooseFile.getTableName(), DatabaseHelper.COLUMN_FORMAT, chooseFile.getRowno());
+            String[] formats = new String[]{"Photo", "Pdf"};
+            AlertDialog.Builder alt_bld = new AlertDialog.Builder(context.getContext());
+            alt_bld.setTitle("Select File Format");
+            alt_bld.setCancelable(false);
+            alt_bld.setSingleChoiceItems(formats, 0, new DialogInterface
+                    .OnClickListener() {
+                public void onClick(DialogInterface dialog, int item) {
+                    databaseHelper.updateRowWithInt(chooseFile.getTableName(), chooseFile.getRowno(), DatabaseHelper.COLUMN_FORMAT, item);
+                    Intent i2 = new Intent(context.getContext(), FileChooser.class);
+                    i2.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.SINGLE_SELECTION.ordinal());
+                    if (item == 0) {
+                        i2.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "jpg;jpeg;png;bmp");
+                    } else {
+                        i2.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "pdf;");
+                    }
+                    context.startActivityForResult(i2, PICK_FILE_REQUEST);
+                    dialog.dismiss();// dismiss the alertbox after chose option
+                }
+            });
+            AlertDialog alert = alt_bld.create();
+            alert.show();
+
+           /*type = databaseHelper.getIntFromRow(chooseFile.getTableName(), DatabaseHelper.COLUMN_FORMAT, chooseFile.getRowno());
             Intent i2 = new Intent(context.getContext(), FileChooser.class);
             i2.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.SINGLE_SELECTION.ordinal());
             if (type == 0) {
                 i2.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "jpg;jpeg;png;bmp");
-            } else if (type == 1) {
+            } else {
                 i2.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "pdf;");
             }
-            context.startActivityForResult(i2, PICK_FILE_REQUEST);
+            context.startActivityForResult(i2, PICK_FILE_REQUEST);*/
         }
 
     }

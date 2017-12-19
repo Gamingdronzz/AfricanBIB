@@ -693,33 +693,17 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 } else if (obj instanceof DropDown) {
                     DropDown dropDown = (DropDown) obj;
                     Log.d(TAG, "simpleTextXml: " + i + ":" + dropDown.getHeading());
-                    if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_FORMAT)) {
-                        i++;
-                        ChooseFile chooseFile = (ChooseFile) items.get(i);
-                        String filename = chooseFile.getTitle().substring(chooseFile.getTitle().lastIndexOf('/')+1);
-                        int type = dropDown.getSelectedPosition();
-                        if (type == 0) {
-                            xmlSerializer.text(System.getProperty("line.separator"));
-                            xmlSerializer.startTag(null, "photo");
-                            xmlSerializer.text(filename);
-                            xmlSerializer.endTag(null, "photo");
-                        } else {
-                            xmlSerializer.text(System.getProperty("line.separator"));
-                            xmlSerializer.startTag(null, "file");
-                            xmlSerializer.text(filename);
-                            xmlSerializer.endTag(null, "file");
-                        }
-                    } else {
-                        if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PREFIX)) {
-                            personTag = "person";
-                            xmlSerializer.text(System.getProperty("line.separator"));
-                            xmlSerializer.startTag(null, personTag);
-                        }
+
+                    if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PREFIX)) {
+                        personTag = "person";
                         xmlSerializer.text(System.getProperty("line.separator"));
-                        xmlSerializer.startTag(null, ((DropDown) obj).getXmlTag());
-                        xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
-                        xmlSerializer.endTag(null, ((DropDown) obj).getXmlTag());
+                        xmlSerializer.startTag(null, personTag);
                     }
+                    xmlSerializer.text(System.getProperty("line.separator"));
+                    xmlSerializer.startTag(null, ((DropDown) obj).getXmlTag());
+                    xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
+                    xmlSerializer.endTag(null, ((DropDown) obj).getXmlTag());
+
                 } else if (obj instanceof MultiSelectDropdown) {
                     MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) obj;
                     Log.d(TAG, "simpleTextXml: " + i + ":" + multiSelectDropdown.getTitle());
@@ -731,6 +715,27 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             xmlSerializer.startTag(null, multiSelectDropdown.getXmlTag());
                             helper.childTags(multiSelectDropdown, index, xmlSerializer);
                             xmlSerializer.endTag(null, multiSelectDropdown.getXmlTag());
+                        }
+                    }
+                } else if (obj instanceof ChooseFile) {
+                    ChooseFile chooseFile = (ChooseFile) obj;
+                    int type = databaseHelper.getIntFromRow(chooseFile.getTableName(), DatabaseHelper.COLUMN_FORMAT, chooseFile.getRowno());
+                    String file = chooseFile.getTitle();
+                    if (file != null) {
+                        Log.d(TAG, file);
+                        if (!(file.equals(getResources().getString(R.string.choose_file)))) {
+                            String filename = file.substring(file.lastIndexOf('/') + 1);
+                            if (type == 0) {
+                                xmlSerializer.text(System.getProperty("line.separator"));
+                                xmlSerializer.startTag(null, "photo");
+                                xmlSerializer.text(filename);
+                                xmlSerializer.endTag(null, "photo");
+                            } else {
+                                xmlSerializer.text(System.getProperty("line.separator"));
+                                xmlSerializer.startTag(null, "file");
+                                xmlSerializer.text(filename);
+                                xmlSerializer.endTag(null, "file");
+                            }
                         }
                     }
                 } else if (obj instanceof SimpleDate) {

@@ -212,12 +212,12 @@ public class Tab3 extends Fragment {
         items.add(new SimpleText("Media", "media"));
         tableName = DatabaseHelper.TABLE_OTHER_MEDIA;
         columnNames = new String[]{DatabaseHelper.COLUMN_SELECTED_FILE,
-                DatabaseHelper.COLUMN_FORMAT,
+                //DatabaseHelper.COLUMN_FORMAT,
                 DatabaseHelper.COLUMN_FILE_TYPE};
         titles = new String[]{getResources().getString(R.string.choose_file),
-                "Select Format",
+                //"Select Format",
                 "File Type"};
-        xmlTags = new String[]{"", "",
+        xmlTags = new String[]{"",
                 "type"};
         if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
             int[] ids = databaseHelper.getrowids(tableName);
@@ -240,13 +240,13 @@ public class Tab3 extends Fragment {
                                     new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9},
                                     databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]),
                                     tableName, columnNames[j], ids[i], xmlTags[j]));
-                        else if (columnNames[j].equals(DatabaseHelper.COLUMN_FORMAT))
+                        /*else if (columnNames[j].equals(DatabaseHelper.COLUMN_FORMAT))
                             items.add(helper.buildDropDown(titles[j],
                                     new String[]{"Photo", "PDF"},
                                     new int[]{1, 2},
                                     databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]),
                                     tableName, columnNames[j], ids[i], xmlTags[j]));
-                        else
+                    */    else
                             items.add(helper.buildChooseFile(databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
                                     ids[i], tableName, columnNames[j], xmlTags[j]));
                     }
@@ -256,7 +256,7 @@ public class Tab3 extends Fragment {
                 mediaRows = ids.length;
             }
         }
-        items.add(helper.buildAdd(3, titles, tableName, columnNames, xmlTags));
+        items.add(helper.buildAdd(2, titles, tableName, columnNames, xmlTags));
 
        /* items.add(new SimpleText("Services & Service Details"));
         tableName = DatabaseHelper.TABLE_SERVICES;
