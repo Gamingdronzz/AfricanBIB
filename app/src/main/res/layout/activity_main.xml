@@ -39,7 +39,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Validate"
+        android:text="Validate And Upload"
         android:layout_alignParentBottom="true"
         android:id="@+id/validate"
         android:textSize="@dimen/text_medium"

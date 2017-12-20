@@ -1,6 +1,5 @@
 package biz.africanbib.Activity;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -110,11 +109,13 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private void init() {
         helper = new Helper(this);
         imageData = new ArrayList<>();
+        pdfData = new ArrayList<>();
         goLeft.setVisibility(View.INVISIBLE);
         awesomeInfoDialog = new AwesomeInfoDialog(this)
-                .setTitle("Generating XML")
+                .setTitle("Uploading Business")
                 .setMessage("Please wait..")
-                .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.colorPrimary)
+                .setColoredCircle(R.color.dialogInfoBackgroundColor)
+                .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
                 .setCancelable(false);
 
 
@@ -332,6 +333,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             tab3.getAdapter().notifyDataSetChanged();
             tab4.getAdapter().notifyDataSetChanged();
 
+            awesomeInfoDialog.setMessage("Validating...");
             awesomeInfoDialog.show();
             Test(items, items2, items3, items4);
 
@@ -725,18 +727,18 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     int type = databaseHelper.getIntFromRow(chooseFile.getTableName(), DatabaseHelper.COLUMN_FORMAT, chooseFile.getRowno());
                     String file = databaseHelper.getStringFromRow(chooseFile.getTableName(), chooseFile.getColumnName(), chooseFile.getRowno());
                     if (file != null) {
-                        String filename = file.substring(file.lastIndexOf('/') + 1);
                         if (type == 0) {
                             xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, "photo");
-                            xmlSerializer.text(filename);
+                            xmlSerializer.text("Media" + chooseFile.getRowno());
                             xmlSerializer.endTag(null, "photo");
-                            imageData.add(new ImageData(DatabaseHelper.COLUMN_SELECTED_IMAGE,chooseFile.getTableName(),chooseFile.getRowno(),"Media"+chooseFile.getRowno()));
+                            imageData.add(new ImageData(DatabaseHelper.COLUMN_SELECTED_IMAGE, chooseFile.getTableName(), chooseFile.getRowno(), "Media" + chooseFile.getRowno()));
                         } else if (type == 1) {
                             xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, "file");
-                            xmlSerializer.text(filename);
+                            xmlSerializer.text("File" + chooseFile.getRowno());
                             xmlSerializer.endTag(null, "file");
+                            pdfData.add(new PdfData(chooseFile.getColumnName(), chooseFile.getTableName(), chooseFile.getRowno(), "File" + chooseFile.getRowno()));
                         }
                     }
                 } else if (obj instanceof SimpleDate) {
@@ -829,17 +831,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         }
 
         VolleyHelper volleyHelper = new VolleyHelper(this, this);
+        awesomeInfoDialog.setMessage("Uplaoding Business");
 
         Map<String, String> params = new HashMap<>();
-
         params.put("xml", aBuffer);
         params.put("businessName", companyName);
-
-       /* String logo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_LOGO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
-        String keyvisuallogo = Base64.encodeToString(databaseHelper.getBlobValue(DatabaseHelper.COLUMN_KEYVISUAL_PHOTO, DatabaseHelper.TABLE_COMPANY_PROFILE), Base64.DEFAULT);
-        params.put("companylogo", logo);
-        params.put("keyvisual", keyvisuallogo);
-       */
         volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
 
         int size = imageData.size();
@@ -860,30 +856,30 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             volleyHelper.makeStringRequest(helper.getBaseURL() + "createimage.php", "tag" + i, params1);
         }
 
-        i=0;
+        i = 0;
         int pdfsize = pdfData.size();
-        String[] files = new String[pdfsize];
-        String[] fileNames = new String[size];
-        for (PdfData pd :pdfData ) {
-            Map<String, String> params1 = new HashMap<>();
-            if (pd.Row == -1) {
-                files[i] = Base64.encodeToString(
-                        helper.createByteArrayFromFile(databaseHelper.getStringValue(pd.ColumnName, pd.TableName)),
-                        Base64.DEFAULT);
+        if (pdfsize > 0) {
+            String[] files = new String[pdfsize];
+            String[] fileNames = new String[size];
+            for (PdfData pd : pdfData) {
+                Map<String, String> params1 = new HashMap<>();
+                if (pd.Row == -1) {
+                    files[i] = Base64.encodeToString(
+                            helper.createByteArrayFromFile(databaseHelper.getStringValue(pd.ColumnName, pd.TableName)),
+                            Base64.DEFAULT);
+                } else
+                    files[i] = Base64.encodeToString(
+                            helper.createByteArrayFromFile(databaseHelper.getStringFromRow(pd.TableName, pd.ColumnName, pd.Row)),
+                            Base64.DEFAULT);
+
+                fileNames[i] = pd.Name;
+                params1.put("filename", fileNames[i]);
+                params1.put("file", files[i]);
+                params1.put("businessName", companyName);
+                i++;
+                volleyHelper.makeStringRequest(helper.getBaseURL() + "createfile.php", "file" + i, params1);
             }
-            else
-                files[i] = Base64.encodeToString(
-                        helper.createByteArrayFromFile(databaseHelper.getStringFromRow(pd.ColumnName, pd.TableName,pd.Row)),
-                        Base64.DEFAULT);
-
-            fileNames[i] = pd.Name;
-            params1.put("filename", fileNames[i]);
-            params1.put("file", files[i]);
-            params1.put("businessName", companyName);
-            i++;
-            volleyHelper.makeStringRequest(helper.getBaseURL() + "createfile.php", "file" + i, params1);
         }
-
 
     }
 
@@ -913,11 +909,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         Log.d(TAG, jsonObject.toString());
         try {
             if (jsonObject.get("result").equals(helper.SUCCESS)) {
-                awesomeInfoDialog.setMessage("Succesfully uploaded Business");
+                awesomeInfoDialog.setMessage("Succesfully Uploaded Business");
                 databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
                 databaseHelper.updateDateTime(DatabaseHelper.TABLE_COMPANY_PROFILE);
             } else {
-                awesomeInfoDialog.setMessage("Business Already Uploaded");
+                awesomeInfoDialog.setMessage("Business Updated Successfully");
                 databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
             }
         } catch (JSONException jse) {

@@ -967,6 +967,7 @@ public class Helper {
             File file = new File(path);
             try {
                 byte[] data = FileUtils.readFileToByteArray(file);//Convert any file, image or video into byte array
+                Log.d(TAG, "createByteArrayFromFile: " + data.length + "  " + data.toString());
                 return data;
             } catch (IOException e) {
                 Log.d(TAG, e.toString());
@@ -975,10 +976,9 @@ public class Helper {
         return null;
     }
 
-    public Bitmap getBitmapFromFile(String path)
-    {
-        File imgFile = new  File(path);
-        if(imgFile.exists()){
+    public Bitmap getBitmapFromFile(String path) {
+        File imgFile = new File(path);
+        if (imgFile.exists()) {
             Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
             //Drawable d = new BitmapDrawable(getResources(), myBitmap);
             return myBitmap;
@@ -986,6 +986,7 @@ public class Helper {
         }
         return null;
     }
+
     public Bitmap createBitmapFromByteArray(byte[] array) {
         if (array != null) {
             Bitmap bmp = BitmapFactory.decodeByteArray(array, 0, array.length);
