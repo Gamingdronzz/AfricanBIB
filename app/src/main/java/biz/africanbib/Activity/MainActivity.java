@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     public static boolean first = true;
     private Button buttonValidate;
     List<ImageData> imageData;
+    List<PdfData> pdfData;
 
 
     AwesomeInfoDialog awesomeInfoDialog;
@@ -858,7 +859,31 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             i++;
             volleyHelper.makeStringRequest(helper.getBaseURL() + "createimage.php", "tag" + i, params1);
         }
-        awesomeInfoDialog.setMessage("Submitting files to server");
+
+        i=0;
+        int pdfsize = pdfData.size();
+        String[] files = new String[pdfsize];
+        String[] fileNames = new String[size];
+        for (PdfData pd :pdfData ) {
+            Map<String, String> params1 = new HashMap<>();
+            if (pd.Row == -1) {
+                files[i] = Base64.encodeToString(
+                        helper.createByteArrayFromFile(databaseHelper.getStringValue(pd.ColumnName, pd.TableName)),
+                        Base64.DEFAULT);
+            }
+            else
+                files[i] = Base64.encodeToString(
+                        helper.createByteArrayFromFile(databaseHelper.getStringFromRow(pd.ColumnName, pd.TableName,pd.Row)),
+                        Base64.DEFAULT);
+
+            fileNames[i] = pd.Name;
+            params1.put("filename", fileNames[i]);
+            params1.put("file", files[i]);
+            params1.put("businessName", companyName);
+            i++;
+            volleyHelper.makeStringRequest(helper.getBaseURL() + "createfile.php", "file" + i, params1);
+        }
+
 
     }
 
@@ -910,6 +935,20 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         String Name;
 
         public ImageData(String columnName, String tableName, int row, String name) {
+            ColumnName = columnName;
+            TableName = tableName;
+            Row = row;
+            Name = name;
+        }
+    }
+
+    private class PdfData {
+        String ColumnName;
+        String TableName;
+        int Row;
+        String Name;
+
+        public PdfData(String columnName, String tableName, int row, String name) {
             ColumnName = columnName;
             TableName = tableName;
             Row = row;

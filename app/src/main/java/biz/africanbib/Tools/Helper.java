@@ -962,7 +962,7 @@ public class Helper {
         return null;
     }
 
-    public byte[] createByteArrayFromString(String path) {
+    public byte[] createByteArrayFromFile(String path) {
         if (path != null) {
             File file = new File(path);
             try {
