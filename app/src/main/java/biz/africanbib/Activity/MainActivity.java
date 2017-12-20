@@ -21,6 +21,7 @@ import com.android.volley.ParseError;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeErrorDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
 import com.carlosmuvi.segmentedprogressbar.SegmentedProgressBar;
 
@@ -88,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
 
     AwesomeInfoDialog awesomeInfoDialog;
+    AwesomeErrorDialog awesomeErrorDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 .setColoredCircle(R.color.dialogInfoBackgroundColor)
                 .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
                 .setCancelable(false);
-
 
         goLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -853,7 +854,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             params1.put("image", images[i]);
             params1.put("businessName", companyName);
             i++;
-            volleyHelper.makeStringRequest(helper.getBaseURL() + "createimage.php", "tag" + i, params1);
+            volleyHelper.makeStringRequest(helper.getBaseURL() + "createimage.php", "image" + i, params1);
         }
 
         i = 0;
@@ -886,8 +887,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     @Override
     public void onError(VolleyError error) {
         if (error instanceof TimeoutError) {
-            awesomeInfoDialog.setMessage("Server Timeout\nPlease Try Again !!");
-            Log.e("Volley", "TimeoutError");
+            awesomeInfoDialog.setColoredCircle(R.color.dialogErrorBackgroundColor);
+             awesomeInfoDialog.setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white);
+            awesomeInfoDialog.setMessage("Server Timeout\nSlow Internet Connection !!");
+            Log.e("Volley", "TimeoutError\n");
         } else if (error instanceof NoConnectionError) {
             awesomeInfoDialog.setMessage("No Internet Connectivity\nCheck your internet connection");
             Log.e("Volley", "NoConnectionError");
