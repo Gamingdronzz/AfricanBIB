@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,6 +35,7 @@ public class PreviousBusinessLists extends AppCompatActivity implements View.OnC
     DatabaseHelper databaseHelper;
     int clickedPosition = -1;
     private final int CONTEXT_MENU_DELETE = 1;
+    private final String TAG = "Previous-Business";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +69,7 @@ public class PreviousBusinessLists extends AppCompatActivity implements View.OnC
                 DatabaseHelper.setCurrentCompanyId(modelList.get(position).getBusinessID());
                 intent.putExtra("type", MainActivity.EDITBUSINESS);
                 startActivity(intent);
+                Log.v(TAG,"Closing Previous Business and Opening Business");
                 finish();
             }
 

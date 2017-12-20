@@ -1,10 +1,12 @@
 package biz.africanbib.Tabs;
 
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -43,6 +45,9 @@ public class Tab2 extends Fragment {
     int refrencesRows;
     int managerRows;
     int subsidiaryRows;
+    private final String TAG = "Tab2";
+    private Fragment fragment;
+    ProgressDialog progressDialog;
 
     ArrayList<Object> items = new ArrayList<>();
 
@@ -58,6 +63,10 @@ public class Tab2 extends Fragment {
         Log.d("Company", "Trying to initialize");
         helper = new Helper(getContext());
         isTab = helper.isTab();
+        fragment = this;
+        progressDialog = new ProgressDialog(this.getContext());
+        progressDialog.setMessage("Loading..");
+        progressDialog.show();
         databaseHelper = new DatabaseHelper(view.getContext(), DatabaseHelper.DATABASE_NAME, null, DatabaseHelper.DATABASE_VERSION);
         init(view);
 
@@ -70,23 +79,7 @@ public class Tab2 extends Fragment {
 
     private void init(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_2);
-        adapter = new ComplexRecyclerViewAdapter(getSampleArrayList(), getFragmentManager(), this);
-
-        if (isTab) {
-            setupGridLayout(true);
-        } else {
-            setupGridLayout(false);
-        }
-        //adapter.updateRow(DatabaseHelper.TABLE_NEEDS, needRows);
-        //adapter.updateRow(DatabaseHelper.TABLE_OFFERS, offerrows);
-        adapter.updateRow(DatabaseHelper.TABLE_OWNERS, ownerRows);
-        adapter.updateRow(DatabaseHelper.TABLE_REFERENCES, refrencesRows);
-        adapter.updateRow(DatabaseHelper.TABLE_MANAGERS, managerRows);
-        adapter.updateRow(DatabaseHelper.TABLE_SUBSIDIARIES, subsidiaryRows);
-        //SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
-        //snapHelper.attachToRecyclerView(recyclerView);
-        recyclerView.setAdapter(adapter);
-        Log.d("Company", "Adapter set");
+        getSampleArrayList();
     }
 
     @Override
@@ -130,11 +123,62 @@ public class Tab2 extends Fragment {
 
     }
 
-    private ArrayList<Object> getSampleArrayList() {
-        items = new ArrayList<>();
+    private void getSampleArrayList() {
+        LoadTab loadTab = new LoadTab();
+        loadTab.execute();
+    }
+
+    private void getValuesFromViews() {
+        Object[] items;
+        items = new Object[adapter.getItemCount()];
+        for (int i = 0; i < items.length; i++) {
+            //Log.d("Company","I = " + i);
+            items[i] = adapter.getItem(i);
+            if (items[i] instanceof SimpleEditText) {
+                SimpleEditText ob = (SimpleEditText) items[i];
+                Log.d("Company", ob.getTitle() + " = " + ob.getValue());
+            } else if (items[i] instanceof DropDown) {
+                DropDown ob = (DropDown) items[i];
+                Log.d("Company", ob.getHeading() + " = " + ob.getSelectedPosition());
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            super.onActivityResult(requestCode, resultCode, data);
+            Log.d("Tab2", "Request Code  " + requestCode);
+            adapter.onActivityResult(requestCode, resultCode, data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case 1: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    adapter.onRequestPermissionsResult(requestCode, permissions, grantResults);
+                } else {
+                    Toast.makeText(getActivity(), "Please give your permission.", Toast.LENGTH_LONG).show();
+                }
+                break;
+            }
+        }
+    }
+
+    private class LoadTab extends AsyncTask<Void, Void, ArrayList<Object>> {
+
+        @Override
+        protected ArrayList<Object> doInBackground(Void... voids) {
+            items = new ArrayList<>();
 
 
-        //items.add(new SimpleEditText(""));
+            //items.add(new SimpleEditText(""));
 
 
         /*
@@ -186,381 +230,381 @@ public class Tab2 extends Fragment {
         items.add(helper.buildAdd(1, new String[]{"Offer"}, DatabaseHelper.TABLE_OFFERS, new String[]{DatabaseHelper.COLUMN_OFFER}, new String[]{"offer"}));
 
 */
-        String columnName = DatabaseHelper.COLUMN_FIRST_NAME;
-        String tableName = DatabaseHelper.TABLE_CONTACT_PERSON;
-        String value;
-        items.add(new Heading("CONTACT PERSON", "contact"));
-        columnName = DatabaseHelper.COLUMN_TELEPHONE;
-        value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Telephone", value, tableName, columnName, -1, "telephone"));
-        columnName = DatabaseHelper.COLUMN_CELLPHONE;
-        value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Cellphone", value, tableName, columnName, -1, "cellphone"));
-        columnName = DatabaseHelper.COLUMN_FAX;
-        value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Fax", value, tableName, columnName, -1, "fax"));
-        columnName = DatabaseHelper.COLUMN_EMAIL;
-        value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Email", value, tableName, columnName, -1, "email"));
-        columnName = DatabaseHelper.COLUMN_STREET;
-        value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Street & Number", value, tableName, columnName, -1, "streetnumber"));
-        columnName = DatabaseHelper.COLUMN_CITY;
-        value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("City / Town", value, tableName, columnName, -1, "city"));
-        columnName = DatabaseHelper.COLUMN_PO_BOX;
-        value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Post Office Box", value, tableName, columnName, -1, "postbox"));
-        columnName = DatabaseHelper.COLUMN_POSTAL_CODE;
-        value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Postal Code", value, tableName, columnName, -1, "postalcode"));
-        columnName = DatabaseHelper.COLUMN_DISTRICT;
-        value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("District / State", value, tableName, columnName, -1, "district"));
-        columnName = DatabaseHelper.COLUMN_COUNTRY;
-        items.add(helper.buildDropDown("Country", helper.getCountryNames(), helper.getCountryCodes(), 0, tableName, columnName, -1, "country"));
-        columnName = DatabaseHelper.COLUMN_PREFIX;
-        int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(
-                helper.buildDropDown(
-                        "Prefix",
-                        new String[]{"Mr.",
-                                "Mrs.",
-                                "Ms.",
-                                "Dr",
-                                "Prof."},
-                        new int[]{0, 1, 2, 3, 4},
-                        selectedPosition,
-                        tableName,
-                        columnName,
-                        -1, "prefix"));
-        columnName = DatabaseHelper.COLUMN_FIRST_NAME;
-        value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("First name", value, tableName, columnName, -1, "firstname"));
-        columnName = DatabaseHelper.COLUMN_LAST_NAME;
-        value = databaseHelper.getStringValue(columnName, tableName);
-        items.add(helper.buildEditText("Last name", value, tableName, columnName, -1, "lastname"));
-        columnName = DatabaseHelper.COLUMN_POSITION_IN_COMPANY;
-        selectedPosition = databaseHelper.getIntValue(columnName, tableName);
-        items.add(
-                helper.buildDropDown(
-                        "Position in company/institution",
-                        new String[]{"Student/Intern",
-                                "Entry Level",
-                                "Professional / Experienced",
-                                "Manager (Manager / Supervisor)",
-                                "Executive (VP, SVP etc)",
-                                "Senior Executive (CEO,CFO)"},
-                        new int[]{0},
-                        selectedPosition,
-                        tableName,
-                        columnName,
-                        -1, "position"));
+            String columnName = DatabaseHelper.COLUMN_FIRST_NAME;
+            String tableName = DatabaseHelper.TABLE_CONTACT_PERSON;
+            String value;
+            items.add(new Heading("CONTACT PERSON", "contact"));
+            columnName = DatabaseHelper.COLUMN_TELEPHONE;
+            value = databaseHelper.getStringValue(columnName, tableName);
+            items.add(helper.buildEditText("Telephone", value, tableName, columnName, -1, "telephone"));
+            columnName = DatabaseHelper.COLUMN_CELLPHONE;
+            value = databaseHelper.getStringValue(columnName, tableName);
+            items.add(helper.buildEditText("Cellphone", value, tableName, columnName, -1, "cellphone"));
+            columnName = DatabaseHelper.COLUMN_FAX;
+            value = databaseHelper.getStringValue(columnName, tableName);
+            items.add(helper.buildEditText("Fax", value, tableName, columnName, -1, "fax"));
+            columnName = DatabaseHelper.COLUMN_EMAIL;
+            value = databaseHelper.getStringValue(columnName, tableName);
+            items.add(helper.buildEditText("Email", value, tableName, columnName, -1, "email"));
+            columnName = DatabaseHelper.COLUMN_STREET;
+            value = databaseHelper.getStringValue(columnName, tableName);
+            items.add(helper.buildEditText("Street & Number", value, tableName, columnName, -1, "streetnumber"));
+            columnName = DatabaseHelper.COLUMN_CITY;
+            value = databaseHelper.getStringValue(columnName, tableName);
+            items.add(helper.buildEditText("City / Town", value, tableName, columnName, -1, "city"));
+            columnName = DatabaseHelper.COLUMN_PO_BOX;
+            value = databaseHelper.getStringValue(columnName, tableName);
+            items.add(helper.buildEditText("Post Office Box", value, tableName, columnName, -1, "postbox"));
+            columnName = DatabaseHelper.COLUMN_POSTAL_CODE;
+            value = databaseHelper.getStringValue(columnName, tableName);
+            items.add(helper.buildEditText("Postal Code", value, tableName, columnName, -1, "postalcode"));
+            columnName = DatabaseHelper.COLUMN_DISTRICT;
+            value = databaseHelper.getStringValue(columnName, tableName);
+            items.add(helper.buildEditText("District / State", value, tableName, columnName, -1, "district"));
+            columnName = DatabaseHelper.COLUMN_COUNTRY;
+            items.add(helper.buildDropDown("Country", helper.getCountryNames(), helper.getCountryCodes(), 0, tableName, columnName, -1, "country"));
+            columnName = DatabaseHelper.COLUMN_PREFIX;
+            int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
+            items.add(
+                    helper.buildDropDown(
+                            "Prefix",
+                            new String[]{"Mr.",
+                                    "Mrs.",
+                                    "Ms.",
+                                    "Dr",
+                                    "Prof."},
+                            new int[]{0, 1, 2, 3, 4},
+                            selectedPosition,
+                            tableName,
+                            columnName,
+                            -1, "prefix"));
+            columnName = DatabaseHelper.COLUMN_FIRST_NAME;
+            value = databaseHelper.getStringValue(columnName, tableName);
+            items.add(helper.buildEditText("First name", value, tableName, columnName, -1, "firstname"));
+            columnName = DatabaseHelper.COLUMN_LAST_NAME;
+            value = databaseHelper.getStringValue(columnName, tableName);
+            items.add(helper.buildEditText("Last name", value, tableName, columnName, -1, "lastname"));
+            columnName = DatabaseHelper.COLUMN_POSITION_IN_COMPANY;
+            selectedPosition = databaseHelper.getIntValue(columnName, tableName);
+            items.add(
+                    helper.buildDropDown(
+                            "Position in company/institution",
+                            new String[]{"Student/Intern",
+                                    "Entry Level",
+                                    "Professional / Experienced",
+                                    "Manager (Manager / Supervisor)",
+                                    "Executive (VP, SVP etc)",
+                                    "Senior Executive (CEO,CFO)"},
+                            new int[]{0},
+                            selectedPosition,
+                            tableName,
+                            columnName,
+                            -1, "position"));
 
 
-        items.add(new Heading("OWNERS/MANAGERS/REFERENCES/SUBSIDIARIES", null));
-        items.add(new SimpleText("REFERENCES", "contact"));
-        tableName = DatabaseHelper.TABLE_REFERENCES;
-        String[] xmltags = new String[]{
-                "organisationtype",
-                "logo",
-                "website",
-                "email",
-                "cellphone",
-                "telephone",
-                "name"
-        };
-        String[] titles = new String[]{
-                "Type of Organisation",
-                "Institution Logo",
-                "Website",
-                "Email",
-                "Cellphone",
-                "Telephone",
-                "Institution Name"};
-        String[] columnNames = new String[]{
-                DatabaseHelper.COLUMN_TYPE_OF_ORGANISATION,
-                DatabaseHelper.COLUMN_LOGO,
-                DatabaseHelper.COLUMN_WEBSITE,
-                DatabaseHelper.COLUMN_EMAIL,
-                DatabaseHelper.COLUMN_CELLPHONE,
-                DatabaseHelper.COLUMN_TELEPHONE,
-                DatabaseHelper.COLUMN_INSTITUTION_NAME};
-        if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
-            int[] ids = databaseHelper.getrowids(tableName);
-            if (ids != null) {
-                Log.v("Reference", "ID Length = " + ids.length);
-                for (int i = 0; i < ids.length; i++) {
-                    for (int j = titles.length - 1; j >= 0; j--) {
-                        Log.v("Reference", "I = " + i + "\nJ = " + j);
-                        if (columnNames[j].equals(DatabaseHelper.COLUMN_TYPE_OF_ORGANISATION)) {
-                            selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
-                            items.add(helper.buildDropDown(titles[j], new String[]{"Business Partnership",
-                                            "International NGO",
-                                            "Freelance",
-                                            "Public Institution",
-                                            "Individual Enterprise",
-                                            "Local NGO",
-                                            "Privately Held Company",
-                                            "Publicly Held Institution"}, new int[]{0, 3, 1, 6, 2, 4, 5, 7}, selectedPosition, tableName, columnNames[j],
-                                    ids[i], xmltags[j]));
-                        } else if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
-                            Bitmap logo = null;
-                            try {
-                                logo = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName, ids[i]));
-                            } catch (Exception e) {
-                                e.printStackTrace();
+            items.add(new Heading("OWNERS/MANAGERS/REFERENCES/SUBSIDIARIES", null));
+            items.add(new SimpleText("REFERENCES", "contact"));
+            tableName = DatabaseHelper.TABLE_REFERENCES;
+            String[] xmltags = new String[]{
+                    "organisationtype",
+                    "logo",
+                    "website",
+                    "email",
+                    "cellphone",
+                    "telephone",
+                    "name"
+            };
+            String[] titles = new String[]{
+                    "Type of Organisation",
+                    "Institution Logo",
+                    "Website",
+                    "Email",
+                    "Cellphone",
+                    "Telephone",
+                    "Institution Name"};
+            String[] columnNames = new String[]{
+                    DatabaseHelper.COLUMN_TYPE_OF_ORGANISATION,
+                    DatabaseHelper.COLUMN_LOGO,
+                    DatabaseHelper.COLUMN_WEBSITE,
+                    DatabaseHelper.COLUMN_EMAIL,
+                    DatabaseHelper.COLUMN_CELLPHONE,
+                    DatabaseHelper.COLUMN_TELEPHONE,
+                    DatabaseHelper.COLUMN_INSTITUTION_NAME};
+            if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
+                int[] ids = databaseHelper.getrowids(tableName);
+                if (ids != null) {
+                    Log.v("Reference", "ID Length = " + ids.length);
+                    for (int i = 0; i < ids.length; i++) {
+                        for (int j = titles.length - 1; j >= 0; j--) {
+                            Log.v("Reference", "I = " + i + "\nJ = " + j);
+                            if (columnNames[j].equals(DatabaseHelper.COLUMN_TYPE_OF_ORGANISATION)) {
+                                selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
+                                items.add(helper.buildDropDown(titles[j], new String[]{"Business Partnership",
+                                                "International NGO",
+                                                "Freelance",
+                                                "Public Institution",
+                                                "Individual Enterprise",
+                                                "Local NGO",
+                                                "Privately Held Company",
+                                                "Publicly Held Institution"}, new int[]{0, 3, 1, 6, 2, 4, 5, 7}, selectedPosition, tableName, columnNames[j],
+                                        ids[i], xmltags[j]));
+                            } else if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
+                                Bitmap logo = null;
+                                try {
+                                    logo = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName, ids[i]));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                items.add(helper.buildImage(titles[j], ids[i], logo, tableName, columnNames[j], xmltags[j]));
+                            } else {
+                                items.add(
+                                        helper.buildEditText(
+                                                titles[j],
+                                                databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                                tableName,
+                                                columnNames[j],
+                                                ids[i], xmltags[j]));
                             }
-                            items.add(helper.buildImage(titles[j], ids[i], logo, tableName, columnNames[j], xmltags[j]));
-                        } else {
-                            items.add(
-                                    helper.buildEditText(
-                                            titles[j],
-                                            databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
-                                            tableName,
-                                            columnNames[j],
-                                            ids[i], xmltags[j]));
                         }
+                        items.add(new Divider());
                     }
-                    items.add(new Divider());
+                    refrencesRows = ids.length;
                 }
-                refrencesRows = ids.length;
             }
-        }
-        items.add(helper.buildAdd(7, titles, tableName, columnNames, xmltags));
+            items.add(helper.buildAdd(7, titles, tableName, columnNames, xmltags));
 
 
-        items.add(new SimpleText("OWNERS", "contact"));
-        tableName = DatabaseHelper.TABLE_OWNERS;
-        xmltags = new String[]{
-                "logo",
-                "affiliation",
-                "professional",
-                "academic",
-                "nationality",
-                "birthday",
-                "firstname",
-                "lastname",
-                "prefix",
-                "email",
-                "telephone"
-        };
-        titles = new String[]{
-                "Owners Logo",
-                "Affiliation",
-                "Professional",
-                "Academic",
-                "Nationality",
-                "Birthday",
-                "First Name",
-                "Last Name",
-                "Prefix",
-                "E-Mail",
-                "Telephone"
-        };
-        columnNames = new String[]{
-                DatabaseHelper.COLUMN_LOGO,
-                DatabaseHelper.COLUMN_AFFILIATION,
-                DatabaseHelper.COLUMN_PROFESSIONAL,
-                DatabaseHelper.COLUMN_ACADEMIC,
-                DatabaseHelper.COLUMN_NATIONALITY,
-                DatabaseHelper.COLUMN_BIRTHDAY,
-                DatabaseHelper.COLUMN_FIRST_NAME,
-                DatabaseHelper.COLUMN_LAST_NAME,
-                DatabaseHelper.COLUMN_PREFIX,
-                DatabaseHelper.COLUMN_EMAIL,
-                DatabaseHelper.COLUMN_TELEPHONE
-        };
-        if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
-            int[] ids = databaseHelper.getrowids(tableName);
-            if (ids != null) {
+            items.add(new SimpleText("OWNERS", "contact"));
+            tableName = DatabaseHelper.TABLE_OWNERS;
+            xmltags = new String[]{
+                    "logo",
+                    "affiliation",
+                    "professional",
+                    "academic",
+                    "nationality",
+                    "birthday",
+                    "firstname",
+                    "lastname",
+                    "prefix",
+                    "email",
+                    "telephone"
+            };
+            titles = new String[]{
+                    "Owners Logo",
+                    "Affiliation",
+                    "Professional",
+                    "Academic",
+                    "Nationality",
+                    "Birthday",
+                    "First Name",
+                    "Last Name",
+                    "Prefix",
+                    "E-Mail",
+                    "Telephone"
+            };
+            columnNames = new String[]{
+                    DatabaseHelper.COLUMN_LOGO,
+                    DatabaseHelper.COLUMN_AFFILIATION,
+                    DatabaseHelper.COLUMN_PROFESSIONAL,
+                    DatabaseHelper.COLUMN_ACADEMIC,
+                    DatabaseHelper.COLUMN_NATIONALITY,
+                    DatabaseHelper.COLUMN_BIRTHDAY,
+                    DatabaseHelper.COLUMN_FIRST_NAME,
+                    DatabaseHelper.COLUMN_LAST_NAME,
+                    DatabaseHelper.COLUMN_PREFIX,
+                    DatabaseHelper.COLUMN_EMAIL,
+                    DatabaseHelper.COLUMN_TELEPHONE
+            };
+            if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
+                int[] ids = databaseHelper.getrowids(tableName);
+                if (ids != null) {
 
-                for (int i = 0; i < ids.length; i++) {
+                    for (int i = 0; i < ids.length; i++) {
 
-                    for (int j = titles.length - 1; j >= 0; j--) {
-                        if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
-                            Bitmap ownerLogo = null;
-                            try {
-                                ownerLogo = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName, ids[i]));
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                        for (int j = titles.length - 1; j >= 0; j--) {
+                            if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
+                                Bitmap ownerLogo = null;
+                                try {
+                                    ownerLogo = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName, ids[i]));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                items.add(helper.buildImage(titles[j], ids[i], ownerLogo, tableName, columnNames[j], xmltags[j]));
+                            } else if (columnNames[j].equals(DatabaseHelper.COLUMN_PREFIX)) {
+                                selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
+                                items.add(helper.buildDropDown(titles[j],
+                                        helper.getPrefixList(),
+                                        new int[]{0, 1, 2, 3, 4}, selectedPosition, tableName, columnNames[j], ids[i], xmltags[j]));
+                            } else if (columnNames[j].equals(DatabaseHelper.COLUMN_BIRTHDAY)) {
+                                items.add(helper.buildDate(titles[j], databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                        tableName, columnNames[j], ids[i], xmltags[j]));
+                            } else {
+                                items.add(
+                                        helper.buildEditText(
+                                                titles[j],
+                                                databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                                tableName,
+                                                columnNames[j],
+                                                ids[i], xmltags[j]));
                             }
-                            items.add(helper.buildImage(titles[j], ids[i], ownerLogo, tableName, columnNames[j], xmltags[j]));
-                        } else if (columnNames[j].equals(DatabaseHelper.COLUMN_PREFIX)) {
-                            selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
-                            items.add(helper.buildDropDown(titles[j],
-                                    helper.getPrefixList(),
-                                    new int[]{0, 1, 2, 3, 4}, selectedPosition, tableName, columnNames[j], ids[i], xmltags[j]));
-                        } else if (columnNames[j].equals(DatabaseHelper.COLUMN_BIRTHDAY)) {
-                            items.add(helper.buildDate(titles[j], databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
-                                    tableName, columnNames[j], ids[i], xmltags[j]));
-                        } else {
-                            items.add(
-                                    helper.buildEditText(
-                                            titles[j],
-                                            databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
-                                            tableName,
-                                            columnNames[j],
-                                            ids[i], xmltags[j]));
                         }
+                        items.add(new Divider());
                     }
-                    items.add(new Divider());
+                    ownerRows = ids.length;
                 }
-                ownerRows = ids.length;
+
+
             }
+            items.add(helper.buildAdd(11, titles,
+                    tableName,
+                    columnNames, xmltags));
 
 
-        }
-        items.add(helper.buildAdd(11, titles,
-                tableName,
-                columnNames, xmltags));
+            items.add(new SimpleText("MANAGERS", "contact"));
+            tableName = DatabaseHelper.TABLE_MANAGERS;
+            xmltags = new String[]{
+                    "logo",
+                    "affiliation",
+                    "professional",
+                    "academic",
+                    "nationality",
+                    "birthday",
+                    "firstname",
+                    "lastname",
+                    "prefix",
+                    "email",
+                    "telephone",
+            };
+            titles = new String[]{
+                    "Manager Logo",
+                    "Affiliation",
+                    "Professional",
+                    "Academic",
+                    "Nationality",
+                    "Birthday",
+                    "First Name",
+                    "Last Name",
+                    "Prefix",
+                    "E-Mail",
+                    "Telephone"
+            };
+            columnNames = new String[]{
+                    DatabaseHelper.COLUMN_LOGO,
+                    DatabaseHelper.COLUMN_AFFILIATION,
+                    DatabaseHelper.COLUMN_PROFESSIONAL,
+                    DatabaseHelper.COLUMN_ACADEMIC,
+                    DatabaseHelper.COLUMN_NATIONALITY,
+                    DatabaseHelper.COLUMN_BIRTHDAY,
+                    DatabaseHelper.COLUMN_FIRST_NAME,
+                    DatabaseHelper.COLUMN_LAST_NAME,
+                    DatabaseHelper.COLUMN_PREFIX,
+                    DatabaseHelper.COLUMN_EMAIL,
+                    DatabaseHelper.COLUMN_TELEPHONE
+            };
+            if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
+                int[] ids = databaseHelper.getrowids(tableName);
+                if (ids != null) {
 
+                    for (int i = 0; i < ids.length; i++) {
 
-        items.add(new SimpleText("MANAGERS", "contact"));
-        tableName = DatabaseHelper.TABLE_MANAGERS;
-        xmltags = new String[]{
-                "logo",
-                "affiliation",
-                "professional",
-                "academic",
-                "nationality",
-                "birthday",
-                "firstname",
-                "lastname",
-                "prefix",
-                "email",
-                "telephone",
-        };
-        titles = new String[]{
-                "Manager Logo",
-                "Affiliation",
-                "Professional",
-                "Academic",
-                "Nationality",
-                "Birthday",
-                "First Name",
-                "Last Name",
-                "Prefix",
-                "E-Mail",
-                "Telephone"
-        };
-        columnNames = new String[]{
-                DatabaseHelper.COLUMN_LOGO,
-                DatabaseHelper.COLUMN_AFFILIATION,
-                DatabaseHelper.COLUMN_PROFESSIONAL,
-                DatabaseHelper.COLUMN_ACADEMIC,
-                DatabaseHelper.COLUMN_NATIONALITY,
-                DatabaseHelper.COLUMN_BIRTHDAY,
-                DatabaseHelper.COLUMN_FIRST_NAME,
-                DatabaseHelper.COLUMN_LAST_NAME,
-                DatabaseHelper.COLUMN_PREFIX,
-                DatabaseHelper.COLUMN_EMAIL,
-                DatabaseHelper.COLUMN_TELEPHONE
-        };
-        if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
-            int[] ids = databaseHelper.getrowids(tableName);
-            if (ids != null) {
-
-                for (int i = 0; i < ids.length; i++) {
-
-                    for (int j = titles.length - 1; j >= 0; j--) {
-                        if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
-                            Bitmap managerLogo = null;
-                            try {
-                                managerLogo = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName, ids[i]));
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                        for (int j = titles.length - 1; j >= 0; j--) {
+                            if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
+                                Bitmap managerLogo = null;
+                                try {
+                                    managerLogo = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName, ids[i]));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                items.add(helper.buildImage(titles[j], ids[i], managerLogo, tableName, columnNames[j], xmltags[j]));
+                            } else if (columnNames[j].equals(DatabaseHelper.COLUMN_PREFIX)) {
+                                selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
+                                items.add(helper.buildDropDown(titles[j],
+                                        helper.getPrefixList(),
+                                        helper.getPrefixCodes(), selectedPosition, tableName, columnNames[j], ids[i], xmltags[j]));
+                            } else if (columnNames[j].equals(DatabaseHelper.COLUMN_BIRTHDAY)) {
+                                items.add(helper.buildDate(titles[j], databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                        tableName, columnNames[j], ids[i], xmltags[j]));
+                            } else {
+                                items.add(
+                                        helper.buildEditText(
+                                                titles[j],
+                                                databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                                tableName,
+                                                columnNames[j],
+                                                ids[i], xmltags[j]));
                             }
-                            items.add(helper.buildImage(titles[j], ids[i], managerLogo, tableName, columnNames[j], xmltags[j]));
-                        } else if (columnNames[j].equals(DatabaseHelper.COLUMN_PREFIX)) {
-                            selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
-                            items.add(helper.buildDropDown(titles[j],
-                                    helper.getPrefixList(),
-                                    helper.getPrefixCodes(), selectedPosition, tableName, columnNames[j], ids[i], xmltags[j]));
-                        } else if (columnNames[j].equals(DatabaseHelper.COLUMN_BIRTHDAY)) {
-                            items.add(helper.buildDate(titles[j], databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
-                                    tableName, columnNames[j], ids[i], xmltags[j]));
-                        } else {
-                            items.add(
-                                    helper.buildEditText(
-                                            titles[j],
-                                            databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
-                                            tableName,
-                                            columnNames[j],
-                                            ids[i], xmltags[j]));
                         }
+                        items.add(new Divider());
                     }
-                    items.add(new Divider());
+                    managerRows = ids.length;
                 }
-                managerRows = ids.length;
+
+
             }
+            items.add(helper.buildAdd(11, titles,
+                    tableName,
+                    columnNames, xmltags));
 
-
-        }
-        items.add(helper.buildAdd(11, titles,
-                tableName,
-                columnNames, xmltags));
-
-        items.add(new SimpleText("SUBSIDIARIES", "contact"));
-        tableName = DatabaseHelper.TABLE_SUBSIDIARIES;
-        xmltags = new String[]{
-                "website",
-                "email",
-                "telephone",
-                "country",
-                "district",
-                "postalcode",
-                "city",
-                "streetnumber",
-                "subsidiaryname"
-        };
-        titles = new String[]{
-                "Website",
-                "Email",
-                "Telephone/Cellphone",
-                "Country",
-                "District/State",
-                "Zip",
-                "City/Town",
-                "Street & Number",
-                "Subsidiary Name"};
-        columnNames = new String[]{
-                DatabaseHelper.COLUMN_WEBSITE,
-                DatabaseHelper.COLUMN_EMAIL,
-                DatabaseHelper.COLUMN_TELEPHONE,
-                DatabaseHelper.COLUMN_COUNTRY,
-                DatabaseHelper.COLUMN_DISTRICT,
-                DatabaseHelper.COLUMN_POSTAL_CODE,
-                DatabaseHelper.COLUMN_CITY,
-                DatabaseHelper.COLUMN_STREET,
-                DatabaseHelper.COLUMN_SUBSIDIARY_NAME};
-        if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
-            int[] ids = databaseHelper.getrowids(tableName);
-            if (ids != null) {
-                Log.v("Subsidiary", "ID Length = " + ids.length);
-                for (int i = 0; i < ids.length; i++) {
-                    for (int j = titles.length - 1; j >= 0; j--) {
-                        Log.v("subsidiary", "I = " + i + "\nJ = " + j);
-                        if (columnNames[j].equals(DatabaseHelper.COLUMN_COUNTRY)) {
-                            selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
-                            items.add(helper.buildDropDown(titles[j],helper.getCountryNames(),helper.getCountryCodes(), selectedPosition, tableName, columnNames[j],
-                                    ids[i], xmltags[j]));
-                        } else {
-                            items.add(
-                                    helper.buildEditText(
-                                            titles[j],
-                                            databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
-                                            tableName,
-                                            columnNames[j],
-                                            ids[i], xmltags[j]));
+            items.add(new SimpleText("SUBSIDIARIES", "contact"));
+            tableName = DatabaseHelper.TABLE_SUBSIDIARIES;
+            xmltags = new String[]{
+                    "website",
+                    "email",
+                    "telephone",
+                    "country",
+                    "district",
+                    "postalcode",
+                    "city",
+                    "streetnumber",
+                    "subsidiaryname"
+            };
+            titles = new String[]{
+                    "Website",
+                    "Email",
+                    "Telephone/Cellphone",
+                    "Country",
+                    "District/State",
+                    "Zip",
+                    "City/Town",
+                    "Street & Number",
+                    "Subsidiary Name"};
+            columnNames = new String[]{
+                    DatabaseHelper.COLUMN_WEBSITE,
+                    DatabaseHelper.COLUMN_EMAIL,
+                    DatabaseHelper.COLUMN_TELEPHONE,
+                    DatabaseHelper.COLUMN_COUNTRY,
+                    DatabaseHelper.COLUMN_DISTRICT,
+                    DatabaseHelper.COLUMN_POSTAL_CODE,
+                    DatabaseHelper.COLUMN_CITY,
+                    DatabaseHelper.COLUMN_STREET,
+                    DatabaseHelper.COLUMN_SUBSIDIARY_NAME};
+            if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
+                int[] ids = databaseHelper.getrowids(tableName);
+                if (ids != null) {
+                    Log.v("Subsidiary", "ID Length = " + ids.length);
+                    for (int i = 0; i < ids.length; i++) {
+                        for (int j = titles.length - 1; j >= 0; j--) {
+                            Log.v("subsidiary", "I = " + i + "\nJ = " + j);
+                            if (columnNames[j].equals(DatabaseHelper.COLUMN_COUNTRY)) {
+                                selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
+                                items.add(helper.buildDropDown(titles[j],helper.getCountryNames(),helper.getCountryCodes(), selectedPosition, tableName, columnNames[j],
+                                        ids[i], xmltags[j]));
+                            } else {
+                                items.add(
+                                        helper.buildEditText(
+                                                titles[j],
+                                                databaseHelper.getStringFromRow(tableName, columnNames[j], ids[i]),
+                                                tableName,
+                                                columnNames[j],
+                                                ids[i], xmltags[j]));
+                            }
                         }
+                        items.add(new Divider());
                     }
-                    items.add(new Divider());
+                    subsidiaryRows = ids.length;
                 }
-                subsidiaryRows = ids.length;
             }
-        }
-        items.add(helper.buildAdd(9, titles, tableName, columnNames, xmltags));
+            items.add(helper.buildAdd(9, titles, tableName, columnNames, xmltags));
 
 
        /* items.add(new Heading("SUBSIDIARIES", "contact"));
@@ -592,50 +636,32 @@ public class Tab2 extends Fragment {
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Website", value, tableName, columnName, -1, "website"));
 */
-        return items;
+            Log.v(TAG,"Tab2 Initialize Complete");
+            return items;
 
-    }
-
-    private void getValuesFromViews() {
-        Object[] items;
-        items = new Object[adapter.getItemCount()];
-        for (int i = 0; i < items.length; i++) {
-            //Log.d("Company","I = " + i);
-            items[i] = adapter.getItem(i);
-            if (items[i] instanceof SimpleEditText) {
-                SimpleEditText ob = (SimpleEditText) items[i];
-                Log.d("Company", ob.getTitle() + " = " + ob.getValue());
-            } else if (items[i] instanceof DropDown) {
-                DropDown ob = (DropDown) items[i];
-                Log.d("Company", ob.getHeading() + " = " + ob.getSelectedPosition());
-            }
         }
-    }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        try {
-            super.onActivityResult(requestCode, resultCode, data);
-            Log.d("Tab2", "Request Code  " + requestCode);
-            adapter.onActivityResult(requestCode, resultCode, data);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+        @Override
+        protected void onPostExecute(ArrayList<Object> objects) {
+            super.onPostExecute(objects);
+            adapter = new ComplexRecyclerViewAdapter(objects, getFragmentManager(), fragment);
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case 1: {
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    adapter.onRequestPermissionsResult(requestCode, permissions, grantResults);
-                } else {
-                    Toast.makeText(getActivity(), "Please give your permission.", Toast.LENGTH_LONG).show();
-                }
-                break;
+            if (isTab) {
+                setupGridLayout(true);
+            } else {
+                setupGridLayout(false);
             }
+            //adapter.updateRow(DatabaseHelper.TABLE_NEEDS, needRows);
+            //adapter.updateRow(DatabaseHelper.TABLE_OFFERS, offerrows);
+            adapter.updateRow(DatabaseHelper.TABLE_OWNERS, ownerRows);
+            adapter.updateRow(DatabaseHelper.TABLE_REFERENCES, refrencesRows);
+            adapter.updateRow(DatabaseHelper.TABLE_MANAGERS, managerRows);
+            adapter.updateRow(DatabaseHelper.TABLE_SUBSIDIARIES, subsidiaryRows);
+            //SnapHelper snapHelper = new GravitySnapHelper(Gravity.TOP);
+            //snapHelper.attachToRecyclerView(recyclerView);
+            recyclerView.setAdapter(adapter);
+            Log.d("Company", "Adapter set");
+            progressDialog.dismiss();
         }
     }
 }
