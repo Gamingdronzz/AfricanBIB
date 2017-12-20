@@ -1082,7 +1082,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
                             add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
                     notifyItemInserted(position);
-                }*/ else if (columnNames[i].equals(DatabaseHelper.COLUMN_SELECTED_FILE)) {
+                }*/ else if (columnNames[i].equals(DatabaseHelper.COLUMN_FILE_NAME)) {
                     items.add(position, helper.buildChooseFile(titles[i],
                             currentRowNo,
                             add.getTableName(),
@@ -1245,12 +1245,12 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             alt_bld.setSingleChoiceItems(formats, -1, new DialogInterface
                     .OnClickListener() {
                 public void onClick(DialogInterface dialog, int item) {
-                    type=item;
+                    type = item;
                     Intent i2 = new Intent(context.getContext(), FileChooser.class);
                     i2.putExtra(Constants.SELECTION_MODE, Constants.SELECTION_MODES.SINGLE_SELECTION.ordinal());
                     if (item == 0) {
                         i2.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "jpg;jpeg;png;bmp");
-                    } else if(item==1){
+                    } else if (item == 1) {
                         i2.putExtra(Constants.ALLOWED_FILE_EXTENSIONS, "pdf;");
                     }
                     context.startActivityForResult(i2, PICK_FILE_REQUEST);
@@ -1568,6 +1568,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Bitmap bitmap;
         Log.d("Adapter", "Request Code  " + requestCode);
         if (requestCode == PICK_FILE_REQUEST && data != null) {
             if (resultCode == RESULT_OK) {
@@ -1577,6 +1578,10 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 notifyItemChanged(pos);
                 databaseHelper.updateRowWithInt(chooseFile.getTableName(), chooseFile.getRowno(), DatabaseHelper.COLUMN_FORMAT, type);
                 databaseHelper.updateRowWithString(chooseFile.getTableName(), chooseFile.getRowno(), chooseFile.getColumnName(), path);
+                if (type == 0) {
+                    bitmap = helper.getBitmapFromFile(path);
+                    databaseHelper.updateRowWithBlob(chooseFile.getTableName(), chooseFile.getRowno(), DatabaseHelper.COLUMN_SELECTED_IMAGE, helper.createByteArrayFromBitmap(bitmap));
+                }
                 Log.d("Adapter", "onclick " + path);
             }
         } else imagePicker.onActivityResult(context, requestCode, resultCode, data);

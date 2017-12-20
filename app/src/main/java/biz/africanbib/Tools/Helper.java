@@ -8,11 +8,13 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 import android.util.Log;
 
+import org.apache.commons.io.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xmlpull.v1.XmlSerializer;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -414,7 +416,7 @@ public class Helper {
         }
     }
 
-    public ChooseFile buildChooseFile(String title, int rowNo, String tableName, String columnName, String xmlTag,Bitmap image,String pdfFilePath) {
+    public ChooseFile buildChooseFile(String title, int rowNo, String tableName, String columnName, String xmlTag, Bitmap image, String pdfFilePath) {
         return new ChooseFileBuilder()
                 .setTitle(title)
                 .setColumnName(columnName)
@@ -960,6 +962,30 @@ public class Helper {
         return null;
     }
 
+    public byte[] createByteArrayFromString(String path) {
+        if (path != null) {
+            File file = new File(path);
+            try {
+                byte[] data = FileUtils.readFileToByteArray(file);//Convert any file, image or video into byte array
+                return data;
+            } catch (IOException e) {
+                Log.d(TAG, e.toString());
+            }
+        }
+        return null;
+    }
+
+    public Bitmap getBitmapFromFile(String path)
+    {
+        File imgFile = new  File(path);
+        if(imgFile.exists()){
+            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+            //Drawable d = new BitmapDrawable(getResources(), myBitmap);
+            return myBitmap;
+
+        }
+        return null;
+    }
     public Bitmap createBitmapFromByteArray(byte[] array) {
         if (array != null) {
             Bitmap bmp = BitmapFactory.decodeByteArray(array, 0, array.length);

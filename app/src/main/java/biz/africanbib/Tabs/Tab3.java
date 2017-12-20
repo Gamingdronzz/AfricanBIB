@@ -211,7 +211,7 @@ public class Tab3 extends Fragment {
 
         items.add(new SimpleText("Media", "media"));
         tableName = DatabaseHelper.TABLE_OTHER_MEDIA;
-        columnNames = new String[]{DatabaseHelper.COLUMN_SELECTED_FILE,
+        columnNames = new String[]{DatabaseHelper.COLUMN_FILE_NAME,
                 //DatabaseHelper.COLUMN_FORMAT,
                 DatabaseHelper.COLUMN_FILE_TYPE};
         titles = new String[]{getResources().getString(R.string.choose_file),
