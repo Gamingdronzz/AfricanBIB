@@ -1439,7 +1439,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         public void onDateSet(DatePicker view, int year, int month, int day) {
             SimpleDate simpleDate = (SimpleDate) adapter.items.get(position);
             month = month + 1;
-            String stringOfDate = day + "/" + month + "/" + year;
+            String stringOfDate = month + "." + day + "." + year;
 
             simpleDate.setValue(stringOfDate);
             adapter.notifyItemChanged(position);
