@@ -21,7 +21,6 @@ import com.android.volley.ParseError;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeProgressDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeSuccessDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
@@ -94,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
 
     AwesomeProgressDialog awesomeDialog;
+    AwesomeSuccessDialog awesomeSuccessDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -479,7 +479,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             String dataWrite = writer.toString();
             fileos.write(dataWrite.getBytes());
             fileos.close();
-            Toast.makeText(this, "Succesfully generated xml", Toast.LENGTH_SHORT).show();
+            // Toast.makeText(this, "Succesfully generated xml", Toast.LENGTH_SHORT).show();
             awesomeDialog.setMessage("Succesfully Generated XML");
             showXML();
         } catch (IOException e) {
@@ -890,13 +890,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     //databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
                     //databaseHelper.updateDateTime(DatabaseHelper.TABLE_COMPANY_PROFILE);
                     sendImageForUpload(imageData.get(currentImage), currentImage);
-                } else if(jsonObject.get("result").equals("Business Already Uploaded")){
+                } else if (jsonObject.get("result").equals("Business Already Uploaded")) {
                     awesomeDialog.setMessage("Business Already Uploaded");
                     awesomeDialog.setDialogBodyBackgroundColor(R.color.white);
-                    awesomeDialog.setDialogIconAndColor(R.drawable.ic_success,R.color.white);
-                }
-                else
-                {
+                    awesomeDialog.setDialogIconAndColor(R.drawable.ic_success, R.color.white);
+                } else {
                     onError(new VolleyError());
                 }
             } else if (jsonObject.get("action").equals("Creating Image")) {
@@ -904,9 +902,28 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     currentImage++;
                     awesomeDialog.setMessage("Uploaded Image " + currentImage + " of " + imageData.size());
                     if (currentImage == imageData.size()) {
-                        sendFileForUpload(pdfData.get(currentFile),currentFile);
+                        if (pdfData.size() > 0)
+                            sendFileForUpload(pdfData.get(currentFile), currentFile);
+                        else {
+                            awesomeDialog.hide();
+                            awesomeSuccessDialog = new AwesomeSuccessDialog(this);
+                            awesomeSuccessDialog.setTitle("Business Uploaded Successfully")
+                                    .setMessage("")
+                                    .setColoredCircle(R.color.dialogSuccessBackgroundColor)
+                                    .setDialogIconAndColor(R.drawable.ic_done_black_24dp, R.color.white)
+                                    .setCancelable(true)
+                                    .setPositiveButtonText("OK")
+                                    .setPositiveButtonbackgroundColor(R.color.dialogSuccessBackgroundColor)
+                                    .setPositiveButtonTextColor(R.color.white)
+                                    .setPositiveButtonClick(new Closure() {
+                                        @Override
+                                        public void exec() {
+                                            awesomeSuccessDialog.hide();
+                                        }
+                                    })
+                                    .show();
+                        }
                     } else {
-
                         sendImageForUpload(imageData.get(currentImage), currentImage);
                     }
 
@@ -917,12 +934,26 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 if (jsonObject.get("result").equals(helper.SUCCESS)) {
                     currentFile++;
                     awesomeDialog.setMessage("Uploaded File " + currentFile + " of " + pdfData.size());
-                    if(currentFile!=pdfData.size()) {
+                    if (currentFile != pdfData.size()) {
                         sendFileForUpload(pdfData.get(currentFile), currentFile);
-                    }
-                    else
-                    {
-                        awesomeDialog.setMessage("Business Uploaded Succesfully");
+                    } else {
+                        awesomeDialog.hide();
+                        awesomeSuccessDialog = new AwesomeSuccessDialog(this);
+                        awesomeSuccessDialog.setTitle("Business Uploaded Successfully")
+                                .setMessage("")
+                                .setColoredCircle(R.color.dialogSuccessBackgroundColor)
+                                .setDialogIconAndColor(R.drawable.ic_done_black_24dp, R.color.white)
+                                .setCancelable(true)
+                                .setPositiveButtonText("OK")
+                                .setPositiveButtonbackgroundColor(R.color.dialogSuccessBackgroundColor)
+                                .setPositiveButtonTextColor(R.color.white)
+                                .setPositiveButtonClick(new Closure() {
+                                    @Override
+                                    public void exec() {
+                                        awesomeSuccessDialog.hide();
+                                    }
+                                })
+                                .show();
                     }
                 } else {
 
@@ -931,9 +962,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         } catch (JSONException jse) {
 
         }
-        //awesomeDialog.setMessage(str);
-        awesomeDialog.setCancelable(true);
-
     }
 
     private class ImageData {
@@ -964,15 +992,15 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         }
     }
 
-    private void sendXMLForUpload(String aBuffer)
-    {
-        awesomeDialog.setMessage("Uplaoding Business");
-
+    private void sendXMLForUpload(String aBuffer) {
+        awesomeDialog.setMessage("Please Wait...");
+        awesomeDialog.setCancelable(false);
         Map<String, String> params = new HashMap<>();
         params.put("xml", aBuffer);
         params.put("businessName", companyName);
         volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
     }
+
     private void sendImageForUpload(ImageData imageData, int number) {
         String image, imageName;
         Map<String, String> imageParams = new HashMap<>();
@@ -987,7 +1015,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         imageParams.put("number", number + "");
 
         volleyHelper.makeStringRequest(helper.getBaseURL() + "createimage.php", imageName, imageParams);
-        Log.v(TAG,"Sending Image " + currentImage);
+        Log.v(TAG, "Sending Image " + currentImage);
 
     }
 
@@ -1008,7 +1036,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         fileParams.put("file", file);
         fileParams.put("businessName", companyName);
         volleyHelper.makeStringRequest(helper.getBaseURL() + "createfile.php", fileName, fileParams);
-        Log.v(TAG,"Sending file " + currentFile);
+        Log.v(TAG, "Sending file " + currentFile);
 
     }
 }
