@@ -235,7 +235,7 @@ public class Tab4 extends Fragment {
                                 selectedIndex,
                                 tableName,
                                 columnNames[1],
-                                ids[i], "industry"));
+                                ids[i], null));
 
                         items.add(helper.buildMultiSelectDropdown(titles[0],
                                 tableName,
@@ -254,7 +254,7 @@ public class Tab4 extends Fragment {
             }
             items.add(helper.buildAdd(2, titles,
                     tableName,
-                    columnNames, new String[]{"sector", "industry"}));
+                    columnNames, new String[]{"sector", null}));
 
 
             items.add(new Heading("SOURCE OF DATA", null));
@@ -298,7 +298,7 @@ public class Tab4 extends Fragment {
 
             columnName = DatabaseHelper.COLUMN_COUNTRY;
             items.add(helper.buildDropDown("Country of Location / Event",
-                    helper.getCountryNames(), helper.getCountryCodes(), selectedPosition, tableName, columnName, -1, "countryoflocation"));
+                    helper.getCountryNames(), helper.getCountryCodes(), selectedPosition, tableName, columnName, -1, "country"));
             items.add(new SimpleText("DISCLAIMER\n\n" +
                     "I certify that the information provided in this form is true, complete and correct to the best of my knowledge and belief. I understand that the information provided in this form is checked and updated by AfricanBIB GmbH on the AfricanBIB website with due diligence on a regular basis. This notwithstanding, data may become subject to changes during the intervening period. Therefore AfricanBIB GmbH does not assume any liability or guarantee for the timeliness, accuracy and completeness of the information provided. This applies also to other websites that may be accessed through hyperlinks. AfricanBIB GmbH assumes no responsibility for the contents of websites that can be accessed through such links.\n" +
                     "Further, AfricanBIB GmbH reserves the right to change or amend the information provided at any time and without prior notice.\n" +

@@ -306,7 +306,7 @@ public class Tab2 extends Fragment {
             items.add(new SimpleText("REFERENCES", "contact"));
             tableName = DatabaseHelper.TABLE_REFERENCES;
             String[] xmltags = new String[]{
-                    "organisationtype",
+                    "institutionType",
                     "logo",
                     "website",
                     "email",
@@ -315,7 +315,7 @@ public class Tab2 extends Fragment {
                     "name"
             };
             String[] titles = new String[]{
-                    "Type of Organisation",
+                    "Type of Institution",
                     "Institution Logo",
                     "Website",
                     "Email",
@@ -323,7 +323,7 @@ public class Tab2 extends Fragment {
                     "Telephone",
                     "Institution Name"};
             String[] columnNames = new String[]{
-                    DatabaseHelper.COLUMN_TYPE_OF_ORGANISATION,
+                    DatabaseHelper.COLUMN_INSTITUTION_TYPE,
                     DatabaseHelper.COLUMN_LOGO,
                     DatabaseHelper.COLUMN_WEBSITE,
                     DatabaseHelper.COLUMN_EMAIL,
@@ -337,16 +337,12 @@ public class Tab2 extends Fragment {
                     for (int i = 0; i < ids.length; i++) {
                         for (int j = titles.length - 1; j >= 0; j--) {
                             Log.v("Reference", "I = " + i + "\nJ = " + j);
-                            if (columnNames[j].equals(DatabaseHelper.COLUMN_TYPE_OF_ORGANISATION)) {
+                            if (columnNames[j].equals(DatabaseHelper.COLUMN_INSTITUTION_TYPE)) {
                                 selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
-                                items.add(helper.buildDropDown(titles[j], new String[]{"Business Partnership",
-                                                "International NGO",
-                                                "Freelance",
-                                                "Public Institution",
-                                                "Individual Enterprise",
-                                                "Local NGO",
-                                                "Privately Held Company",
-                                                "Publicly Held Institution"}, new int[]{0, 3, 1, 6, 2, 4, 5, 7}, selectedPosition, tableName, columnNames[j],
+                                items.add(helper.buildDropDown(titles[j], new String[]{"Local Association",
+                                                "International Association",
+                                                "Partner",
+                                                "Clients"}, new int[]{0, 1, 2, 3}, selectedPosition, tableName, columnNames[j],
                                         ids[i], xmltags[j]));
                             } else if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
                                 Bitmap logo = null;
@@ -587,7 +583,7 @@ public class Tab2 extends Fragment {
                             Log.v("subsidiary", "I = " + i + "\nJ = " + j);
                             if (columnNames[j].equals(DatabaseHelper.COLUMN_COUNTRY)) {
                                 selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
-                                items.add(helper.buildDropDown(titles[j],helper.getCountryNames(),helper.getCountryCodes(), selectedPosition, tableName, columnNames[j],
+                                items.add(helper.buildDropDown(titles[j], helper.getCountryNames(), helper.getCountryCodes(), selectedPosition, tableName, columnNames[j],
                                         ids[i], xmltags[j]));
                             } else {
                                 items.add(
@@ -636,7 +632,7 @@ public class Tab2 extends Fragment {
         value = databaseHelper.getStringValue(columnName, tableName);
         items.add(helper.buildEditText("Website", value, tableName, columnName, -1, "website"));
 */
-            Log.v(TAG,"Tab2 Initialize Complete");
+            Log.v(TAG, "Tab2 Initialize Complete");
             return items;
 
         }

@@ -35,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 24;
+    public static final int DATABASE_VERSION = 25;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -104,7 +104,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_VISION = "COLUMN_VISION";
     public static final String COLUMN_MISSION_STATEMENT = "COLUMN_MISSION_STATEMENT";
     public static final String COLUMN_GUIDING_PRINCIPALS = "COLUMN_GUIDING_PRINCIPALS";
-    public static final String COLUMN_INVESTMENT_OPPORTUNITIES = "COLUMN_INVESTMENT_OPPORTUNITIES";
+    //public static final String COLUMN_INVESTMENT_OPPORTUNITIES = "COLUMN_INVESTMENT_OPPORTUNITIES";
 
     //public static final String COLUMN_OFFER = "COLUMN_OFFER";
     public static final String COLUMN_ROW_ID = "COLUMN_ROW_ID";
@@ -136,7 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_SECTOR = "COLUMN_SECTOR";
 
     public static final String COLUMN_INSTITUTION_NAME = "COLUMN_INSTITUTION_NAME";
-//    public static final String COLUMN_ORGANISATION_TYPE = "COLUMN_ORGANISATION_TYPE";
+   public static final String COLUMN_INSTITUTION_TYPE = "COLUMN_INSTITUTION_TYPE";
 
     public static final String COLUMN_SUBSIDIARY_NAME = "COLUMN_SUBSIDIARY_NAME";
 
@@ -161,7 +161,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String COLUMN_AGE_OF_ACTIVE_BUSINESS = "COLUMN_AGE_OF_ACTIVE_BUSINESS";
     public static final String COLUMN_ANNUAL_SALES = "COLUMN_ANNUAL_SALES";
     public static final String COLUMN_ANNUAL_REVENUE = "COLUMN_ANNUAL_REVENUE";
-    public static final String COLUMN_NO_OF_BRANCHES = "COLUMN_NO_OF_BRANCHES";
+    //public static final String COLUMN_NO_OF_BRANCHES = "COLUMN_NO_OF_BRANCHES";
     public static final String COLUMN_TOTAL_NO_OF_EMPLOYEES = "COLUMN_TOTAL_NO_OF_EMPLOYEES";
     public static final String COLUMN_NO_OF_EMPLOYEES_IN_PRODUCTION = "COLUMN_NO_OF_EMPLOYEES_IN_PRODUCTION";
     public static final String COLUMN_NO_OF_ADMINISTRATIVE_STAFF = "COLUMN_NO_OF_ADMINISTRATIVE_STAFF";
@@ -203,6 +203,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_KEYVISUAL_NOTE + " VARCHAR," +
             COLUMN_BRIEF_DESCRIPTION + " VARCHAR, " +
             COLUMN_NGO_DIASPORA + " NUMBER, " +
+            COLUMN_FOUNDING_YEAR_OF_COMPANY + " VARCHAR," +
+            COLUMN_AGE_OF_ACTIVE_BUSINESS + " VARCHAR," +
             COLUMN_STATUS + " INTEGER, " +
             COLUMN_DATE_OF_ADDITION + " VARCHAR, " +
             COLUMN_TIME_OF_ADDITION + " VARCHAR, " +
@@ -246,8 +248,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_ABOUT_US + " VARCHAR," +
             COLUMN_VISION + " VARCHAR," +
             COLUMN_MISSION_STATEMENT + " VARCHAR," +
-            COLUMN_GUIDING_PRINCIPALS + " VARCHAR, " +
-            COLUMN_INVESTMENT_OPPORTUNITIES + " VARCHAR " +
+            COLUMN_GUIDING_PRINCIPALS + " VARCHAR " +
+            //COLUMN_INVESTMENT_OPPORTUNITIES + " VARCHAR " +
             ")";
 
 
@@ -292,7 +294,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_EMAIL + " VARCHAR," +
             COLUMN_WEBSITE + " VARCHAR," +
             COLUMN_LOGO + " BLOB," +
-            COLUMN_TYPE_OF_ORGANISATION + " NUMBER" +
+            COLUMN_INSTITUTION_TYPE + " NUMBER" +
             ")";
 
     private String CREATE_TABLE_OWNERS = "CREATE TABLE IF NOT EXISTS " + TABLE_OWNERS + " ( " +
@@ -414,11 +416,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private String CREATE_TABLE_COMPANY_INDICATORS = "CREATE TABLE IF NOT EXISTS " + TABLE_COMPANY_INDICATORS + " ( " +
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_COMPANY_SIZE + " NUMBER," +
-            COLUMN_FOUNDING_YEAR_OF_COMPANY + " VARCHAR," +
-            COLUMN_AGE_OF_ACTIVE_BUSINESS + " VARCHAR," +
             COLUMN_ANNUAL_SALES + " VARCHAR," +
             COLUMN_ANNUAL_REVENUE + " VARCHAR," +
-            COLUMN_NO_OF_BRANCHES + " VARCHAR," +
+            //COLUMN_NO_OF_BRANCHES + " VARCHAR," +
             COLUMN_TOTAL_NO_OF_EMPLOYEES + " VARCHAR," +
             COLUMN_NO_OF_EMPLOYEES_IN_PRODUCTION + " VARCHAR," +
             COLUMN_NO_OF_ADMINISTRATIVE_STAFF + " VARCHAR," +

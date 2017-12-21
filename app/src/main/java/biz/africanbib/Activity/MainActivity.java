@@ -583,7 +583,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                 } else {
                                     xmlSerializer.text(System.getProperty("line.separator"));
                                     xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
-                                    collectedBy = Helper.forReplacementString(edt.getValue()) + " , " + helper.toDays(date.getValue());
+                                    collectedBy = Helper.forReplacementString(edt.getValue()) + ", " + date.getValue();
                                     xmlSerializer.text(collectedBy);
                                     xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
                                 }
@@ -594,7 +594,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                 SimpleDate date = (SimpleDate) items.get(i);
                                 xmlSerializer.text(System.getProperty("line.separator"));
                                 xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
-                                collectedBy = helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()) + ", " + helper.toDays(date.getValue());
+                                collectedBy = helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()) + ", " + date.getValue();
                                 xmlSerializer.text(collectedBy);
                                 xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
                             }
@@ -705,11 +705,12 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         xmlSerializer.text(System.getProperty("line.separator"));
                         xmlSerializer.startTag(null, personTag);
                     }
-                    xmlSerializer.text(System.getProperty("line.separator"));
-                    xmlSerializer.startTag(null, ((DropDown) obj).getXmlTag());
-                    xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
-                    xmlSerializer.endTag(null, ((DropDown) obj).getXmlTag());
-
+                    if (dropDown.getXmlTag() != null) {
+                        xmlSerializer.text(System.getProperty("line.separator"));
+                        xmlSerializer.startTag(null, ((DropDown) obj).getXmlTag());
+                        xmlSerializer.text(helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()));
+                        xmlSerializer.endTag(null, ((DropDown) obj).getXmlTag());
+                    }
                 } else if (obj instanceof MultiSelectDropdown) {
                     MultiSelectDropdown multiSelectDropdown = (MultiSelectDropdown) obj;
                     Log.d(TAG, "simpleTextXml: " + i + ":" + multiSelectDropdown.getTitle());
@@ -888,7 +889,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     public void onError(VolleyError error) {
         if (error instanceof TimeoutError) {
             awesomeInfoDialog.setColoredCircle(R.color.dialogErrorBackgroundColor);
-             awesomeInfoDialog.setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white);
+            awesomeInfoDialog.setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white);
             awesomeInfoDialog.setMessage("Server Timeout\nSlow Internet Connection !!");
             Log.e("Volley", "TimeoutError\n");
         } else if (error instanceof NoConnectionError) {

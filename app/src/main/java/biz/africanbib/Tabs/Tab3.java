@@ -369,25 +369,17 @@ public class Tab3 extends Fragment {
                     "1,001 - 10,000 Employees",
                     "10,001 or More"}, new int[]{0, 1, 2, 3, 4, 5, 6, 7}, selectedPosition, tableName, columnName, -1, "companySize"));
 
-            columnName = DatabaseHelper.COLUMN_FOUNDING_YEAR_OF_COMPANY;
-            value = databaseHelper.getStringValue(columnName, tableName);
-            items.add(helper.buildEditText("Founding year of Company / Institution", value, tableName, columnName, -1, "foundingYear"));
-            columnName = DatabaseHelper.COLUMN_AGE_OF_ACTIVE_BUSINESS;
-            value = databaseHelper.getStringValue(columnName, tableName);
-            items.add(helper.buildEditText("Age of Active Business", value, tableName, columnName, -1, "ageOfActBusiness"));
             columnName = DatabaseHelper.COLUMN_ANNUAL_SALES;
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText("Annual Sales (Range)", value, tableName, columnName, -1, "annualSales"));
             columnName = DatabaseHelper.COLUMN_ANNUAL_REVENUE;
             value = databaseHelper.getStringValue(columnName, tableName);
-            items.add(helper.buildEditText("Annual Revenue (Range)", value, tableName, columnName, -1, "annualrevenue"));
+            items.add(helper.buildEditText("Annual Revenue (Range)", value, tableName, columnName, -1, "annualRevenue"));
 
-
-            columnName = DatabaseHelper.COLUMN_NO_OF_BRANCHES;
+            /*  columnName = DatabaseHelper.COLUMN_NO_OF_BRANCHES;
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText("No. of Branches", value, tableName, columnName, -1, "branches"));
-
-
+*/
             columnName = DatabaseHelper.COLUMN_TOTAL_NO_OF_EMPLOYEES;
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText("Total no. of Employees", value, tableName, columnName, -1, "numberEmployees"));

@@ -1106,7 +1106,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             titles[i],
                             helper.getIndustryList(), helper.getIndustryCodes(),
                             databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
-                            add.getTableName(), columnNames[i], currentRowNo, "industry"));
+                            add.getTableName(), columnNames[i], currentRowNo, null));
                     notifyItemInserted(position);
                 } else if (columnNames[i].equals(DatabaseHelper.COLUMN_TYPE_OF_ORGANISATION)) {
                     items.add(position, helper.buildDropDown(titles[i],
@@ -1118,6 +1118,15 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                     "Local NGO",
                                     "Privately Held Company",
                                     "Publicly Held Institution"}, new int[]{0, 3, 1, 6, 2, 4, 5, 7},
+                            databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
+                            add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
+                    notifyItemInserted(position);
+                } else if (columnNames[i].equals(DatabaseHelper.COLUMN_INSTITUTION_TYPE)) {
+                    items.add(position, helper.buildDropDown(titles[i],
+                            new String[]{"Local Association",
+                                    "International Association",
+                                    "Partner",
+                                    "Clients"}, new int[]{0, 1, 2, 3},
                             databaseHelper.getIntFromRow(add.getTableName(), columnNames[i], currentRowNo),
                             add.getTableName(), columnNames[i], currentRowNo, xmlTags[i]));
                     notifyItemInserted(position);
@@ -1212,10 +1221,13 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
             }
 
-            if (!clicked) {
+            if (!clicked)
+
+            {
                 //items.add(position, new Divider());
                 clicked = true;
             }
+
             //Log.v("Adapter", "Inserted");
             notifyDataSetChanged();
         }

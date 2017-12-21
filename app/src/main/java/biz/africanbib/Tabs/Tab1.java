@@ -240,8 +240,15 @@ public class Tab1 extends Fragment {
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText("Brief Description of the Company / Instituion", value, tableName, columnName, -1, "description"));
 
-            items.add(new Heading("COMPANY CONTACT", "contact"));
+            columnName = DatabaseHelper.COLUMN_FOUNDING_YEAR_OF_COMPANY;
+            value = databaseHelper.getStringValue(columnName, tableName);
+            items.add(helper.buildEditText("Founding year of Company / Institution", value, tableName, columnName, -1, "foundingYear"));
+            columnName = DatabaseHelper.COLUMN_AGE_OF_ACTIVE_BUSINESS;
+            value = databaseHelper.getStringValue(columnName, tableName);
+            items.add(helper.buildEditText("Age of Active Business", value, tableName, columnName, -1, "ageOfActBusiness"));
 
+
+            items.add(new Heading("COMPANY CONTACT", "contact"));
             columnName = DatabaseHelper.COLUMN_TELEPHONE;
             tableName = DatabaseHelper.TABLE_COMPANY_CONTACT;
             value = databaseHelper.getStringValue(columnName, tableName);
@@ -360,10 +367,10 @@ public class Tab1 extends Fragment {
             items.add(helper.buildEditText("Guiding Principals", value, tableName, columnName, -1, "guidingPrinciples"));
 
 
-            columnName = DatabaseHelper.COLUMN_INVESTMENT_OPPORTUNITIES;
+           /* columnName = DatabaseHelper.COLUMN_INVESTMENT_OPPORTUNITIES;
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText("Investment Opportunities", value, tableName, columnName, -1, "investmentOpportunities"));
-            Log.v(TAG, "Tab1 Initialize Complete");
+         */   Log.v(TAG, "Tab1 Initialize Complete");
             return items;
         }
 
