@@ -21,8 +21,8 @@ import com.android.volley.ParseError;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeErrorDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeProgressDialog;
 import com.carlosmuvi.segmentedprogressbar.SegmentedProgressBar;
 
 import org.json.JSONException;
@@ -86,10 +86,12 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private Button buttonValidate;
     List<ImageData> imageData;
     List<PdfData> pdfData;
+    int currentImage = 0;
+    int currentFile = 0;
+    VolleyHelper volleyHelper;
 
 
-    AwesomeInfoDialog awesomeInfoDialog;
-    AwesomeErrorDialog awesomeErrorDialog;
+    AwesomeProgressDialog awesomeDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         setUpTabLayout();
         init();
         handleIntent();
+        volleyHelper = new VolleyHelper(this, this);
         Log.v(TAG, "Current company id = " + DatabaseHelper.getCurrentCompanyId());
     }
 
@@ -113,10 +116,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         imageData = new ArrayList<>();
         pdfData = new ArrayList<>();
         goLeft.setVisibility(View.INVISIBLE);
-        awesomeInfoDialog = new AwesomeInfoDialog(this)
+        awesomeDialog = new AwesomeProgressDialog(this)
                 .setTitle("Uploading Business")
                 .setMessage("Please wait..")
-                .setColoredCircle(R.color.dialogInfoBackgroundColor)
+                .setColoredCircle(R.color.dialogProgressBackgroundColor)
                 .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
                 .setCancelable(false);
 
@@ -334,8 +337,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             tab3.getAdapter().notifyDataSetChanged();
             tab4.getAdapter().notifyDataSetChanged();
 
-            awesomeInfoDialog.setMessage("Validating...");
-            awesomeInfoDialog.show();
+            awesomeDialog.setMessage("Validating...");
+            awesomeDialog.show();
             Test(items, items2, items3, items4);
 
         } else {
@@ -475,11 +478,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             fileos.write(dataWrite.getBytes());
             fileos.close();
             Toast.makeText(this, "Succesfully generated xml", Toast.LENGTH_SHORT).show();
-            awesomeInfoDialog.setMessage("Succesfully Generated XML");
+            awesomeDialog.setMessage("Succesfully Generated XML");
             showXML();
         } catch (IOException e) {
-            awesomeInfoDialog.setMessage("Error in Generating XML");
-            awesomeInfoDialog.setCancelable(true);
+            awesomeDialog.setMessage("Error in Generating XML");
+            awesomeDialog.setCancelable(true);
             e.printStackTrace();
         }
 
@@ -832,8 +835,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             e.printStackTrace();
         }
 
-        VolleyHelper volleyHelper = new VolleyHelper(this, this);
-        awesomeInfoDialog.setMessage("Uplaoding Business");
+
+        awesomeDialog.setMessage("Uplaoding Business");
 
         Map<String, String> params = new HashMap<>();
         params.put("xml", aBuffer);
@@ -888,23 +891,23 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     @Override
     public void onError(VolleyError error) {
         if (error instanceof TimeoutError) {
-            awesomeInfoDialog.setColoredCircle(R.color.dialogErrorBackgroundColor);
-            awesomeInfoDialog.setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white);
-            awesomeInfoDialog.setMessage("Server Timeout\nSlow Internet Connection !!");
+            awesomeDialog.setColoredCircle(R.color.dialogErrorBackgroundColor);
+            awesomeDialog.setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white);
+            awesomeDialog.setMessage("Server Timeout\nSlow Internet Connection !!");
             Log.e("Volley", "TimeoutError\n");
         } else if (error instanceof NoConnectionError) {
-            awesomeInfoDialog.setMessage("No Internet Connectivity\nCheck your internet connection");
+            awesomeDialog.setMessage("No Internet Connectivity\nCheck your internet connection");
             Log.e("Volley", "NoConnectionError");
         } else if (error instanceof AuthFailureError) {
-            awesomeInfoDialog.setMessage("Authentication Error\nContact server administrator");
+            awesomeDialog.setMessage("Authentication Error\nContact server administrator");
         } else if (error instanceof ServerError) {
-            awesomeInfoDialog.setMessage("Server Error\nContact server administrator");
+            awesomeDialog.setMessage("Server Error\nContact server administrator");
         } else if (error instanceof NetworkError) {
-            awesomeInfoDialog.setMessage("Netowrk Error\nTry again after some time");
+            awesomeDialog.setMessage("Netowrk Error\nTry again after some time");
         } else if (error instanceof ParseError) {
             Log.e("Volley", "ParseError");
         }
-        awesomeInfoDialog.setCancelable(true);
+        awesomeDialog.setCancelable(true);
     }
 
     @Override
@@ -912,19 +915,48 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         JSONObject jsonObject = helper.getJson(str);
         Log.d(TAG, jsonObject.toString());
         try {
-            if (jsonObject.get("result").equals(helper.SUCCESS)) {
-                awesomeInfoDialog.setMessage("Succesfully Uploaded Business");
-                databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
-                databaseHelper.updateDateTime(DatabaseHelper.TABLE_COMPANY_PROFILE);
-            } else {
-                awesomeInfoDialog.setMessage("Business Updated Successfully");
-                databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
+            if (jsonObject.get("action").equals("Creating XML")) {
+                if (jsonObject.get("result").equals(helper.SUCCESS)) {
+                    awesomeDialog.setMessage("XML Generated and Uploaded");
+                    //databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
+                    //databaseHelper.updateDateTime(DatabaseHelper.TABLE_COMPANY_PROFILE);
+                    sendImageForUpload(imageData.get(currentImage), currentImage);
+                } else {
+                    awesomeDialog.setMessage("XML Generation Failed/nTry again after some time");
+                }
+            } else if (jsonObject.get("action").equals("Creating Image")) {
+                if (jsonObject.get("result").equals(helper.SUCCESS)) {
+                    currentImage++;
+                    awesomeDialog.setMessage("Uploaded Image " + currentImage + " of " + imageData.size());
+                    if (currentImage == imageData.size()) {
+                        sendFileForUpload(pdfData.get(currentFile),currentFile);
+                    } else {
+                        sendImageForUpload(imageData.get(currentImage), currentImage);
+                    }
+
+                } else {
+
+                }
+            } else if (jsonObject.get("action").equals("Creating File")) {
+                if (jsonObject.get("result").equals(helper.SUCCESS)) {
+                    currentFile++;
+                    awesomeDialog.setMessage("Uploaded File " + currentFile + " of " + pdfData.size());
+                    if(currentFile!=pdfData.size()) {
+                        sendFileForUpload(pdfData.get(currentFile), currentFile);
+                    }
+                    else
+                    {
+                        awesomeDialog.setMessage("Business Uploaded Succesfully");
+                    }
+                } else {
+
+                }
             }
         } catch (JSONException jse) {
 
         }
-        //awesomeInfoDialog.setMessage(str);
-        awesomeInfoDialog.setCancelable(true);
+        //awesomeDialog.setMessage(str);
+        awesomeDialog.setCancelable(true);
 
     }
 
@@ -956,4 +988,40 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         }
     }
 
+    private void sendImageForUpload(ImageData imageData, int number) {
+        String image, imageName;
+        Map<String, String> imageParams = new HashMap<>();
+        if (imageData.Row == -1)
+            image = Base64.encodeToString(databaseHelper.getBlobValue(imageData.ColumnName, imageData.TableName), Base64.DEFAULT);
+        else
+            image = Base64.encodeToString(databaseHelper.getBlobFromRow(imageData.ColumnName, imageData.TableName, imageData.Row), Base64.DEFAULT);
+        imageName = imageData.Name;
+        imageParams.put("imagename", imageName);
+        imageParams.put("image", image);
+        imageParams.put("businessName", companyName);
+        imageParams.put("number", number + "");
+
+        volleyHelper.makeStringRequest(helper.getBaseURL() + "createimage.php", imageName, imageParams);
+
+    }
+
+    private void sendFileForUpload(PdfData pdfData, int number) {
+        String file, fileName;
+        Map<String, String> fileParams = new HashMap<>();
+        if (pdfData.Row == -1) {
+            file = Base64.encodeToString(
+                    helper.createByteArrayFromFile(databaseHelper.getStringValue(pdfData.ColumnName, pdfData.TableName)),
+                    Base64.DEFAULT);
+        } else
+            file = Base64.encodeToString(
+                    helper.createByteArrayFromFile(databaseHelper.getStringFromRow(pdfData.TableName, pdfData.ColumnName, pdfData.Row)),
+                    Base64.DEFAULT);
+
+        fileName = pdfData.Name;
+        fileParams.put("filename", fileName);
+        fileParams.put("file", file);
+        fileParams.put("businessName", companyName);
+        volleyHelper.makeStringRequest(helper.getBaseURL() + "createfile.php", fileName, fileParams);
+
+    }
 }

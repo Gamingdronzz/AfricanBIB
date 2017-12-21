@@ -182,7 +182,7 @@ public class Tab1 extends Fragment {
             items = new ArrayList<>();
 
 
-            items.add(new Heading("COMPANY / INSTITUION PROFILE", null));
+            items.add(new Heading("COMPANY / INSTITUTION PROFILE", null));
 
             String columnName = DatabaseHelper.COLUMN_COMPANY_NAME;
             String tableName = DatabaseHelper.TABLE_COMPANY_PROFILE;
