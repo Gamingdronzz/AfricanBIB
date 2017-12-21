@@ -500,7 +500,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.execSQL(CREATE_TABLE_SECTORS);
         db.execSQL(CREATE_TABLE_SOURCE_OF_DATA);
 
-        Log.v(TAG, "TABLE CREATED");
+        //Log.v(TAG, "TABLE CREATED");
     }
 
     @Override
@@ -549,7 +549,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_DATE_OF_UPLOADING, new SimpleDateFormat("dd-MM-yyyy").format(c.getTime()));
         values.put(COLUMN_TIME_OF_UPLOADING, new SimpleDateFormat("hh:mm:ss a").format(c.getTime()));
         long result = db.update(TableName, values, COLUMN_COMPANY_ID + " = " + getCurrentCompanyId(), null);
-        Log.v(TAG, String.valueOf(result));
+        //Log.v(TAG, String.valueOf(result));
         if (db != null) db.close();
     }
 
@@ -563,7 +563,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         values.put(COLUMN_DATE_OF_ADDITION, new SimpleDateFormat("dd-MM-yyyy").format(c.getTime()));
         values.put(COLUMN_TIME_OF_ADDITION, new SimpleDateFormat("hh:mm:ss a").format(c.getTime()));
         long result = db.insert(TABLE_COMPANY_PROFILE, null, values);
-        Log.v(TAG, "Insert = " + result);
+        //Log.v(TAG, "Insert = " + result);
 
         addValue(result, TABLE_COMPANY_CONTACT);
         addValue(result, TABLE_COMPANY_POSTAL_ADDRESS);
@@ -691,8 +691,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             cursor.moveToFirst();
             if (cursor.getCount() != 0) {
                 result = cursor.getString(0);
+                /*
                 Log.v(TAG, "Query = " + query +
+
                         "\nResult =  " + result);
+*/
             } else {
                 return null;
             }
@@ -710,8 +713,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int result = -1;
         try {
             String query = "SELECT " + columnName + "  FROM " + tableName + " WHERE " + COLUMN_COMPANY_ID + " = " + getCurrentCompanyId();
+            /*
             Log.v(TAG, "Query = " + query +
                     "\nResult =  " + result);
+                    */
             cursor = db.rawQuery(query, null);
             cursor.moveToFirst();
             if (cursor.getCount() != 0) {
@@ -739,28 +744,29 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void updateRowWithString(String TableName, int rowNo, String ColumnName, String value) {
-        Log.v(TAG, "Updating table = " + TableName +
+        /*Log.v(TAG, "Updating table = " + TableName +
                 "\nColumn = " + ColumnName +
                 "\nRow = " + rowNo +
                 "\nValues = " + value);
+                */
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(ColumnName, value);
         long result = db.update(TableName, values, COLUMN_COMPANY_ID + " = ? AND " + COLUMN_ROW_ID + " = ?", new String[]{getCurrentCompanyId() + "", rowNo + ""});
-        Log.v(TAG, "Result  = " + result);
+        //Log.v(TAG, "Result  = " + result);
         if (db != null) db.close();
     }
 
 
     public void updateRowWithInt(String TableName, int rowNo, String ColumnName, int value) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Log.v(TAG, "Updating Table = " + TableName);
+        //Log.v(TAG, "Updating Table = " + TableName);
         long result = -1;
 
         ContentValues values = new ContentValues();
         values.put(ColumnName, value);
         result = db.update(TableName, values, COLUMN_COMPANY_ID + " = " + getCurrentCompanyId() + " AND " + COLUMN_ROW_ID + " = " + rowNo, null);
-        Log.v(TAG, TableName + "." + ColumnName + " updated with value = " + value);
+        //Log.v(TAG, TableName + "." + ColumnName + " updated with value = " + value);
         if (db != null) db.close();
     }
 
@@ -769,7 +775,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int[] result = null;
         try {
             String query = "SELECT " + COLUMN_ROW_ID + " FROM " + tableName + " WHERE " + COLUMN_COMPANY_ID + " = " + getCurrentCompanyId();
-            Log.v(TAG, "Query = " + query);
+            //Log.v(TAG, "Query = " + query);
             cursor = db.rawQuery(query, null);
             cursor.moveToFirst();
             if (cursor.getCount() > 0) {
@@ -796,7 +802,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         String result = null;
         try {
             String query = "SELECT " + columnName + " FROM " + tableName + " WHERE " + COLUMN_COMPANY_ID + " = " + getCurrentCompanyId() + " AND " + COLUMN_ROW_ID + " = " + rowid;
-            Log.v(TAG, "Query = " + query);
+            //Log.v(TAG, "Query = " + query);
             cursor = db.rawQuery(query, null);
             cursor.moveToFirst();
             if (cursor.getCount() != 0) {
@@ -817,7 +823,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         try {
             String query = "SELECT * FROM " + tableName + " WHERE " + COLUMN_COMPANY_ID + " = " + getCurrentCompanyId();
-            Log.v(TAG, "Query = " + query);
+            //Log.v(TAG, "Query = " + query);
             cursor = db.rawQuery(query, null);
             cursor.moveToFirst();
             if (cursor.getCount() > 0) {
@@ -843,7 +849,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         int result = 0;
         try {
             String query = "SELECT " + columnName + " FROM " + tableName + " WHERE " + COLUMN_COMPANY_ID + " = " + getCurrentCompanyId() + " AND " + COLUMN_ROW_ID + " = " + rowid;
-            Log.v(TAG, "Query = " + query);
+            //Log.v(TAG, "Query = " + query);
             cursor = db.rawQuery(query, null);
             cursor.moveToFirst();
             if (cursor.getCount() != 0) {
@@ -863,13 +869,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void updateStringValue(String TableName, String ColumnName, String value) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        Log.v(TAG, "Updating Table = " + TableName);
+        //Log.v(TAG, "Updating Table = " + TableName);
         long result = -1;
 
         ContentValues values = new ContentValues();
         values.put(ColumnName, value);
         result = db.update(TableName, values, COLUMN_COMPANY_ID + " = " + getCurrentCompanyId(), null);
-        Log.v(TAG, TableName + "." + ColumnName + " updated with value = " + value);
+        //Log.v(TAG, TableName + "." + ColumnName + " updated with value = " + value);
         if (db != null) db.close();
 
 
@@ -877,12 +883,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         try {
             String query = "SELECT " + ColumnName + " FROM " + TableName + " WHERE " + COLUMN_COMPANY_ID + " = " + getCurrentCompanyId();
-            Log.v(TAG, "Query = " + query);
+            //Log.v(TAG, "Query = " + query);
             cursor = db.rawQuery(query, null);
             cursor.moveToFirst();
             if (cursor.getCount() != 0) {
-                for (int i = 0; i < cursor.getCount(); i++)
-                    Log.v("Database", "Value = " + cursor.getString(0));
+                //for (int i = 0; i < cursor.getCount(); i++)
+                    //Log.v("Database", "Value = " + cursor.getString(0));
 
             } else {
             }
@@ -899,18 +905,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void updateBlobValue(String TableName, String ColumnName, byte[] value) {
 
         SQLiteDatabase db = this.getWritableDatabase();
-        Log.v(TAG, "Updating Table = " + TableName);
+        //Log.v(TAG, "Updating Table = " + TableName);
         long result = -1;
 
         ContentValues values = new ContentValues();
         values.put(ColumnName, value);
         result = db.update(TableName, values, COLUMN_COMPANY_ID + " = " + getCurrentCompanyId(), null);
-        Log.v(TAG, TableName + "." + ColumnName + " updated with value = " + value);
+        //Log.v(TAG, TableName + "." + ColumnName + " updated with value = " + value);
         if (db != null) db.close();
     }
 
     public void updateRowWithBlob(String TableName, int rowNo, String ColumnName, byte[] value) {
-        Log.v(TAG, "Updating Table = " + TableName + " Row = " + rowNo);
+        //Log.v(TAG, "Updating Table = " + TableName + " Row = " + rowNo);
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(ColumnName, value);
@@ -962,13 +968,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public void updateIntValue(String TableName, String ColumnName, int value) {
         SQLiteDatabase db = this.getWritableDatabase();
-        Log.v(TAG, "Updating Table = " + TableName);
+        //Log.v(TAG, "Updating Table = " + TableName);
         long result = -1;
 
         ContentValues values = new ContentValues();
         values.put(ColumnName, value);
         result = db.update(TableName, values, COLUMN_COMPANY_ID + " = " + getCurrentCompanyId(), null);
-        Log.v(TAG, "Row Updated");
+        //Log.v(TAG, "Row Updated");
         if (db != null) db.close();
 
     }

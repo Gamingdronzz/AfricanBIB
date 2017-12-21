@@ -843,6 +843,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         params.put("businessName", companyName);
         volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
 
+        /*
         int size = imageData.size();
         String[] images = new String[size];
         String[] imagenames = new String[size];
@@ -885,11 +886,13 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 volleyHelper.makeStringRequest(helper.getBaseURL() + "createfile.php", "file" + i, params1);
             }
         }
+        */
 
     }
 
     @Override
     public void onError(VolleyError error) {
+        databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 0);
         if (error instanceof TimeoutError) {
             awesomeDialog.setColoredCircle(R.color.dialogErrorBackgroundColor);
             awesomeDialog.setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white);

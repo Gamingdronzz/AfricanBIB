@@ -129,7 +129,7 @@ public class VolleyHelper {
 
         StringRequest strReq = new StringRequest(StringRequest.Method.POST, url, this.stringResponseListener, this.errorListener) {
            protected Map<String, String> getParams() throws AuthFailureError {
-               Log.v("Volley","Value = " + map.toString());
+               //Log.v("Volley","Value = " + map.toString());
                 return map;
             }
 /*
