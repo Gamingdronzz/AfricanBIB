@@ -24,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeProgressDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeSuccessDialog;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
 import com.carlosmuvi.segmentedprogressbar.SegmentedProgressBar;
 
 import org.json.JSONException;
@@ -841,7 +842,21 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     @Override
     public void onError(VolleyError error) {
-        AwesomeSuccessDialog awesomeDialog = new AwesomeSuccessDialog(this);
+        AwesomeSuccessDialog awesomeDialog = new AwesomeSuccessDialog(this)
+                .setPositiveButtonText("Yes")
+                .setNegativeButtonText("No")
+                .setPositiveButtonClick(new Closure() {
+                    @Override
+                    public void exec() {
+
+                    }
+                })
+                .setNegativeButtonClick(new Closure() {
+                    @Override
+                    public void exec() {
+
+                    }
+                });
         databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 0);
         awesomeDialog.setColoredCircle(R.color.dialogErrorBackgroundColor);
         awesomeDialog.setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white);
@@ -860,8 +875,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         } else if (error instanceof ParseError) {
             Log.e("Volley", "ParseError");
         }
+        awesomeDialog.setMessage("Uploading Interrupted!\nDo you want to try again?\n\nWarning: Clicking no will erase your previous progress.");
         //awesomeDialog.setCancelable(true);
-
     }
 
     @Override
@@ -875,8 +890,14 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     //databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
                     //databaseHelper.updateDateTime(DatabaseHelper.TABLE_COMPANY_PROFILE);
                     sendImageForUpload(imageData.get(currentImage), currentImage);
-                } else {
-                    awesomeDialog.setMessage("XML Generation Failed/nTry again after some time");
+                } else if(jsonObject.get("result").equals("Business Already Uploaded")){
+                    awesomeDialog.setMessage("Business Already Uploaded");
+                    awesomeDialog.setDialogBodyBackgroundColor(R.color.white);
+                    awesomeDialog.setDialogIconAndColor(R.drawable.ic_success,R.color.white);
+                }
+                else
+                {
+                    onError(new VolleyError());
                 }
             } else if (jsonObject.get("action").equals("Creating Image")) {
                 if (jsonObject.get("result").equals(helper.SUCCESS)) {
