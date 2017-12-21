@@ -23,6 +23,7 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeInfoDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeProgressDialog;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeSuccessDialog;
 import com.carlosmuvi.segmentedprogressbar.SegmentedProgressBar;
 
 import org.json.JSONException;
@@ -835,67 +836,16 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             e.printStackTrace();
         }
 
-
-        awesomeDialog.setMessage("Uplaoding Business");
-
-        Map<String, String> params = new HashMap<>();
-        params.put("xml", aBuffer);
-        params.put("businessName", companyName);
-        volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
-
-        /*
-        int size = imageData.size();
-        String[] images = new String[size];
-        String[] imagenames = new String[size];
-        int i = 0;
-        for (ImageData id : imageData) {
-            Map<String, String> params1 = new HashMap<>();
-            if (id.Row == -1)
-                images[i] = Base64.encodeToString(databaseHelper.getBlobValue(id.ColumnName, id.TableName), Base64.DEFAULT);
-            else
-                images[i] = Base64.encodeToString(databaseHelper.getBlobFromRow(id.ColumnName, id.TableName, id.Row), Base64.DEFAULT);
-            imagenames[i] = id.Name;
-            params1.put("imagename", imagenames[i]);
-            params1.put("image", images[i]);
-            params1.put("businessName", companyName);
-            i++;
-            volleyHelper.makeStringRequest(helper.getBaseURL() + "createimage.php", "image" + i, params1);
-        }
-
-        i = 0;
-        int pdfsize = pdfData.size();
-        if (pdfsize > 0) {
-            String[] files = new String[pdfsize];
-            String[] fileNames = new String[size];
-            for (PdfData pd : pdfData) {
-                Map<String, String> params1 = new HashMap<>();
-                if (pd.Row == -1) {
-                    files[i] = Base64.encodeToString(
-                            helper.createByteArrayFromFile(databaseHelper.getStringValue(pd.ColumnName, pd.TableName)),
-                            Base64.DEFAULT);
-                } else
-                    files[i] = Base64.encodeToString(
-                            helper.createByteArrayFromFile(databaseHelper.getStringFromRow(pd.TableName, pd.ColumnName, pd.Row)),
-                            Base64.DEFAULT);
-
-                fileNames[i] = pd.Name;
-                params1.put("filename", fileNames[i]);
-                params1.put("file", files[i]);
-                params1.put("businessName", companyName);
-                i++;
-                volleyHelper.makeStringRequest(helper.getBaseURL() + "createfile.php", "file" + i, params1);
-            }
-        }
-        */
-
+        sendXMLForUpload(aBuffer);
     }
 
     @Override
     public void onError(VolleyError error) {
+        AwesomeSuccessDialog awesomeDialog = new AwesomeSuccessDialog(this);
         databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 0);
+        awesomeDialog.setColoredCircle(R.color.dialogErrorBackgroundColor);
+        awesomeDialog.setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white);
         if (error instanceof TimeoutError) {
-            awesomeDialog.setColoredCircle(R.color.dialogErrorBackgroundColor);
-            awesomeDialog.setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white);
             awesomeDialog.setMessage("Server Timeout\nSlow Internet Connection !!");
             Log.e("Volley", "TimeoutError\n");
         } else if (error instanceof NoConnectionError) {
@@ -910,7 +860,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         } else if (error instanceof ParseError) {
             Log.e("Volley", "ParseError");
         }
-        awesomeDialog.setCancelable(true);
+        //awesomeDialog.setCancelable(true);
+
     }
 
     @Override
@@ -934,6 +885,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     if (currentImage == imageData.size()) {
                         sendFileForUpload(pdfData.get(currentFile),currentFile);
                     } else {
+
                         sendImageForUpload(imageData.get(currentImage), currentImage);
                     }
 
@@ -991,6 +943,15 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         }
     }
 
+    private void sendXMLForUpload(String aBuffer)
+    {
+        awesomeDialog.setMessage("Uplaoding Business");
+
+        Map<String, String> params = new HashMap<>();
+        params.put("xml", aBuffer);
+        params.put("businessName", companyName);
+        volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
+    }
     private void sendImageForUpload(ImageData imageData, int number) {
         String image, imageName;
         Map<String, String> imageParams = new HashMap<>();
@@ -1005,6 +966,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         imageParams.put("number", number + "");
 
         volleyHelper.makeStringRequest(helper.getBaseURL() + "createimage.php", imageName, imageParams);
+        Log.v(TAG,"Sending Image " + currentImage);
 
     }
 
@@ -1025,6 +987,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         fileParams.put("file", file);
         fileParams.put("businessName", companyName);
         volleyHelper.makeStringRequest(helper.getBaseURL() + "createfile.php", fileName, fileParams);
+        Log.v(TAG,"Sending file " + currentFile);
 
     }
 }
