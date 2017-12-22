@@ -34,6 +34,7 @@ dependencies {
     compile 'com.android.volley:volley:1.0.0'
     compile 'com.github.blennerSilva:AwesomeDialog:2.0.5'
     compile 'com.adityak:browsemyfiles:1.7'
+    compile 'net.gotev:uploadservice:2.1'
     testCompile 'junit:junit:4.12'
 
 }

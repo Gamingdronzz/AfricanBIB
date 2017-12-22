@@ -81,6 +81,7 @@ public class Tab4 extends Fragment {
 
     private void init(View view) {
         recyclerView = (RecyclerView) view.findViewById(R.id.recycler_view_4);
+        recyclerView.setNestedScrollingEnabled(false);
         accept = (CheckBox) view.findViewById(R.id.accept);
         getSampleArrayList();
 

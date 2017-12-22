@@ -1591,8 +1591,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 databaseHelper.updateRowWithInt(chooseFile.getTableName(), chooseFile.getRowno(), DatabaseHelper.COLUMN_FORMAT, type);
                 databaseHelper.updateRowWithString(chooseFile.getTableName(), chooseFile.getRowno(), chooseFile.getColumnName(), path);
                 if (type == 0) {
-                    bitmap = helper.getBitmapFromFile(path);
-                    databaseHelper.updateRowWithBlob(chooseFile.getTableName(), chooseFile.getRowno(), DatabaseHelper.COLUMN_SELECTED_IMAGE, helper.createByteArrayFromBitmap(bitmap));
+                    databaseHelper.updateRowWithBlob(chooseFile.getTableName(), chooseFile.getRowno(), DatabaseHelper.COLUMN_SELECTED_IMAGE, helper.getByteArrayFromBitmapFile(path));
                 }
                 Log.d("Adapter", "onclick " + path);
             }
@@ -1604,7 +1603,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                                            int[] grantResults) {
         imagePicker.onRequestPermissionsResult(context, requestCode, permissions, grantResults);
     }
-
 
     public void setFocus() {
         int a = 0;

@@ -962,29 +962,30 @@ public class Helper {
         return null;
     }
 
-    public byte[] createByteArrayFromFile(String path) {
+    public byte[] getByteArrayFromPDFFile(String path) {
         if (path != null) {
+
             File file = new File(path);
             try {
                 byte[] data = FileUtils.readFileToByteArray(file);//Convert any file, image or video into byte array
-                Log.d(TAG, "createByteArrayFromFile: " + data.length + "  " + data.toString());
+                Log.v(TAG, "getByteArrayFromPDFFile: " + " File = " + file.getName() + "\nLength = " + data.length + "Array =   " + data.toString());
                 return data;
             } catch (IOException e) {
                 Log.d(TAG, e.toString());
             }
+
+
         }
         return null;
     }
 
-    public Bitmap getBitmapFromFile(String path) {
-        File imgFile = new File(path);
-        if (imgFile.exists()) {
-            Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-            //Drawable d = new BitmapDrawable(getResources(), myBitmap);
-            return myBitmap;
-
+    public byte[] getByteArrayFromBitmapFile(String path) {
+        if(path!=null) {
+            Bitmap bitmap = BitmapFactory.decodeFile(path);
+            return this.createByteArrayFromBitmap(bitmap);
         }
         return null;
+
     }
 
     public Bitmap createBitmapFromByteArray(byte[] array) {
