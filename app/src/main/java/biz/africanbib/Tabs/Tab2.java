@@ -307,7 +307,7 @@ public class Tab2 extends Fragment {
             tableName = DatabaseHelper.TABLE_REFERENCES;
             String[] xmltags = new String[]{
                     "institutionType",
-                    "logo",
+                    "image",
                     "website",
                     "email",
                     "cellphone",
@@ -373,7 +373,7 @@ public class Tab2 extends Fragment {
             items.add(new SimpleText("OWNERS", "contact"));
             tableName = DatabaseHelper.TABLE_OWNERS;
             xmltags = new String[]{
-                    "logo",
+                    "image",
                     "affiliation",
                     "professional",
                     "academic",
@@ -386,7 +386,7 @@ public class Tab2 extends Fragment {
                     "telephone"
             };
             titles = new String[]{
-                    "Owners Logo",
+                    "Owners Image",
                     "Affiliation",
                     "Professional",
                     "Academic",
@@ -459,7 +459,7 @@ public class Tab2 extends Fragment {
             items.add(new SimpleText("MANAGERS", "contact"));
             tableName = DatabaseHelper.TABLE_MANAGERS;
             xmltags = new String[]{
-                    "logo",
+                    "image",
                     "affiliation",
                     "professional",
                     "academic",
@@ -472,7 +472,7 @@ public class Tab2 extends Fragment {
                     "telephone",
             };
             titles = new String[]{
-                    "Manager Logo",
+                    "Manager Image",
                     "Affiliation",
                     "Professional",
                     "Academic",

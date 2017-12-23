@@ -21,29 +21,32 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
-            android:padding="@dimen/padding_xlarge"
+            android:padding="@dimen/padding_medium"
+            android:paddingRight="@dimen/padding_large"
+            android:layout_marginBottom="?attr/actionBarSize"
             android:foregroundGravity="center_vertical"
             android:orientation="horizontal">
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/accept"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/margin_large"></CheckBox>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_medium"
-                android:layout_alignParentEnd="true"
                 android:textSize="@dimen/text_xlarge"
                 android:textStyle="bold"
-                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:id="@+id/textViewAccept"
+                android:layout_toLeftOf="@id/accept"
                 android:text="@string/accept"/>
 
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/accept"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/margin_large"
-                android:layout_toLeftOf="@id/textViewAccept" />
+            />
 
 
 

@@ -67,9 +67,10 @@
 
     <LinearLayout
         android:id="@+id/poweredBy"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/margin_medium"
         android:orientation="vertical">
 
@@ -95,5 +96,18 @@
             android:textColor="#0000ff"
             android:textSize="15sp" />
     </LinearLayout>
+    <!--
+
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_large"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:backgroundTint="@color/colorAccentDark"
+        android:tint="@color/white"
+        android:src="@drawable/ic_action_settings"
+         />
+-->
 
 </RelativeLayout>

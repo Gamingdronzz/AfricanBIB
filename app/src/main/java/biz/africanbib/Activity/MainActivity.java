@@ -77,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private TabLayout tabLayout;
     //This is our viewPager
     private ViewPager viewPager;
-    SegmentedProgressBar segmentedProgressBar;
+    //SegmentedProgressBar segmentedPrgressBar;
     FloatingActionButton goLeft, goRight;
     DatabaseHelper databaseHelper;
     String companyName = null;
@@ -160,7 +160,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
 
     private void bindViews() {
-        segmentedProgressBar = (SegmentedProgressBar) findViewById(R.id.segmented_progressbar);
+        //segmentedProgressBar = (SegmentedProgressBar) findViewById(R.id.segmented_progressbar);
         goLeft = (FloatingActionButton) findViewById(R.id.fab_go_left);
         goRight = (FloatingActionButton) findViewById(R.id.fab_go_right);
         buttonValidate = (Button) findViewById(R.id.validate);
@@ -416,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             manageFab(true, true);
         }
         viewPager.setCurrentItem(position);
-        segmentedProgressBar.setCompletedSegments(position);
+        //segmentedProgressBar.setCompletedSegments(position);
 
     }
 
@@ -573,7 +573,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             tagName = tagName.replace("photo", "");
                             tagName = tagName.replace(" ", "");
                             tagName = tagName.replace("(", "");
-                            tagName = tagName.replace(") ", "");
+                            tagName = tagName.replace(")", "");
                             xmlSerializer.text(tagName + ".jpg");
                             xmlSerializer.endTag(null, simpleImage.getXmlTag());
                             imageData.add(new ImageData(simpleImage.getColumnName(), simpleImage.getTableName(), simpleImage.getRowno(), tagName));
@@ -798,7 +798,23 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             referencesCount++;
                             tagName = tagName + referencesCount;
                         }
-                        xmlSerializer.text(tagName + ".jpg");
+
+                        //Add Product Media Group Tag
+                        if(simpleImage.getXmlTag().equals("productMedia"))
+                        {
+                            xmlSerializer.startTag(null,"type");
+                            xmlSerializer.text("7");
+                            xmlSerializer.endTag(null,"type");
+                            xmlSerializer.startTag(null,"photo");
+                            xmlSerializer.text(tagName + ".jpg");
+                            xmlSerializer.endTag(null,"photo");
+                        }
+                        else
+                        {
+                            xmlSerializer.text(tagName + ".jpg");
+                        }
+                        //Log.v(TAG,"Image name = " + simpleImage.getXmlTag() + "\n Tag value = " + tagName);
+
                         xmlSerializer.endTag(null, simpleImage.getXmlTag());
                         imageData.add(new ImageData(simpleImage.getColumnName(), simpleImage.getTableName(), simpleImage.getRowno(), tagName));
                     }
