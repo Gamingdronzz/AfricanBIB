@@ -957,6 +957,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                         }
                                     })
                                     .show();
+                            databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE,DatabaseHelper.COLUMN_STATUS,1);
                         }
                     } else {
                         sendImageForUpload(imageData.get(currentImage));
@@ -989,6 +990,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                     }
                                 })
                                 .show();
+                        databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
                     }
                 } else {
 
