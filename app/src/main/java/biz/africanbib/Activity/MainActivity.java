@@ -935,6 +935,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     awesomeDialog.setMessage("XML Generated and Uploaded");
                     if (imageData.size() > 0)
                         sendImageForUpload(imageData.get(currentImage));
+                    else if (fileData.size() > 0)
+                        sendFileForUpload(fileData.get(currentFile));
                     else {
                         awesomeDialog.hide();
                         awesomeSuccessDialog = new AwesomeSuccessDialog(this);
@@ -953,6 +955,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                     }
                                 })
                                 .show();
+                        updateBusiness();
                         databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
                     }
                 } else if (jsonObject.get("result").equals("Business Already Uploaded")) {
@@ -1030,12 +1033,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         }
     }
 
-    private void updateBusiness()
-    {
+    private void updateBusiness() {
         Calendar c = Calendar.getInstance();
         databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
-        databaseHelper.updateStringValue(DatabaseHelper.TABLE_COMPANY_PROFILE,DatabaseHelper.COLUMN_DATE_OF_UPLOADING,new SimpleDateFormat("dd-MM-yyyy").format(c.getTime()));
-        databaseHelper.updateStringValue(DatabaseHelper.TABLE_COMPANY_PROFILE,DatabaseHelper.COLUMN_TIME_OF_UPLOADING,new SimpleDateFormat("hh:mm:ss a").format(c.getTime()));
+        databaseHelper.updateStringValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_DATE_OF_UPLOADING, new SimpleDateFormat("dd-MM-yyyy").format(c.getTime()));
+        databaseHelper.updateStringValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_TIME_OF_UPLOADING, new SimpleDateFormat("hh:mm:ss a").format(c.getTime()));
     }
 
     private class ImageData {

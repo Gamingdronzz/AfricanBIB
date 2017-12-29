@@ -58,7 +58,6 @@ public class PreviousBusinessLists extends AppCompatActivity implements View.OnC
             @Override
             public void afterTextChanged(Editable s) {
                 filter(s.toString());
-
             }
         });
         registerForContextMenu(recyclerView);
@@ -69,7 +68,7 @@ public class PreviousBusinessLists extends AppCompatActivity implements View.OnC
                 DatabaseHelper.setCurrentCompanyId(modelList.get(position).getBusinessID());
                 intent.putExtra("type", MainActivity.EDITBUSINESS);
                 startActivity(intent);
-                Log.v(TAG,"Closing Previous Business and Opening Business");
+                Log.v(TAG, "Closing Previous Business and Opening Business");
                 finish();
             }
 
@@ -83,14 +82,14 @@ public class PreviousBusinessLists extends AppCompatActivity implements View.OnC
     }
 
     void filter(String text) {
-        List<PreviousBusiness> temp = new ArrayList();
+        List<PreviousBusiness> currentList = new ArrayList<>();
         for (PreviousBusiness p : modelList) {
             if (p.getBusinessName().toLowerCase().contains(text.toLowerCase())) {
-                temp.add(p);
+                currentList.add(p);
             }
         }
         //update recyclerview
-        adapter.updateList(temp);
+        adapter.updateList(currentList);
     }
 
     private void bindviews() {
