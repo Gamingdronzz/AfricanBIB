@@ -39,8 +39,6 @@ public class Tab2 extends Fragment {
     Helper helper;
     boolean isTab;
     DatabaseHelper databaseHelper;
-    int needRows;
-    int offerrows;
     int ownerRows;
     int refrencesRows;
     int managerRows;
@@ -248,7 +246,7 @@ public class Tab2 extends Fragment {
             items.add(helper.buildEditText("Email", value, tableName, columnName, -1, "email"));
             columnName = DatabaseHelper.COLUMN_STREET;
             value = databaseHelper.getStringValue(columnName, tableName);
-            items.add(helper.buildEditText("Street & Number", value, tableName, columnName, -1, "streetnumber"));
+            items.add(helper.buildEditText("Street & Number", value, tableName, columnName, -1, "street"));
             columnName = DatabaseHelper.COLUMN_CITY;
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText("City / Town", value, tableName, columnName, -1, "city"));
@@ -257,7 +255,7 @@ public class Tab2 extends Fragment {
             items.add(helper.buildEditText("Post Office Box", value, tableName, columnName, -1, "postbox"));
             columnName = DatabaseHelper.COLUMN_POSTAL_CODE;
             value = databaseHelper.getStringValue(columnName, tableName);
-            items.add(helper.buildEditText("Postal Code", value, tableName, columnName, -1, "postalcode"));
+            items.add(helper.buildEditText("Postal Code", value, tableName, columnName, -1, "postalCode"));
             columnName = DatabaseHelper.COLUMN_DISTRICT;
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText("District / State", value, tableName, columnName, -1, "district"));
@@ -306,7 +304,7 @@ public class Tab2 extends Fragment {
             items.add(new SimpleText("REFERENCES", "contact"));
             tableName = DatabaseHelper.TABLE_REFERENCES;
             String[] xmltags = new String[]{
-                    "institutionType",
+                    //"institutionType",
                     "image",
                     "website",
                     "email",
@@ -315,7 +313,7 @@ public class Tab2 extends Fragment {
                     "name"
             };
             String[] titles = new String[]{
-                    "Type of Institution",
+                    //"Type of Institution",
                     "Institution Logo",
                     "Website",
                     "Email",
@@ -323,7 +321,7 @@ public class Tab2 extends Fragment {
                     "Telephone",
                     "Institution Name"};
             String[] columnNames = new String[]{
-                    DatabaseHelper.COLUMN_INSTITUTION_TYPE,
+                    //DatabaseHelper.COLUMN_INSTITUTION_TYPE,
                     DatabaseHelper.COLUMN_LOGO,
                     DatabaseHelper.COLUMN_WEBSITE,
                     DatabaseHelper.COLUMN_EMAIL,
@@ -367,7 +365,7 @@ public class Tab2 extends Fragment {
                     refrencesRows = ids.length;
                 }
             }
-            items.add(helper.buildAdd(7, titles, tableName, columnNames, xmltags));
+            items.add(helper.buildAdd(6, titles, tableName, columnNames, xmltags));
 
 
             items.add(new SimpleText("OWNERS", "contact"));
@@ -549,10 +547,10 @@ public class Tab2 extends Fragment {
                     "telephone",
                     "country",
                     "district",
-                    "postalcode",
+                    "postalCode",
                     "city",
-                    "streetnumber",
-                    "subsidiaryname"
+                    "street",
+                    "name"
             };
             titles = new String[]{
                     "Website",

@@ -701,8 +701,11 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                     if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PLACE_OF_COLECTION)) {
                         if (i == 2) {
                             Log.v("Adapter", "Place of collection Selected = " + i);
-                            items.add(position + 1, helper.buildEditText("Place of Collection (Specify)", "", dropDown.getTableName(), COLUMN_OTHERS_SPECIFY, -1, "collectedBy"));
-                            notifyItemInserted(position + 1);
+                            SimpleEditText edt = (SimpleEditText) items.get(position + 1);
+                            if (!(edt.getTitle().equals("Place of Collection (Specify)"))) {
+                                items.add(position + 1, helper.buildEditText("Place of Collection (Specify)", "", dropDown.getTableName(), COLUMN_OTHERS_SPECIFY, -1, "collectedBy"));
+                                notifyItemInserted(position + 1);
+                            }
                             //notifyDataSetChanged();
                         }
                     }
@@ -1098,7 +1101,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                             columnNames[i],
                             helper.manageMultiSelectList(0), helper.manageMultiSelectList2(0),
                             null,
-                            currentRowNo, "sector"
+                            currentRowNo, "sectors"
                     ));
                     notifyItemInserted(position);
                 } else if (columnNames[i].equals(DatabaseHelper.COLUMN_INDUSTRY)) {
@@ -1439,7 +1442,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         public void onDateSet(DatePicker view, int year, int month, int day) {
             SimpleDate simpleDate = (SimpleDate) adapter.items.get(position);
             month = month + 1;
-            String stringOfDate = month + "." + day + "." + year;
+            String stringOfDate = year + "." + month + "." + day;
 
             simpleDate.setValue(stringOfDate);
             adapter.notifyItemChanged(position);
@@ -1595,7 +1598,9 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                 }
                 Log.d("Adapter", "onclick " + path);
             }
-        } else imagePicker.onActivityResult(context, requestCode, resultCode, data);
+        } else {
+            imagePicker.onActivityResult(context, requestCode, resultCode, data);
+        }
 
     }
 

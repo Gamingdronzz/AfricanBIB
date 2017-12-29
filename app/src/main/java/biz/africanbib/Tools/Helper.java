@@ -1012,16 +1012,16 @@ public class Helper {
         Date d = null;
         if (date != null) {
             try {
-                d = new SimpleDateFormat("mm.dd.yyyy").parse(date);
+                d = new SimpleDateFormat("yyyy.mm.dd").parse(date);
             } catch (ParseException e) {
                 e.printStackTrace();
             }
             if (d != null) {
                 long days = TimeUnit.DAYS.convert(d.getTime(), TimeUnit.MILLISECONDS);
                 return String.valueOf(days);
-            } else return "N/A";
+            } else return " ";
 
-        } else return "N/A";
+        } else return " ";
     }
 }
 

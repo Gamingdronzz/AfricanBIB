@@ -40,13 +40,13 @@ public class Tab1 extends Fragment {
     DatabaseHelper databaseHelper;
     ArrayList<Object> items = new ArrayList<>();
     public String businessName = "Business Name *";
-    public String registerationNumber = "Registeration No *";
-    public String keyVisual = "Keyvisual (Photo) *";
-    public String corporateLogo = "Corporate Logo *";
-    public String telephone = "Telephone *";
-    public String city_town = "City / Town *";
-    public String state = "District / State *";
-    public String country = "Country *";
+    public String registerationNumber = "Registeration No ";
+    public String keyVisual = "Keyvisual (Photo) ";
+    public String corporateLogo = "Corporate Logo ";
+    public String telephone = "Telephone ";
+    public String city_town = "City / Town ";
+    public String state = "District / State ";
+    public String country = "Country ";
     private final String TAG = "Tab1";
     private Fragment fragment;
     ProgressDialog progressDialog;
@@ -272,26 +272,27 @@ public class Tab1 extends Fragment {
 
 
             items.add(new Heading("COMPANY POSTAL ADDRESS", "contact"));
-            columnName = DatabaseHelper.COLUMN_STREET;
             tableName = DatabaseHelper.TABLE_COMPANY_POSTAL_ADDRESS;
 
+            columnName = DatabaseHelper.COLUMN_STREET;
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText("Street & Number", value, tableName, columnName, -1, "street"));
 
             columnName = DatabaseHelper.COLUMN_PO_BOX;
-
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText("Post Office Box", value, tableName, columnName, -1, "postbox"));
 
             columnName = DatabaseHelper.COLUMN_POSTAL_CODE;
-
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText("Postal Code", value, tableName, columnName, -1, "postalCode"));
 
             columnName = DatabaseHelper.COLUMN_CITY;
-
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText("City / Town", value, tableName, columnName, -1, "city"));
+
+            columnName = DatabaseHelper.COLUMN_DISTRICT;
+            value = databaseHelper.getStringValue(columnName, tableName);
+            items.add(helper.buildEditText("District/State", value, tableName, columnName, -1, "district"));
 
             columnName = DatabaseHelper.COLUMN_COUNTRY;
             selectedPosition = databaseHelper.getIntValue(columnName, tableName);
@@ -370,14 +371,15 @@ public class Tab1 extends Fragment {
            /* columnName = DatabaseHelper.COLUMN_INVESTMENT_OPPORTUNITIES;
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText("Investment Opportunities", value, tableName, columnName, -1, "investmentOpportunities"));
-         */   Log.v(TAG, "Tab1 Initialize Complete");
+         */
+            Log.v(TAG, "Tab1 Initialize Complete");
             return items;
         }
 
         @Override
         protected void onPostExecute(ArrayList<Object> objects) {
             super.onPostExecute(objects);
-            adapter = new ComplexRecyclerViewAdapter(objects, getFragmentManager(),fragment);
+            adapter = new ComplexRecyclerViewAdapter(objects, getFragmentManager(), fragment);
             if (MainActivity.first) {
                 if (isTab) {
                     setupGridLayout(true);

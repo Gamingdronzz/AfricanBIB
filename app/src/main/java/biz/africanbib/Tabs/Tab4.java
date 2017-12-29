@@ -42,12 +42,13 @@ public class Tab4 extends Fragment {
     CheckBox accept;
     ArrayList<Object> items;
 
-    public String nameOfCollector = "Name of Collector *";
-    public String authorizedBy = "Authorized By *";
-    public String placeOfCollection = "Place of Collection *";
+    public String nameOfCollector = "Name of Collector";
+    public String authorizedBy = "Authorized By";
+    public String placeOfCollection = "Place of Collection";
     private final String TAG = "Tab4";
     private Fragment fragment;
     ProgressDialog progressDialog;
+
     public boolean getAccepted() {
         return accept.isChecked();
     }
@@ -133,7 +134,6 @@ public class Tab4 extends Fragment {
         LoadTab loadTab = new LoadTab();
         loadTab.execute();
     }
-
 
 
     private void getValuesFromViews() {
@@ -244,7 +244,7 @@ public class Tab4 extends Fragment {
                                 helper.manageMultiSelectList(selectedIndex),
                                 helper.manageMultiSelectList2(selectedIndex),
                                 selectedIndices,
-                                ids[i], "sector"
+                                ids[i], "sectors"
                         ));
                         items.add(new Divider());
                     }
@@ -255,7 +255,7 @@ public class Tab4 extends Fragment {
             }
             items.add(helper.buildAdd(2, titles,
                     tableName,
-                    columnNames, new String[]{"sector", null}));
+                    columnNames, new String[]{"sectors", null}));
 
 
             items.add(new Heading("SOURCE OF DATA", null));
@@ -265,26 +265,37 @@ public class Tab4 extends Fragment {
             String value;
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText(nameOfCollector, value, tableName, columnName, -1, "approvedBy"));
+
+
             columnName = DatabaseHelper.COLUMN_AUTHORIZED_BY;
-            value = databaseHelper.getStringValue(columnName, tableName);
+            int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
             items.add(helper.buildEditText(authorizedBy, value, tableName, columnName, -1, "authorizedBy"));
 
+            columnName = DatabaseHelper.COLUMN_SOURCE_OF_DATA;
+            value = databaseHelper.getStringValue(columnName, tableName);
+            items.add(helper.buildDropDown("Source of Data", new String[]{"Not specified",
+                            "ABIB collected",
+                            "Government organisation",
+                            "Internet"
+                    },
+                    new int[]{0, 1, 2, 3}, selectedPosition, tableName, columnName, -1, "sourceOfData"));
+
             columnName = DatabaseHelper.COLUMN_PLACE_OF_COLECTION;
-            int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
             items.add(helper.buildDropDown(placeOfCollection,
                     new String[]{"Event", "Company", "Others"}, new int[]{0}, selectedPosition, tableName, columnName, -1, "collectedBy"));
+            selectedPosition = databaseHelper.getIntValue(columnName, tableName);
             if (selectedPosition == 2) {
                 columnName = DatabaseHelper.COLUMN_OTHERS_SPECIFY;
                 value = databaseHelper.getStringValue(columnName, tableName);
                 items.add(helper.buildEditText("Place of Collection (Specify)", value, tableName, columnName, -1, "collectedBy"));
             }
 
-            columnName = DatabaseHelper.COLUMN_DATE;
-            items.add(helper.buildDate("Date/Time", databaseHelper.getStringValue(columnName, tableName), tableName, columnName, -1, null));
-
             columnName = DatabaseHelper.COLUMN_LOCATION;
             value = databaseHelper.getStringValue(columnName, tableName);
-            items.add(helper.buildEditText("Name of Location / Event", value, tableName, columnName, -1, "location"));
+            items.add(helper.buildEditText("Name of Location / Event", value, tableName, columnName, -1, null));
+
+            columnName = DatabaseHelper.COLUMN_DATE;
+            items.add(helper.buildDate("Date/Time", databaseHelper.getStringValue(columnName, tableName), tableName, columnName, -1, null));
 
             columnName = DatabaseHelper.COLUMN_GRANT_FREE_ACCESS;
             selectedPosition = databaseHelper.getIntValue(columnName, tableName);
@@ -305,7 +316,7 @@ public class Tab4 extends Fragment {
                     "Further, AfricanBIB GmbH reserves the right to change or amend the information provided at any time and without prior notice.\n" +
                     "Contents and structure of this form sites are copyright protected. Reproduction of information or data content, in particular the use of text (whether in full or in part), pictures or graphics, requires the prior approval of AfricanBIB GmbH.\n", "disclaimer"));
 
-            Log.v(TAG,"Tab4 Initialize Complete");
+            Log.v(TAG, "Tab4 Initialize Complete");
             return items;
         }
 

@@ -35,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 26;
+    public static final int DATABASE_VERSION = 28;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -181,6 +181,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     public static final String COLUMN_NAME_OF_COLLECTOR = "COLUMN_NAME_OF_COLLECTOR";
     public static final String COLUMN_AUTHORIZED_BY = "COLUMN_AUTHORIZED_BY";
+    public static final String COLUMN_SOURCE_OF_DATA = "COLUMN_SOURCE_OF_DATA";
     public static final String COLUMN_PLACE_OF_COLECTION = "COLUMN_PLACE_OF_COLECTION";
     public static final String COLUMN_OTHERS_SPECIFY = "COLUMN_OTHERS_SPECIFY";
     public static final String COLUMN_LOCATION = "COLUMN_LOCATION";
@@ -293,8 +294,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_CELLPHONE + " VARCHAR," +
             COLUMN_EMAIL + " VARCHAR," +
             COLUMN_WEBSITE + " VARCHAR," +
-            COLUMN_LOGO + " BLOB," +
-            COLUMN_INSTITUTION_TYPE + " NUMBER" +
+            COLUMN_LOGO + " BLOB" +
+            //COLUMN_INSTITUTION_TYPE + " NUMBER" +
             ")";
 
     private String CREATE_TABLE_OWNERS = "CREATE TABLE IF NOT EXISTS " + TABLE_OWNERS + " ( " +
@@ -463,6 +464,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_COMPANY_ID + " NUMBER," +
             COLUMN_NAME_OF_COLLECTOR + " VARCHAR," +
             COLUMN_AUTHORIZED_BY + " VARCHAR," +
+            COLUMN_SOURCE_OF_DATA + " NUMBER," +
             COLUMN_PLACE_OF_COLECTION + " VARCHAR," +
             COLUMN_OTHERS_SPECIFY + " VARCHAR," +
             COLUMN_DATE + " VARCHAR," +

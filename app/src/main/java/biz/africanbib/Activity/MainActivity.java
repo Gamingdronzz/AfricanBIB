@@ -17,14 +17,12 @@ import android.widget.Toast;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkError;
 import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeProgressDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeSuccessDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
-import com.carlosmuvi.segmentedprogressbar.SegmentedProgressBar;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -170,12 +168,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 currentImage = 0;
                 currentFile = 0;
                 xmlUploaded = false;
-                if(imageData!=null)
-                {
+                if (imageData != null) {
                     imageData.clear();
                 }
-                if(fileData !=null)
-                {
+                if (fileData != null) {
                     fileData.clear();
                 }
                 checkValidation();
@@ -215,7 +211,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
                     }
 
-                    if (simpleEditText.getTitle().equals(tab1.registerationNumber)) {
+                    /*if (simpleEditText.getTitle().equals(tab1.registerationNumber)) {
                         if (helper.checkForInput(simpleEditText.getValue()) == null) {
                             Toast.makeText(this, "Please enter a valid Registeration Number", Toast.LENGTH_SHORT).show();
                             viewPager.setCurrentItem(0);
@@ -223,10 +219,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             tab1.getAdapter().notifyItemChanged(i);
                             return;
                         }
-                    }
+                    }*/
 
                     //Telephone
-                    if (simpleEditText.getTitle().equals(tab1.telephone)) {
+                    /*if (simpleEditText.getTitle().equals(tab1.telephone)) {
                         if (helper.checkForInput(simpleEditText.getValue()) == null) {
                             Toast.makeText(this, "Please enter a valid Telephone", Toast.LENGTH_SHORT).show();
                             viewPager.setCurrentItem(0);
@@ -274,8 +270,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
                             return;
                         }
-                    }
-                } else if (o instanceof SimpleImage) {
+                    }*/
+                } /*else if (o instanceof SimpleImage) {
                     SimpleImage simpleImage = (SimpleImage) o;
                     if (simpleImage.getTitle().equals(tab1.corporateLogo)) {
                         if (simpleImage.getImage() == null) {
@@ -293,13 +289,13 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             return;
                         }
                     }
-                }
+                }*/
             }
 
             //items.clear();
             i = -1;
             ArrayList<Object> items4 = tab4.getList();
-            for (Object o :
+           /* for (Object o :
                     items4) {
                 i++;
                 if (o instanceof SimpleEditText) {
@@ -344,7 +340,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
                     }
                 }
-            }
+            }*/
 
 
             tab1.getAdapter().notifyDataSetChanged();
@@ -464,7 +460,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
 
     void Test(ArrayList<Object> items1, ArrayList<Object> items2, ArrayList<Object> items3, ArrayList<Object> items4) {
-
+        productMediaCount = 0;
+        referencesCount = 0;
+        ownersCount = 0;
+        managersCount = 0;
         try {
             Log.v(TAG, "Trying to create xml FileChosed");
             File file = new File(getApplicationContext().getFilesDir(), companyName + ".xml");
@@ -513,14 +512,14 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             if (items.get(i) instanceof Heading) {
                 Heading heading = (Heading) items.get(i);
                 headTag = heading.getXmlTag();
-                if (heading.getHeading().equals("CONTACT PERSON")) {
+                if (heading.getHeading().equals("CONTACT PERSON") || heading.getHeading().equals("COMPANY CONTACT")) {
                     xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, headTag);
                     xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, "type");
                     xmlSerializer.text("0");
                     xmlSerializer.endTag(null, "type");
-                } else if (heading.getHeading().equals("COMPANY POSTAL ADDRESS") || heading.getHeading().equals("COMPANY CONTACT")) {
+                } else if (heading.getHeading().equals("COMPANY POSTAL ADDRESS")) {
                     xmlSerializer.text(System.getProperty("line.separator"));
                     xmlSerializer.startTag(null, headTag);
                     xmlSerializer.text(System.getProperty("line.separator"));
@@ -580,42 +579,52 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
                     } else if (item instanceof DropDown) {
                         DropDown dropDown = (DropDown) item;
-                        String collectedBy = " ";
                         if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PREFIX)) {
                             personTag = "person";
                             xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, personTag);
                         }
+
                         if (dropDown.getColumnName().equals(DatabaseHelper.COLUMN_PLACE_OF_COLECTION)) {
+                            String collectedBy = " ";
+                            String atLoc = " ";
+                            String onDate = " ";
+                            SimpleEditText edt;
+                            SimpleDate date;
+                            SimpleEditText edtLoc;
                             if (helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()).equals("Others")) {
-                                SimpleEditText edt = (SimpleEditText) items.get(++i);
-                                SimpleDate date = (SimpleDate) items.get(++i);
-                                if (edt.getValue().trim().length() == 0) {
-                                    if (date.getValue() != null && date.getValue().trim().length() != 0) {
-                                        xmlSerializer.text(System.getProperty("line.separator"));
-                                        xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
-                                        collectedBy = helper.toDays(date.getValue());
-                                        xmlSerializer.text(collectedBy);
-                                        xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
-                                    }
-                                } else {
-                                    xmlSerializer.text(System.getProperty("line.separator"));
-                                    xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
-                                    collectedBy = Helper.forReplacementString(edt.getValue()) + ", " + date.getValue();
-                                    xmlSerializer.text(collectedBy);
-                                    xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
-                                }
+                                edt = (SimpleEditText) items.get(++i);
+                                edtLoc = (SimpleEditText) items.get(++i);
+                                date = (SimpleDate) items.get(++i);
+                                collectedBy = edt.getValue();
                             } else {
-                                if (items.get(i + 1) instanceof SimpleEditText) {
+                                if (items.get(i + 2) instanceof SimpleEditText) {
                                     i = i + 2;
                                 } else i++;
-                                SimpleDate date = (SimpleDate) items.get(i);
-                                xmlSerializer.text(System.getProperty("line.separator"));
-                                xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
-                                collectedBy = helper.getSelectedValue(dropDown, dropDown.getSelectedPosition()) + ", " + date.getValue();
-                                xmlSerializer.text(collectedBy);
-                                xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
+                                edtLoc = (SimpleEditText) items.get(i);
+                                date = (SimpleDate) items.get(++i);
+                                collectedBy = helper.getSelectedValue(dropDown, dropDown.getSelectedPosition());
                             }
+                            atLoc = edtLoc.getValue();
+                            onDate = date.getValue();
+                            xmlSerializer.text(System.getProperty("line.separator"));
+                            xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
+                            if (!collectedBy.isEmpty()) {
+                                if (!atLoc.isEmpty()) {
+                                    if (onDate != null) {
+                                        xmlSerializer.text(Helper.forReplacementString(collectedBy + ", in " + atLoc + " on " + onDate));
+                                    } else
+                                        xmlSerializer.text(Helper.forReplacementString(collectedBy + ", in " + atLoc));
+
+                                } else {
+                                    if (onDate != null) {
+                                        xmlSerializer.text(Helper.forReplacementString(collectedBy + ", on " + onDate));
+                                    } else
+                                        xmlSerializer.text(Helper.forReplacementString(collectedBy));
+                                }
+                            } else
+                                xmlSerializer.text("");
+                            xmlSerializer.endTag(null, ((DropDown) item).getXmlTag());
                         } else {
                             xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
@@ -748,15 +757,16 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     String file = databaseHelper.getStringFromRow(chooseFile.getTableName(), chooseFile.getColumnName(), chooseFile.getRowno());
                     if (file != null) {
                         if (type == 0) {
+                            String extension = file.substring(file.lastIndexOf("."));
                             xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, "photo");
-                            xmlSerializer.text("Media" + chooseFile.getRowno());
+                            xmlSerializer.text("Media" + chooseFile.getRowno() + extension);
                             xmlSerializer.endTag(null, "photo");
                             imageData.add(new ImageData(DatabaseHelper.COLUMN_SELECTED_IMAGE, chooseFile.getTableName(), chooseFile.getRowno(), "Media" + chooseFile.getRowno()));
                         } else if (type == 1) {
                             xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, "file");
-                            xmlSerializer.text("File" + chooseFile.getRowno());
+                            xmlSerializer.text("File" + chooseFile.getRowno() + ".pdf");
                             xmlSerializer.endTag(null, "file");
                             fileData.add(new FileData(chooseFile.getColumnName(), chooseFile.getTableName(), chooseFile.getRowno(), "File" + chooseFile.getRowno()));
                         }
@@ -786,11 +796,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             productMediaCount++;
                             tagName = tagName + productMediaCount;
                         }
-                        if (simpleImage.getTitle().equals("Manager Logo")) {
+                        if (simpleImage.getTitle().equals("Manager Image")) {
                             managersCount++;
                             tagName = tagName + managersCount;
                         }
-                        if (simpleImage.getTitle().equals("Owners Logo")) {
+                        if (simpleImage.getTitle().equals("Owners Image")) {
                             ownersCount++;
                             tagName = tagName + ownersCount;
                         }
@@ -800,17 +810,14 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
 
                         //Add Product Media Group Tag
-                        if(simpleImage.getXmlTag().equals("productMedia"))
-                        {
-                            xmlSerializer.startTag(null,"type");
+                        if (simpleImage.getXmlTag().equals("productMedia")) {
+                            xmlSerializer.startTag(null, "type");
                             xmlSerializer.text("7");
-                            xmlSerializer.endTag(null,"type");
-                            xmlSerializer.startTag(null,"photo");
+                            xmlSerializer.endTag(null, "type");
+                            xmlSerializer.startTag(null, "photo");
                             xmlSerializer.text(tagName + ".jpg");
-                            xmlSerializer.endTag(null,"photo");
-                        }
-                        else
-                        {
+                            xmlSerializer.endTag(null, "photo");
+                        } else {
                             xmlSerializer.text(tagName + ".jpg");
                         }
                         //Log.v(TAG,"Image name = " + simpleImage.getXmlTag() + "\n Tag value = " + tagName);
@@ -874,8 +881,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         awesomeDialog.hide();
         //awesomeDialog.setCancelable(true);
         final AwesomeSuccessDialog awesomeSuccessDialog = new AwesomeSuccessDialog(this);
-                awesomeSuccessDialog.setPositiveButtonText("Try Again")
-                        .setCancelable(false)
+        awesomeSuccessDialog.setPositiveButtonText("Try Again")
+                .setCancelable(false)
                 .setNegativeButtonText("Some Other Time")
                 .setPositiveButtonbackgroundColor(R.color.dialogSuccessBackgroundColor)
                 .setNegativeButtonbackgroundColor(R.color.dialogErrorBackgroundColor)
@@ -907,9 +914,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             msg = "Server Error\nContact server administrator";
         } else if (error instanceof NetworkError) {
             msg = "Network Error";
-        }
-        else
-        {
+        } else {
             msg = "Technical Error";
         }
         awesomeSuccessDialog.setMessage(msg);
@@ -926,7 +931,28 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             if (jsonObject.get("action").equals("Creating XML")) {
                 if (jsonObject.get("result").equals(helper.SUCCESS)) {
                     awesomeDialog.setMessage("XML Generated and Uploaded");
-                    sendImageForUpload(imageData.get(currentImage));
+                    if (imageData.size() > 0)
+                        sendImageForUpload(imageData.get(currentImage));
+                    else {
+                        awesomeDialog.hide();
+                        awesomeSuccessDialog = new AwesomeSuccessDialog(this);
+                        awesomeSuccessDialog.setTitle("Business Uploaded Successfully")
+                                .setMessage("")
+                                .setColoredCircle(R.color.dialogSuccessBackgroundColor)
+                                .setDialogIconAndColor(R.drawable.ic_done_black_24dp, R.color.white)
+                                .setCancelable(true)
+                                .setPositiveButtonText("OK")
+                                .setPositiveButtonbackgroundColor(R.color.dialogProgressBackgroundColor)
+                                .setPositiveButtonTextColor(R.color.white)
+                                .setPositiveButtonClick(new Closure() {
+                                    @Override
+                                    public void exec() {
+                                        awesomeSuccessDialog.hide();
+                                    }
+                                })
+                                .show();
+                        databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
+                    }
                 } else if (jsonObject.get("result").equals("Business Already Uploaded")) {
 
                 } else {
@@ -957,7 +983,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                         }
                                     })
                                     .show();
-                            databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE,DatabaseHelper.COLUMN_STATUS,1);
+                            databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
                         }
                     } else {
                         sendImageForUpload(imageData.get(currentImage));
@@ -1027,6 +1053,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             Row = row;
             Name = name;
         }
+
     }
 
     private void sendXMLForUpload(String aBuffer) {
@@ -1036,7 +1063,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         params.put("xml", aBuffer);
         params.put("businessName", companyName);
         volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
-        awesomeDialog.setMessage("\nTotal Images : " + this.imageData.size()+"\nTotal Files : "+this.fileData.size() + "\n\nUploading XML File");
+        awesomeDialog.setMessage("\nTotal Images : " + this.imageData.size() + "\nTotal Files : " + this.fileData.size() + "\n\nUploading XML File");
     }
 
     private void sendImageForUpload(ImageData imageData) {
@@ -1054,7 +1081,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
         volleyHelper.makeStringRequest(helper.getBaseURL() + "createimage.php", imageName, imageParams);
         Log.v(TAG, "Sending Image " + currentImage);
-        awesomeDialog.setMessage("\nTotal Images : " + this.imageData.size()+"\nTotal Files : "+this.fileData.size() + "\n\nUploading Image " + (currentImage + 1) + " of " +this.imageData.size());
+        awesomeDialog.setMessage("\nTotal Images : " + this.imageData.size() + "\nTotal Files : " + this.fileData.size() + "\n\nUploading Image " + (currentImage + 1) + " of " + this.imageData.size());
 
     }
 
@@ -1070,15 +1097,15 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     helper.getByteArrayFromPDFFile(databaseHelper.getStringFromRow(fileData.TableName, fileData.ColumnName, fileData.Row)),
                     Base64.DEFAULT);
 
-        Log.v(TAG,"PDF Byte Array\n" + file );
+        Log.v(TAG, "PDF Byte Array\n" + file);
         fileName = fileData.Name;
         fileParams.put("filename", fileName);
         fileParams.put("file", file);
         fileParams.put("businessName", companyName);
-        fileParams.put("number",currentFile+"");
+        fileParams.put("number", currentFile + "");
         volleyHelper.makeStringRequest(helper.getBaseURL() + "createfile.php", fileName, fileParams);
         Log.v(TAG, "Sending file " + currentFile);
-        awesomeDialog.setMessage("\nTotal Images : " + this.imageData.size()+"\nTotal Files : "+this.fileData.size() + "\n\nUploading File " + (currentFile + 1) + " of " +this.fileData.size());
+        awesomeDialog.setMessage("\nTotal Images : " + this.imageData.size() + "\nTotal Files : " + this.fileData.size() + "\n\nUploading File " + (currentFile + 1) + " of " + this.fileData.size());
 
     }
 }
