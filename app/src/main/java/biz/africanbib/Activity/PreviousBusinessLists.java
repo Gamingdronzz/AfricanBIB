@@ -32,6 +32,7 @@ public class PreviousBusinessLists extends AppCompatActivity implements View.OnC
     RecyclerViewAdapterPreviousBusiness adapter;
     private EditText editText;
     private List<PreviousBusiness> modelList;
+    private List<PreviousBusiness> updatedList = new ArrayList<PreviousBusiness>();
     DatabaseHelper databaseHelper;
     int clickedPosition = -1;
     private final int CONTEXT_MENU_DELETE = 1;
@@ -65,7 +66,7 @@ public class PreviousBusinessLists extends AppCompatActivity implements View.OnC
             @Override
             public void onClick(View view, int position) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                DatabaseHelper.setCurrentCompanyId(modelList.get(position).getBusinessID());
+                DatabaseHelper.setCurrentCompanyId(updatedList.get(position).getBusinessID());
                 intent.putExtra("type", MainActivity.EDITBUSINESS);
                 startActivity(intent);
                 Log.v(TAG, "Closing Previous Business and Opening Business");
@@ -90,6 +91,7 @@ public class PreviousBusinessLists extends AppCompatActivity implements View.OnC
         }
         //update recyclerview
         adapter.updateList(currentList);
+        updatedList = currentList;
     }
 
     private void bindviews() {
@@ -113,13 +115,14 @@ public class PreviousBusinessLists extends AppCompatActivity implements View.OnC
             modelList.add(i, result[i]);
             adapter.notifyItemInserted(i);
         }
+        updatedList = modelList;
     }
 
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         if (v.getId() == R.id.recycler_view_previous_businesses) {
-            menu.setHeaderTitle(modelList.get(clickedPosition).getBusinessName());
+            menu.setHeaderTitle(updatedList.get(clickedPosition).getBusinessName());
             menu.add(Menu.NONE, CONTEXT_MENU_DELETE, Menu.NONE, "Delete");
         }
     }
@@ -128,9 +131,9 @@ public class PreviousBusinessLists extends AppCompatActivity implements View.OnC
     public boolean onContextItemSelected(MenuItem item) {
         int index = item.getItemId();
         if (index == CONTEXT_MENU_DELETE) {
-            int businessid = modelList.get(clickedPosition).getBusinessID();
+            int businessid = updatedList.get(clickedPosition).getBusinessID();
             if (databaseHelper.deleteBusiness(businessid)) {
-                modelList.remove(clickedPosition);
+                updatedList.remove(clickedPosition);
                 adapter.notifyItemRemoved(clickedPosition);
             } else {
 
