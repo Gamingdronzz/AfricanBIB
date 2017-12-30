@@ -1036,7 +1036,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private void updateBusiness() {
         Calendar c = Calendar.getInstance();
         databaseHelper.updateIntValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_STATUS, 1);
-        databaseHelper.updateStringValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_DATE_OF_UPLOADING, new SimpleDateFormat("dd-MM-yyyy").format(c.getTime()));
+        databaseHelper.updateStringValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_DATE_OF_UPLOADING, new SimpleDateFormat("dd-MMM-yyyy").format(c.getTime()));
         databaseHelper.updateStringValue(DatabaseHelper.TABLE_COMPANY_PROFILE, DatabaseHelper.COLUMN_TIME_OF_UPLOADING, new SimpleDateFormat("hh:mm:ss a").format(c.getTime()));
     }
 

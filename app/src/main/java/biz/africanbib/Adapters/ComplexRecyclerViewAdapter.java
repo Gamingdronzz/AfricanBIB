@@ -609,6 +609,10 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             if (simpleImage.getImage() != null) {
                 viewHolderSimpleImage.setImage(simpleImage.getImage());
             }
+            else
+            {
+                viewHolderSimpleImage.setImage(BitmapFactory.decodeResource(context.getResources(),R.mipmap.ic_launcher_round));
+            }
 
         }
     }

@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -46,12 +47,14 @@ public class RecyclerViewAdapterPreviousBusiness extends RecyclerView.Adapter<Re
 
         Log.v(TAG, "Status = " + model.isUploadStatus());
         if (model.isUploadStatus()) {
-            holder.buttonBusinessName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.ic_tick, 0);
+            holder.buttonBusinessName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.ic_success, 0);
+            //holder.layout.setBackground(context.getResources().getDrawable(R.drawable.ps__button_business_success));
             holder.uploadedOn.setText("Uploaded on : " + model.getDateOfUploading() + " at " + model.getTimeOfUploading());
             holder.uploadedOn.setVisibility(View.VISIBLE);
         } else {
 
-            holder.buttonBusinessName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.ic_cross, 0);
+            holder.buttonBusinessName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.ic_failed, 0);
+            //holder.layout.setBackground(context.getResources().getDrawable(R.drawable.ps__button_business_failed));
             holder.uploadedOn.setVisibility(View.GONE);
         }
 
@@ -73,6 +76,7 @@ public class RecyclerViewAdapterPreviousBusiness extends RecyclerView.Adapter<Re
         private Button buttonBusinessName;
         private TextView addedOn;
         private TextView uploadedOn;
+        private LinearLayout layout;
         //private ImageView imageViewUploadStatus;
 
         private MyViewHolder(View itemView) {
@@ -80,6 +84,7 @@ public class RecyclerViewAdapterPreviousBusiness extends RecyclerView.Adapter<Re
             buttonBusinessName = (Button) itemView.findViewById(R.id.previous_business_name);
             addedOn = (TextView) itemView.findViewById(R.id.txtview_addedon);
             uploadedOn = (TextView) itemView.findViewById(R.id.txtview_uploadedon);
+            layout = (LinearLayout) itemView.findViewById(R.id.previous_business_layout);
             //imageViewUploadStatus = (ImageView) itemView.findViewById(R.id.imageViewUploadStatus);
 
         }

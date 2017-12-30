@@ -562,7 +562,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_COMPANY_NAME, businessName);
         Calendar c = Calendar.getInstance();
-        values.put(COLUMN_DATE_OF_ADDITION, new SimpleDateFormat("dd-MM-yyyy").format(c.getTime()));
+        values.put(COLUMN_DATE_OF_ADDITION, new SimpleDateFormat("dd-MMM-yyyy").format(c.getTime()));
         values.put(COLUMN_TIME_OF_ADDITION, new SimpleDateFormat("hh:mm:ss a").format(c.getTime()));
         long result = db.insert(TABLE_COMPANY_PROFILE, null, values);
         //Log.v(TAG, "Insert = " + result);

@@ -210,13 +210,14 @@ public class Tab1 extends Fragment {
                     new int[]{0, 1, 2}, selectedPosition, tableName, columnName, -1, "companyNgoDiaspora"));
 
             columnName = DatabaseHelper.COLUMN_LOGO;
-            Bitmap image = null;
+            Bitmap corporatelogo = null;
             try {
-                image = helper.createBitmapFromByteArray(databaseHelper.getBlobValue(columnName, tableName));
+                corporatelogo = helper.createBitmapFromByteArray(databaseHelper.getBlobValue(columnName, tableName));
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            items.add(helper.buildImage(corporateLogo, -1, image, tableName, columnName, "logo"));
+            //Log.v(TAG,"Image Value = " + image.toString());
+            items.add(helper.buildImage(corporateLogo, -1, corporatelogo, tableName, columnName, "logo"));
 
             columnName = DatabaseHelper.COLUMN_KEYVISUAL_PHOTO;
             Bitmap keyvisual = null;
