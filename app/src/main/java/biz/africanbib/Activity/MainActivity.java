@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     public int referencesCount = 0;
     public int ownersCount = 0;
     public int managersCount = 0;
+    public int subsidiaryCount=0;
     //This is our tablayout
     private TabLayout tabLayout;
     //This is our viewPager
@@ -466,6 +467,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         referencesCount = 0;
         ownersCount = 0;
         managersCount = 0;
+        subsidiaryCount=0;
         try {
             Log.v(TAG, "Trying to create xml FileChosed");
             File file = new File(getApplicationContext().getFilesDir(), companyName + ".xml");
@@ -558,7 +560,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         if (date.getValue() != null) {
                             xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, date.getXmlTag());
-                            xmlSerializer.text(helper.toDays(date.getValue()));
+                            xmlSerializer.text(helper.reverseFormat(date.getValue()));
                             xmlSerializer.endTag(null, date.getXmlTag());
                         }
                     } else if (item instanceof SimpleImage) {
@@ -777,7 +779,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     if (date.getValue() != null) {
                         xmlSerializer.text(System.getProperty("line.separator"));
                         xmlSerializer.startTag(null, date.getXmlTag());
-                        xmlSerializer.text(helper.toDays(date.getValue()));
+                        xmlSerializer.text(helper.reverseFormat(date.getValue()));
                         xmlSerializer.endTag(null, date.getXmlTag());
                     }
                 } else if (obj instanceof SimpleImage) {
@@ -803,6 +805,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         if (simpleImage.getTitle().equals("Owners Image")) {
                             ownersCount++;
                             tagName = tagName + ownersCount;
+                        }
+                        if (simpleImage.getTitle().equals("Subsidiary Logo")) {
+                            subsidiaryCount++;
+                            tagName = tagName + subsidiaryCount;
                         }
                         if (simpleImage.getTitle().equals("Institution Logo")) {
                             referencesCount++;

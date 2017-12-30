@@ -35,7 +35,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     String TAG = "DBHelper";
-    public static final int DATABASE_VERSION = 28;
+    public static final int DATABASE_VERSION = 29;
     public static final String DATABASE_NAME = "ABIBDatabase";
 
     //Table Companies
@@ -342,7 +342,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             COLUMN_COUNTRY + " NUMBER," +
             COLUMN_TELEPHONE + " VARCHAR," +
             COLUMN_EMAIL + " VARCHAR, " +
-            COLUMN_WEBSITE + " VARCHAR " +
+            COLUMN_WEBSITE + " VARCHAR, " +
+            COLUMN_LOGO + " BLOB" +
             ")";
 /*
     private String CREATE_TABLE_ACADEMIC_BACKGROUND = "CREATE TABLE IF NOT EXISTS " + TABLE_ACADEMIC_BACKGROUND + " ( " +

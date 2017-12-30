@@ -175,64 +175,10 @@ public class Tab2 extends Fragment {
         protected ArrayList<Object> doInBackground(Void... voids) {
             items = new ArrayList<>();
 
-
-            //items.add(new SimpleEditText(""));
-
-
-        /*
-        items.add(new Heading("INVESTMENT OPPURTUNTIES", "investmentOpportunities"));
-        items.add(new SimpleText("Needs"));
-        Log.v("Tab2", "Business type = " + MainActivity.typeOfBusiness);
-
-        if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
-            int[] ids = databaseHelper.getrowids(tableName);
-            if (ids != null) {
-                for (int i = 0; i < ids.length; i++) {
-
-                    items.add(helper.buildEditText(
-                            "Need",
-                            databaseHelper.getStringFromRow(tableName, columnName, ids[i]),
-                            tableName,
-                            columnName,
-                            ids[i], "need"));
-                    items.add(new Divider());
-                }
-                needRows = ids.length;
-            }
-
-
-        }
-        items.add(helper.buildAdd(1, new String[]{"Need"}, tableName, new String[]{columnName}, new String[]{"need"}));
-
-        items.add(new SimpleText("Offers"));
-        columnName = DatabaseHelper.COLUMN_OFFER;
-        tableName = DatabaseHelper.TABLE_OFFERS;
-        if (MainActivity.typeOfBusiness == MainActivity.EDITBUSINESS) {
-            int[] ids = databaseHelper.getrowids(tableName);
-            if (ids != null) {
-                for (int i = 0; i < ids.length; i++) {
-                    items.add(
-                            helper.buildEditText(
-                                    "Offer",
-                                    databaseHelper.getStringFromRow(tableName, columnName, ids[i]),
-                                    tableName,
-                                    columnName,
-                                    ids[i], "offer"));
-                    items.add(new Divider());
-                }
-                offerrows = ids.length;
-            }
-
-
-        }
-        items.add(helper.buildAdd(1, new String[]{"Offer"}, DatabaseHelper.TABLE_OFFERS, new String[]{DatabaseHelper.COLUMN_OFFER}, new String[]{"offer"}));
-
-*/
-            String columnName = DatabaseHelper.COLUMN_FIRST_NAME;
             String tableName = DatabaseHelper.TABLE_CONTACT_PERSON;
             String value;
             items.add(new Heading("CONTACT PERSON", "contact"));
-            columnName = DatabaseHelper.COLUMN_TELEPHONE;
+            String columnName = DatabaseHelper.COLUMN_TELEPHONE;
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText("Telephone", value, tableName, columnName, -1, "telephone"));
             columnName = DatabaseHelper.COLUMN_CELLPHONE;
@@ -542,6 +488,7 @@ public class Tab2 extends Fragment {
             items.add(new SimpleText("SUBSIDIARIES", "contact"));
             tableName = DatabaseHelper.TABLE_SUBSIDIARIES;
             xmltags = new String[]{
+                    "logo",
                     "website",
                     "email",
                     "telephone",
@@ -553,6 +500,7 @@ public class Tab2 extends Fragment {
                     "name"
             };
             titles = new String[]{
+                    "Subsidiary Logo",
                     "Website",
                     "Email",
                     "Telephone/Cellphone",
@@ -563,6 +511,7 @@ public class Tab2 extends Fragment {
                     "Street & Number",
                     "Subsidiary Name"};
             columnNames = new String[]{
+                    DatabaseHelper.COLUMN_LOGO,
                     DatabaseHelper.COLUMN_WEBSITE,
                     DatabaseHelper.COLUMN_EMAIL,
                     DatabaseHelper.COLUMN_TELEPHONE,
@@ -583,6 +532,15 @@ public class Tab2 extends Fragment {
                                 selectedPosition = databaseHelper.getIntFromRow(tableName, columnNames[j], ids[i]);
                                 items.add(helper.buildDropDown(titles[j], helper.getCountryNames(), helper.getCountryCodes(), selectedPosition, tableName, columnNames[j],
                                         ids[i], xmltags[j]));
+                            } else if (columnNames[j].equals(DatabaseHelper.COLUMN_LOGO)) {
+                                Bitmap subsidiayLogo = null;
+                                try {
+                                    subsidiayLogo = helper.createBitmapFromByteArray(databaseHelper.getBlobFromRow(columnNames[j], tableName, ids[i]));
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                                items.add(helper.buildImage(titles[j], ids[i],subsidiayLogo, tableName, columnNames[j], xmltags[j]));
+
                             } else {
                                 items.add(
                                         helper.buildEditText(
@@ -598,7 +556,7 @@ public class Tab2 extends Fragment {
                     subsidiaryRows = ids.length;
                 }
             }
-            items.add(helper.buildAdd(9, titles, tableName, columnNames, xmltags));
+            items.add(helper.buildAdd(10, titles, tableName, columnNames, xmltags));
 
 
        /* items.add(new Heading("SUBSIDIARIES", "contact"));
