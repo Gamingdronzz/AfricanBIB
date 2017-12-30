@@ -980,7 +980,7 @@ public class Helper {
     }
 
     public byte[] getByteArrayFromBitmapFile(String path) {
-        if(path!=null) {
+        if (path != null) {
             Bitmap bitmap = BitmapFactory.decodeFile(path);
             return this.createByteArrayFromBitmap(bitmap);
         }
@@ -1008,11 +1008,19 @@ public class Helper {
         return Matcher.quoteReplacement(aInput);
     }
 
+    public String reverseFormat(String date) {
+        if (date != null) {
+            String[] revDate = date.split("\\.");
+            return revDate[2] + "." + revDate[1] + "." + revDate[0];
+        }
+        else return null;
+    }
+
     public String toDays(String date) {
         Date d = null;
         if (date != null) {
             try {
-                d = new SimpleDateFormat("yyyy.mm.dd").parse(date);
+                d = new SimpleDateFormat("dd.mm.yyyy").parse(date);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

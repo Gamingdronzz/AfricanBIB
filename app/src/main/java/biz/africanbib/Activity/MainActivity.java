@@ -555,7 +555,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
                     } else if (item instanceof SimpleDate) {
                         SimpleDate date = (SimpleDate) item;
-                        //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
                         if (date.getValue() != null) {
                             xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, date.getXmlTag());
@@ -564,7 +563,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
                     } else if (item instanceof SimpleImage) {
                         SimpleImage simpleImage = (SimpleImage) item;
-                        //Log.v(TAG, "Found " + date.getTitle() + " with value = " + date.getValue() + " where i = " + i);
                         if (simpleImage.getImage() != null) {
 
                             xmlSerializer.text(System.getProperty("line.separator"));
@@ -608,7 +606,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                                 collectedBy = helper.getSelectedValue(dropDown, dropDown.getSelectedPosition());
                             }
                             atLoc = edtLoc.getValue();
-                            onDate = date.getValue();
+                            onDate = helper.reverseFormat(date.getValue());
                             xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, ((DropDown) item).getXmlTag());
                             if (!collectedBy.isEmpty()) {

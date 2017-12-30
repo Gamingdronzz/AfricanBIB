@@ -608,10 +608,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             viewHolderSimpleImage.setTitle(simpleImage.getTitle());
             if (simpleImage.getImage() != null) {
                 viewHolderSimpleImage.setImage(simpleImage.getImage());
-            }
-            else
-            {
-                viewHolderSimpleImage.setImage(BitmapFactory.decodeResource(context.getResources(),R.mipmap.ic_launcher_round));
+            } else {
+                viewHolderSimpleImage.setImage(BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher_round));
             }
 
         }
@@ -1446,7 +1444,8 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         public void onDateSet(DatePicker view, int year, int month, int day) {
             SimpleDate simpleDate = (SimpleDate) adapter.items.get(position);
             month = month + 1;
-            String stringOfDate = year + "." + month + "." + day;
+            //String stringToSave = year + "." + month + "." + day;
+            String stringOfDate = day + "." + month + "." + year;
 
             simpleDate.setValue(stringOfDate);
             adapter.notifyItemChanged(position);
