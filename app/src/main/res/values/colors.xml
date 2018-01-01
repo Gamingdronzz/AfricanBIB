@@ -4,8 +4,9 @@
     <color name="colorPrimary">#03A9F4</color>
     <color name="colorPrimaryDark">#0288D1</color>
     <color name="colorPrimaryLight">#B3E5FC</color>
-    <color name="colorAccent">#607D8B</color>
-    <color name="colorAccentDark">#40515a</color>
+    <color name="colorAccent">#37474f</color>
+    <color name="colorAccentLight">#62727b</color>
+    <color name="colorAccentDark">#102027</color>
     <color name="colorPrimaryText">#212121</color>
     <color name="colorSecondaryText">#757575</color>
     <color name="icons">#FFFFFF</color>
@@ -29,6 +30,16 @@
 
 
     <!--
+
+
+        <color name="colorPrimary">#aa00ff</color>
+        <color name="colorPrimaryLight">#e254ff</color>
+        <color name="colorPrimaryDark">#7200ca</color>
+        <color name="colorAccent">#ff7043</color>
+        <color name="colorAccentLight">#ffa270</color>
+        <color name="colorAccentDark">#c63f17</color>
+        <color name="colorPrimaryText">#ffffff</color>
+        <color name="colorSecondaryText">#000000</color>
 
         <color name="colorPrimary">#03A9F4</color>
         <color name="colorPrimaryDark">#0288D1</color>

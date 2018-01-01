@@ -1,10 +1,18 @@
 package biz.africanbib.App;
 import android.app.Application;
+import android.os.Environment;
 import android.text.TextUtils;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
+import com.bosphere.filelogger.FL;
+import com.bosphere.filelogger.FLConfig;
+import com.bosphere.filelogger.Loggable;
+
+import java.io.File;
+import java.io.IOException;
+
 import biz.africanbib.Tools.BitmapCache;
 
 public class AppController extends Application {
@@ -16,6 +24,7 @@ public class AppController extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+
     }
 
     public static synchronized AppController getInstance() {
@@ -59,4 +68,9 @@ public class AppController extends Application {
             this.mRequestQueue.cancelAll(tag);
         }
     }
+
+    /* Checks if external storage is available for read and write */
+
+
+
 }

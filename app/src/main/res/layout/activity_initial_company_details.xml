@@ -34,7 +34,7 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/ps__button_stumble_upon"
+        android:background="@drawable/ps_button_submit"
         android:text="Submit"
         android:layout_alignParentBottom="true"
         android:textColor="@color/colorWhite"

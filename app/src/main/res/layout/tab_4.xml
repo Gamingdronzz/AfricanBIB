@@ -3,7 +3,6 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorLightGray"
-    android:paddingBottom="@dimen/padding_large"
     android:layout_height="match_parent">
 
     <LinearLayout
@@ -20,9 +19,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:padding="@dimen/padding_medium"
-            android:paddingRight="@dimen/padding_large"
+            android:gravity="center_vertical|center_horizontal"
+            android:padding="@dimen/padding_min"
+            android:layout_gravity="center_horizontal"
+            android:background="@color/colorOffWhite"
             android:layout_marginBottom="?attr/actionBarSize"
             android:foregroundGravity="center_vertical"
             android:orientation="horizontal">
@@ -30,10 +30,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/accept"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/margin_large"></CheckBox>
+                android:layout_marginRight="@dimen/margin_min"></CheckBox>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -43,7 +41,7 @@
                 android:textStyle="bold"
                 android:layout_centerVertical="true"
                 android:id="@+id/textViewAccept"
-                android:layout_toLeftOf="@id/accept"
+                android:layout_toRightOf="@id/accept"
                 android:text="@string/accept"/>
 
             />

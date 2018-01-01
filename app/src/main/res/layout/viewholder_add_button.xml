@@ -14,7 +14,9 @@
         android:layout_height="wrap_content"
         android:tint="@color/colorWhite"
         android:layout_gravity="center_horizontal"
+        app:backgroundTint="@color/colorAccent"
         android:padding="@dimen/padding_large"
+        android:elevation="@dimen/elevation_xlarge"
         android:src="@android:drawable/ic_input_add"/>
 
 

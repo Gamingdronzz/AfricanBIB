@@ -54,7 +54,7 @@ public class RecyclerViewAdapterPreviousBusiness extends RecyclerView.Adapter<Re
         } else {
 
             holder.buttonBusinessName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.ic_failed, 0);
-            //holder.layout.setBackground(context.getResources().getDrawable(R.drawable.ps__button_business_failed));
+            //holder.layout.setBackground(context.getResources().getDrawable(R.drawable.ps_button_validate));
             holder.uploadedOn.setVisibility(View.GONE);
         }
 

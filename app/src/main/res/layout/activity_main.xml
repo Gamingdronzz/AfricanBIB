@@ -12,14 +12,14 @@
         app:tabMode="fixed"
         app:tabGravity="center"
         app:tabTextAppearance="@style/TextAppearance.AppCompat.Large"
-        app:tabTextColor="@color/colorBlack"
-        app:tabSelectedTextColor="@color/colorWhite"
+        app:tabTextColor="@color/colorWhite"
+        app:tabSelectedTextColor="@color/colorPrimary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorAccent"
         android:minHeight="?attr/actionBarSize"
-        app:tabIndicatorColor="@color/colorBlack"
-        app:tabIndicatorHeight="@dimen/height_large" />
+        app:tabIndicatorColor="@color/colorPrimary"
+        app:tabIndicatorHeight="@dimen/height_medium" />
 
     <!--
     <com.carlosmuvi.segmentedprogressbar.SegmentedProgressBar
@@ -40,23 +40,23 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?attr/actionBarSize"
         android:text="Validate And Upload"
         android:layout_alignParentBottom="true"
         android:id="@+id/validate"
         android:textSize="@dimen/text_medium"
         android:textColor="@color/white"
-        android:background="@drawable/ps__button_dropbox"/>
+        android:background="@drawable/ps_button_validate"/>
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/left_arrow"
         android:id="@+id/fab_go_left"
-        android:layout_above="@id/validate"
+        android:layout_centerVertical="true"
         android:tint="@color/colorWhite"
-        app:backgroundTint="@color/colorOrange"
-        android:layout_alignParentBottom="true"
+        android:scaleType="centerInside"
+        app:backgroundTint="@color/colorBlack"
         android:layout_marginLeft="@dimen/margin_large"
         android:padding="@dimen/padding_large"/>
 
@@ -64,14 +64,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/right_arrow"
-        android:layout_above="@id/validate"
-        android:layout_alignParentBottom="true"
+        android:scaleType="centerInside"
+        android:layout_centerVertical="true"
         android:tint="@color/colorWhite"
         android:layout_alignParentRight="true"
-        app:backgroundTint="@color/colorOrange"
+        app:backgroundTint="@color/colorBlack"
         android:id="@+id/fab_go_right"
         android:layout_marginRight="@dimen/margin_large"
-        android:padding="@dimen/padding_xlarge"/>
+        android:padding="@dimen/padding_large"/>
 
 
 
