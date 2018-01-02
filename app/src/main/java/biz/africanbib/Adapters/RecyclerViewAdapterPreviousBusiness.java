@@ -43,13 +43,13 @@ public class RecyclerViewAdapterPreviousBusiness extends RecyclerView.Adapter<Re
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         PreviousBusiness model = previousBusinessList.get(position);
         holder.buttonBusinessName.setText(model.getBusinessName());
-        holder.addedOn.setText("Added on : " + model.getDateOfAddition() + "at " + model.getTimeOfAddition());
+        holder.addedOn.setText("Added on : " + model.getDateOfAddition() + " at " + model.getTimeOfAddition());
 
         Log.v(TAG, "Status = " + model.isUploadStatus());
         if (model.isUploadStatus()) {
             holder.buttonBusinessName.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.mipmap.ic_success, 0);
             //holder.layout.setBackground(context.getResources().getDrawable(R.drawable.ps__button_business_success));
-            holder.uploadedOn.setText("Uploaded on : " + model.getDateOfUploading() + " at " + model.getTimeOfUploading());
+            holder.uploadedOn.setText("Last Uploaded on : " + model.getDateOfUploading() + " at " + model.getTimeOfUploading());
             holder.uploadedOn.setVisibility(View.VISIBLE);
         } else {
 
