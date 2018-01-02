@@ -1004,8 +1004,9 @@ public class Helper {
         return ids[index];
     }
 
-    public static String forReplacementString(String aInput) {
-        return Matcher.quoteReplacement(aInput);
+    public String forReplacementString(String aInput) {
+
+        return Matcher.quoteReplacement(checkForInput(aInput));
     }
 
     public String reverseFormat(String date) {

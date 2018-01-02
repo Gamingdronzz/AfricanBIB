@@ -41,7 +41,7 @@ public class AppController extends Application {
         {
             ioe.printStackTrace();
         }
-        Log.v("Application","File Created");
+        Log.v("Application","File Created at : " + outputFile.getAbsolutePath());
 
     }
 

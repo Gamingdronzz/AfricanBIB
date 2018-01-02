@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             companyName = databaseHelper.getStringValue(DatabaseHelper.COLUMN_COMPANY_NAME, DatabaseHelper.TABLE_COMPANY_PROFILE);
             getSupportActionBar().setTitle(companyName);
         }
-        AppController.getInstance().writeLogToFile(companyName);
+        AppController.getInstance().writeLogToFile(helper.checkForInput(companyName));
         showValidate(false);
     }
 
@@ -556,7 +556,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             if (simpleEditText.getValue().trim().length() != 0) {
                                 xmlSerializer.text(System.getProperty("line.separator"));
                                 xmlSerializer.startTag(null, simpleEditText.getXmlTag());
-                                xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
+                                xmlSerializer.text(helper.forReplacementString(simpleEditText.getValue()));
                                 xmlSerializer.endTag(null, simpleEditText.getXmlTag());
                             }
                         }
