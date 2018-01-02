@@ -5,6 +5,8 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/margin_medium"
     android:orientation="vertical"
+    android:layout_marginLeft="@dimen/margin_large"
+    android:layout_marginRight="@dimen/margin_large"
     android:padding="@dimen/padding_medium">
 
     <TextView
@@ -21,6 +23,7 @@
     <android.support.v7.widget.AppCompatSpinner
         android:id="@+id/spinner_dropdown"
         style="@style/SpinnerTheme"
+        android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:spinnerMode="dropdown">

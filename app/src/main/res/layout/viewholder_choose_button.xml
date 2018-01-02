@@ -22,7 +22,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:background="@drawable/ps__button_stumble_upon"
-        android:padding="@dimen/padding_large"
+        android:paddingLeft="@dimen/padding_large"
+        android:paddingRight="@dimen/padding_large"
+        android:textColor="@color/white"
         android:text="Choose File"
         android:textSize="@dimen/text_small" />
 

@@ -6,4 +6,4 @@
     android:textColor="@color/colorBlack"
     android:padding="@dimen/padding_small"
     android:textSize="@dimen/text_medium"
-    android:gravity="left|center_vertical"/>
+    android:gravity="center_horizontal|center_vertical"/>

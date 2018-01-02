@@ -52,6 +52,7 @@ public class Helper {
     public String SUCCESS = "success";
     final String TAG = "Helper";
     private String baseURL = "http://www.imergesoft.de/android/";
+    private String uploadURL = "http://www.gamingdronzz.com/Android-Log-Files/";
     //private String baseURL = "http://www.gamingdronzz.com/gunjita/android/";
 
 
@@ -66,6 +67,10 @@ public class Helper {
 
     public String getBaseURL() {
         return this.baseURL;
+    }
+
+    public String getUploadURL() {
+        return this.uploadURL;
     }
 
     public JSONObject getJson(String input) {
@@ -962,13 +967,13 @@ public class Helper {
         return null;
     }
 
-    public byte[] getByteArrayFromPDFFile(String path) {
+    public byte[] getByteArrayFromFile(String path) {
         if (path != null) {
 
             File file = new File(path);
             try {
                 byte[] data = FileUtils.readFileToByteArray(file);//Convert any file, image or video into byte array
-                Log.v(TAG, "getByteArrayFromPDFFile: " + " File = " + file.getName() + "\nLength = " + data.length + "Array =   " + data.toString());
+                Log.v(TAG, "getByteArrayFromFile: " + " File = " + file.getName() + "\nLength = " + data.length + "Array =   " + data.toString());
                 return data;
             } catch (IOException e) {
                 Log.d(TAG, e.toString());
