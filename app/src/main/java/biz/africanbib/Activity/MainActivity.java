@@ -146,13 +146,31 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private void UploadLog() {
         try {
 
-            String file, fileName;
+            String logFile = null, fileName = companyName;
             Map<String, String> logParams = new HashMap<>();
-            String logFile = getFilesDir() + "/" + helper.checkForInput(companyName) + ".txt";
-            file = Base64.encodeToString(helper.getByteArrayFromFile(logFile), Base64.DEFAULT);
-            fileName = companyName;
+            String logFilePath = getFilesDir() + "/" + helper.checkForInput(companyName) + ".txt";
+            try {
+                logFile = Base64.encodeToString(helper.getByteArrayFromFile(logFilePath), Base64.DEFAULT);
+            } catch (NullPointerException npe) {
+                Log.v(TAG, Log.getStackTraceString(npe));
+                new AwesomeErrorDialog(this).setTitle("Log File Not Found")
+                        .setMessage("Business has been uploaded succesfully\nNo need to upload error log")
+                        .setColoredCircle(R.color.dialogNoticeBackgroundColor)
+                        .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.black)
+                        .setCancelable(false).setButtonText(getString(R.string.dialog_ok_button))
+                        .setButtonBackgroundColor(R.color.colorPrimaryDark)
+                        .setButtonText(getString(R.string.dialog_ok_button))
+                        .setErrorButtonClick(new Closure() {
+                            @Override
+                            public void exec() {
+                                finish();
+                            }
+                        })
+                        .show();
+                return;
+            }
             logParams.put("filename", fileName);
-            logParams.put("file", file);
+            logParams.put("file", logFile);
             logParams.put("application", "AfricanBIB");
             volleyHelper.makeStringRequest(helper.getUploadURL() + "uploadLog.php", fileName, logParams);
             logUpload = true;
@@ -162,15 +180,14 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     .setMessage("Please Wait..")
                     .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
                     .show();
-        } catch (Exception e) {
-            Log.d(TAG, Log.getStackTraceString(e));
-            new AwesomeErrorDialog(this)
-                    .setTitle("Error")
-                    .setMessage("Unable to upload log file!")
-                    .setColoredCircle(R.color.dialogErrorBackgroundColor)
-                    .setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white)
+        } catch (Exception fnfe) {
+            Log.d(TAG, Log.getStackTraceString(fnfe));
+            new AwesomeErrorDialog(this).setTitle("Error Occured")
+                    .setMessage("Please Try Again")
+                    .setColoredCircle(R.color.dialogNoticeBackgroundColor)
+                    .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.black)
                     .setCancelable(false).setButtonText(getString(R.string.dialog_ok_button))
-                    .setButtonBackgroundColor(R.color.dialogErrorBackgroundColor)
+                    .setButtonBackgroundColor(R.color.colorPrimaryDark)
                     .setButtonText(getString(R.string.dialog_ok_button))
                     .setErrorButtonClick(new Closure() {
                         @Override
@@ -179,6 +196,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         }
                     })
                     .show();
+
         }
     }
 
@@ -195,12 +213,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         fileData = new ArrayList<>();
         goLeft.setVisibility(View.INVISIBLE);
         logUpload = false;
-        awesomeDialog = new AwesomeProgressDialog(this)
-                .setTitle("Uploading Business")
-                .setMessage("Please wait..")
-                .setColoredCircle(R.color.dialogProgressBackgroundColor)
-                .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white)
-                .setCancelable(false);
+        awesomeDialog = new AwesomeProgressDialog(this);
 
         goLeft.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -424,7 +437,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
 
-    void Test(ArrayList<Object> items1, ArrayList<Object> items2, ArrayList<Object> items3, ArrayList<Object> items4) {
+    private void Test(ArrayList<Object> items1, ArrayList<Object> items2, ArrayList<Object> items3, ArrayList<Object> items4) {
         productMediaCount = 0;
         referencesCount = 0;
         ownersCount = 0;
@@ -432,7 +445,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         subsidiaryCount = 0;
         try {
             Log.v(TAG, "Trying to create xml File at : " + getApplicationContext().getFilesDir());
-            File file = new File(getApplicationContext().getFilesDir(), companyName + ".xml");
+            File file = new File(getApplicationContext().getFilesDir(), helper.checkForInput(companyName) + ".xml");
             file.createNewFile();
             Log.v(TAG, "Path = " + file.getAbsolutePath());
             FileOutputStream fileos = new FileOutputStream(file);
@@ -893,6 +906,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             //awesomeDialog.setCancelable(true);
             final AwesomeSuccessDialog awesomeSuccessDialog = new AwesomeSuccessDialog(this);
             awesomeSuccessDialog.setPositiveButtonText("Upload Log Again")
+                    .setTitle("Log Uploading Failed")
+                    .setMessage("What do you want to do ?")
                     .setCancelable(false)
                     .setNegativeButtonText("Some Other Time")
                     .setColoredCircle(R.color.dialogErrorBackgroundColor)
@@ -1105,7 +1120,11 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     private void sendXMLForUpload(String aBuffer) {
         logUpload = false;
         try {
-            awesomeDialog.setCancelable(false);
+            awesomeDialog.setCancelable(false)
+                    .setTitle("Uploading Business")
+                    .setMessage("Please wait..")
+                    .setColoredCircle(R.color.dialogProgressBackgroundColor)
+                    .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white);
             Map<String, String> params = new HashMap<>();
             params.put("xml", aBuffer);
             params.put("businessName", helper.checkForInput(companyName));

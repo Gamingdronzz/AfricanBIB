@@ -789,7 +789,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     cursor.moveToNext();
                 }
             } else {
-                Log.v(TAG, "IDS are null");
+                Log.v(TAG,tableName +  " IDS are null");
             }
         } catch (Exception e) {
             e.printStackTrace();
