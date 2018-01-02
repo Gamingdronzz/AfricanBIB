@@ -205,10 +205,13 @@ public class Tab2 extends Fragment {
             columnName = DatabaseHelper.COLUMN_DISTRICT;
             value = databaseHelper.getStringValue(columnName, tableName);
             items.add(helper.buildEditText("District / State", value, tableName, columnName, -1, "district"));
+
             columnName = DatabaseHelper.COLUMN_COUNTRY;
-            items.add(helper.buildDropDown("Country", helper.getCountryNames(), helper.getCountryCodes(), 0, tableName, columnName, -1, "country"));
-            columnName = DatabaseHelper.COLUMN_PREFIX;
             int selectedPosition = databaseHelper.getIntValue(columnName, tableName);
+            items.add(helper.buildDropDown("Country", helper.getCountryNames(), helper.getCountryCodes(), selectedPosition, tableName, columnName, -1, "country"));
+
+            columnName = DatabaseHelper.COLUMN_PREFIX;
+            selectedPosition = databaseHelper.getIntValue(columnName, tableName);
             items.add(
                     helper.buildDropDown(
                             "Prefix",
@@ -251,7 +254,7 @@ public class Tab2 extends Fragment {
             tableName = DatabaseHelper.TABLE_REFERENCES;
             String[] xmltags = new String[]{
                     //"institutionType",
-                    "image",
+                    "logo",
                     "website",
                     "email",
                     "cellphone",

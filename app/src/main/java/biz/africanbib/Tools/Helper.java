@@ -1005,8 +1005,7 @@ public class Helper {
     }
 
     public String forReplacementString(String aInput) {
-
-        return Matcher.quoteReplacement(checkForInput(aInput));
+        return Matcher.quoteReplacement(aInput.trim());
     }
 
     public String reverseFormat(String date) {

@@ -272,7 +272,7 @@ public class Tab4 extends Fragment {
             items.add(helper.buildEditText(authorizedBy, value, tableName, columnName, -1, "authorizedBy"));
 
             columnName = DatabaseHelper.COLUMN_SOURCE_OF_DATA;
-            value = databaseHelper.getStringValue(columnName, tableName);
+            selectedPosition = databaseHelper.getIntValue(columnName, tableName);
             items.add(helper.buildDropDown("Source of Data", new String[]{"Not specified",
                             "ABIB collected",
                             "Government organisation",
@@ -281,9 +281,9 @@ public class Tab4 extends Fragment {
                     new int[]{0, 1, 2, 3}, selectedPosition, tableName, columnName, -1, "sourceOfData"));
 
             columnName = DatabaseHelper.COLUMN_PLACE_OF_COLECTION;
+            selectedPosition = databaseHelper.getIntValue(columnName, tableName);
             items.add(helper.buildDropDown(placeOfCollection,
                     new String[]{"Event", "Company", "Others"}, new int[]{0}, selectedPosition, tableName, columnName, -1, "collectedBy"));
-            selectedPosition = databaseHelper.getIntValue(columnName, tableName);
             if (selectedPosition == 2) {
                 columnName = DatabaseHelper.COLUMN_OTHERS_SPECIFY;
                 value = databaseHelper.getStringValue(columnName, tableName);
@@ -309,6 +309,7 @@ public class Tab4 extends Fragment {
             items.add(helper.buildDropDown("Business Card Generation", new String[]{"False", "True"}, new int[]{0, 1}, selectedPosition, tableName, columnName, -1, "businessCardGeneration"));
 
             columnName = DatabaseHelper.COLUMN_COUNTRY;
+            selectedPosition=databaseHelper.getIntValue(columnName,tableName);
             items.add(helper.buildDropDown("Country of Location / Event",
                     helper.getCountryNames(), helper.getCountryCodes(), selectedPosition, tableName, columnName, -1, "country"));
             items.add(new SimpleText("DISCLAIMER\n\n" +

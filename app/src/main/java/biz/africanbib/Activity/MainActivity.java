@@ -10,6 +10,8 @@ import android.util.Base64;
 import android.util.Log;
 import android.util.Xml;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -20,10 +22,10 @@ import com.android.volley.NoConnectionError;
 import com.android.volley.ServerError;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeErrorDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeProgressDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeSuccessDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
-import com.hypertrack.hyperlog.HyperLog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -114,6 +116,53 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     }
 
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.clear();
+        menu.add(0, 0, Menu.NONE, "Upload Log");
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case 0:
+                try {
+                    String file, fileName;
+                    Map<String, String> logParams = new HashMap<>();
+                    String logFile = getFilesDir() + "/" + helper.checkForInput(companyName) + ".txt";
+                    file = Base64.encodeToString(helper.getByteArrayFromPDFFile(logFile), Base64.DEFAULT);
+                    fileName = companyName + ".txt";
+                    logParams.put("filename", fileName);
+                    logParams.put("file", file);
+                    logParams.put("businessName", companyName);
+                    volleyHelper.makeStringRequest(helper.getBaseURL() + "uploadLog.php", fileName, logParams);
+                    Log.v(TAG, "Sending file ");
+                    awesomeDialog.setMessage("Uploading Log File");
+                    awesomeDialog.show();
+                    return true;
+                } catch (Exception e) {
+                    Log.d(TAG, Log.getStackTraceString(e));
+                    new AwesomeErrorDialog(this)
+                            .setTitle("Error")
+                            .setMessage("Unable to upload log file!")
+                            .setColoredCircle(R.color.dialogErrorBackgroundColor)
+                            .setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white)
+                            .setCancelable(false).setButtonText(getString(R.string.dialog_ok_button))
+                            .setButtonBackgroundColor(R.color.dialogErrorBackgroundColor)
+                            .setButtonText(getString(R.string.dialog_ok_button))
+                            .setErrorButtonClick(new Closure() {
+                                @Override
+                                public void exec() {
+                                    finish();
+                                }
+                            })
+                            .show();
+                }
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
     private void handleIntent() {
         Intent intent = getIntent();
         typeOfBusiness = intent.getIntExtra("type", -1);
@@ -121,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     private void init() {
         helper = new Helper(this);
-    
+
         imageData = new ArrayList<>();
         fileData = new ArrayList<>();
         goLeft.setVisibility(View.INVISIBLE);
@@ -189,181 +238,68 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     private void checkValidation() {
-        Tab1 tab1 = (Tab1) adapter.getItem(0);
-        Tab2 tab2 = (Tab2) adapter.getItem(1);
-        Tab3 tab3 = (Tab3) adapter.getItem(2);
-        Tab4 tab4 = (Tab4) adapter.getItem(3);
+        try {
+            Tab1 tab1 = (Tab1) adapter.getItem(0);
+            Tab2 tab2 = (Tab2) adapter.getItem(1);
+            Tab3 tab3 = (Tab3) adapter.getItem(2);
+            Tab4 tab4 = (Tab4) adapter.getItem(3);
 
-        ArrayList<Object> items2 = tab2.getList();
-        ArrayList<Object> items3 = tab3.getList();
-        int i = -1;
-        if (tab4.getAccepted()) {
+            ArrayList<Object> items2 = tab2.getList();
+            ArrayList<Object> items3 = tab3.getList();
+            int i = -1;
+            if (tab4.getAccepted()) {
 
-            ArrayList<Object> items = tab1.getList();
-            for (Object o :
-                    items) {
-                i++;
-                if (o instanceof SimpleEditText) {
-                    SimpleEditText simpleEditText = (SimpleEditText) o;
+                ArrayList<Object> items = tab1.getList();
+                for (Object o :
+                        items) {
+                    i++;
+                    if (o instanceof SimpleEditText) {
+                        SimpleEditText simpleEditText = (SimpleEditText) o;
 
-
-                    //Business Name
-                    if (simpleEditText.getTitle().equals(tab1.businessName)) {
-                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid Business Name", Toast.LENGTH_SHORT).show();
-                            viewPager.setCurrentItem(0);
-                            simpleEditText.setFocused(true);
-                            tab4.getAdapter().notifyItemChanged(i);
-
-                            return;
-                        }
-                    }
-
-                    /*if (simpleEditText.getTitle().equals(tab1.registerationNumber)) {
-                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid Registeration Number", Toast.LENGTH_SHORT).show();
-                            viewPager.setCurrentItem(0);
-                            simpleEditText.setFocused(true);
-                            tab1.getAdapter().notifyItemChanged(i);
-                            return;
-                        }
-                    }*/
-
-                    //Telephone
-                    /*if (simpleEditText.getTitle().equals(tab1.telephone)) {
-                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid Telephone", Toast.LENGTH_SHORT).show();
-                            viewPager.setCurrentItem(0);
-                            simpleEditText.setFocused(true);
-                            tab1.getAdapter().notifyItemChanged(i);
-
-                            return;
-                        }
-                    }
-
-
-                    //City
-                    if (simpleEditText.getTitle().equals(tab1.city_town)) {
-                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid City / Town", Toast.LENGTH_SHORT).show();
-                            viewPager.setCurrentItem(0);
-                            simpleEditText.setFocused(true);
-                            tab1.getAdapter().notifyItemChanged(i);
-
-                            return;
-                        }
-                    }
-
-
-                    //State
-                    if (simpleEditText.getTitle().equals(tab1.state)) {
-                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid State", Toast.LENGTH_SHORT).show();
-                            viewPager.setCurrentItem(0);
-                            simpleEditText.setFocused(true);
-                            tab1.getAdapter().notifyItemChanged(i);
-
-                            return;
-                        }
-                    }
-
-
-                    //Country
-                    if (simpleEditText.getTitle().equals(tab1.country)) {
-                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid Country", Toast.LENGTH_SHORT).show();
-                            viewPager.setCurrentItem(0);
-                            simpleEditText.setFocused(true);
-                            tab1.getAdapter().notifyItemChanged(i);
-
-                            return;
-                        }
-                    }*/
-                } /*else if (o instanceof SimpleImage) {
-                    SimpleImage simpleImage = (SimpleImage) o;
-                    if (simpleImage.getTitle().equals(tab1.corporateLogo)) {
-                        if (simpleImage.getImage() == null) {
-                            Toast.makeText(this, "Please select Corporate Logo", Toast.LENGTH_SHORT).show();
-                            viewPager.setCurrentItem(0);
-                            return;
-                        }
-                    }
-
-                    if (simpleImage.getTitle().equals(tab1.keyVisual)) {
-                        if (simpleImage.getImage() == null) {
-                            Toast.makeText(this, "Please select KeyVisual Photo", Toast.LENGTH_SHORT).show();
-                            tab1.getAdapter().notifyItemChanged(i);
-                            viewPager.setCurrentItem(0);
-                            return;
-                        }
-                    }
-                }*/
-            }
-
-            //items.clear();
-            i = -1;
-            ArrayList<Object> items4 = tab4.getList();
-           /* for (Object o :
-                    items4) {
-                i++;
-                if (o instanceof SimpleEditText) {
-                    SimpleEditText simpleEditText = (SimpleEditText) o;
-
-
-                    //Business Name
-                    if (simpleEditText.getTitle().equals(tab4.nameOfCollector)) {
-                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid Collector Name", Toast.LENGTH_SHORT).show();
-                            viewPager.setCurrentItem(3);
-                            simpleEditText.setFocused(true);
-                            tab4.getAdapter().notifyItemChanged(i);
-
-                            Log.v("Validate", "position = " + i);
-                            return;
-                        }
-                    }
-
-                    //Telephone
-                    if (simpleEditText.getTitle().equals(tab4.authorizedBy)) {
-                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid Authorizing Name", Toast.LENGTH_SHORT).show();
-                            viewPager.setCurrentItem(3);
-                            simpleEditText.setFocused(true);
-                            tab4.getAdapter().notifyItemChanged(i);
-
-                            return;
-                        }
-                    }
-
-
-                    //City
-                    if (simpleEditText.getTitle().equals(tab4.placeOfCollection)) {
-                        if (helper.checkForInput(simpleEditText.getValue()) == null) {
-                            Toast.makeText(this, "Please enter a valid Place of Collection", Toast.LENGTH_SHORT).show();
-                            viewPager.setCurrentItem(3);
-                            simpleEditText.setFocused(true);
-                            tab4.getAdapter().notifyItemChanged(i);
-
-                            return;
+                        //Business Name
+                        if (simpleEditText.getTitle().equals(tab1.businessName)) {
+                            if (helper.checkForInput(simpleEditText.getValue()) == null) {
+                                Toast.makeText(this, "Please enter a valid Business Name", Toast.LENGTH_SHORT).show();
+                                viewPager.setCurrentItem(0);
+                                simpleEditText.setFocused(true);
+                                tab4.getAdapter().notifyItemChanged(i);
+                                return;
+                            }
                         }
                     }
                 }
-            }*/
+                i = -1;
+                ArrayList<Object> items4 = tab4.getList();
+                tab1.getAdapter().notifyDataSetChanged();
+                tab2.getAdapter().notifyDataSetChanged();
+                tab3.getAdapter().notifyDataSetChanged();
+                tab4.getAdapter().notifyDataSetChanged();
 
+                awesomeDialog.setMessage("Validating...");
+                awesomeDialog.show();
+                Test(items, items2, items3, items4);
 
-            tab1.getAdapter().notifyDataSetChanged();
-            tab2.getAdapter().notifyDataSetChanged();
-            tab3.getAdapter().notifyDataSetChanged();
-            tab4.getAdapter().notifyDataSetChanged();
-
-            awesomeDialog.setMessage("Validating...");
-            awesomeDialog.show();
-            Test(items, items2, items3, items4);
-
-        } else {
-            Toast.makeText(this, "Please accept the agreeement first", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Please accept the agreeement first", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            Log.d(TAG, Log.getStackTraceString(e));
+            new AwesomeErrorDialog(this)
+                    .setTitle("Error")
+                    .setMessage("Error in Validating")
+                    .setColoredCircle(R.color.dialogErrorBackgroundColor)
+                    .setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white)
+                    .setCancelable(false).setButtonText(getString(R.string.dialog_ok_button))
+                    .setButtonBackgroundColor(R.color.dialogErrorBackgroundColor)
+                    .setButtonText(getString(R.string.dialog_ok_button))
+                    .setErrorButtonClick(new Closure() {
+                        @Override
+                        public void exec() {
+                            finish();
+                        }
+                    })
+                    .show();
         }
-
     }
 
     private void setUpTabLayout() {
@@ -500,13 +436,24 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             String dataWrite = writer.toString();
             fileos.write(dataWrite.getBytes());
             fileos.close();
-            // Toast.makeText(this, "Succesfully generated xml", Toast.LENGTH_SHORT).show();
-            awesomeDialog.setMessage("Succesfully Generated XML");
             showXML();
         } catch (IOException e) {
-            awesomeDialog.setMessage("Error in Generating XML");
-            awesomeDialog.setCancelable(true);
-            e.printStackTrace();
+            Log.d(TAG, Log.getStackTraceString(e));
+            new AwesomeErrorDialog(this)
+                    .setTitle("Error")
+                    .setMessage("Error in generating xml!")
+                    .setColoredCircle(R.color.dialogErrorBackgroundColor)
+                    .setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white)
+                    .setCancelable(false).setButtonText(getString(R.string.dialog_ok_button))
+                    .setButtonBackgroundColor(R.color.dialogErrorBackgroundColor)
+                    .setButtonText(getString(R.string.dialog_ok_button))
+                    .setErrorButtonClick(new Closure() {
+                        @Override
+                        public void exec() {
+                            finish();
+                        }
+                    })
+                    .show();
         }
 
     }
@@ -619,15 +566,15 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                             if (!collectedBy.isEmpty()) {
                                 if (!atLoc.isEmpty()) {
                                     if (onDate != null) {
-                                        xmlSerializer.text(Helper.forReplacementString(collectedBy + ", in " + atLoc + " on " + onDate));
+                                        xmlSerializer.text(helper.forReplacementString(collectedBy + ", in " + atLoc + " on " + onDate));
                                     } else
-                                        xmlSerializer.text(Helper.forReplacementString(collectedBy + ", in " + atLoc));
+                                        xmlSerializer.text(helper.forReplacementString(collectedBy + ", in " + atLoc));
 
                                 } else {
                                     if (onDate != null) {
-                                        xmlSerializer.text(Helper.forReplacementString(collectedBy + ", on " + onDate));
+                                        xmlSerializer.text(helper.forReplacementString(collectedBy + ", on " + onDate));
                                     } else
-                                        xmlSerializer.text(Helper.forReplacementString(collectedBy));
+                                        xmlSerializer.text(helper.forReplacementString(collectedBy));
                                 }
                             } else
                                 xmlSerializer.text("");
@@ -726,7 +673,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         if (simpleEditText.getValue().trim().length() != 0) {
                             xmlSerializer.text(System.getProperty("line.separator"));
                             xmlSerializer.startTag(null, simpleEditText.getXmlTag());
-                            xmlSerializer.text(Helper.forReplacementString(simpleEditText.getValue()));
+                            xmlSerializer.text(helper.forReplacementString(simpleEditText.getValue()));
                             xmlSerializer.endTag(null, simpleEditText.getXmlTag());
                         }
                     }
@@ -880,8 +827,39 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             fIn.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            Log.d(TAG, Log.getStackTraceString(e));
+            new AwesomeErrorDialog(this)
+                    .setTitle("Error")
+                    .setMessage("Error in generating xml!")
+                    .setColoredCircle(R.color.dialogErrorBackgroundColor)
+                    .setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white)
+                    .setCancelable(false).setButtonText(getString(R.string.dialog_ok_button))
+                    .setButtonBackgroundColor(R.color.dialogErrorBackgroundColor)
+                    .setButtonText(getString(R.string.dialog_ok_button))
+                    .setErrorButtonClick(new Closure() {
+                        @Override
+                        public void exec() {
+                            finish();
+                        }
+                    })
+                    .show();
         } catch (IOException e) {
-            e.printStackTrace();
+            Log.d(TAG, Log.getStackTraceString(e));
+            new AwesomeErrorDialog(this)
+                    .setTitle("Error")
+                    .setMessage("Error in generating xml!")
+                    .setColoredCircle(R.color.dialogErrorBackgroundColor)
+                    .setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white)
+                    .setCancelable(false).setButtonText(getString(R.string.dialog_ok_button))
+                    .setButtonBackgroundColor(R.color.dialogErrorBackgroundColor)
+                    .setButtonText(getString(R.string.dialog_ok_button))
+                    .setErrorButtonClick(new Closure() {
+                        @Override
+                        public void exec() {
+                            finish();
+                        }
+                    })
+                    .show();
         }
 
         sendXMLForUpload(aBuffer);
@@ -939,7 +917,27 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         JSONObject jsonObject = helper.getJson(str);
         Log.d(TAG, jsonObject.toString());
         try {
-            if (jsonObject.get("action").equals("Creating XML")) {
+            if (jsonObject.get("action").equals("Creating Log File")) {
+                if (jsonObject.get("result").equals(helper.SUCCESS)) {
+                    awesomeDialog.hide();
+                    awesomeSuccessDialog = new AwesomeSuccessDialog(this);
+                    awesomeSuccessDialog.setTitle("Log Uploaded Successfully")
+                            .setMessage("")
+                            .setColoredCircle(R.color.dialogSuccessBackgroundColor)
+                            .setDialogIconAndColor(R.drawable.ic_done_black_24dp, R.color.white)
+                            .setCancelable(true)
+                            .setPositiveButtonText("OK")
+                            .setPositiveButtonbackgroundColor(R.color.dialogProgressBackgroundColor)
+                            .setPositiveButtonTextColor(R.color.white)
+                            .setPositiveButtonClick(new Closure() {
+                                @Override
+                                public void exec() {
+                                    awesomeSuccessDialog.hide();
+                                }
+                            })
+                            .show();
+                }
+            } else if (jsonObject.get("action").equals("Creating XML")) {
                 if (jsonObject.get("result").equals(helper.SUCCESS)) {
                     awesomeDialog.setMessage("XML Generated and Uploaded");
                     if (imageData.size() > 0)
@@ -1002,7 +1000,6 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     } else {
                         sendImageForUpload(imageData.get(currentImage));
                     }
-
                 } else {
 
                 }
@@ -1079,62 +1076,110 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     private void sendXMLForUpload(String aBuffer) {
-        writeLogToFile();
-        awesomeDialog.setCancelable(false);
-        Map<String, String> params = new HashMap<>();
-        params.put("xml", aBuffer);
-        params.put("businessName", companyName);
-        volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
-        awesomeDialog.setMessage("\nTotal Images : " + this.imageData.size() + "\nTotal Files : " + this.fileData.size() + "\n\nUploading XML File");
+        try {
+            awesomeDialog.setCancelable(false);
+            Map<String, String> params = new HashMap<>();
+            params.put("xml", aBuffer);
+            params.put("businessName", companyName);
+            volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
+            awesomeDialog.setMessage("\nTotal Images : " + this.imageData.size() + "\nTotal Files : " + this.fileData.size() + "\n\nUploading XML File");
+        } catch (Exception e) {
+            Log.d(TAG, Log.getStackTraceString(e));
+            new AwesomeErrorDialog(this)
+                    .setTitle("Error")
+                    .setMessage("Error in uploading xml!")
+                    .setColoredCircle(R.color.dialogErrorBackgroundColor)
+                    .setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white)
+                    .setCancelable(false).setButtonText(getString(R.string.dialog_ok_button))
+                    .setButtonBackgroundColor(R.color.dialogErrorBackgroundColor)
+                    .setButtonText(getString(R.string.dialog_ok_button))
+                    .setErrorButtonClick(new Closure() {
+                        @Override
+                        public void exec() {
+                            finish();
+                        }
+                    })
+                    .show();
+        }
     }
 
     private void sendImageForUpload(ImageData imageData) {
-        writeLogToFile();
+        try {
+            String image, imageName;
+            Map<String, String> imageParams = new HashMap<>();
+            if (imageData.Row == -1)
+                image = Base64.encodeToString(databaseHelper.getBlobValue(imageData.ColumnName, imageData.TableName), Base64.DEFAULT);
+            else
+                image = Base64.encodeToString(databaseHelper.getBlobFromRow(imageData.ColumnName, imageData.TableName, imageData.Row), Base64.DEFAULT);
+            imageName = imageData.Name;
+            imageParams.put("imagename", imageName);
+            imageParams.put("image", image);
+            imageParams.put("businessName", companyName);
+            imageParams.put("number", currentImage + "");
 
-        String image, imageName;
-        Map<String, String> imageParams = new HashMap<>();
-        if (imageData.Row == -1)
-            image = Base64.encodeToString(databaseHelper.getBlobValue(imageData.ColumnName, imageData.TableName), Base64.DEFAULT);
-        else
-            image = Base64.encodeToString(databaseHelper.getBlobFromRow(imageData.ColumnName, imageData.TableName, imageData.Row), Base64.DEFAULT);
-        imageName = imageData.Name;
-        imageParams.put("imagename", imageName);
-        imageParams.put("image", image);
-        imageParams.put("businessName", companyName);
-        imageParams.put("number", currentImage + "");
-
-        volleyHelper.makeStringRequest(helper.getBaseURL() + "createimage.php", imageName, imageParams);
-        Log.v(TAG, "Sending Image " + currentImage);
-        awesomeDialog.setMessage("\nTotal Images : " + this.imageData.size() + "\nTotal Files : " + this.fileData.size() + "\n\nUploading Image " + (currentImage + 1) + " of " + this.imageData.size());
-
+            volleyHelper.makeStringRequest(helper.getBaseURL() + "createimage.php", imageName, imageParams);
+            Log.v(TAG, "Sending Image " + currentImage);
+            awesomeDialog.setMessage("\nTotal Images : " + this.imageData.size() + "\nTotal Files : " + this.fileData.size() + "\n\nUploading Image " + (currentImage + 1) + " of " + this.imageData.size());
+        } catch (Exception e) {
+            Log.d(TAG, Log.getStackTraceString(e));
+            new AwesomeErrorDialog(this)
+                    .setTitle("Error")
+                    .setMessage("Error in uploading images!")
+                    .setColoredCircle(R.color.dialogErrorBackgroundColor)
+                    .setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white)
+                    .setCancelable(false).setButtonText(getString(R.string.dialog_ok_button))
+                    .setButtonBackgroundColor(R.color.dialogErrorBackgroundColor)
+                    .setButtonText(getString(R.string.dialog_ok_button))
+                    .setErrorButtonClick(new Closure() {
+                        @Override
+                        public void exec() {
+                            finish();
+                        }
+                    })
+                    .show();
+        }
     }
 
     private void sendFileForUpload(FileData fileData) {
-        writeLogToFile();
-        String file, fileName;
-        Map<String, String> fileParams = new HashMap<>();
-        if (fileData.Row == -1) {
-            file = Base64.encodeToString(
-                    helper.getByteArrayFromPDFFile(databaseHelper.getStringValue(fileData.ColumnName, fileData.TableName)),
-                    Base64.DEFAULT);
-        } else
-            file = Base64.encodeToString(
-                    helper.getByteArrayFromPDFFile(databaseHelper.getStringFromRow(fileData.TableName, fileData.ColumnName, fileData.Row)),
-                    Base64.DEFAULT);
+        try {
+            String file, fileName;
+            Map<String, String> fileParams = new HashMap<>();
+            if (fileData.Row == -1) {
+                file = Base64.encodeToString(
+                        helper.getByteArrayFromPDFFile(databaseHelper.getStringValue(fileData.ColumnName, fileData.TableName)),
+                        Base64.DEFAULT);
+            } else
+                file = Base64.encodeToString(
+                        helper.getByteArrayFromPDFFile(databaseHelper.getStringFromRow(fileData.TableName, fileData.ColumnName, fileData.Row)),
+                        Base64.DEFAULT);
 
-        Log.v(TAG, "PDF Byte Array\n" + file);
-        fileName = fileData.Name;
-        fileParams.put("filename", fileName);
-        fileParams.put("file", file);
-        fileParams.put("businessName", companyName);
-        fileParams.put("number", currentFile + "");
-        volleyHelper.makeStringRequest(helper.getBaseURL() + "createfile.php", fileName, fileParams);
-        Log.v(TAG, "Sending file " + currentFile);
-        awesomeDialog.setMessage("\nTotal Images : " + this.imageData.size() + "\nTotal Files : " + this.fileData.size() + "\n\nUploading File " + (currentFile + 1) + " of " + this.fileData.size());
-
+            Log.v(TAG, "PDF Byte Array\n" + file);
+            fileName = fileData.Name;
+            fileParams.put("filename", fileName);
+            fileParams.put("file", file);
+            fileParams.put("businessName", companyName);
+            fileParams.put("number", currentFile + "");
+            volleyHelper.makeStringRequest(helper.getBaseURL() + "createfile.php", fileName, fileParams);
+            Log.v(TAG, "Sending file " + currentFile);
+            awesomeDialog.setMessage("\nTotal Images : " + this.imageData.size() + "\nTotal Files : " + this.fileData.size() + "\n\nUploading File " + (currentFile + 1) + " of " + this.fileData.size());
+        } catch (Exception e) {
+            Log.d(TAG, Log.getStackTraceString(e));
+            new AwesomeErrorDialog(this)
+                    .setTitle("Error")
+                    .setMessage("Error in uploading file!")
+                    .setColoredCircle(R.color.dialogErrorBackgroundColor)
+                    .setDialogIconAndColor(R.drawable.ic_dialog_error, R.color.white)
+                    .setCancelable(false).setButtonText(getString(R.string.dialog_ok_button))
+                    .setButtonBackgroundColor(R.color.dialogErrorBackgroundColor)
+                    .setButtonText(getString(R.string.dialog_ok_button))
+                    .setErrorButtonClick(new Closure() {
+                        @Override
+                        public void exec() {
+                            finish();
+                        }
+                    })
+                    .show();
+        }
     }
 
-    private void writeLogToFile() {
-
-    }
 }
