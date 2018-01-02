@@ -35,6 +35,7 @@ dependencies {
     compile 'com.github.blennerSilva:AwesomeDialog:2.0.5'
     compile 'com.adityak:browsemyfiles:1.7'
     compile 'com.uncopt:android.justified:1.0'
+    compile 'com.hypertrack:hyperlog:0.0.7'
     testCompile 'junit:junit:4.12'
 
 }

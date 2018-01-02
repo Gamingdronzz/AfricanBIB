@@ -2,16 +2,17 @@ package biz.africanbib.App;
 import android.app.Application;
 import android.os.Environment;
 import android.text.TextUtils;
+import android.util.Log;
+
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
-import com.bosphere.filelogger.FL;
-import com.bosphere.filelogger.FLConfig;
-import com.bosphere.filelogger.Loggable;
+import com.hypertrack.hyperlog.HyperLog;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Calendar;
 
 import biz.africanbib.Tools.BitmapCache;
 
@@ -24,6 +25,23 @@ public class AppController extends Application {
     public void onCreate() {
         super.onCreate();
         mInstance = this;
+
+
+    }
+
+    public void writeLogToFile(String businessName)
+    {
+        File outputFile = new File(getApplicationContext().getFilesDir(), businessName + ".txt");
+        try
+        {
+            Runtime.getRuntime().exec("logcat -c");
+            Runtime.getRuntime().exec("logcat -v time -f " + outputFile.getAbsolutePath());
+        }
+        catch (IOException ioe)
+        {
+            ioe.printStackTrace();
+        }
+        Log.v("Application","File Created");
 
     }
 

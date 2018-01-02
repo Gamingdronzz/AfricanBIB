@@ -14,6 +14,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.util.logging.Logger;
+
 import biz.africanbib.R;
 import biz.africanbib.Tools.DatabaseHelper;
 
@@ -32,6 +34,7 @@ public class SplashScreen extends AppCompatActivity {
         bindVIews();
         //ShowNextActivity();
         StartAnimations();
+
     }
 
     private void bindVIews() {

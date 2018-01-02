@@ -23,6 +23,7 @@ import com.android.volley.VolleyError;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeProgressDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.AwesomeSuccessDialog;
 import com.awesomedialog.blennersilva.awesomedialoglibrary.interfaces.Closure;
+import com.hypertrack.hyperlog.HyperLog;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +44,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import biz.africanbib.App.AppController;
 import biz.africanbib.Models.Add;
 import biz.africanbib.Models.ChooseFile;
 import biz.africanbib.Models.Divider;
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     public int referencesCount = 0;
     public int ownersCount = 0;
     public int managersCount = 0;
-    public int subsidiaryCount=0;
+    public int subsidiaryCount = 0;
     //This is our tablayout
     private TabLayout tabLayout;
     //This is our viewPager
@@ -109,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         handleIntent();
         volleyHelper = new VolleyHelper(this, this);
         Log.v(TAG, "Current company id = " + DatabaseHelper.getCurrentCompanyId());
+
     }
 
     private void handleIntent() {
@@ -118,6 +121,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     private void init() {
         helper = new Helper(this);
+    
         imageData = new ArrayList<>();
         fileData = new ArrayList<>();
         goLeft.setVisibility(View.INVISIBLE);
@@ -147,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
             companyName = databaseHelper.getStringValue(DatabaseHelper.COLUMN_COMPANY_NAME, DatabaseHelper.TABLE_COMPANY_PROFILE);
             getSupportActionBar().setTitle(companyName);
         }
+        AppController.getInstance().writeLogToFile(companyName);
         showValidate(false);
     }
 
@@ -467,9 +472,9 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         referencesCount = 0;
         ownersCount = 0;
         managersCount = 0;
-        subsidiaryCount=0;
+        subsidiaryCount = 0;
         try {
-            Log.v(TAG, "Trying to create xml FileChosed");
+            Log.v(TAG, "Trying to create xml File at : " + getApplicationContext().getFilesDir());
             File file = new File(getApplicationContext().getFilesDir(), companyName + ".xml");
             file.createNewFile();
             Log.v(TAG, "Path = " + file.getAbsolutePath());
@@ -1074,7 +1079,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     private void sendXMLForUpload(String aBuffer) {
-
+        writeLogToFile();
         awesomeDialog.setCancelable(false);
         Map<String, String> params = new HashMap<>();
         params.put("xml", aBuffer);
@@ -1084,6 +1089,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     private void sendImageForUpload(ImageData imageData) {
+        writeLogToFile();
+
         String image, imageName;
         Map<String, String> imageParams = new HashMap<>();
         if (imageData.Row == -1)
@@ -1103,6 +1110,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     private void sendFileForUpload(FileData fileData) {
+        writeLogToFile();
         String file, fileName;
         Map<String, String> fileParams = new HashMap<>();
         if (fileData.Row == -1) {
@@ -1123,6 +1131,10 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         volleyHelper.makeStringRequest(helper.getBaseURL() + "createfile.php", fileName, fileParams);
         Log.v(TAG, "Sending file " + currentFile);
         awesomeDialog.setMessage("\nTotal Images : " + this.imageData.size() + "\nTotal Files : " + this.fileData.size() + "\n\nUploading File " + (currentFile + 1) + " of " + this.fileData.size());
+
+    }
+
+    private void writeLogToFile() {
 
     }
 }
