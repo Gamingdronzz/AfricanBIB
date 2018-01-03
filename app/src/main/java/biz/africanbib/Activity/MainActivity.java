@@ -153,7 +153,8 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                 logFile = Base64.encodeToString(helper.getByteArrayFromFile(logFilePath), Base64.DEFAULT);
             } catch (NullPointerException npe) {
                 Log.v(TAG, Log.getStackTraceString(npe));
-                new AwesomeErrorDialog(this).setTitle("Log File Not Found")
+                final AwesomeErrorDialog awesomeErrorDialog = new AwesomeErrorDialog(this);
+                awesomeErrorDialog.setTitle("Log File Not Found")
                         .setMessage("Business has been uploaded succesfully\nNo need to upload error log")
                         .setColoredCircle(R.color.dialogNoticeBackgroundColor)
                         .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.black)
@@ -163,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                         .setErrorButtonClick(new Closure() {
                             @Override
                             public void exec() {
-                                finish();
+                                awesomeErrorDialog.hide();
                             }
                         })
                         .show();
@@ -445,7 +446,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
         subsidiaryCount = 0;
         try {
             Log.v(TAG, "Trying to create xml File at : " + getApplicationContext().getFilesDir());
-            File file = new File(getApplicationContext().getFilesDir(), helper.checkForInput(companyName) + ".xml");
+            File file = new File(getApplicationContext().getFilesDir(), companyName + ".xml");
             file.createNewFile();
             Log.v(TAG, "Path = " + file.getAbsolutePath());
             FileOutputStream fileos = new FileOutputStream(file);
@@ -843,7 +844,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
     }
 
     private void showXML() {
-        File file = new File(getApplicationContext().getFilesDir(), helper.checkForInput(companyName) + ".xml");
+        File file = new File(getApplicationContext().getFilesDir(), companyName + ".xml");
         String aDataRow = "";
         String aBuffer = "";
         try {
@@ -1079,7 +1080,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
 
     private void deleteBusinessFiles() {
         File logFile = new File(getApplicationContext().getFilesDir(), helper.checkForInput(companyName) + ".txt");
-        File xmlFile = new File(getApplicationContext().getFilesDir(), helper.checkForInput(companyName) + ".xml");
+        File xmlFile = new File(getApplicationContext().getFilesDir(), companyName + ".xml");
         try {
             logFile.delete();
             xmlFile.delete();
@@ -1127,7 +1128,7 @@ public class MainActivity extends AppCompatActivity implements TabLayout.OnTabSe
                     .setDialogIconAndColor(R.drawable.ic_dialog_info, R.color.white);
             Map<String, String> params = new HashMap<>();
             params.put("xml", aBuffer);
-            params.put("businessName", helper.checkForInput(companyName));
+            params.put("businessName", companyName);
             volleyHelper.makeStringRequest(helper.getBaseURL() + "addxml.php", "tag", params);
             awesomeDialog.setMessage("\nTotal Images : " + this.imageData.size() + "\nTotal Files : " + this.fileData.size() + "\n\nUploading XML File");
         } catch (Exception e) {
