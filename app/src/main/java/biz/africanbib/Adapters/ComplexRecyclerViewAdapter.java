@@ -36,6 +36,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.aditya.filebrowser.Constants;
@@ -90,6 +91,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
     private int currentRowManagers = 1;
     private int currentRowProducts = 1;
     private int currentRowServices = 1;
+
     public String path;
     int pos;
     int type = -1;
@@ -274,18 +276,23 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
 
         private EditText editText;
         private TextView textview;
+        private LinearLayout Container;
         public CustomEditTextListener customEditTextListener;
         public CustomFocusChangeListener customFocusChangeListener;
+
 
         public ViewHolderSimpleEditText(View v, CustomEditTextListener customEditTextListener, CustomFocusChangeListener customFocusChangeListener) {
             super(v);
             editText = (EditText) v.findViewById(R.id.edit_text_simple_edit_text);
             textview = (TextView) v.findViewById(R.id.text_view_simple_edit_text);
+            Container = (LinearLayout) v.findViewById(R.id.simpleEditTextContainer);
             this.customEditTextListener = customEditTextListener;
             this.customFocusChangeListener = customFocusChangeListener;
+
             this.editText.setFocusable(true);
             this.editText.addTextChangedListener(this.customEditTextListener);
             this.editText.setOnFocusChangeListener(this.customFocusChangeListener);
+
         }
 
 
@@ -329,6 +336,16 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         public void setFocus(boolean requestFocus) {
             if (requestFocus) {
                 this.editText.requestFocus();
+            }
+        }
+
+        public void setBackground(boolean isFocussed) {
+            Log.v("Adapter", "Focus = " + isFocussed);
+            if (isFocussed) {
+
+                this.Container.setBackground(context.getResources().getDrawable(R.color.colorAccent));
+            } else {
+                this.Container.setBackground(context.getResources().getDrawable(android.R.color.transparent));
             }
         }
     }
@@ -592,12 +609,15 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         if (simpleEditText != null) {
             viewHolderSimpleEditText.customEditTextListener.updatePosition(position);
             viewHolderSimpleEditText.customFocusChangeListener.updatePosition(position);
+
             viewHolderSimpleEditText.setTitle(simpleEditText.getTitle());
             viewHolderSimpleEditText.setHint("Enter " + simpleEditText.getTitle());
             viewHolderSimpleEditText.setValue(simpleEditText.getValue());
             viewHolderSimpleEditText.setTag(simpleEditText.getTitle());
             viewHolderSimpleEditText.setEditTextType(simpleEditText.getType());
             viewHolderSimpleEditText.setFocus(simpleEditText.isFocused());
+            Log.v("Adapter", "Focus of " + simpleEditText.getTitle() + " = " + simpleEditText.isFocused());
+
         }
     }
 
@@ -1486,11 +1506,13 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
                         } else {
                             databaseHelper.updateRowWithString(simpleEditText.getTableName(), simpleEditText.getRowno(), simpleEditText.getColumnName(), simpleEditText.getValue());
                         }
+
                     }
                 }
             }
         }
     }
+
 
     private class CustomOnMultiSelectClickListener implements MyCustomMultiSelectionSpinner.OnMultipleItemsSelectedListener {
         private int position;
@@ -1524,7 +1546,6 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         }
 
     }
-
 
     private int manageRowNo(Add add) {
         String tableName = add.getTableName();

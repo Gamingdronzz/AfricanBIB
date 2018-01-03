@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/llContainer"
+    android:id="@+id/simpleEditTextContainer"
+
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="@dimen/margin_medium"
@@ -12,6 +13,7 @@
     <TextView
         android:id="@+id/text_view_simple_edit_text"
         android:layout_width="match_parent"
+
         android:textAlignment="center"
         android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
         android:layout_height="wrap_content"
@@ -20,11 +22,12 @@
     <EditText
         android:id="@+id/edit_text_simple_edit_text"
         android:layout_width="match_parent"
+        android:background="@drawable/bg_edittext"
+        android:focusable="true"
         android:padding="@dimen/padding_medium"
         android:scrollHorizontally="false"
         android:inputType="textCapSentences|textMultiLine"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_edittext"
         android:textAlignment="center" />
 
 
