@@ -117,6 +117,7 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         this.fragmentManager = manager;
         helper = new Helper();
         this.context = context;
+
     }
 
 
@@ -1037,7 +1038,22 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
             //items.add(position+1,multiSelectDropdown);
         }
     }
+/*
+private class EditTextClickListener implements View.OnClickListener{
 
+    private int position;
+
+    public void updatePosition(int position) {
+        this.position = position;
+    }
+
+    @Override
+    public void onClick(View v) {
+        EditText editText= (EditText) v.findViewById(R.id.edit_text_simple_edit_text);
+        editText.setBackgroundColor(context.getResources().getColor(R.color.colorLightGray));
+    }
+}
+*/
 
     private class CustomOnClickListener implements View.OnClickListener {
         private int position;
@@ -1471,11 +1487,19 @@ public class ComplexRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVie
         public void onFocusChange(View view, boolean b) {
             if (b) {
                 currentlyFocusedPosition = position;
+                if (items.get(currentlyFocusedPosition) instanceof SimpleEditText) {
+                    EditText editText = (EditText) view.findViewById(R.id.edit_text_simple_edit_text);
+                    editText.setBackground(context.getResources().getDrawable(R.drawable.bg_edittext_highlighted));
+                    editText.setPadding(8, 8, 8, 8);
+                }
                 //Log.v("Complex Adapter", "Focused Position  = " + currentlyFocusedPosition + " and title = " + ((SimpleEditText) items.get(currentlyFocusedPosition)).getTitle());
             } else {
                 if (currentlyFocusedPosition != -1) {
                     if (items.get(currentlyFocusedPosition) instanceof SimpleEditText) {
                         SimpleEditText simpleEditText = (SimpleEditText) items.get(currentlyFocusedPosition);
+                        EditText editText = (EditText) view.findViewById(R.id.edit_text_simple_edit_text);
+                        editText.setBackground(context.getResources().getDrawable(R.drawable.bg_edittext));
+                        editText.setPadding(8, 8, 8, 8);
                         /*Log.v("Complex Adapter", "Lost Focus Position  = " + currentlyFocusedPosition +
                                 "\nTitle = " + simpleEditText.getTitle() +
                                 "\nColumn = " + simpleEditText.getColumnName() +
